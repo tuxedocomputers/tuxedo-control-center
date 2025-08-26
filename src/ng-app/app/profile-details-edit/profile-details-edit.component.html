@@ -872,6 +872,22 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     <mat-grid-tile [colspan]="gridParams.value">
                                         <content class="value" [hidden]="editProfile">{{ viewProfile.cpu.onlineCores }}</content>
                                         <content class="value" [hidden]="!editProfile">{{ profileFormGroup.get("cpu.onlineCores")?.value }}</content>
+                                        <div class="increment-decrement-buttons">
+                                            <button mat-icon-button color="primary"
+                                                [hidden]="!editProfile"
+                                                (mousedown)="buttonRepeatDown(modifySliderInput(profileFormGroup.get('cpu').get('onlineCores'), -1, 1, cpuInfo?.availableCores));"
+                                                (mouseup)="buttonRepeatUp()"
+                                                (mouseleave)="buttonRepeatUp()">
+                                                <mat-icon>remove</mat-icon>
+                                            </button>
+                                            <button mat-icon-button color="primary"
+                                                [hidden]="!editProfile"
+                                                (mousedown)="buttonRepeatDown(modifySliderInput(profileFormGroup.get('cpu').get('onlineCores'), +1, 1, cpuInfo?.availableCores));"
+                                                (mouseup)="buttonRepeatUp()"
+                                                (mouseleave)="buttonRepeatUp()">
+                                                <mat-icon>add</mat-icon>
+                                            </button>
+                                        </div>
                                     </mat-grid-tile>
                                     <mat-grid-tile [colspan]="gridParams.input">
                                         <content class="input" [hidden]="!editProfile">
