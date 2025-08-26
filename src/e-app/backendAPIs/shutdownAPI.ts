@@ -39,14 +39,15 @@ ipcMain.handle('cancel-shutdown', async (event: IpcMainInvokeEvent): Promise<str
 });
 
 ipcMain.handle('get-scheduled-shutdown', async (event: IpcMainInvokeEvent): Promise<string> => {
-    return new Promise<string>((resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
+    return new Promise<string>(async (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): Promise<void> => {
         const available: boolean = fs.existsSync("/run/systemd/shutdown/scheduled")
         if (available) {
-            execCmd("cat /run/systemd/shutdown/scheduled")
+            await execCmd("cat /run/systemd/shutdown/scheduled")
             .then((results: string): void => {resolve(results)})
             .catch((err: unknown): void => {console.error("shutdownAPI: get-scheduled-shutdown failed =>", err); resolve("")});
+        } else {
+            resolve("")
         }
-        resolve("")
     });
 });
 
