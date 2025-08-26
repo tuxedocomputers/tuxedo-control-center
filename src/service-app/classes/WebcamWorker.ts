@@ -30,7 +30,7 @@ export class WebcamWorker extends DaemonWorker {
     }
 
     public async onStart(): Promise<void> {
-        this.updateWebcamStatuses();
+        this.updateWebcamStatus();
 
         const activeProfile: ITccProfile = this.activeProfile;
         const settingsDefined: boolean = activeProfile.webcam !== undefined
@@ -57,11 +57,11 @@ export class WebcamWorker extends DaemonWorker {
             }
         }
 
-        this.updateWebcamStatuses();
+        this.updateWebcamStatus();
     }
 
     public async onWork(): Promise<void> {
-        this.updateWebcamStatuses();
+        this.updateWebcamStatus();
     }
 
     public async onExit(): Promise<void> {
@@ -69,7 +69,7 @@ export class WebcamWorker extends DaemonWorker {
     }
 
 
-    private updateWebcamStatuses(): void {
+    private updateWebcamStatus(): void {
         // Use getter method to check for implemented functionality
         const webcamStatus: ObjWrapper<boolean> = { value: undefined };
         if (!TuxedoIOAPI.getWebcamStatus(webcamStatus)) {
