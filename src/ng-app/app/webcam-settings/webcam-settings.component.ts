@@ -58,7 +58,6 @@ export class WebcamSettingsComponent implements OnInit {
     public gridParams: IGridParams = GridParamsSettings;
 
     public video: any;
-    public mediaDeviceStream: MediaStream;
 
     private timer: NodeJS.Timeout = null;
     private mutex: Mutex = new Mutex();
@@ -68,17 +67,14 @@ export class WebcamSettingsComponent implements OnInit {
     public webcamInitComplete: boolean = false;
     private webcamPresetsOtherDevices: WebcamPreset[] = [];
     private webcamPresetsCurrentDevice: WebcamPreset[] = [];
-    public webcamFormGroup: FormGroup = new FormGroup({});
     public webcamCategories: string[] = [];
 
     private allPresetData: WebcamPreset[] = [];
-    private presetSettings: WebcamDeviceInformation[];
     private defaultPreset: WebcamPreset;
     public selectedPreset: WebcamPreset;
-    public selectedWebcam: WebcamDevice;
 
     private defaultSettings: WebcamPresetValues;
-    public viewWebcam: WebcamPresetValues;
+    public viewWebcam: WebcamPresetValues = {};
     public noWebcams: boolean = false;
 
     private activePreset: WebcamPreset;
@@ -98,6 +94,36 @@ export class WebcamSettingsComponent implements OnInit {
         public webcamService: WebcamService
     ) {}
 
+    public set selectedWebcam(selectedWebcam: WebcamDevice) {
+        this.webcamService.setSelectedWebcam(selectedWebcam);
+    }
+    
+    public get selectedWebcam(): WebcamDevice {
+        return this.webcamService.getSelectedWebcam();
+    }
+    
+    public set webcamFormGroup(webcamFormGroup: FormGroup<{}>) {
+        this.webcamService.setWebcamFormGroup(webcamFormGroup);
+    }
+    
+    public get webcamFormGroup(): FormGroup<{}> {
+        return this.webcamService.getWebcamFormGroup();
+    }
+    
+    public get mediaStream(): MediaStream {
+        return this.webcamService.getMediaStream();
+    }
+    
+    public set presetSettings(presetSettings: WebcamDeviceInformation[]) {
+        this.webcamService.setPresetSettings(presetSettings);
+    }
+    public get presetSettings(): WebcamDeviceInformation[] {
+        return this.webcamService.getPresetSettings();
+    }
+    
+    public get getWebcamSettingNames(): string[] {
+        return Object.keys(this.webcamFormGroup.getRawValue());
+    }
 
     public async ngOnInit(): Promise<void> {
         this.video = document.getElementById("video")
@@ -112,6 +138,7 @@ export class WebcamSettingsComponent implements OnInit {
 
         window.webcam.onExternalWebcamPreviewClosed((): void => {
             this.webcamService.setDetachedWebcamWindowActive(false);
+            
             document.getElementById("hidden").style.display = "flex";
             this.applyPreset(this.webcamFormGroup.getRawValue());
         });
@@ -271,11 +298,12 @@ export class WebcamSettingsComponent implements OnInit {
     public async setWebcam(webcamPreset: WebcamDevice): Promise<void> {
         this.setLoading();
         this.stopWebcam();
+        
+        this.selectedWebcam = webcamPreset;
+        
         await this.reloadConfigValues();
         this.filterPresetsForCurrentDevice();
         await this.checkAllPresetsForCurrentDevice();
-
-        this.selectedWebcam = webcamPreset;
 
         let preset: WebcamPresetValues = this.defaultSettings;
         const filtered: WebcamPreset[] = this.webcamPresetsCurrentDevice.filter(
@@ -523,7 +551,7 @@ export class WebcamSettingsComponent implements OnInit {
                     document.getElementById("hidden").style.display = "flex";
                     this.video.srcObject = stream;
                     
-                    this.webcamService.setMediaStream(stream)
+                    this.webcamService.setMediaStream(stream);
                 },
                 async (error: unknown): Promise<void> => {
                     console.error(error);
@@ -542,12 +570,6 @@ export class WebcamSettingsComponent implements OnInit {
             };
         }
     }
-    
-    // setting media stream with ngDoCheck() because getUserMedia() with "this.video.srcObject = stream" is not enough for <video>.
-    // using [srcObject]="mediaDeviceStream" instead of video.srcObject to avoid interruptions in the preview
-    public ngDoCheck(): void {
-        this.mediaDeviceStream = this.webcamService.getMediaStream()
-    }
 
     private unsetLoading(initComplete: boolean = false): void {
         if (initComplete) {
@@ -558,10 +580,6 @@ export class WebcamSettingsComponent implements OnInit {
         this.utils.pageDisabled = false;
     }
 
-    public getWebcamSettingNames(): string[] {
-        return Object.keys(this.webcamFormGroup.getRawValue());
-    }
-
     private checkIfPresetNameAvailable(checkPresetName: string): boolean {
         const presetNames: string[] = [];
         this.webcamPresetsCurrentDevice.forEach((preset: WebcamPreset): void => {
@@ -570,21 +588,21 @@ export class WebcamSettingsComponent implements OnInit {
         return !presetNames.includes(checkPresetName);
     }
 
-    // Some configurations depend on each other and while one is active, another can't be active
+    // some configurations depend on each other and while one is active, another can't be active
     private setSliderEnabledStatus(): void {
+        const webcamFormGroupValue: WebcamPresetValues = this.webcamFormGroup.getRawValue();
+        
         if (
-            (this.webcamFormGroup.getRawValue()
-                ?.white_balance_temperature_auto ||
-                this.webcamFormGroup.getRawValue()?.white_balance_automatic) &&
+            (webcamFormGroupValue?.white_balance_temperature_auto ||
+                webcamFormGroupValue?.white_balance_automatic) &&
             "white_balance_temperature" in this.webcamFormGroup.getRawValue()
         ) {
             this.webcamFormGroup.get("white_balance_temperature").disable();
         }
         if (
             !(
-                this.webcamFormGroup.getRawValue()
-                    ?.white_balance_temperature_auto ||
-                this.webcamFormGroup.getRawValue()?.white_balance_automatic
+                webcamFormGroupValue?.white_balance_temperature_auto ||
+                webcamFormGroupValue?.white_balance_automatic
             ) &&
             "white_balance_temperature" in this.webcamFormGroup.getRawValue()
         ) {
@@ -596,13 +614,13 @@ export class WebcamSettingsComponent implements OnInit {
             "exposure_absolute" in this.webcamFormGroup.getRawValue()
         ) {
             if (
-                this.webcamFormGroup.getRawValue().exposure_auto ===
+                webcamFormGroupValue?.exposure_auto ===
                 "aperture_priority_mode"
             ) {
                 this.webcamFormGroup.get("exposure_absolute").disable();
             }
             if (
-                this.webcamFormGroup.getRawValue().exposure_auto !==
+                webcamFormGroupValue?.exposure_auto !==
                 "aperture_priority_mode"
             ) {
                 this.webcamFormGroup.get("exposure_absolute").enable();
@@ -614,13 +632,13 @@ export class WebcamSettingsComponent implements OnInit {
             "exposure_time_absolute" in this.webcamFormGroup.getRawValue()
         ) {
             if (
-                this.webcamFormGroup.getRawValue().auto_exposure ===
+                webcamFormGroupValue?.auto_exposure ===
                 "aperture_priority_mode"
             ) {
                 this.webcamFormGroup.get("exposure_time_absolute").disable();
             }
             if (
-                this.webcamFormGroup.getRawValue().auto_exposure !==
+                webcamFormGroupValue?.auto_exposure !==
                 "aperture_priority_mode"
             ) {
                 this.webcamFormGroup.get("exposure_time_absolute").enable();
@@ -671,7 +689,7 @@ export class WebcamSettingsComponent implements OnInit {
         });
     }
 
-    // config names depend on linux kernel version and this function adjusts in case rename was found
+    // config names can change with a different linux kernel version
     private async checkConfig(preset: WebcamPreset): Promise<boolean> {
         const formGroupKeys: string[] = Object.keys(this.webcamFormGroup.getRawValue());
         const configKeys: string[] = Object.keys(preset.webcamSettings);
@@ -716,7 +734,7 @@ export class WebcamSettingsComponent implements OnInit {
 
     private async checkAllPresetsForCurrentDevice(): Promise<void> {
         this.mutex.runExclusive(async (): Promise<void> => {
-            const unknown_all: boolean[] = [];
+            const configErrorStatusArray: boolean[] = [];
 
             // todo: this should be in main.ts
             if (environment.production) {
@@ -728,11 +746,11 @@ export class WebcamSettingsComponent implements OnInit {
             }
 
             for (const profile of this.webcamPresetsCurrentDevice) {
-                const unknown: boolean = await this.checkConfig(profile);
-                unknown_all.push(unknown);
+                const status: boolean = await this.checkConfig(profile);
+                configErrorStatusArray.push(status);
             }
 
-            if (unknown_all.includes(true)) {
+            if (configErrorStatusArray.includes(true)) {
                 if (await this.configMismatchDialog()) {
                     await this.savePreset(
                         this.selectedPreset.presetName,
@@ -1026,7 +1044,7 @@ export class WebcamSettingsComponent implements OnInit {
         const min: string | number = this.getOptionValue(configParameter, "min");
         const max: string | number = this.getOptionValue(configParameter, "max");
         let newValue: string | number =
-            this.webcamFormGroup.controls[configParameter].value + offset;
+            this.webcamFormGroup.controls[configParameter]?.value + offset;
         if (newValue < min) {
             newValue = min;
         } else if (newValue > max) {
@@ -1196,10 +1214,12 @@ export class WebcamSettingsComponent implements OnInit {
 
     public getPercentValue(preset: string): string {
         const { max, min } = this.getMinMaxOptionValues(preset);
-        const current: number = Number(this.webcamFormGroup.get(preset).value);
-
-        const roundingDigits: number = this.getRoundingDigits(preset);
-        return this.calculatePercentValue(current, min, max, roundingDigits);
+        let current: number = Number(this.webcamFormGroup?.get(preset)?.value);
+        
+        if (max !== undefined && min !== undefined && current !== undefined) {
+            const roundingDigits: number = this.getRoundingDigits(preset);
+            return this.calculatePercentValue(current, min, max, roundingDigits);
+        }
     }
 
     private getMinMaxOptionValues(preset: string): {
@@ -1242,6 +1262,10 @@ export class WebcamSettingsComponent implements OnInit {
             : preset1 === preset2;
     }
 
+    public compareWebcams(webcam1: WebcamDevice, webcam2: WebcamDevice): boolean {
+        return webcam1 && webcam2 && webcam1.label === webcam2.label && webcam1.id === webcam2.id;
+    }
+    
     private setTimeout(delay: number): Promise<void> {
         return new Promise<void>((resolve: () => void): NodeJS.Timeout => setTimeout(resolve, delay));
     }
@@ -1258,7 +1282,7 @@ export class WebcamSettingsComponent implements OnInit {
     }
 
     public checkValid(setting: string): boolean {
-        return this.webcamFormGroup.get(setting).status === "VALID";
+        return this.webcamFormGroup.get(setting)?.status === "VALID";
     }
 
     public getConfigTranslation(configText: string): string {
@@ -1357,3 +1381,4 @@ export class WebcamSettingsComponent implements OnInit {
         }
     }
 }
+

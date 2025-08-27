@@ -18,6 +18,8 @@
  */
 
 import { Injectable } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { WebcamDevice, WebcamDeviceInformation } from 'src/common/models/TccWebcamSettings';
 
 // using a service to store values because DOM does not always update otherwise
 // https://stackoverflow.com/questions/69749023/angular-variable-value-change-doesnt-reflect-in-dom
@@ -25,29 +27,56 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class WebcamService {
-    public mediaState: MediaStream = undefined;
+    public mediaStream: MediaStream = undefined;
     public detachedWebcamWindowActiveStatus: boolean = false;
     public spinnerStatus: boolean = false;
+    public selectedWebcam: WebcamDevice = undefined;
+    public webcamFormGroup: FormGroup<{}> = new FormGroup({});
+    public presetSettings: WebcamDeviceInformation[] = undefined;
     
-    public setMediaStream(media: MediaStream): void {
-      this.mediaState = media
+    public setMediaStream(mediaStream: MediaStream): void {
+      this.mediaStream = mediaStream;
     }
     public getMediaStream(): MediaStream {
-      return this.mediaState
+      return this.mediaStream;
     }
     
     public setDetachedWebcamWindowActive(status: boolean): void {
-      this.detachedWebcamWindowActiveStatus = status
+      this.detachedWebcamWindowActiveStatus = status;
     }
     public getDetachedWebcamWindowActive(): boolean {
-       return this.detachedWebcamWindowActiveStatus
+       return this.detachedWebcamWindowActiveStatus;
     }
     
     public setSpinnerStatus(status: boolean): void {
-      this.spinnerStatus = status
+      this.spinnerStatus = status;
     }
     
     public getSpinnerStatus(): boolean {
-      return this.spinnerStatus 
+      return this.spinnerStatus;
+    }
+    
+    public setSelectedWebcam(selectedWebcam: WebcamDevice): void {
+        this.selectedWebcam = selectedWebcam;
+    }
+    
+    public getSelectedWebcam(): WebcamDevice {
+        return this.selectedWebcam;
+    }
+    
+    public setWebcamFormGroup(webcamFormGroup: FormGroup<{}>): void {
+        this.webcamFormGroup = webcamFormGroup;
+    }
+    
+    public getWebcamFormGroup(): FormGroup<{}> {
+        return this.webcamFormGroup;
+    }
+    
+    public setPresetSettings(presetSettings: WebcamDeviceInformation[]): void {
+        this.presetSettings = presetSettings;
+    }
+    
+    public getPresetSettings(): WebcamDeviceInformation[] {
+        return this.presetSettings;
     }
 }

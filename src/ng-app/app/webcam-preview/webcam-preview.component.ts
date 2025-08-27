@@ -34,7 +34,7 @@ import { WebcamConstraints } from "src/common/models/TccWebcamSettings";
 export class WebcamPreviewComponent implements OnInit {
     @ViewChild("video", { static: true })
     public video: ElementRef;
-    private mediaDeviceStream: MediaStream;
+    private mediaStream: MediaStream;
     public spinnerActive: boolean = false;
 
     public ngOnInit(): void {
@@ -62,17 +62,17 @@ export class WebcamPreviewComponent implements OnInit {
             })
             .then(async (stream: MediaStream): Promise<void> => {
                 this.video.nativeElement.srcObject = stream;
-                this.mediaDeviceStream = stream;
+                this.mediaStream = stream;
             });
-        this.mediaDeviceStream.getVideoTracks()[0].onended = (): void => {
+        this.mediaStream.getVideoTracks()[0].onended = (): void => {
             window.webcamAPI.videoEnded();
         };
     }
 
     private stopWebcam(): void {
         this.video.nativeElement.pause();
-        if (this.mediaDeviceStream != undefined) {
-            for (const track of this.mediaDeviceStream.getTracks()) {
+        if (this.mediaStream != undefined) {
+            for (const track of this.mediaStream.getTracks()) {
                 track.stop();
             }
         }
