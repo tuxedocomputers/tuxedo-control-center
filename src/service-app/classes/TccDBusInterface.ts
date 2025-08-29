@@ -44,7 +44,7 @@ export class TccDBusData {
     public dGpuInfoValuesJSON: string = "{}";
     public iGpuInfoValuesJSON: string = "{}";
     public cpuPowerValuesJSON: string = "{}";
-    public primeState: string = "";
+    public primeState: string = "-1";
     public modeReapplyPending: boolean;
     public tempProfileName: string = "";
     public tempProfileId: string = "";
