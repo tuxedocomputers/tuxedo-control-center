@@ -119,14 +119,14 @@ export const webcamHandlers: Map<string, (...args: any[]) => any> = new Map<stri
     })
 
     .set(WebcamAPIFunctions.getSelectedWebcamSettings, (selectedWebcamPath: string): Promise<string> => {
-        return new Promise<string>((resolve: (value: string | PromiseLike<string>) => void): void => {
-            resolve(execCmd("python3 " + getWebcamCtrlPythonPath() + ` -d ${selectedWebcamPath} -j`))
+        return new Promise<string>(async (resolve: (value: string | PromiseLike<string>) => void): Promise<void> => {
+            resolve(await execCmd("python3 " + getWebcamCtrlPythonPath() + ` -d ${selectedWebcamPath} -j`))
         });
     })
 
     .set(WebcamAPIFunctions.executeWebcamCtrls, (devicePath: string, parameter: string, value: string): Promise<string> => {
-        return new Promise<string>((resolve: (value: string | PromiseLike<string>) => void): void => {
-            resolve(execCmd("python3 " + getWebcamCtrlPythonPath() +
+        return new Promise<string>(async (resolve: (value: string | PromiseLike<string>) => void): Promise<void> => {
+            resolve(await execCmd("python3 " + getWebcamCtrlPythonPath() +
             ` -d ${devicePath} -c ${parameter}=${value}`))
         });
     })

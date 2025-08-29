@@ -35,7 +35,7 @@ export class ProgramManagementService {
         this.isCheckingInstallation.set(name, true);
           return new Promise<boolean>(async (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): Promise<void> => {
           // using || to return a success code to avoid throwing an error when nothing was found with "which" and : means no-op
-          execCmd(`which ${name} || :`).then((result: string): void => {
+          await execCmd(`which ${name} || :`).then((result: string): void => {
             this.isCheckingInstallation.set(name, false);
             if (result.trim()) {
               resolve(true);
@@ -52,7 +52,7 @@ export class ProgramManagementService {
     public async install(name: string): Promise<boolean> {
       this.isInProgress.set(name, true);
         return new Promise<boolean>(async (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): Promise<void> => {
-        execCmd('pkexec apt install -y ' + name).then((): void  => {
+        await execCmd('pkexec apt install -y ' + name).then((): void  => {
           this.isInProgress.set(name, false);
           resolve(true);
         }).catch((err: unknown): void => {
@@ -66,7 +66,7 @@ export class ProgramManagementService {
     public async remove(name: string): Promise<boolean> {
       this.isInProgress.set(name, true);
         return new Promise<boolean>(async (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): Promise<void> => {
-        execCmd('pkexec apt remove -y ' + name).then((): void => {
+        await execCmd('pkexec apt remove -y ' + name).then((): void => {
           this.isInProgress.set(name, false);
           resolve(true);
         }).catch((err: unknown): void => {

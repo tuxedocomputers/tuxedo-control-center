@@ -23,16 +23,16 @@ import { execCmd } from "./utilsAPI";
 import * as fs from 'node:fs';
 
 ipcMain.handle('set-shutdown-time', async (event: IpcMainInvokeEvent, selectedHour: number, selectedMinute: number): Promise<string> => {
-    return new Promise<string>((resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
-        execCmd("pkexec shutdown -h " + selectedHour + ":" + selectedMinute)
+    return new Promise<string>(async (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): Promise<void> => {
+        await execCmd("pkexec shutdown -h " + selectedHour + ":" + selectedMinute)
         .then((results: string) => {resolve(results)})
         .catch((): void => {resolve("")});
     });
 });
 
 ipcMain.handle('cancel-shutdown', async (event: IpcMainInvokeEvent): Promise<string> => {
-    return new Promise<string>((resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
-        execCmd("pkexec shutdown -c")
+    return new Promise<string>(async (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): Promise<void> => {
+        await execCmd("pkexec shutdown -c")
         .then((results: string): void => {resolve(results)})
         .catch((): void => {resolve("")});
     });
@@ -52,8 +52,8 @@ ipcMain.handle('get-scheduled-shutdown', async (event: IpcMainInvokeEvent): Prom
 });
 
 ipcMain.handle('issue-reboot', async (event: IpcMainInvokeEvent): Promise<string> => {
-    return new Promise<string>((resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
-        execCmd("reboot")
+    return new Promise<string>(async (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): Promise<void> => {
+        await execCmd("reboot")
         .then((results: string): void => {resolve(results)})
         .catch((): void => {resolve("")});
     });

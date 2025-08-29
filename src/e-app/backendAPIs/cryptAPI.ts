@@ -35,7 +35,7 @@ async function changeCryptPassword(newPassword: string, oldPassword: string, con
         oneliner += `printf '%s\\n' '${oldPassword}' '${newPassword}' '${confirmPassword}' | /usr/sbin/cryptsetup -q luksChangeKey --force-password ${drive.devPath} && `
     }
     oneliner = oneliner.slice(0, -4); // remove the tailing " && "
-    return execCmd(`pkexec /bin/sh -c "` + oneliner + `"`);
+    return await execCmd(`pkexec /bin/sh -c "` + oneliner + `"`);
 }
 
 ipcMain.handle('change-crypt-password', async (event: IpcMainInvokeEvent, newPassword: string, oldPassword: string, confirmPassword: string): Promise<string> => {

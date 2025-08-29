@@ -77,7 +77,7 @@ async function getModuleDescription(moduleName: string, langId: string): Promise
 async function removeModule(moduleName: string): Promise<void> {
     const command: string = "yes | pkexec tuxedo-tomte remove " + moduleName;
     return new Promise<void>(async (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): Promise<void> => {
-        execCmd(command).then((): void => {
+        await execCmd(command).then((): void => {
             resolve();
         }).catch((err: unknown): void => {
             console.error("tomteAPI: removeModule failed =>", err)
@@ -89,7 +89,7 @@ async function removeModule(moduleName: string): Promise<void> {
 async function installModule(moduleName: string): Promise<void> {
     const command: string = "pkexec tuxedo-tomte configure " + moduleName;
     return new Promise<void>(async (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): Promise<void> => {
-        execCmd(command).then((): void => {
+        await execCmd(command).then((): void => {
             resolve();
         }).catch((err: unknown): void => {
             console.error("tomteAPI: installModule failed =>", err)
@@ -101,7 +101,7 @@ async function installModule(moduleName: string): Promise<void> {
 async function unBlockModule(moduleName: string): Promise<void> {
     const command: string = "pkexec tuxedo-tomte unblock " + moduleName;
     return new Promise<void>(async (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): Promise<void> => {
-        execCmd(command).then((): void => {
+        await execCmd(command).then((): void => {
             resolve();
         }).catch((err: unknown): void => {
             console.error("tomteAPI: unBlockModule failed =>", err)
@@ -113,7 +113,7 @@ async function unBlockModule(moduleName: string): Promise<void> {
 async function blockModule(moduleName: string): Promise<void> {
     const command: string = "pkexec tuxedo-tomte block " + moduleName;
     return new Promise<void>(async (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): Promise<void> => {
-        execCmd(command).then((): void => {
+        await execCmd(command).then((): void => {
             resolve();
         }).catch((err: unknown): void => {
             console.error("tomteAPI: blockModule failed =>", err)
@@ -125,7 +125,7 @@ async function blockModule(moduleName: string): Promise<void> {
 async function setMode(mode: string): Promise<void> {
     const command: string = "pkexec tuxedo-tomte " + mode;
     return new Promise<void>(async (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): Promise<void> => {
-        execCmd(command).then(() => {
+        await execCmd(command).then(() => {
             resolve();
         }).catch((err: unknown): void => {
             console.error("tomteAPI: setMode failed =>", err)
