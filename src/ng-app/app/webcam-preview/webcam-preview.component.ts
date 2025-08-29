@@ -18,6 +18,7 @@
  */
 
 import {
+    ChangeDetectorRef,
     Component,
     ElementRef,
     OnInit,
@@ -35,20 +36,27 @@ export class WebcamPreviewComponent implements OnInit {
     @ViewChild("video", { static: true })
     public video: ElementRef;
     private mediaStream: MediaStream;
-    public spinnerActive: boolean = false;
-
-    public ngOnInit(): void {
+    public spinnerActive: boolean = undefined;
+    
+    constructor(
+        public cdRef: ChangeDetectorRef
+    ) {}
+    
+    public async ngOnInit(): Promise<void> {
         window.webcam.onSettingWebcamWithLoading(async (event: any, config: WebcamConstraints): Promise<void> => {
+            this.spinnerActive = true;
+            this.cdRef.detectChanges();
             document.getElementById("video").style.visibility = "hidden";
-                this.spinnerActive = true;
-                this.stopWebcam();
-                await this.setWebcamWithConfig(config);
-                window.webcamAPI.applyControls();
-                setTimeout(async (): Promise<void> => {
-                    document.getElementById("video").style.visibility =
-                        "visible";
-                    this.spinnerActive = false;
-                }, 500);
+            this.stopWebcam();
+            await this.setWebcamWithConfig(config);
+            window.webcamAPI.applyControls();
+            await new Promise<void>((resolve: () => void): NodeJS.Timeout => setTimeout(async (): Promise<void> => {
+                document.getElementById("video").style.visibility =
+                    "visible";
+                this.spinnerActive = false
+                this.cdRef.detectChanges();
+                resolve()
+            }, 500));
             }
         );
     }
