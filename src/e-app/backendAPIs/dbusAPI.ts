@@ -285,6 +285,16 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
         });
     })
 
+    .set(DbusAPIFunctions.getIGpuInfoValuesJSON, (): Promise<string> => {
+        return new Promise<string>((resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
+            try {
+                resolve(tccDBus.getIGpuInfoValuesJSON());
+            } catch (err: unknown) {
+                console.error("dbusAPI: getIGpuInfoValuesJSON failed =>", err)
+            }
+        });
+    })
+    
     .set(DbusAPIFunctions.getDGpuInfoValuesJSON, (): Promise<string> => {
         return new Promise<string>((resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
             try {
@@ -295,12 +305,22 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
         });
     })
 
-    .set(DbusAPIFunctions.getIGpuInfoValuesJSON, (): Promise<string> => {
-        return new Promise<string>((resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
+    .set(DbusAPIFunctions.getIGpuAvailable, (): Promise<number> => {
+        return new Promise<number>((resolve: (value: number | PromiseLike<number>) => void, reject: (reason?: unknown) => void): void => {
             try {
-                resolve(tccDBus.getIGpuInfoValuesJSON());
+                resolve(tccDBus.getIGpuAvailable());
             } catch (err: unknown) {
-                console.error("dbusAPI: getIGpuInfoValuesJSON failed =>", err)
+                console.error("dbusAPI: getIGpuAvailable failed =>", err)
+            }
+        });
+    })
+    
+    .set(DbusAPIFunctions.getDGpuAvailable, (): Promise<number> => {
+        return new Promise<number>((resolve: (value: number | PromiseLike<number>) => void, reject: (reason?: unknown) => void): void => {
+            try {
+                resolve(tccDBus.getDGpuAvailable());
+            } catch (err: unknown) {
+                console.error("dbusAPI: getDGpuAvailable failed =>", err)
             }
         });
     })

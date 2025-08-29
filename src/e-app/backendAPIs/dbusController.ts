@@ -359,6 +359,24 @@ export class TccDBusController {
         }
     }
 
+    async getIGpuInfoValuesJSON(): Promise<string> {
+        try {
+            if (this.dbusStatus && this.interface) {
+                return await this.interface.GetIGpuInfoValuesJSON();
+            }
+        } catch (err: unknown) {
+            this.dbusStatus = false
+
+            if (err instanceof dbus.DBusError) {
+                console.error("dbusController: getIGpuInfoValuesJSON failed =>", err.text)
+                return undefined
+            }
+
+            console.error("dbusController: getIGpuInfoValuesJSON failed =>", err)
+            return undefined;
+        }
+    }
+    
     async getDGpuInfoValuesJSON(): Promise<string> {
         try {
             if (this.dbusStatus && this.interface) {
@@ -376,21 +394,57 @@ export class TccDBusController {
             return undefined;
         }
     }
-
-    async getIGpuInfoValuesJSON(): Promise<string> {
+    
+    async getIGpuAvailable(): Promise<number> {
         try {
             if (this.dbusStatus && this.interface) {
-                return await this.interface.GetIGpuInfoValuesJSON();
+                return await this.interface.GetIGpuAvailable();
             }
         } catch (err: unknown) {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getIGpuInfoValuesJSON failed =>", err.text)
+                console.error("dbusController: getIGpuAvailable failed =>", err.text)
                 return undefined
             }
 
-            console.error("dbusController: getIGpuInfoValuesJSON failed =>", err)
+            console.error("dbusController: getIGpuAvailable failed =>", err)
+            return undefined;
+        }
+    }
+    
+    async getDGpuAvailable(): Promise<number> {
+        try {
+            if (this.dbusStatus && this.interface) {
+                return await this.interface.GetDGpuAvailable();
+            }
+        } catch (err: unknown) {
+            this.dbusStatus = false
+
+            if (err instanceof dbus.DBusError) {
+                console.error("dbusController: getDGpuAvailable failed =>", err.text)
+                return undefined
+            }
+
+            console.error("dbusController: getDGpuAvailable failed =>", err)
+            return undefined;
+        }
+    }
+    
+    async getPrimeState(): Promise<string> {
+        try {
+            if (this.dbusStatus && this.interface) {
+                return await this.interface.GetPrimeState();
+            }
+        } catch (err: unknown) {
+            this.dbusStatus = false
+
+            if (err instanceof dbus.DBusError) {
+                console.error("dbusController: getPrimeState failed =>", err.text)
+                return undefined
+            }
+
+            console.error("dbusController: getPrimeState failed =>", err)
             return undefined;
         }
     }
@@ -409,24 +463,6 @@ export class TccDBusController {
             }
 
             console.error("dbusController: getCpuPowerValuesJSON failed =>", err)
-            return undefined;
-        }
-    }
-
-    async getPrimeState(): Promise<string> {
-        try {
-            if (this.dbusStatus && this.interface) {
-                return await this.interface.GetPrimeState();
-            }
-        } catch (err: unknown) {
-            this.dbusStatus = false
-
-            if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getPrimeState failed =>", err.text)
-                return undefined
-            }
-
-            console.error("dbusController: getPrimeState failed =>", err)
             return undefined;
         }
     }

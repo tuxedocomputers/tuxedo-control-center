@@ -169,8 +169,9 @@ async function initTray(): Promise<void> {
     if (tray.state.fnLockSupported) {
         tray.state.fnLockStatus = await fnLockStatus();
     }
-    [tray.state.isPrimeSupported, tray.state.primeQuery] = await checkPrimeAvailabilityStatus();
-    tray.state.isX11 = await isX11();
+    [tray.state.isPrimeSupported, tray.state.primeQuery] = await getPrimeAvailable();
+    [tray.state.iGpuAvailable, tray.state.dGpuAvailable] = await getGpuAvailable();
+    tray.state.isX11 = await getX11Available();
     
     await updateTrayProfiles();
     tray.events.startTCCClick = (): Promise<void> => activateTccGui();
@@ -325,7 +326,7 @@ function createUserConfigDir(): boolean {
     }
 }
 
-async function checkPrimeAvailabilityStatus(): Promise<[boolean, string]> {
+async function getPrimeAvailable(): Promise<[boolean, string]> {
     try {
         let primeStatus: string = await tccDBus.getPrimeState();
         
@@ -336,12 +337,27 @@ async function checkPrimeAvailabilityStatus(): Promise<[boolean, string]> {
         }
         return [false, "-1"];
     } catch (err: unknown) {
-        console.error("initMain: checkPrimeAvailabilityStatus failed =>", err)
+        console.error("initMain: getPrimeAvailable failed =>", err)
         return [false, "-1"];
     }
 }
 
-async function isX11(): Promise<boolean> {
+async function getGpuAvailable(): Promise<[boolean, boolean]> {
+    for (let i: number = 0; i < 5; i++) {
+        const iGpuAvailable: number = await tccDBus.getIGpuAvailable();
+        const dGpuAvailable: number = await tccDBus.getDGpuAvailable();
+        
+        if (iGpuAvailable !== -1 && dGpuAvailable !== -1) {
+            return [iGpuAvailable === 1, dGpuAvailable === 1];
+        }
+        console.log("initMain: getGpuAvailable: gpu status not available, retrying")
+        await new Promise<void>((resolve: () => void): NodeJS.Timeout => setTimeout(resolve, 1000));
+    }
+    console.log("initMain: getGpuAvailable: Failed to get gpu status")
+    return [false, false];
+}
+
+async function getX11Available(): Promise<boolean> {
     return (await tccDBus.getIsX11()) === 1;
 }
 

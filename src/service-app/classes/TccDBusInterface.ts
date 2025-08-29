@@ -41,8 +41,10 @@ export class TccDBusData {
     public webcamSwitchAvailable: boolean = false;
     public webcamSwitchStatus: boolean = false;
     public forceYUV420OutputSwitchAvailable: boolean = false;
-    public dGpuInfoValuesJSON: string = "{}";
     public iGpuInfoValuesJSON: string = "{}";
+    public dGpuInfoValuesJSON: string = "{}";
+    public iGpuAvailable: number = -1;
+    public dGpuAvailable: number = -1;
     public cpuPowerValuesJSON: string = "{}";
     public primeState: string = "-1";
     public modeReapplyPending: boolean;
@@ -110,19 +112,24 @@ export class TccDBusInterface extends dbus.interface.Interface {
     private WebcamSWAvailable(): boolean { return this.data.webcamSwitchAvailable; }
     private GetWebcamSWStatus(): boolean { return this.data.webcamSwitchStatus; }
     private GetForceYUV420OutputSwitchAvailable(): boolean { return this.data.forceYUV420OutputSwitchAvailable; }
+    
+    private GetIGpuInfoValuesJSON(): string {
+        this.resetDataCollectionTimeout();
+        return this.data.iGpuInfoValuesJSON;
+    }
 
     private GetDGpuInfoValuesJSON(): string {
         this.resetDataCollectionTimeout();
         return this.data.dGpuInfoValuesJSON;
     }
 
-    private GetIGpuInfoValuesJSON(): string {
-        this.resetDataCollectionTimeout();
-        return this.data.iGpuInfoValuesJSON;
-    }
+    private GetIGpuAvailable(): number { return this.data.iGpuAvailable; }
 
-    private GetCpuPowerValuesJSON(): string { return this.data.cpuPowerValuesJSON; }
+    private GetDGpuAvailable(): number { return this.data.dGpuAvailable; }
+
     private GetPrimeState(): string { return this.data.primeState; }
+    private GetCpuPowerValuesJSON(): string { return this.data.cpuPowerValuesJSON; }
+
     private SetSensorDataCollectionStatus(status: boolean): void {this.data.sensorDataCollectionStatus = status}
     private GetSensorDataCollectionStatus(): boolean {
         return this.data.sensorDataCollectionStatus;
@@ -257,10 +264,12 @@ TccDBusInterface.configureMembers({
         WebcamSWAvailable: { outSignature: 'b' },
         GetWebcamSWStatus: { outSignature: 'b' },
         GetForceYUV420OutputSwitchAvailable: { outSignature: 'b' },
-        GetDGpuInfoValuesJSON: { outSignature: "s" },
         GetIGpuInfoValuesJSON: { outSignature: "s" },
-        GetCpuPowerValuesJSON: { outSignature: 's' },
+        GetDGpuInfoValuesJSON: { outSignature: "s" },
+        GetIGpuAvailable: { outSignature: "i" },
+        GetDGpuAvailable: { outSignature: 'i' },
         GetPrimeState: { outSignature: 's' },
+        GetCpuPowerValuesJSON: { outSignature: 's' },
         ConsumeModeReapplyPending: { outSignature: 'b' },
         GetActiveProfileJSON: { outSignature: 's' },
         SetTempProfile: { inSignature: 's',  outSignature: 'b' },

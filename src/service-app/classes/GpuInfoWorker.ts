@@ -70,6 +70,9 @@ export class GpuInfoWorker extends DaemonWorker {
         } else if (this.availability.getAmdDGpuCount() === 1) {
             this.amdDGpuHwmonPath = await this.getAmdDGpuHwmonPath();
         }
+        
+        this.tccd.dbusData.iGpuAvailable = this.availability.isIGpuAvailable() ? 1 : 0;
+        this.tccd.dbusData.dGpuAvailable = this.availability.isDGpuAvailable() ? 1 : 0;
 
         this.onWork();
     }
