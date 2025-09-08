@@ -1,12 +1,12 @@
 # Changelog
 
-## [] - UNRELEASED
+## [2.1.19] - 2025-09-08
 ### Added
 - Aquaris support for Stellaris Gen7
-- Extra start TCC shortcut key F14 to support Sirius (on Wayland)
+- Extra "start TCC" shortcut key F14 to support the Sirius gauge key (on Wayland)
 
 ### Fixed
-- Issue with "System profiles" not changing power limits for InfinityBook Gen10 AMD
+- Issue with "System profiles" not changing power limits for InfinityBook Pro Gen10 AMD
 
 ## [2.1.18] - 2025-08-01
 ### Added
