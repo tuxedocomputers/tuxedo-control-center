@@ -60,7 +60,7 @@ interface IPC extends EventEmitter {
     triggerLanguageChange: (languageId: string) => void,
     changeCryptPassword: (newPassword: string, oldPassword: string, confirmPassword: string) => Promise<string>,
     runSysteminfo: (ticketNumber: string) => Promise<void>,
-    onUpdateSysteminfoLabel: (callback: (event: any, text: string) => void) => void,
+    onUpdateSystemInfosLabel: (callback: (event: any, text: string) => void) => void,
     primeSelect: (selectedState: string) => Promise<string>,
 }
 

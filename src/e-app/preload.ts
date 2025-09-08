@@ -83,8 +83,8 @@ contextBridge.exposeInMainWorld(
             ipcRenderer.on(channelname, callback);
         }
     },
-    onUpdateSysteminfoLabel: (callback: (event: any, text: any) => void): void => {
-        var channelname: string = 'update-system-info-label';
+    onUpdateSystemInfosLabel: (callback: (event: any, text: any) => void): void => {
+        var channelname: string = 'update-systeminfos-label';
         if(callbacks.indexOf(channelname) < 0)
         {
             callbacks.push(channelname);

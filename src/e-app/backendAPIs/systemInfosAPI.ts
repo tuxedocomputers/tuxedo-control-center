@@ -23,14 +23,16 @@ import * as https from "node:https";
 import { tccWindow } from "./browserWindowsAPI";
 import { execCmd, writeTextFile } from "./utilsAPI";
 import type { ClientRequest, IncomingMessage } from "node:http";
+import * as fs from 'fs';
 
-export const systeminfosURL: string = 'https://mytuxedo.de/public.php/dav/files/DcAeZk4TbBTTjRq/?accept=zip';
+export const systemInfosURL: string = 'https://mytuxedo.de/public.php/dav/files/DcAeZk4TbBTTjRq/?accept=zip';
+const systemInfosFilePath: string = '/tmp/tcc/systeminfos.sh';
 
 async function getSystemInfos(): Promise<Buffer> {
     return new Promise<Buffer>(async (resolve: (value: Buffer | PromiseLike<Buffer>) => void, reject: (reason?: unknown) => void): Promise<void> => {
         try {
           const dataArray: Buffer[] = [];
-          const req: ClientRequest = https.get(systeminfosURL, (response: IncomingMessage): void => {
+          const request: ClientRequest = https.get(systemInfosURL, (response: IncomingMessage): void => {
 
             response.on('data', (data: any): void => {
               dataArray.push(data);
@@ -46,7 +48,7 @@ async function getSystemInfos(): Promise<Buffer> {
 
           });
 
-          req.once('error', (err: Error): void => {
+          request.once('error', (err: Error): void => {
        reject(err);
           });
         } catch (err: unknown) {
@@ -56,41 +58,61 @@ async function getSystemInfos(): Promise<Buffer> {
       });
 }
 
-const systeminfoFilePath: string = '/tmp/tcc/systeminfos.sh';
-    function updateSystemInfoLabel(text: string): void
-    {
-        tccWindow.webContents.send('update-system-info-label', text);
-    }
+function updateSystemInfosLabel(text: string): void {
+    tccWindow.webContents.send('update-systeminfos-label', text);
+}
 
-    async function runSysteminfo(ticketNumber: string): Promise<void> {
+async function runSystemInfos(ticketNumber: string): Promise<void> {
         return new Promise<void>(async (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): Promise<void> => {
           let fileData: string;
-          // Download file
+          // Download
           try {
-            updateSystemInfoLabel('Fetching: ' + systeminfosURL);
+            updateSystemInfosLabel(`Downloading ${systemInfosURL}`);
             const data: Buffer = await getSystemInfos();
             fileData = data.toString();
           } catch (err: unknown) {
-            console.error("systemInfosAPI: runSysteminfo download failed =>", err)
-            reject('Download failed'); return;
+            console.error("systemInfosAPI: runSystemInfos: Download failed =>", err)
+            reject('Failed to download systeminfos.sh');
+            return;
           }
 
-          // Write file
+          // Write
           try {
-            updateSystemInfoLabel('Writing file: ' + systeminfoFilePath);
-            await writeTextFile(systeminfoFilePath, fileData, { mode: 0o755 });
+            updateSystemInfosLabel(`Writing ${systemInfosFilePath}`);
+            await writeTextFile(systemInfosFilePath, fileData, { mode: 0o755 });
           } catch (err: unknown) {
-            console.error("systemInfosAPI: runSysteminfo write failed =>", err)
-            reject('Failed to write file ' + systeminfoFilePath); return;
+            console.error("systemInfosAPI: runSystemInfos: Write failed =>", err)
+            reject(`Failed to write ${systemInfosFilePath}`);
+            return;
           }
-
+          
+          try {
+            const systemInfosAvailable: boolean = fs.existsSync(systemInfosFilePath);
+            
+            if (systemInfosAvailable) {
+              const systemInfosFileSize: number = fs.statSync(systemInfosFilePath)?.size
+            
+              if (systemInfosFileSize === undefined || systemInfosFileSize === 0) {
+                console.error("systemInfosAPI: runSystemInfos: Download failed")
+                reject('Failed to download systeminfos.sh');
+              }
+            } else {
+              console.error(`systemInfosAPI: ${systemInfosFilePath} does not exist`)
+              reject(`${systemInfosFilePath} does not exist`);
+            }
+          } catch (err: unknown) {
+            console.error("systemInfosAPI: runSystemInfos: Check failed =>", err)
+            reject("Failed to check systeminfos.sh");
+            return;
+          }
+          
           // Run
           try {
-            updateSystemInfoLabel('Running systeminfos.sh');
-            await execCmd('pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY XDG_SESSION_TYPE=$XDG_SESSION_TYPE XDG_CURRENT_DESKTOP=$XDG_CURRENT_DESKTOP sh ' + systeminfoFilePath + ' ' + ticketNumber);
+            updateSystemInfosLabel(`Running ${systemInfosFilePath}`);
+            await execCmd('pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY XDG_SESSION_TYPE=$XDG_SESSION_TYPE XDG_CURRENT_DESKTOP=$XDG_CURRENT_DESKTOP sh ' + systemInfosFilePath + ' ' + ticketNumber);
           } catch (err: unknown) {
-            console.error("systemInfosAPI: runSysteminfo run failed =>", err)
-            reject('Failed to execute script');
+            console.error("systemInfosAPI: runSystemInfos failed =>", err)
+            reject('systeminfos.sh failed');
           }
           resolve();
         });
@@ -98,6 +120,6 @@ const systeminfoFilePath: string = '/tmp/tcc/systeminfos.sh';
 
 ipcMain.handle('run-systeminfos', async (event: IpcMainInvokeEvent, ticketNumber: string): Promise<void> => {
     return new Promise<void>(async (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): Promise<void> => {
-        resolve(runSysteminfo(ticketNumber));
+        resolve(runSystemInfos(ticketNumber));
     });
 });

@@ -30,7 +30,7 @@ import {
 } from "./initMain";
 import type { OpenDialogReturnValue, SaveDialogReturnValue } from "electron/main";
 import { tccWindow } from "./browserWindowsAPI";
-import { systeminfosURL } from "./systemInfosAPI"
+import { systemInfosURL } from "./systemInfosAPI"
 
 export const cwd: string = process.cwd();
 export const environmentIsProduction: boolean = app.isPackaged;
@@ -100,7 +100,7 @@ ipcMain.on('show-tcc-window', (event: IpcMainEvent,): void => {
 });
 
 ipcMain.on('utils-get-systeminfos-url-sync', (event: IpcMainEvent): void => {
-    event.returnValue = systeminfosURL;
+    event.returnValue = systemInfosURL;
 });
 
 async function changeLanguage(newLangId: string): Promise<void> {
