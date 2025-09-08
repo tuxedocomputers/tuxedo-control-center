@@ -29,7 +29,6 @@ import { ConfigService } from "../config.service";
 })
 export class PrimeDialogComponent implements OnInit {
     private primeSelectMode: string;
-    private loadingBar: boolean = false;
     public langId: string;
 
     public dialogStatus: string = "info";
@@ -59,7 +58,6 @@ export class PrimeDialogComponent implements OnInit {
     public async applyPrimeConfig(rebootStatus: string): Promise<void> {
         this.setDialogStatus("loading");
 
-        this.loadingBar = true;
         const status: boolean = await this.config.pkexecSetPrimeSelectAsync(
             this.primeSelectMode
         );

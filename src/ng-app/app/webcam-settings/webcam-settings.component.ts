@@ -28,7 +28,6 @@ import {
 } from "src/common/models/TccWebcamSettings";
 import { UtilsService } from "../utils.service";
 import { WebcamSettingsGuard } from "../webcam.guard";
-//import { setInterval, clearInterval } from "timers";
 import {
     AbstractControl,
     FormControl,

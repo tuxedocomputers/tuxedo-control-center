@@ -30,7 +30,6 @@ let aquarisStateCurrent: AquarisState;
 
 let aquarisIoProgress: boolean = false;
 let aquarisSearchProgress: boolean = false;
-let aquarisConnectProgress: boolean = false;
 
 let aquarisHasBluetooth: boolean = true;
 
@@ -179,7 +178,6 @@ const aquaris = new LCT21001();
 
 export const aquarisHandlers: Map<string, (...args: any[]) => any> = new Map<string, (...args: any[]) => any>()
     .set(AquarisAPIFunctions.connect, async (deviceUUID: string): Promise<void> => {
-        aquarisConnectProgress = true;
         try {
             await stopSearch();
 
@@ -212,8 +210,6 @@ export const aquarisHandlers: Map<string, (...args: any[]) => any> = new Map<str
             await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected, true);
         } catch (err: unknown) {
             console.error("aquarisAPI: connect failed =>", err);
-        } finally {
-            aquarisConnectProgress = false;
         }
     })
 

@@ -20,7 +20,7 @@
 import { aquarisCleanUp } from './aquarisAPI';
 import * as path from 'node:path';
 import { tccDBus } from './dbusAPI';
-import { app, BrowserWindow, globalShortcut, ipcMain, powerMonitor, screen } from 'electron'
+import { app, BrowserWindow, globalShortcut, ipcMain, screen } from 'electron'
 import { tray, userConfig } from './initMain';
 import { displayBrightnessGnomeCleanup } from './brightnessAPI';
 import { unregisterAPI } from './apiManagement';

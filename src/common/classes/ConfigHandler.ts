@@ -35,8 +35,6 @@ export class ConfigHandler {
     public autosaveFileMod: number;
     public fantablesFileMod: number;
 
-    private loadedCustomProfiles: ITccProfile[];
-    private loadedSettings: ITccSettings;
 
     // tslint:disable-next-line: variable-name
     constructor(private _pathSettings: string, private _pathProfiles: string, private _pathWebcam: string, private _pathV4l2Names: string, private _pathAutosave: string, private _pathFantables: string) {

@@ -165,14 +165,7 @@ interface PGMS
       pgms: PGMS,
     }
   }
-
-
-interface IPCReturnValue
-  {
-    data;
-    error;
-  }
-
+  
 interface IProcessVersions
   {
     node: string;

@@ -23,7 +23,6 @@ import { TccDBusClientService } from './tcc-dbus-client.service';
 import { IdGpuInfo, IiGpuInfo } from "src/common/models/TccGpuValues";
 import { IDBusFanData, TimeData } from 'src/common/models/IFanData';
 import { SystemProfileInfo, deviceSystemProfileInfo } from 'src/common/models/ISystemProfileInfo';
-import { Subject } from 'rxjs';
 import { ICpuPower } from 'src/common/models/TccPowerSettings';
 
 @Injectable({

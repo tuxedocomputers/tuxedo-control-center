@@ -28,7 +28,6 @@ import { StateService, IStateInfo } from '../state.service';
 import { Subscription } from 'rxjs';
 import { ITccSettings } from '../../../common/models/TccSettings';
 import { ProfileConflictDialogService } from "../profile-conflict-dialog/profile-conflict-dialog.service";
-import { ConfirmDialogResult } from '../dialog-confirm/dialog-confirm.component';
 import { IProfileConflictDialogResult } from '../profile-conflict-dialog/profile-conflict-dialog.component';
 
 

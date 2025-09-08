@@ -40,7 +40,6 @@ import {
 import {
     ITccFanProfile,
     ITccFanTableEntry,
-    customFanPreset,
     defaultFanProfiles,
 } from "src/common/models/TccFanTable";
 import { ConfigService } from "../config.service";

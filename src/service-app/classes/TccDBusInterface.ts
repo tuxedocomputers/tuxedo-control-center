@@ -22,7 +22,6 @@ import { ChargingWorker } from './ChargingWorker';
 import { BehaviorSubject } from 'rxjs';
 import { FnLockController } from '../../common/classes/FnLockController';
 import { ChargeType } from '../../common/classes/PowerSupplyController';
-import { DMIController } from '../../common/classes/DMIController';
 
 
 /**

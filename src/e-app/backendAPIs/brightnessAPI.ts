@@ -19,7 +19,6 @@
 
 import { ipcMain, nativeTheme } from "electron";
 import type { IpcMainEvent, IpcMainInvokeEvent } from "electron";
-import type { Observable } from "rxjs";
 import { Subject } from "rxjs";
 import { DBusDisplayBrightnessGnome } from "../../common/classes/DBusDisplayBrightnessGnome";
 import { userConfig } from "./initMain";

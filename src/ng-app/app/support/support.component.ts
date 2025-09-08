@@ -63,7 +63,7 @@ export class SupportComponent implements OnInit {
     this.formTicketNumber = new FormGroup({
       inputTicketNumber: new FormControl('', [Validators.required, Validators.pattern('^(99)([0-9]){7}')])
     });
-    // TODO register callback for onUpdateSysteminfoLabel and update label accordingly
+
     window.ipc.onUpdateSysteminfoLabel((event: any, text: string): void => {
         this.systeminfoOutput(text);
     });

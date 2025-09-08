@@ -27,7 +27,7 @@ import { SysFsService } from "../sys-fs.service";
 import { Subscription } from "rxjs";
 import { UtilsService } from "../utils.service";
 import { TccDBusClientService } from "../tcc-dbus-client.service";
-import { IDBusFanData, TimeData } from "src/common/models/IFanData";
+import { IDBusFanData } from "src/common/models/IFanData";
 import { ITccProfile } from "src/common/models/TccProfile";
 import { StateService } from "../state.service";
 import { ActivatedRoute, Router } from "@angular/router";

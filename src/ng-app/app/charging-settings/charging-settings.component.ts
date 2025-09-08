@@ -76,7 +76,6 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
     public chargingThresholdsProgress: boolean = false;
     public thresholdPresets: Map<String, ThresholdPresets> = new Map<String, ThresholdPresets>();
 
-    private updateInterval: number = 1000;
     private timeout;
 
     public gridParams: IGridParams = GridParamsSettings;

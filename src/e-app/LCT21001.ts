@@ -24,8 +24,6 @@ function sleep(ms: number, arg: string = 'timeout'): Promise<string> {
     return new Promise<string>((resolve: (value: string) => void): NodeJS.Timeout => setTimeout(resolve, ms, arg));
 }
 
-const noop: () => void = (): void => {};
-
 export enum RGBState {
     Static = 0x00,
     Breathe = 0x01,
