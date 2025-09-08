@@ -23,7 +23,7 @@ const debugAPICalls = false;
 
 export function registerAPI (ipcMain: IpcMain, apiHandle: string, mainsideHandlers: Map<string, (...args: any[]) => any>): void {
 
-    ipcMain.handle(apiHandle, async (event: IpcMainInvokeEvent, args: any[]) => {
+    ipcMain.handle(apiHandle, async (event: IpcMainInvokeEvent, args: any[]): Promise<any> => {
         const mainsideFunction: (...args: any[]) => any = mainsideHandlers.get(args[0]);
         if (mainsideFunction === undefined) {
             throw Error(apiHandle + ': Undefined API function');

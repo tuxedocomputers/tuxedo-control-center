@@ -54,7 +54,10 @@ export class FanControlWorker extends DaemonWorker {
             speed: { timestamp: number; speed: number };
         }[];
     } = {
-        fans: Array.from({ length: 3 }, (): any => ({
+        fans: Array.from({ length: 3 }, (): {
+            temp: { timestamp: number; temp: number };
+            speed: { timestamp: number; speed: number };
+        } => ({
             temp: {
                 timestamp: -1,
                 temp: -1,

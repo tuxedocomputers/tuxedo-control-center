@@ -86,7 +86,7 @@ export class PrimeSelectComponent implements OnInit {
             this.config.pkexecSetPrimeSelectAsync(selectedPrimeStatus);
 
         // todo: use boolean instead
-        const isSuccessful: Boolean = await this.utils.waitingDialog(
+        const isSuccessful: boolean = await this.utils.waitingDialog(
             config,
             pkexecSetPrimeSelectAsync
         );

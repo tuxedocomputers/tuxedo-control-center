@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, EventEmitter, Input, ViewChild } from "@angular/core";
+import { Component, ElementRef, EventEmitter, Input, ViewChild } from "@angular/core";
 import { Chart, ChartConfiguration, TooltipItem } from "chart.js";
 import {
     chartAnimation,
@@ -34,7 +34,7 @@ import { UtilsService } from "../utils.service";
     standalone: false,
 })
 export class TgpChartComponent {
-    @ViewChild("chartCanvas") chartCanvas!: any;
+    @ViewChild("chartCanvas") chartCanvas!: ElementRef;
     private chart: Chart;
 
     @Input()
@@ -44,7 +44,7 @@ export class TgpChartComponent {
     public nvidiaPowerCTRLMaxPowerLimit: number;
     @Input()
     public nvidiaPowerCTRLDefaultPowerLimit: number;
-    private dataCollectionTimeout: any = null;
+    private dataCollectionTimeout: NodeJS.Timeout = null;
     
     private textColor: string = ""
 

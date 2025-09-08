@@ -20,6 +20,7 @@
 import { Component, OnInit } from "@angular/core";
 import { UtilsService } from "../utils.service";
 import { ConfigService } from "../config.service";
+import { IpcRendererEvent } from "electron";
 
 @Component({
     selector: "app-prime-dialog",
@@ -39,7 +40,7 @@ export class PrimeDialogComponent implements OnInit {
     ) {}
 
     public ngOnInit(): void {
-        window.ipc.onSetPrimeSelectMode( async (event: any, primeSelectMode: string): Promise<void> => {
+        window.ipc.onSetPrimeSelectMode(async (event: IpcRendererEvent, primeSelectMode: string): Promise<void> => {
             this.primeSelectMode = primeSelectMode;
 
             // small delay required to avoid flickering ui since html does not instantly update

@@ -23,10 +23,10 @@ import {
 } from "../classes/SysFsProperties";
 
 export interface IFanDataInputs {
-    speedInput: SysFsPropertyInteger;
-    fanMaxInput: SysFsPropertyInteger;
-    tempInput: SysFsPropertyInteger;
-    pwmInput: SysFsPropertyInteger;
-    fanLabel: SysFsPropertyString;
-    tempLabel: SysFsPropertyString;
+    speedInput?: SysFsPropertyInteger;
+    fanMaxInput?: SysFsPropertyInteger;
+    tempInput?: SysFsPropertyInteger;
+    pwmInput?: SysFsPropertyInteger;
+    fanLabel?: SysFsPropertyString;
+    tempLabel?: SysFsPropertyString;
 }

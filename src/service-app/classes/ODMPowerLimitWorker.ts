@@ -49,7 +49,7 @@ export class ODMPowerLimitWorker extends DaemonWorker {
             }
 
             this.tccd.logLine('ODMPowerLimitWorker: Set ODM TDPs '
-                + JSON.stringify(newTDPValues.map(tdpValue => tdpValue + ' W')));
+                + JSON.stringify(newTDPValues.map((tdpValue: number): string => tdpValue + ' W')));
             const writeSuccess: boolean = ioAPI.setTDPValues(newTDPValues);
             if (writeSuccess) {
                 for (let i: number = 0; i < tdpInfo?.length && i < newTDPValues?.length; ++i) {

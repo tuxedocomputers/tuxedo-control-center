@@ -53,7 +53,7 @@ export class GlobalSettingsComponent implements OnInit {
     private subscriptions: Subscription = new Subscription();
 
     public primeState: string = "iGPU";
-    public expandPrimeSelect: Boolean = false;
+    public expandPrimeSelect: boolean = false;
     public isX11: number = -1;
     public aptInstalled: boolean = false;
     
@@ -133,7 +133,7 @@ export class GlobalSettingsComponent implements OnInit {
         );
     }
     
-    public async onCPUSettingsEnabledChanged(event: any): Promise<void> {
+    public async onCPUSettingsEnabledChanged(event:  MatCheckboxChange): Promise<void> {
         await this.mutex.runExclusive(async (): Promise<void> => {
             this.utils.pageDisabled = true;
 
@@ -215,7 +215,7 @@ export class GlobalSettingsComponent implements OnInit {
         })
     }
 
-    public async onYCbCr420WorkaroundChanged(event: any, card: number, port: string): Promise<void> {
+    public async onYCbCr420WorkaroundChanged(event: MatCheckboxChange, card: number, port: string): Promise<void> {
         await this.mutex.runExclusive(async (): Promise<void> => {
             if (this.config.getSettings().ycbcr420Workaround?.length > card && port in this.config.getSettings().ycbcr420Workaround[card]) {
                 this.utils.pageDisabled = true;

@@ -17,9 +17,10 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const fs: any = require("fs");
-const fsp: any = require("fs").promises;
+const fs: typeof import("fs") = require("fs");
+const fsp: typeof import("fs").promises = require("fs").promises;
 import { ISysFsProperty } from '../models/IDeviceProperty';
+import { FSWatcher } from "fs";
 
 /**
  * Base (abstract) IO class for communicating with devices in /sys
@@ -171,7 +172,7 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
     /**
      * Set a callback on changes to value
      */
-    public setFSWatchListener(listener: (event: "rename" | "change", filename: string) => Array<any>): Array<any> {
+    public setFSWatchListener(listener: (event: "rename" | "change", filename: string) => Array<FSWatcher>): Array<FSWatcher> {
         if (this.readPath === this.writePath) {
             return [fs.watch(this.readPath, listener)];
         }

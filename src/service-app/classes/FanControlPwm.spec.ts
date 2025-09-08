@@ -18,7 +18,7 @@
  */
 
 import "jasmine";
-const mock: any = require("mock-fs");
+const mock: typeof import("mock-fs") = require("mock-fs");
 
 import { FanControlPwm } from "./FanControlPwm";
 import { SysFsPropertyInteger } from "../../common/classes/SysFsProperties";

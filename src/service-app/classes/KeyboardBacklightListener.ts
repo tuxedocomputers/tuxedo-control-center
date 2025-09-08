@@ -285,7 +285,7 @@ export class KeyboardBacklightListener {
             } catch (err: unknown) {
                 console.error("KeyboardBacklightListener: setKeyboardBacklightStates failed =>", err)
                 // todo: error handling
-                if ((err as any)?.name === "DBusError") {
+                if (err instanceof dbus.DBusError) {
                     console.log("Failed to write brightness using UPower: Try restarting upower.service followed by tccd.service using systemctl.")
                 }
             }

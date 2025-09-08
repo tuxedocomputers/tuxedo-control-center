@@ -21,6 +21,7 @@ import { SysFsController } from './SysFsController';
 import { SysFsPropertyIntegerHex, SysFsPropertyString } from './SysFsProperties';
 import * as path from 'path';
 import * as fs from 'fs';
+import { Dirent } from "fs";
 
 export class UsbController extends SysFsController {
 
@@ -35,8 +36,8 @@ export class UsbController extends SysFsController {
 
     public static getUsbDriverDeviceList(): string[] {
         return SysFsController.getDeviceListDirent(UsbController.USB_DRIVER_PATH)
-        .filter((dirent: any): boolean => dirent.isDirectory() || dirent.isSymbolicLink())
-        .map((dirent: any): string => dirent.name);
+        .filter((dirent: Dirent): boolean => dirent.isDirectory() || dirent.isSymbolicLink())
+        .map((dirent: Dirent): string => dirent.name);
     }
     // End static stuff
 

@@ -27,7 +27,7 @@ import { WebcamClientAPI} from "./preloadAPIs/webcamClientAPI";
 import type * as fs from 'node:fs';
 import type { ITccFanProfile } from "../common/models/TccFanTable";
 import type { IDrive } from "../common/models/IDrive";
-import type { OpenDialogReturnValue, SaveDialogReturnValue } from "electron";
+import type { IpcRendererEvent, OpenDialogReturnValue, SaveDialogReturnValue } from "electron";
 import type { BrightnessModeString } from "./backendAPIs/brightnessAPI";
 import type { IDisplayBrightnessInfo, IGeneralCPUInfo, ILogicalCoreInfo } from "../common/models/ICpuInfos";
 const { contextBridge, ipcRenderer } = require('electron');
@@ -45,7 +45,7 @@ interface IProcessVersions
 contextBridge.exposeInMainWorld(
   'ipc',
   {
-    getAppVersion: async (): Promise<any> => ipcRenderer.invoke('get-app-version'),
+    getAppVersion: async (): Promise<string> => ipcRenderer.invoke('get-app-version'),
     closeApp: (): void => ipcRenderer.send('close-app'),
     closeWindow: (): void => ipcRenderer.send('close-window'),
     minimizeWindow: (): void => ipcRenderer.send('minimize-window'),
@@ -75,7 +75,7 @@ contextBridge.exposeInMainWorld(
     saveFileDialog: (properties: Electron.OpenDialogOptions): Promise<SaveDialogReturnValue> => ipcRenderer.invoke('show-save-dialog', properties),
     primeWindowClose: (): void => ipcRenderer.send("prime-window-close"),
     primeWindowShow: (): void => ipcRenderer.send("prime-window-show"),
-    onSetPrimeSelectMode: (callback: () => void): void => {
+    onSetPrimeSelectMode: (callback: (event: IpcRendererEvent, primeSelectMode: string) => void): void => {
         var channelname: string = "set-prime-select-mode";
         if(callbacks.indexOf(channelname) < 0)
         {
@@ -83,7 +83,7 @@ contextBridge.exposeInMainWorld(
             ipcRenderer.on(channelname, callback);
         }
     },
-    onUpdateSystemInfosLabel: (callback: (event: any, text: any) => void): void => {
+    onUpdateSystemInfosLabel: (callback: (event: IpcRendererEvent, text: string) => void): void => {
         var channelname: string = 'update-systeminfos-label';
         if(callbacks.indexOf(channelname) < 0)
         {
@@ -157,7 +157,7 @@ contextBridge.exposeInMainWorld(
             ipcRenderer.on(channelname, callback);
         }
     },
-    onSettingWebcamWithLoading: (callback: (event: any, config: WebcamConstraints) => void): void => {
+    onSettingWebcamWithLoading: (callback: (event: IpcRendererEvent, config: WebcamConstraints) => void): void => {
         var channelname: string = "setting-webcam-with-loading";
         if(callbacks.indexOf(channelname) < 0)
         {

@@ -19,6 +19,7 @@
 
 import {
     ITccFanProfile,
+    ITccFanTableEntry,
     customFanPreset,
 } from "../../common/models/TccFanTable";
 
@@ -45,7 +46,7 @@ export async function getCurrentCustomProfile(
         interpolatePointsArray(customFanCurve.tableGPU),
     ]);
 
-    const tccFanTable = (temp: number, i: number) => ({
+    const tccFanTable: (temp: number, i: number) => ITccFanTableEntry = (temp: number, i: number): ITccFanTableEntry => ({
         temp: i,
         speed: temp,
     });

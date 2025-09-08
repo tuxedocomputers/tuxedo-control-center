@@ -35,11 +35,11 @@ export class FanControlHwmon extends FanControlBaseClass {
     private fanMaxInputMap: Map<number, SysFsPropertyInteger>;
     private tempInputMap: Map<number, SysFsPropertyInteger>;
     private pwmInputMap: Map<number, SysFsPropertyInteger>;
-    private sensorValueMap: Map<number, number> = new Map<number, number>();
+    private sensorValueMap: Map<string, number> = new Map<string, number>();
     private fanLabelMap: Map<number, string> = new Map<number, string>();
     private tempLabelMap: Map<number, string> = new Map<number, string>();
-    private fanTempMap: Map<number, any> = new Map<number, string>();
-    private tempCache: Map<number, number | null> = new Map();
+    private fanTempMap: Map<number, { tempLabel: string; tempInput: SysFsPropertyInteger }> = new Map<number, { tempLabel: string; tempInput: SysFsPropertyInteger }>();
+    private tempCache: Map<string, number> = new Map<string, number>();
 
 
     private async getFilteredAndMappedFiles(
@@ -135,7 +135,7 @@ export class FanControlHwmon extends FanControlBaseClass {
         );
         return Promise.all(
             fanNumbers.map(
-                (fanIndex: number): Promise<any> => this.getFanData(fanIndex),
+                (fanIndex: number): Promise<IFanDataInputs> => this.getFanData(fanIndex),
             ),
         );
     }
@@ -148,7 +148,7 @@ export class FanControlHwmon extends FanControlBaseClass {
         );
         return Promise.all(
             tempNumbers.map(
-                (tempIndex: number): Promise<any> =>
+                (tempIndex: number): Promise<IFanDataInputs> =>
                     this.getTempData(tempIndex),
             ),
         );
@@ -239,7 +239,7 @@ export class FanControlHwmon extends FanControlBaseClass {
         console.log(fanInfo);
     }
 
-    private async getFanData(fanIndex: number): Promise<any> {
+    private async getFanData(fanIndex: number): Promise<IFanDataInputs> {
         return {
             speedInput: await this.getPropertyInteger(
                 this.hwmonPath,
@@ -263,7 +263,7 @@ export class FanControlHwmon extends FanControlBaseClass {
             ),
         };
     }
-    private async getTempData(fanIndex: number): Promise<any> {
+    private async getTempData(fanIndex: number): Promise<IFanDataInputs> {
         return {
             tempInput: await this.getPropertyInteger(
                 this.hwmonPath,
@@ -352,14 +352,14 @@ export class FanControlHwmon extends FanControlBaseClass {
     }
 
     public async getFanTemperature(fanIndex: number): Promise<number> {
-        const fanData = this.fanTempMap.get(fanIndex + 1);
+        const fanData: { tempLabel: string; tempInput: SysFsPropertyInteger } = this.fanTempMap.get(fanIndex + 1);
         if (!fanData) {
             console.warn(`No fan data found for index: ${fanIndex}`);
             return -1;
         }
 
         const { tempLabel } = fanData;
-        const cachedValue = this.tempCache.get(tempLabel);
+        const cachedValue: number = this.tempCache.get(tempLabel);
 
         if (cachedValue !== undefined && cachedValue !== null) {
             return cachedValue;
@@ -370,7 +370,7 @@ export class FanControlHwmon extends FanControlBaseClass {
         if (tempEntry !== undefined) {
             const readValue: number = await tempEntry.readValueNTA();
             if (readValue) {
-                const tempCelsius = readValue / 1000;
+                const tempCelsius: number = readValue / 1000;
                 this.sensorValueMap.set(tempLabel, tempCelsius);
                 this.tempCache.set(tempLabel, tempCelsius);
                 return tempCelsius;

@@ -26,12 +26,12 @@ import { TccDBusClientService } from "./tcc-dbus-client.service";
 @Injectable({
     providedIn: "root",
 })
-export class X11StatusResolver implements Resolve<boolean> {
+export class X11StatusResolver implements Resolve<number> {
     constructor(private tccdbus: TccDBusClientService) {}
 
-    resolve(): Observable<boolean> {
+    resolve(): Observable<number> {
         return from(this.tccdbus.isX11.asObservable()).pipe(
-            filter((value: any): any => value !== undefined && value !== -1),
+            filter((value: number): boolean => value !== undefined && value !== -1),
             first()
         );
     }

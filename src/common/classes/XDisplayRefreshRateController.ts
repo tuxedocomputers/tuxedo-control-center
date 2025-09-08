@@ -193,7 +193,7 @@ export class XDisplayRefreshRateController {
         let currLine: string = lineIter.next().value;
 
         while (currLine && !foundDisplayName) {
-            const displayNameMatch: any = currLine.match(displayNameRegex);
+            const displayNameMatch: RegExpMatchArray = currLine.match(displayNameRegex);
             if (displayNameMatch) {
                 newDisplayModes.displayName = this.displayName =
                     displayNameMatch[0].trim();

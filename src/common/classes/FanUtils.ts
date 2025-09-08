@@ -18,7 +18,7 @@
  */
 
 import type { ITccFanTableEntry } from "../models/TccFanTable";
-const fsp = require("fs").promises;
+const fsp: typeof import("fs").promises = require("fs").promises;
 import * as path from "path";
 
 async function interpolatePoints(

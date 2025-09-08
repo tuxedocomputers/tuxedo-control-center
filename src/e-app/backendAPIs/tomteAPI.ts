@@ -125,7 +125,7 @@ async function blockModule(moduleName: string): Promise<void> {
 async function setMode(mode: string): Promise<void> {
     const command: string = "pkexec tuxedo-tomte " + mode;
     return new Promise<void>(async (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): Promise<void> => {
-        await execCmd(command).then(() => {
+        await execCmd(command).then((): void => {
             resolve();
         }).catch((err: unknown): void => {
             console.error("tomteAPI: setMode failed =>", err)

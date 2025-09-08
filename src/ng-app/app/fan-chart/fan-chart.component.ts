@@ -20,6 +20,7 @@
 import {
     AfterViewInit,
     Component,
+    ElementRef,
     Input,
     OnDestroy,
     OnInit,
@@ -52,15 +53,15 @@ import { UtilsService } from "../utils.service";
     standalone: false,
 })
 export class FanChartComponent implements OnInit, OnDestroy, AfterViewInit {
-    public tempsLabels: any[];
+    public tempsLabels: string[];
     public graphType: string = "line";
-    private dataCollectionTimeout: any = null;
+    private dataCollectionTimeout: NodeJS.Timeout = null;
 
-    @ViewChild("chartCanvas") chartCanvas!: any;
-    private chart: any;
+    @ViewChild("chartCanvas") chartCanvas!: ElementRef;
+    private chart: Chart;
 
-    private cpuData: any[] = [];
-    private gpuData: any[] = [];
+    private cpuData: { x: number; y: number }[] = [];
+    private gpuData: { x: number; y: number }[] = [];
 
     private _fanProfile: ITccFanProfile;
     private _offsetFanspeed: number = 0;
@@ -224,7 +225,7 @@ export class FanChartComponent implements OnInit, OnDestroy, AfterViewInit {
                 ),
             },
         };
-
+        
         const ctx = this.chartCanvas.nativeElement.getContext(
             "2d"
         ) as CanvasRenderingContext2D;

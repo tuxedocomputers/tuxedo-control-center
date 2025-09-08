@@ -45,7 +45,7 @@ async function updateDeviceState(dev: LCT21001, current: AquarisState, next: Aqu
     if (!aquarisIoProgress) {
         try {
             aquarisIoProgress = true;
-            let updatedSomething;
+            let updatedSomething: boolean;
             do {
                 let updateLed: boolean = false;
                 let updateFan: boolean = false;

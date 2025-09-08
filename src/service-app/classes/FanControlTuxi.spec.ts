@@ -18,7 +18,7 @@
  */
 
 import "jasmine";
-const mock: any = require("mock-fs");
+const mock: typeof import("mock-fs") = require("mock-fs");
 
 import { FanControlTuxi } from "./FanControlTuxi";
 import { SysFsPropertyInteger } from "../../common/classes/SysFsProperties";

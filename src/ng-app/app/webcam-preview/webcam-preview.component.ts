@@ -24,6 +24,7 @@ import {
     OnInit,
     ViewChild,
 } from "@angular/core";
+import { IpcRendererEvent } from "electron";
 import { WebcamConstraints } from "src/common/models/TccWebcamSettings";
 
 @Component({
@@ -43,7 +44,7 @@ export class WebcamPreviewComponent implements OnInit {
     ) {}
     
     public async ngOnInit(): Promise<void> {
-        window.webcam.onSettingWebcamWithLoading(async (event: any, config: WebcamConstraints): Promise<void> => {
+        window.webcam.onSettingWebcamWithLoading(async (event: IpcRendererEvent, config: WebcamConstraints): Promise<void> => {
             this.spinnerActive = true;
             this.cdRef.detectChanges();
             document.getElementById("video").style.visibility = "hidden";

@@ -52,7 +52,7 @@ export class ChangeCryptPasswordComponent implements OnInit {
             confirmPassword: new FormControl('', [Validators.required, Validators.minLength(this.minLength), Validators.maxLength(this.maxLength)])
         }, { validators: [this.confirmValidation] })
 
-        this.crypt_drives = (await window.driveController.getDrives()).filter(x => x.crypt);
+        this.crypt_drives = (await window.driveController.getDrives()).filter((x: IDrive): boolean => x.crypt);
 
         this.buttonType = "password";
         this.show_password_button_text = $localize `:@@cryptButtonShowPassword:Show Passwords`;
@@ -71,7 +71,7 @@ export class ChangeCryptPasswordComponent implements OnInit {
 
     async changePassword(): Promise<void> {
         this.utils.pageDisabled = true;
-        this.changeCryptPassword().then((execStatus) => {
+        this.changeCryptPassword().then((execStatus: boolean): void => {
             if (execStatus) {
                 this.passwordFormGroup.setValue({
                     cryptPassword: "",

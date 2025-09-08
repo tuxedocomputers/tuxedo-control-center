@@ -28,7 +28,7 @@ import { filter, first } from "rxjs/operators";
 export class AptInstalledResolver implements Resolve<boolean> {
     resolve(): Observable<boolean> {
         return from(window.pgms.aptInstalled()).pipe(
-            filter((value: any): any => value !== undefined),
+            filter((value: boolean): boolean => value !== undefined),
             first()
         );
     }

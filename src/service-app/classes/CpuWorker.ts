@@ -41,7 +41,7 @@ export class CpuWorker extends DaemonWorker {
         super(10000, "CpuWorker", tccd);
         this.cpuCtrl = new CpuController(this.basePath);
 
-        const dev = this.tccd.identifyDevice();
+        const dev: TUXEDODevice = this.tccd.identifyDevice();
         if ([TUXEDODevice.SIRIUS1602, TUXEDODevice.STELLSL15A06].includes(dev)) {
             this.noEPPWriteQuirk = true;
         } else {
@@ -84,9 +84,9 @@ export class CpuWorker extends DaemonWorker {
                 scalingDriver = this.cpuCtrl.cores[0].scalingDriver.readValueNT();
             }
 
-            const fixedPowersaveDrivers = [
+            const fixedPowersaveDrivers: string[] = [
                 ScalingDriver.intel_pstate,
-                ScalingDriver.amd_pstate_epp].map(d => d.toString());
+                ScalingDriver.amd_pstate_epp].map((d: ScalingDriver): string => d.toString());
 
             if (fixedPowersaveDrivers.includes(scalingDriver)) {
                 // Fixed 'powersave' governor for intel_pstate and amd-pstate-epp
@@ -123,9 +123,9 @@ export class CpuWorker extends DaemonWorker {
                 scalingDriver = this.cpuCtrl.cores[0].scalingDriver.readValueNT();
             }
 
-            const fixedPerformanceDrivers = [
+            const fixedPerformanceDrivers: string[] = [
                 ScalingDriver.intel_pstate,
-                ScalingDriver.amd_pstate_epp].map(d => d.toString());
+                ScalingDriver.amd_pstate_epp].map((d: ScalingDriver): string => d.toString());
 
             if (fixedPerformanceDrivers.includes(scalingDriver)) {
                 // Fixed 'performance' governor for intel_pstate and amd-pstate-epp
@@ -134,7 +134,7 @@ export class CpuWorker extends DaemonWorker {
                 // Preferred governors list for other drivers, mainly 'acpi-cpufreq'.
                 // Also includes 'intel_cpufreq' which according to kernel.org doc on intel_pstate
                 // behaves as the acpi-cpufreq governors.
-                const availableGovernors = this.cpuCtrl.cores[0].scalingAvailableGovernors.readValue();
+                const availableGovernors: string[] = this.cpuCtrl.cores[0].scalingAvailableGovernors.readValue();
                 for (const governorName of this.preferredPerformanceAcpiFreqGovernors) {
                     if (availableGovernors.includes(governorName)) {
                         chosenName = governorName;

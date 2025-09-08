@@ -27,7 +27,7 @@ import {
     ViewChild,
 } from "@angular/core";
 
-import type { OnInit } from "@angular/core";
+import type { ElementRef, OnInit } from "@angular/core";
 
 import type { FormGroup } from "@angular/forms";
 
@@ -97,7 +97,7 @@ export class FanCustomChartComponent implements OnInit {
     private textColor: string = "";
     private fahrenheit: boolean = false;
 
-    @ViewChild("chartCanvas") chartCanvas!: any;
+    @ViewChild("chartCanvas") chartCanvas!: ElementRef;
 
     private prevTemp: number;
 

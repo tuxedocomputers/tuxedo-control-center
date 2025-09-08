@@ -22,12 +22,13 @@ import type { IpcMainEvent, IpcMainInvokeEvent } from "electron";
 import { Subject } from "rxjs";
 import { DBusDisplayBrightnessGnome } from "../../common/classes/DBusDisplayBrightnessGnome";
 import { userConfig } from "./initMain";
+import { MessageBus } from "dbus-next";
 '../../common/classes/DBusDisplayBrightnessGnome';
 
 export type BrightnessModeString = 'light' | 'dark' | 'system';
 
-let sessionBus: any;
-const dbus: any = require('dbus-next');
+let sessionBus: MessageBus;
+const dbus: typeof import("dbus-next") = require('dbus-next');
 
 const displayBrightnessSubject: Subject<number> = new Subject<number>();
 let currentDisplayBrightness: number;

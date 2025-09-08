@@ -28,7 +28,7 @@ import type { IDbusClientAPI } from "../../e-app/preloadAPIs/DbusClientAPI";
 import type { ITomteClientAPI } from "src/e-app/preloadAPIs/tomteClientAPI";
 import type { IWebcamClientAPI } from "src/e-app/preloadAPIs/webcamClientAPI";
 import type { WebcamConstraints } from "../../common/models/TccWebcamSettings";
-import type { OpenDialogReturnValue, SaveDialogReturnValue } from "electron";
+import type { IpcRendererEvent, OpenDialogReturnValue, SaveDialogReturnValue } from "electron";
 import type { BrightnessModeString } from "src/e-app/backendAPIs/brightnessAPI";
 
 // todo: variables shouldn't be uppercase in every letter
@@ -49,7 +49,7 @@ interface IPC extends EventEmitter {
     saveFileDialog: (properties: Electron.OpenDialogOptions) => Promise<SaveDialogReturnValue>,
     primeWindowShow: () => void,
     primeWindowClose: () => void,
-    onSetPrimeSelectMode: (callback: (event: any, primeSelectMode: string) => Promise<void>) => void,
+    onSetPrimeSelectMode: (callback: (event: IpcRendererEvent, primeSelectMode: string) => void) => Promise<void>,
     displayBrightnessNotSupportedGnome: () => boolean,
     setDisplayBrightnessGnome: (valuePercent: number) => void,
     setShutdownTime: (selectedHour: number , selectedMinute: number) => Promise<string>,
@@ -60,7 +60,7 @@ interface IPC extends EventEmitter {
     triggerLanguageChange: (languageId: string) => void,
     changeCryptPassword: (newPassword: string, oldPassword: string, confirmPassword: string) => Promise<string>,
     runSysteminfo: (ticketNumber: string) => Promise<void>,
-    onUpdateSystemInfosLabel: (callback: (event: any, text: string) => void) => void,
+    onUpdateSystemInfosLabel: (callback: (event: IpcRendererEvent, text: string) => void) => void,
     primeSelect: (selectedState: string) => Promise<string>,
 }
 
@@ -97,7 +97,7 @@ interface WEBCAM
     onVideoEnded: (callback: () => void) => void,
     onExternalWebcamPreviewClosed: (callback: () => void) => void,
     onApplyControls: (callback: () => void) => void,
-    onSettingWebcamWithLoading: (callback: (event: any, config: WebcamConstraints) => void) => void,
+    onSettingWebcamWithLoading: (callback: (event: IpcRendererEvent, config: WebcamConstraints) => void) => void,
     }
 
 interface CPU

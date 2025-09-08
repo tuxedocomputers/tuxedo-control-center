@@ -33,7 +33,7 @@ export class ProfileConflictDialogService {
     constructor(private dialog: MatDialog) { }  
     dialogRef: MatDialogRef<ProfileConflictComponent>;
   
-  private open(oldProfile: ITccProfile, newProfile: ITccProfile) 
+  private open(oldProfile: ITccProfile, newProfile: ITccProfile): void 
   {
     this.dialogRef = this.dialog.open(ProfileConflictComponent, {    
         data: {
@@ -49,18 +49,18 @@ export class ProfileConflictDialogService {
 
   private closed(): Observable<IProfileConflictDialogResult> 
   {
-    return this.dialogRef.afterClosed().pipe(take(1), map(res => {
+    return this.dialogRef.afterClosed().pipe(take(1), map((res: IProfileConflictDialogResult): IProfileConflictDialogResult => {
         return res;
       }
     ));
   }
 
-  public async openConflictModal(oldProfile: ITccProfile, importedProfile: ITccProfile,)
+  public async openConflictModal(oldProfile: ITccProfile, importedProfile: ITccProfile,): Promise<IProfileConflictDialogResult>
     {
-        return new Promise<IProfileConflictDialogResult>((resolve, reject) => {
+        return new Promise<IProfileConflictDialogResult>((resolve: (value: IProfileConflictDialogResult | PromiseLike<IProfileConflictDialogResult>) => void, reject: (reason?: any) => void): void  => {
             this.open(oldProfile,importedProfile);
 
-            this.closed().subscribe(confirmed => {
+            this.closed().subscribe((confirmed: IProfileConflictDialogResult): void => {
                 if (confirmed) {
                   resolve(confirmed);
                 }

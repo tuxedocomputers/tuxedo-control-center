@@ -148,8 +148,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public get hasMaxFreqWorkaround(): boolean { return this.compat.hasMissingMaxFreqBoostWorkaround; }
     public powerLimitSliderIndex: number = undefined;
-
-    public min = Math.min;
+    public min: (...values: number[]) => number = Math.min;
 
     @ViewChild('inputName') public inputName: MatInput;
 
@@ -166,7 +165,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         public compat: CompatibilityService
     ) { }
 
-    public ngOnInit() {
+    public ngOnInit(): void {
         // prevents error messages on forced refresh
         this.cpuInfo =
         {
@@ -775,9 +774,9 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         clearInterval(this.buttonRepeatTimer);
     }
     
-    public modifySliderInput(slider: any, offset: number, min: number, max: number, updateFunction?: any, updateFunctionArg?: any): () => void {
+    public modifySliderInput(slider: FormControl, offset: number, min: number, max: number, updateFunction?: any, updateFunctionArg?: any): () => void {
         return (): void => {
-            let newValue: number = slider.value += offset;
+            let newValue: number = slider.value + offset;
             if (newValue < min) {
                 newValue = min;
             } else if (newValue > max) {
@@ -824,9 +823,9 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         const odmPowerLimits: FormGroup = this.profileFormGroup.controls.odmPowerLimits as FormGroup;
         const tdpValues: FormArray = odmPowerLimits.controls.tdpValues as FormArray;
         tdpValues.controls[sliderIndex].reset(this.viewProfile.odmPowerLimits.tdpValues[sliderIndex]);
-        const wantedValue: any = tdpValues.controls[sliderIndex].value;
+        const wantedValue: number = tdpValues.controls[sliderIndex].value;
         this.sliderODMPowerLimitChange(sliderIndex);
-        const correctedValue: any = tdpValues.controls[sliderIndex].value;
+        const correctedValue: number = tdpValues.controls[sliderIndex].value;
         if (correctedValue !== wantedValue) {
             tdpValues.controls[sliderIndex].markAsDirty();
         }

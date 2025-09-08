@@ -70,7 +70,7 @@ export class LCT21001 {
     private device: NodeBle.Device | undefined;
     private uartRx: NodeBle.GattCharacteristic | undefined;
     private uartTx: NodeBle.GattCharacteristic | undefined;
-    private destroy: (() => any) | undefined;
+    private destroy: (() => void) | undefined;
 
     private connectedModel: LCTDeviceModel | undefined;
 
@@ -282,7 +282,7 @@ export class LCT21001 {
                     reject('rx already awaiting notify');
                 }
                 await this.uartRx.startNotifications();
-                this.uartRx.once('valuechanged', async (outputBuffer: any) => {
+                this.uartRx.once('valuechanged', async (outputBuffer: any): Promise<void> => {
                     await this.uartRx?.stopNotifications();
                     resolve(outputBuffer);
                 });

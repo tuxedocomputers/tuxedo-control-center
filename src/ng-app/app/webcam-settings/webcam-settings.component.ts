@@ -487,12 +487,15 @@ export class WebcamSettingsComponent implements OnInit {
     ): ValidatorFn {
         return (control: AbstractControl): ValidationErrors | null => {
             let errors: { min?: number, max?: number, type?: string, options?: string[]; actual: unknown} = null;
-            const value: any = control.value;
+            const value: boolean | number | string = control.value;
             if (setting.type === "slider") {
-                if (value < setting.min) {
+                if (typeof value !== "number") {
+                    errors = { type: "number", actual: typeof value };
+                }
+                if (typeof value === "number" && value < setting.min) {
                     errors = { min: setting.min, actual: value };
                 }
-                if (value > setting.max) {
+                if (typeof value === "number" && value > setting.max) {
                     errors = { max: setting.max, actual: value };
                 }
             }
@@ -501,7 +504,10 @@ export class WebcamSettingsComponent implements OnInit {
                     errors = { type: "boolean", actual: typeof value };
             }
             if (setting.type === "menu") {
-                if (!setting.options.includes(value)) {
+                if (typeof value !== "string") {
+                    errors = { type: "string", actual: typeof value };
+                }
+                if (typeof value === "string" && !setting.options.includes(value)) {
                     errors = { options: setting.options, actual: value };
                 }
             }
@@ -1159,7 +1165,7 @@ export class WebcamSettingsComponent implements OnInit {
             buttonAbortLabel: $localize`:@@dialogAbort:Cancel`,
             buttonConfirmLabel: $localize`:@@dialogContinue:Continue`,
         };
-        return this.utils.confirmDialog(config).then((dialogResult) => {
+        return this.utils.confirmDialog(config).then((dialogResult: ConfirmDialogResult): boolean => {
             return dialogResult["confirm"];
         });
     }

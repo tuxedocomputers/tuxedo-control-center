@@ -264,16 +264,16 @@ export class UtilsService {
   // todo: using boolean instead of Boolean
   public async waitingDialog(
     config: WaitingDialogData,
-    pkexecSetPrimeSelectAsync: Promise<Boolean>
-  ): Promise<Boolean> {
-    const dialogRef: MatDialogRef<DialogWaitingComponent, Boolean> = this.dialog.open(DialogWaitingComponent, {
+    pkexecSetPrimeSelectAsync: Promise<boolean>
+  ): Promise<boolean> {
+    const dialogRef: MatDialogRef<DialogWaitingComponent, boolean> = this.dialog.open(DialogWaitingComponent, {
       minWidth: 350,
       maxWidth: 600,
       data: config,
       autoFocus: false,
       disableClose: true,
     });
-    const status: Boolean = await pkexecSetPrimeSelectAsync;
+    const status: boolean = await pkexecSetPrimeSelectAsync;
     dialogRef.close();
     return status;
   }

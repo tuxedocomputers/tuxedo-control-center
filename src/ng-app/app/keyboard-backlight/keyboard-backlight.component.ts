@@ -31,6 +31,7 @@ import {
     GridParamsBacklight,
     IGridParams,
 } from "src/common/models/IGridParams";
+import { MatSliderThumb } from "@angular/material/slider";
 
 @Component({
     selector: "app-keyboard-backlight",
@@ -70,7 +71,7 @@ export class KeyboardBacklightComponent implements OnInit {
 
     // Converts integer value: 0xRRGGBBAA or 0xRRGGBB to a string value "#RRGGBB"
     private intToRGBSharpString(input: number): string {
-        const hex = input.toString(16).padStart(input <= 0xffffff ? 6 : 8, "0");
+        const hex: string = input.toString(16).padStart(input <= 0xffffff ? 6 : 8, "0");
         return "#" + hex.substring(0, 6);
     }
 
@@ -287,7 +288,7 @@ export class KeyboardBacklightComponent implements OnInit {
     }
 
     public startPress(
-        slider: any,
+        slider:  MatSliderThumb,
         offset: number,
         min: number,
         max: number
@@ -308,7 +309,7 @@ export class KeyboardBacklightComponent implements OnInit {
     }
 
     public modifySliderInput(
-        slider: any,
+        slider: MatSliderThumb,
         offset: number,
         min: number,
         max: number

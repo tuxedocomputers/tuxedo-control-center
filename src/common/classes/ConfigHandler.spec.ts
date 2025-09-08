@@ -18,7 +18,7 @@
  */
 
 import 'jasmine';
-const mock = require('mock-fs');
+const mock: typeof import("mock-fs") = require('mock-fs');
 import * as fs from 'fs';
 import * as path from 'path';
 

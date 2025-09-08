@@ -18,20 +18,21 @@
  */
 
 const fs: typeof import("fs") = require("fs");
+import { Dirent } from "fs";
 
 export abstract class SysFsController {
 
     public static getDeviceList(sourceDir: string): string[] {
         try {
             return fs.readdirSync(sourceDir, { withFileTypes: true })
-                .map(dirent => dirent.name);
+                .map((dirent: Dirent): any => dirent.name);
         } catch (err: unknown) {
             console.error("SysFsController: getDeviceList failed =>", err)
             return [];
         }
     }
 
-    public static getDeviceListDirent(sourceDir: string): any[] {
+    public static getDeviceListDirent(sourceDir: string): Dirent[] {
         try {
             return fs.readdirSync(sourceDir, { withFileTypes: true });
         } catch (err: unknown) {

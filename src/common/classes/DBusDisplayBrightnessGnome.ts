@@ -24,7 +24,7 @@ type OnChangedFunction = (value: number) => void;
 
 export class DBusDisplayBrightnessGnome {
 
-    private interface: any;
+    private interface: dbus.ClientInterface;
 
     private destination: string = 'org.gnome.SettingsDaemon.Power';
     private path: string = '/org/gnome/SettingsDaemon/Power';
@@ -38,7 +38,7 @@ export class DBusDisplayBrightnessGnome {
 
     constructor(private bus: dbus.MessageBus) {
         if (this.isGnome()) {
-            this.getInterface().then((iface: DBusDisplayBrightnessGnome["interface"]): void => {
+            this.getInterface().then((iface: dbus.ClientInterface): void => {
                 if (iface === undefined) { return; }
                 this.eventEmitter = iface.on('PropertiesChanged', (interfaceString: string, changed: any, invalidated: any): void => {
                     const changedValueExists: boolean = changed.hasOwnProperty('Brightness') && changed.Brightness.hasOwnProperty('value');
@@ -74,7 +74,7 @@ export class DBusDisplayBrightnessGnome {
                 const isGnome: boolean = this.isGnome()
 
                 if (isGnome) {
-                    const iface: DBusDisplayBrightnessGnome["interface"] = await this.getInterface();
+                    const iface: dbus.ClientInterface = await this.getInterface();
                     if (iface === undefined) {
                         resolve(false);
                     } else {
@@ -99,12 +99,12 @@ export class DBusDisplayBrightnessGnome {
         }
     }
 
-    public async getInterface(): Promise<DBusDisplayBrightnessGnome["interface"]> {
-        return new Promise<DBusDisplayBrightnessGnome["interface"]>((resolve: (value: DBusDisplayBrightnessGnome["interface"]) => void): void => {
+    public async getInterface(): Promise<dbus.ClientInterface> {
+        return new Promise<dbus.ClientInterface>((resolve: (value: dbus.ClientInterface) => void): void => {
             if (this.interface !== undefined) { resolve(this.interface); return; }
             // Initialize interface
             this.bus.getProxyObject(this.destination, this.path).then(
-                (proxyObject: any): void => {
+                (proxyObject: dbus.ProxyObject): void => {
                     this.interface = proxyObject.getInterface('org.freedesktop.DBus.Properties');
                     resolve(this.interface);
                 }
@@ -119,9 +119,9 @@ export class DBusDisplayBrightnessGnome {
     public async getBrightness(): Promise<number> {
         return new Promise<number>(async (resolve: (value: number | PromiseLike<number>) => void, reject: (reason?: unknown) => void): Promise<void> => {
             try {
-                const iface: any = await this.getInterface();
+                const iface: dbus.ClientInterface = await this.getInterface();
                 if (iface !== undefined) {
-                    const result: any = await iface.Get(this.propertyInterface, this.methodName);
+                    const result: dbus.Variant = await iface.Get(this.propertyInterface, this.methodName);
                     resolve(result.value);
                 } else {
                     reject(new Error('Interface not available'));
@@ -135,7 +135,7 @@ export class DBusDisplayBrightnessGnome {
     public async setBrightness(valuePercent: number): Promise<void> {
         return new Promise<void>(async (resolve: (value?: void) => void, reject: (reason?: unknown) => void): Promise<void> => {
             try {
-                const iface: any = await this.getInterface();
+                const iface: dbus.ClientInterface = await this.getInterface();
                 if (iface !== undefined) {
                     await iface.Set(this.propertyInterface, this.methodName, new dbus.Variant(this.methodReturnType, valuePercent));
                     resolve();

@@ -17,6 +17,8 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { Dirent } from "fs";
+
 const fs: typeof import("fs") = require("fs");
 const child_process: any = require("child_process");
 
@@ -25,8 +27,8 @@ export function getDirectories(source: string): string[] {
     try {
         return fs
             .readdirSync(source, { withFileTypes: true })
-            .filter((dirent: any): boolean => dirent.isDirectory())
-            .map((dirent: any): string => dirent.name);
+            .filter((dirent: Dirent): boolean => dirent.isDirectory())
+            .map((dirent: Dirent): string => dirent.name);
     } catch (err: unknown) {
         console.error("Utils: getDirectories failed =>", err)
         return [];
@@ -37,8 +39,8 @@ export function getFiles(source: string): string[] {
     try {
         return fs
             .readdirSync(source, { withFileTypes: true })
-            .filter((dirent: any): boolean => dirent.isFile())
-            .map((dirent: any): string => dirent.name);
+            .filter((dirent: Dirent): boolean => dirent.isFile())
+            .map((dirent: Dirent): string => dirent.name);
     } catch (err: unknown) {
         console.error("Utils: getFiles failed =>", err)
         return [];
@@ -49,8 +51,8 @@ export function getSymbolicLinks(source: string): string[] {
     try {
         return fs
             .readdirSync(source, { withFileTypes: true })
-            .filter((dirent: any): boolean => dirent.isSymbolicLink())
-            .map((dirent: any): string => dirent.name);
+            .filter((dirent: Dirent): boolean => dirent.isSymbolicLink())
+            .map((dirent: Dirent): string => dirent.name);
     } catch (err: unknown) {
         console.error("Utils: getSymbolicLinks failed =>", err)
         return [];
@@ -119,7 +121,7 @@ export function delay(ms: number): Promise<void> {
 
 export async function execCommandAsync(command: string, logging?: boolean): Promise<string> {
     return new Promise((resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
-        child_process.exec(command, (error: any, stdout: string, stderr: string): void => {
+        child_process.exec(command, (error: unknown, stdout: string, stderr: string): void => {
             if (error) {
                 if (logging ?? true) {
                     console.error("Utils: execCommandAsync failed =>", error);
