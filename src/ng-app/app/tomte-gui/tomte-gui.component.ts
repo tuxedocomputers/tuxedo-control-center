@@ -272,8 +272,8 @@ export class TomteGuiComponent implements OnInit {
     public async tomteResetToDefaults(): Promise<void>
     {
         this.utils.pageDisabled = true;
-        const dialogYes: boolean = await this.confirmResetDialog();
-        if (!dialogYes)
+        const confirmed: boolean = await this.confirmResetDialog();
+        if (!confirmed)
         {
             this.tomtelist();
             this.utils.pageDisabled = false;
@@ -299,8 +299,8 @@ export class TomteGuiComponent implements OnInit {
     public async tomteModuleInstallButton(name: string, isInstalled: boolean, isBlocked: boolean)
     {
         this.utils.pageDisabled = true;
-        const dialogYes: boolean = await this.confirmChangesDialog();
-        if (!dialogYes)
+        const confirmed: boolean = await this.confirmChangesDialog();
+        if (!confirmed)
         {
             this.tomtelist();
             this.utils.pageDisabled = false;
@@ -341,8 +341,8 @@ export class TomteGuiComponent implements OnInit {
     */
     public async tomteBlockButton(name: string, isBlocked: boolean): Promise<void>
     {
-        const dialogYes: boolean = await this.confirmChangesDialog();
-        if (!dialogYes)
+        const confirmed: boolean = await this.confirmChangesDialog();
+        if (!confirmed)
         {
             this.tomtelist();
             this.utils.pageDisabled = false;
@@ -375,8 +375,8 @@ export class TomteGuiComponent implements OnInit {
     */
     public async tomteModeButton(mode: { value: ["AUTOMATIC", "UPDATES_ONLY", "DONT_CONFIGURE"]} ): Promise<void>
     {
-        const dialogYes: boolean = await this.confirmChangesDialog();
-        if (!dialogYes)
+        const confirmed: boolean = await this.confirmChangesDialog();
+        if (!confirmed)
         {
             this.tomtelist();
             this.utils.pageDisabled = false;
