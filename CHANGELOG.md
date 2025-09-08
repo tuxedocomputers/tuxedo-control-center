@@ -1,5 +1,13 @@
 # Changelog
 
+## [] - UNRELEASED
+### Added
+- Aquaris support for Stellaris Gen7
+- Extra start TCC shortcut key F14 to support Sirius (on Wayland)
+
+### Fixed
+- Issue with "System profiles" not changing power limits for InfinityBook Gen10 AMD
+
 ## [2.1.18] - 2025-08-01
 ### Added
 - Dashboard support for new AMD iGPUs (IBP Gen10 AMD)
