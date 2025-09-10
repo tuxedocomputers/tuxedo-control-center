@@ -30,7 +30,6 @@ import { DeviceInfo, LCT21001, LCTDeviceModel, PumpVoltage, RGBState } from './L
 import { NgTranslations, profileIdToI18nId } from './NgTranslations';
 import { OpenDialogReturnValue, SaveDialogReturnValue } from 'electron/main';
 import electron = require("electron");
-import * as process from 'process';
 
 // Tweak to get correct dirname for resource files outside app.asar
 const appPath = __dirname.replace('app.asar/', '');
@@ -44,19 +43,11 @@ const availableLanguages = [
     'de'
 ];
 const translation = new NgTranslations();
+let startTCCAccelerator;
 
-let startTCCAccelerator: string = app.commandLine.getSwitchValue('startTCCAccelerator');
+startTCCAccelerator = app.commandLine.getSwitchValue('startTCCAccelerator');
 if (startTCCAccelerator === '') {
     startTCCAccelerator = 'Super+Alt+F6'
-}
-let startTCCAcceleratorAlt: string = app.commandLine.getSwitchValue('startTCCAcceleratorAlt');
-if (startTCCAcceleratorAlt === '') {
-    if (process.env.XDG_SESSION_TYPE === 'wayland') {
-        startTCCAcceleratorAlt = 'F14'
-    }
-    else {
-        startTCCAcceleratorAlt = 'none'
-    }
 }
 
 let tccWindow: Electron.BrowserWindow;
@@ -129,13 +120,7 @@ app.whenReady().then( async () => {
         const success = globalShortcut.register(startTCCAccelerator, () => {
             activateTccGui();
         });
-        if (!success) { console.log('Failed to register global shortcut 1'); }
-    }
-    if (startTCCAcceleratorAlt !== 'none') {
-        const success = globalShortcut.register(startTCCAcceleratorAlt, () => {
-            activateTccGui();
-        });
-        if (!success) { console.log('Failed to register global shortcut 2'); }
+        if (!success) { console.log('Failed to register global shortcut'); }
     }
     tccDBus = new TccDBusController();
     startDbusAndInit();
