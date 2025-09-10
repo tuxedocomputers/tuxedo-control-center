@@ -1,5 +1,9 @@
 # Changelog
 
+## [2.1.20] - 2025-09-10
+### Fixed
+- Revert the Sirius "start TCC" shortcut due to an issue with keyboard input in certain applications in Wayland
+
 ## [2.1.19] - 2025-09-08
 ### Added
 - Aquaris support for Stellaris Gen7
