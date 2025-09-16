@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { IpcMain, IpcMainInvokeEvent } from "electron";
+import type { IpcMain, IpcMainInvokeEvent } from "electron";
 
 const debugAPICalls = false;
 

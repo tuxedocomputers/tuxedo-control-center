@@ -18,14 +18,11 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import type { Observable } from 'rxjs';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { ProfileConflictComponent, IProfileConflictDialogResult } from "./profile-conflict-dialog.component";
+import { ProfileConflictComponent, type IProfileConflictDialogResult } from "./profile-conflict-dialog.component";
 import { map, take } from 'rxjs/operators';
-import { ITccProfile } from 'src/common/models/TccProfile';
-
-
-
+import type { ITccProfile } from 'src/common/models/TccProfile';
 
 @Injectable()
 export class ProfileConflictDialogService {  

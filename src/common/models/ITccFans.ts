@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {
+import type {
     SysFsPropertyInteger,
     SysFsPropertyString,
 } from "../classes/SysFsProperties";

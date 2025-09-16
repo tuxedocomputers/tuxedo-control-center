@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { async, type ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { SupportComponent } from './support.component';
 

@@ -17,20 +17,20 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { ITccProfile, profileImageMap } from '../../../common/models/TccProfile';
+import { Component, type OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { type ITccProfile, profileImageMap } from '../../../common/models/TccProfile';
 import { UtilsService } from '../utils.service';
-import { StateService, IStateInfo } from '../state.service';
-import { ITccSettings } from '../../../common/models/TccSettings';
+import { StateService, type IStateInfo } from '../state.service';
+import type { ITccSettings } from '../../../common/models/TccSettings';
 import { ConfigService } from '../config.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { CompatibilityService } from '../compatibility.service';
 import { SysFsService } from '../sys-fs.service';
-import { IGeneralCPUInfo } from 'src/common/models/ICpuInfos'
+import type { IGeneralCPUInfo } from 'src/common/models/ICpuInfos'
 import { Subscription } from 'rxjs';
 import { TccDBusClientService } from '../tcc-dbus-client.service';
-import { TDPInfo } from '../../../native-lib/TuxedoIOAPI';
+import type { TDPInfo } from '../../../native-lib/TuxedoIOAPI';
 
 @Component({
     selector: 'app-profile-overview-tile',

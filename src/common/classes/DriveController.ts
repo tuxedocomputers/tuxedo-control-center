@@ -21,7 +21,7 @@ import * as path from 'path';
 import * as fs from 'fs';
 import * as child_process from 'child_process';
 
-import { IDrive } from "../models/IDrive";
+import type { IDrive } from "../models/IDrive";
 import { SysFsPropertyInteger } from './SysFsProperties';
 
 export class DriveController {

@@ -17,11 +17,11 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, type OnInit } from '@angular/core';
 import { UtilsService } from '../utils.service';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
-import { ITomteInformation, ITomteModule } from '../../../common/models/ITomteAPI';
-import { ConfirmDialogResult } from '../dialog-confirm/dialog-confirm.component';
+import type { ITomteInformation, ITomteModule } from '../../../common/models/ITomteAPI';
+import type { ConfirmDialogResult } from '../dialog-confirm/dialog-confirm.component';
 import { ActivatedRoute } from '@angular/router';
 
 

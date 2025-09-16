@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
+import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
 export abstract class DaemonListener {
     constructor(protected tccd: TuxedoControlCenterDaemon) {}

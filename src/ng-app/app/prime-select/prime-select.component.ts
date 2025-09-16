@@ -17,13 +17,13 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, OnInit } from "@angular/core";
+import { Component, type OnInit } from "@angular/core";
 import { ConfigService } from "../config.service";
 import { UtilsService } from "../utils.service";
 import { TccDBusClientService } from "../tcc-dbus-client.service";
 import { Subscription } from "rxjs";
 import { first } from "rxjs/operators";
-import { ConfirmChoiceResult } from "../dialog-choice/dialog-choice.component";
+import type { ConfirmChoiceResult } from "../dialog-choice/dialog-choice.component";
 import { Mutex } from "async-mutex";
 
 @Component({

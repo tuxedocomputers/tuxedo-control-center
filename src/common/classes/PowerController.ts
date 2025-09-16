@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { IntelRAPLController } from "./IntelRAPLController";
+import type { IntelRAPLController } from "./IntelRAPLController";
 
 export class PowerController {
     private intelRAPL: IntelRAPLController;

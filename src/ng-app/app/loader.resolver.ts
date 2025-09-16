@@ -18,9 +18,9 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Resolve } from '@angular/router';
+import type { Resolve } from '@angular/router';
 
-import { Observable, of, from } from 'rxjs';
+import { type Observable, of, from } from 'rxjs';
 import { TccDBusClientService } from './tcc-dbus-client.service';
 
 @Injectable({

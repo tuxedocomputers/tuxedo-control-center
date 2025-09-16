@@ -18,10 +18,10 @@
  */
 
 import * as dbus from 'dbus-next';
-import { ChargingWorker } from './ChargingWorker';
+import type { ChargingWorker } from './ChargingWorker';
 import { BehaviorSubject } from 'rxjs';
 import { FnLockController } from '../../common/classes/FnLockController';
-import { ChargeType } from '../../common/classes/PowerSupplyController';
+import type { ChargeType } from '../../common/classes/PowerSupplyController';
 
 
 /**

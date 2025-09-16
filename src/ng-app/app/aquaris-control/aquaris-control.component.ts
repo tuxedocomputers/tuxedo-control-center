@@ -17,15 +17,15 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { AfterContentInit, Component, OnDestroy, OnInit } from '@angular/core';
+import { type AfterContentInit, Component, type OnDestroy, type OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { DeviceInfo as AquarisDeviceInfo, RGBState } from '../../../e-app/LCT21001';
+import { type DeviceInfo as AquarisDeviceInfo, RGBState } from '../../../e-app/LCT21001';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { DialogInputTextComponent } from '../dialog-input-text/dialog-input-text.component';
 import { UtilsService } from '../utils.service';
-import { IAquarisClientAPI } from 'src/e-app/preloadAPIs/AquarisClientAPI';
-import { AquarisState } from 'src/common/models/IAquarisAPI';
-import { ConfirmDialogResult } from '../dialog-confirm/dialog-confirm.component';
+import type { IAquarisClientAPI } from 'src/e-app/preloadAPIs/AquarisClientAPI';
+import type { AquarisState } from 'src/common/models/IAquarisAPI';
+import type { ConfirmDialogResult } from '../dialog-confirm/dialog-confirm.component';
 
 interface FanPreset {
     name: string;

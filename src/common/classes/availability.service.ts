@@ -23,7 +23,7 @@ import {
 } from "./AmdDeviceIDs";
 import { intelIGpuDeviceIdString } from "./IntelDeviceIDs";
 import { countLines, execCommandSync } from "./Utils";
-import { IDeviceCounts } from "src/common/models/TccGpuValues";
+import type { IDeviceCounts } from "src/common/models/TccGpuValues";
 
 
 export class AvailabilityService {

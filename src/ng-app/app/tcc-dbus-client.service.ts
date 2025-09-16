@@ -17,19 +17,19 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, type OnDestroy } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
-import { FanData, IDBusFanData } from '../../common/models/IFanData';
-import { ITccProfile, TccProfile } from '../../common/models/TccProfile';
+import { FanData, type IDBusFanData } from '../../common/models/IFanData';
+import type { ITccProfile, TccProfile } from '../../common/models/TccProfile';
 import { UtilsService } from './utils.service';
-import { ITccSettings, KeyboardBacklightCapabilitiesInterface, KeyboardBacklightStateInterface } from '../../common/models/TccSettings';
-import { TDPInfo } from '../../native-lib/TuxedoIOAPI';
-import { ICpuPower } from '../../common/models/TccPowerSettings';
-import { IdGpuInfo, IiGpuInfo } from '../../common/models/TccGpuValues';
-import { IDisplayFreqRes } from '../../common/models/DisplayFreqRes';
-import { TUXEDODevice } from '../../common/models/DefaultProfiles';
-import { IDbusClientAPI } from '../../e-app/preloadAPIs/DbusClientAPI';
-import { DbusFunctionEntry } from '../../common/models/IDbus';
+import type { ITccSettings, KeyboardBacklightCapabilitiesInterface, KeyboardBacklightStateInterface } from '../../common/models/TccSettings';
+import type { TDPInfo } from '../../native-lib/TuxedoIOAPI';
+import type { ICpuPower } from '../../common/models/TccPowerSettings';
+import type { IdGpuInfo, IiGpuInfo } from '../../common/models/TccGpuValues';
+import type { IDisplayFreqRes } from '../../common/models/DisplayFreqRes';
+import type { TUXEDODevice } from '../../common/models/DefaultProfiles';
+import type { IDbusClientAPI } from '../../e-app/preloadAPIs/DbusClientAPI';
+import type { DbusFunctionEntry } from '../../common/models/IDbus';
 
 @Injectable({
   providedIn: 'root'

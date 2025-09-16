@@ -18,13 +18,13 @@
  */
 
 import {
-    ITccFanProfile,
-    ITccFanTableEntry,
+    type ITccFanProfile,
+    type ITccFanTableEntry,
     customFanPreset,
 } from "../../common/models/TccFanTable";
 
 import { interpolatePointsArray } from "../../common/classes/FanUtils";
-import { ITccProfile } from "src/common/models/TccProfile";
+import type { ITccProfile } from "src/common/models/TccProfile";
 
 export async function getCustomFanCurve(
     profile: ITccProfile

@@ -20,7 +20,7 @@
 import * as fs from 'fs';
 
 import { DaemonWorker } from './DaemonWorker';
-import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
+import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 import { fileOK } from '../../common/classes/Utils';
 
 export class YCbCr420WorkaroundWorker extends DaemonWorker {

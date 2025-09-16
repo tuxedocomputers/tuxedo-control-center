@@ -21,17 +21,17 @@ import { Injectable, Inject, LOCALE_ID } from '@angular/core';
 import { DecimalPipe } from '@angular/common';
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { BehaviorSubject } from 'rxjs';
-import { ConfirmDialogData, ConfirmDialogResult, DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
-import { ChoiceDialogData, ConfirmChoiceResult, DialogChoiceComponent, WaitingDialogData } from './dialog-choice/dialog-choice.component';
+import { type ConfirmDialogData, type ConfirmDialogResult, DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
+import { type ChoiceDialogData, type ConfirmChoiceResult, DialogChoiceComponent, type WaitingDialogData } from './dialog-choice/dialog-choice.component';
 
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { ITccProfile } from '../../common/models/TccProfile';
-import { DefaultProfileIDs, IProfileTextMappings, LegacyDefaultProfileIDs } from '../../common/models/DefaultProfiles';
+import type { ITccProfile } from '../../common/models/TccProfile';
+import { DefaultProfileIDs, type IProfileTextMappings, LegacyDefaultProfileIDs } from '../../common/models/DefaultProfiles';
 import { DialogInputTextComponent } from './dialog-input-text/dialog-input-text.component';
 import { DialogWaitingComponent } from './dialog-waiting/dialog-waiting.component';
-import * as fs from 'fs';
-import { OpenDialogReturnValue, SaveDialogReturnValue } from 'electron';
-import { BrightnessModeString } from 'src/e-app/backendAPIs/brightnessAPI';
+import type * as fs from 'fs';
+import type { OpenDialogReturnValue, SaveDialogReturnValue } from 'electron';
+import type { BrightnessModeString } from 'src/e-app/backendAPIs/brightnessAPI';
 
 @Injectable({
   providedIn: 'root'

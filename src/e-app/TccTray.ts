@@ -18,7 +18,7 @@
  */
 
 import { Menu, Tray } from "electron";
-import { TccProfile } from "../common/models/TccProfile";
+import type { TccProfile } from "../common/models/TccProfile";
 
 export class TccTray {
 

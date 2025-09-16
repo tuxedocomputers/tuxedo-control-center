@@ -18,7 +18,7 @@
  */
 
 import { DaemonWorker } from "./DaemonWorker";
-import { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
+import type { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
 import { execCommandAsync, delay } from "../../common/classes/Utils";
 import * as fs from "fs";
 

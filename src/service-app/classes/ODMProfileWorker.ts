@@ -18,15 +18,15 @@
  */
 
 import { DaemonWorker } from "./DaemonWorker";
-import { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
+import type { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
 
-import { TuxedoIOAPI as ioAPI, ObjWrapper } from "../../native-lib/TuxedoIOAPI";
+import { TuxedoIOAPI as ioAPI, type ObjWrapper } from "../../native-lib/TuxedoIOAPI";
 
 import {
     SysFsPropertyString,
     SysFsPropertyStringList,
 } from "../../common/classes/SysFsProperties";
-import { ITccODMProfile } from "src/common/models/TccProfile";
+import type { ITccODMProfile } from "src/common/models/TccProfile";
 
 export class ODMProfileWorker extends DaemonWorker {
     private static tuxedoPlatformProfile: SysFsPropertyString = new SysFsPropertyString(

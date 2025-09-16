@@ -18,8 +18,8 @@
  */
 
 import { DaemonWorker } from "./DaemonWorker";
-import { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
-import { ICpuPower } from "../../common/models/TccPowerSettings";
+import type { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
+import type { ICpuPower } from "../../common/models/TccPowerSettings";
 import { IntelRAPLController } from "../../common/classes/IntelRAPLController";
 import { PowerController } from "../../common/classes/PowerController";
 

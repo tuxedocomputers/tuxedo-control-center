@@ -17,16 +17,16 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, type OnInit } from '@angular/core';
 import { ConfigService } from '../config.service';
 import { UtilsService } from '../utils.service';
 import { filter, firstValueFrom, Subscription } from 'rxjs';
 import { TccDBusClientService } from '../tcc-dbus-client.service';
 import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatCheckboxChange } from '@angular/material/checkbox';
-import { BrightnessModeString } from 'src/e-app/backendAPIs/brightnessAPI';
-import { GridParamsSettings, IGridParams } from "src/common/models/IGridParams";
+import type { MatCheckboxChange } from '@angular/material/checkbox';
+import type { BrightnessModeString } from 'src/e-app/backendAPIs/brightnessAPI';
+import { GridParamsSettings, type IGridParams } from "src/common/models/IGridParams";
 import { Mutex } from 'async-mutex';
 
 @Component({

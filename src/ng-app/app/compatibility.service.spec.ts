@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { TestBed, TestBedStatic } from '@angular/core/testing';
+import { TestBed, type TestBedStatic } from '@angular/core/testing';
 
 import { CompatibilityService } from './compatibility.service';
 

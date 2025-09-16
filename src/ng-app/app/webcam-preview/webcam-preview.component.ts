@@ -20,12 +20,12 @@
 import {
     ChangeDetectorRef,
     Component,
-    ElementRef,
-    OnInit,
+    type ElementRef,
+    type OnInit,
     ViewChild,
 } from "@angular/core";
-import { IpcRendererEvent } from "electron";
-import { WebcamConstraints } from "src/common/models/TccWebcamSettings";
+import type { IpcRendererEvent } from "electron";
+import type { WebcamConstraints } from "src/common/models/TccWebcamSettings";
 
 @Component({
     selector: "app-webcam-preview",

@@ -17,21 +17,21 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, OnInit } from "@angular/core";
+import { Component, type OnInit } from "@angular/core";
 import { TccDBusClientService } from "../tcc-dbus-client.service";
 import { ConfigService } from '../config.service';
 import {
-    KeyboardBacklightCapabilitiesInterface,
+    type KeyboardBacklightCapabilitiesInterface,
     KeyboardBacklightColorModes,
-    KeyboardBacklightStateInterface,
+    type KeyboardBacklightStateInterface,
 } from "../../../common/models/TccSettings";
 import { filter, take } from "rxjs/operators";
 import { interval, Subscription } from "rxjs";
 import {
     GridParamsBacklight,
-    IGridParams,
+    type IGridParams,
 } from "src/common/models/IGridParams";
-import { MatSliderThumb } from "@angular/material/slider";
+import type { MatSliderThumb } from "@angular/material/slider";
 
 @Component({
     selector: "app-keyboard-backlight",

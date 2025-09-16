@@ -19,7 +19,7 @@
 
 import { LegacyDefaultProfileIDs } from "../DefaultProfiles";
 import { customFanPreset } from "../TccFanTable";
-import { ITccProfile } from "../TccProfile";
+import type { ITccProfile } from "../TccProfile";
 
 export const defaultProfiles: ITccProfile[] = [
     {

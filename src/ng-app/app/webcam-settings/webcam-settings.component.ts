@@ -17,8 +17,8 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, OnInit } from "@angular/core";
-import {
+import { Component, type OnInit } from "@angular/core";
+import type {
     WebcamPreset,
     WebcamDeviceInformation,
     WebcamConstraints,
@@ -29,21 +29,21 @@ import {
 import { UtilsService } from "../utils.service";
 import { WebcamSettingsGuard } from "../webcam.guard";
 import {
-    AbstractControl,
+    type AbstractControl,
     FormControl,
-    ValidationErrors,
-    ValidatorFn,
+    type ValidationErrors,
+    type ValidatorFn,
 } from "@angular/forms";
 import { FormGroup } from "@angular/forms";
 import { TccPaths } from "src/common/classes/TccPaths";
 import { MatOptionSelectionChange } from "@angular/material/core";
 import { Mutex } from "async-mutex";
 import { environment } from "../../environments/environment";
-import { MatTab } from "@angular/material/tabs";
-import { ConfirmDialogData, ConfirmDialogResult } from "../dialog-confirm/dialog-confirm.component";
-import { ChoiceDialogData, ConfirmChoiceResult } from "../dialog-choice/dialog-choice.component";
-import { InputDialogData } from "../dialog-input-text/dialog-input-text.component";
-import { GridParamsSettings, IGridParams } from "src/common/models/IGridParams";
+import type { MatTab } from "@angular/material/tabs";
+import type { ConfirmDialogData, ConfirmDialogResult } from "../dialog-confirm/dialog-confirm.component";
+import type { ChoiceDialogData, ConfirmChoiceResult } from "../dialog-choice/dialog-choice.component";
+import type { InputDialogData } from "../dialog-input-text/dialog-input-text.component";
+import { GridParamsSettings, type IGridParams } from "src/common/models/IGridParams";
 import { WebcamService } from "../webcam.service";
 
 // todo: move dialog functions into a new file

@@ -18,7 +18,7 @@
  */
 
 import { DaemonWorker } from './DaemonWorker';
-import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
+import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 import { ChargingProfileController } from '../../common/classes/ChargingProfileController';
 import { ChargingPriorityController } from '../../common/classes/ChargingPriorityController';
 import { ChargeType, PowerSupplyController } from '../../common/classes/PowerSupplyController';

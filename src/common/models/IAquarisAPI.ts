@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { PumpVoltage, RGBState } from "../../e-app/LCT21001";
+import type { PumpVoltage, RGBState } from "../../e-app/LCT21001";
 
 export interface AquarisState {
     deviceUUID: string,

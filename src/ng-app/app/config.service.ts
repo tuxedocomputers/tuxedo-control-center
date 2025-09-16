@@ -17,12 +17,12 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Injectable, OnDestroy } from '@angular/core';
-import { ITccSettings } from '../../common/models/TccSettings';
-import { ITccProfile, generateProfileId } from '../../common/models/TccProfile';
-import { Observable, Subject, BehaviorSubject, Subscription } from 'rxjs';
+import { Injectable, type OnDestroy } from '@angular/core';
+import type { ITccSettings } from '../../common/models/TccSettings';
+import { type ITccProfile, generateProfileId } from '../../common/models/TccProfile';
+import { type Observable, Subject, BehaviorSubject, Subscription } from 'rxjs';
 import { UtilsService } from './utils.service';
-import { ITccFanProfile } from '../../common/models/TccFanTable';
+import type { ITccFanProfile } from '../../common/models/TccFanTable';
 import { TccDBusClientService } from './tcc-dbus-client.service';
 
 @Injectable({

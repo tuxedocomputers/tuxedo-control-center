@@ -18,7 +18,7 @@
  */
 
 import { DefaultProfileIDs, LegacyDefaultProfileIDs } from "./DefaultProfiles";
-import { ITccFanProfile } from "./TccFanTable";
+import type { ITccFanProfile } from "./TccFanTable";
 
 export interface ITccProfile {
     id: string;

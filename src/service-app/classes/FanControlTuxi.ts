@@ -20,7 +20,7 @@
 import { TUXEDODevice } from "../../common/models/DefaultProfiles";
 import { getHwmonPathWithName } from "../../common/classes/FanUtils";
 import { FanControlHwmon } from "./FanControlHwmon";
-import { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
+import type { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
 
 export class FanControlTuxi extends FanControlHwmon {
     private tuxedoDevice: TUXEDODevice;

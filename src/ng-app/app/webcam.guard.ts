@@ -18,10 +18,10 @@
  */
 
 import { Injectable } from "@angular/core";
-import { FormGroup } from "@angular/forms";
-import { CanDeactivate } from "@angular/router";
+import type { FormGroup } from "@angular/forms";
+import type { CanDeactivate } from "@angular/router";
 import { UtilsService } from "./utils.service";
-import { ConfirmDialogData, ConfirmDialogResult } from "./dialog-confirm/dialog-confirm.component";
+import type { ConfirmDialogData, ConfirmDialogResult } from "./dialog-confirm/dialog-confirm.component";
 
 export interface CanComponentDeactivate {
     webcamFormGroup: FormGroup;

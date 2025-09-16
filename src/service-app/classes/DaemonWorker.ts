@@ -17,8 +17,8 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ITccProfile } from '../../common/models/TccProfile';
-import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
+import type { ITccProfile } from '../../common/models/TccProfile';
+import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
 export abstract class DaemonWorker {
 

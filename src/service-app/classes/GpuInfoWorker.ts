@@ -18,8 +18,8 @@
  */
 
 import { DaemonWorker } from "./DaemonWorker";
-import { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
-import { IdGpuInfo, IiGpuInfo } from "src/common/models/TccGpuValues";
+import type { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
+import type { IdGpuInfo, IiGpuInfo } from "src/common/models/TccGpuValues";
 import {
     SysFsPropertyInteger,
     SysFsPropertyString,
@@ -33,7 +33,7 @@ import {
 } from "../../common/classes/AmdDeviceIDs";
 import { intelIGpuDeviceIdString } from "../../common/classes/IntelDeviceIDs";
 import { execCommandAsync, countLines } from "../../common/classes/Utils";
-import { AvailabilityService } from "../../common/classes/availability.service";
+import type { AvailabilityService } from "../../common/classes/availability.service";
 
 export class GpuInfoWorker extends DaemonWorker {
     private isNvidiaSmiInstalled: boolean = false;

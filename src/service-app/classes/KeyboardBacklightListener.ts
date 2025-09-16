@@ -20,8 +20,8 @@
 import * as fs from 'fs';
 import * as dbus from 'dbus-next';
 
-import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
-import { KeyboardBacklightColorModes, KeyboardBacklightCapabilitiesInterface, KeyboardBacklightStateInterface } from '../../common/models/TccSettings';
+import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
+import { KeyboardBacklightColorModes, type KeyboardBacklightCapabilitiesInterface, type KeyboardBacklightStateInterface } from '../../common/models/TccSettings';
 import { fileOK, fileOKAsync, getDirectories, getSymbolicLinks } from '../../common/classes/Utils';
 
 export class KeyboardBacklightListener {

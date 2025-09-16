@@ -17,8 +17,8 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, OnInit, OnDestroy } from "@angular/core";
-import {
+import { Component, type OnInit, type OnDestroy } from "@angular/core";
+import type {
     ILogicalCoreInfo,
     IGeneralCPUInfo,
     IPstateInfo,
@@ -27,16 +27,16 @@ import { SysFsService } from "../sys-fs.service";
 import { Subscription } from "rxjs";
 import { UtilsService } from "../utils.service";
 import { TccDBusClientService } from "../tcc-dbus-client.service";
-import { IDBusFanData } from "src/common/models/IFanData";
-import { ITccProfile } from "src/common/models/TccProfile";
+import type { IDBusFanData } from "src/common/models/IFanData";
+import type { ITccProfile } from "src/common/models/TccProfile";
 import { StateService } from "../state.service";
 import { ActivatedRoute, Router } from "@angular/router";
 import { ConfigService } from "../config.service";
 import { CompatibilityService } from "../compatibility.service";
-import { ICpuPower } from "src/common/models/TccPowerSettings";
-import { IdGpuInfo, IiGpuInfo } from "src/common/models/TccGpuValues";
+import type { ICpuPower } from "src/common/models/TccPowerSettings";
+import type { IdGpuInfo, IiGpuInfo } from "src/common/models/TccGpuValues";
 import { filter, first, tap } from "rxjs/operators";
-import { TDPInfo } from "src/native-lib/TuxedoIOAPI";
+import type { TDPInfo } from "src/native-lib/TuxedoIOAPI";
 import { PowerStateService } from "../power-state.service";
 
 @Component({

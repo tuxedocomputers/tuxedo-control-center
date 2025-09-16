@@ -18,15 +18,15 @@
  */
 
 import {
-    AfterViewInit,
+    type AfterViewInit,
     Component,
-    ElementRef,
+    type ElementRef,
     Input,
-    OnDestroy,
-    OnInit,
+    type OnDestroy,
+    type OnInit,
     ViewChild,
 } from "@angular/core";
-import { Chart, ChartConfiguration, TooltipItem } from "chart.js";
+import { Chart, type ChartConfiguration, type TooltipItem } from "chart.js";
 import {
     chartAnimation,
     chartMaintainAspectRatio,
@@ -39,8 +39,8 @@ import {
     manageCriticalTemperature,
 } from "src/common/classes/FanUtils";
 import {
-    ITccFanProfile,
-    ITccFanTableEntry,
+    type ITccFanProfile,
+    type ITccFanTableEntry,
     defaultFanProfiles,
 } from "src/common/models/TccFanTable";
 import { ConfigService } from "../config.service";

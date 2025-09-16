@@ -18,8 +18,8 @@
  */
 
 import { Injectable } from "@angular/core";
-import { Resolve } from "@angular/router";
-import { Observable, from } from "rxjs";
+import type { Resolve } from "@angular/router";
+import { type Observable, from } from "rxjs";
 import { filter, first } from "rxjs/operators";
 import { TccDBusClientService } from "./tcc-dbus-client.service";
 

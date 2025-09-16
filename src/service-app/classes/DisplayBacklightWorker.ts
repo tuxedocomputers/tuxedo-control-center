@@ -20,8 +20,8 @@
 import { DaemonWorker } from './DaemonWorker';
 import { DisplayBacklightController } from '../../common/classes/DisplayBacklightController';
 
-import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
-import { ITccProfile } from 'src/common/models/TccProfile';
+import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
+import type { ITccProfile } from 'src/common/models/TccProfile';
 
 export class DisplayBacklightWorker extends DaemonWorker {
 

@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Dirent } from "fs";
+import type { Dirent } from "fs";
 
 const fs: typeof import("fs") = require("fs");
 const child_process: any = require("child_process");

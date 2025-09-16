@@ -19,13 +19,13 @@
 
 import { DaemonWorker } from "./DaemonWorker";
 import { XDisplayRefreshRateController } from "../../common/classes/XDisplayRefreshRateController";
-import {
+import type {
     IDisplayFreqRes,
     IDisplayMode,
 } from "../../common/models/DisplayFreqRes";
-import { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
+import type { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
 import * as child_process from "child_process";
-import { ITccProfile } from "src/common/models/TccProfile";
+import type { ITccProfile } from "src/common/models/TccProfile";
 import { execCommandAsync } from "../../common/classes/Utils";
 
 export class DisplayRefreshRateWorker extends DaemonWorker {

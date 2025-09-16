@@ -18,7 +18,7 @@
  */
 
 import { DaemonListener } from "./DaemonListener";
-import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
+import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 import { SysFsPropertyInteger } from "../../common/classes/SysFsProperties";
 import { execCommandAsync } from "../../common/classes/Utils";
 

@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { WebcamPreset, WebcamConstraints } from "../../common/models/TccWebcamSettings";
+import type { WebcamPreset, WebcamConstraints } from "../../common/models/TccWebcamSettings";
 import { webcamAPIHandle, WebcamAPIFunctions } from "../../common/models/IWebcamAPI"
 const { ipcRenderer } = require('electron');
 

@@ -23,8 +23,8 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import { ConfigHandler } from './ConfigHandler';
-import { ITccSettings, defaultSettings} from '../models/TccSettings';
-import { ITccProfile } from '../models/TccProfile';
+import { type ITccSettings, defaultSettings} from '../models/TccSettings';
+import type { ITccProfile } from '../models/TccProfile';
 import { defaultProfiles } from '../models/profiles/LegacyProfiles';
 import { TccPaths } from './TccPaths';
 import { TUXEDODevice } from '../models/DefaultProfiles';

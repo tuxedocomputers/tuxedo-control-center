@@ -20,8 +20,8 @@
 import { DaemonWorker } from './DaemonWorker';
 import { CpuController } from '../../common/classes/CpuController';
 
-import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
-import { ITccProfile } from '../../common/models/TccProfile';
+import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
+import type { ITccProfile } from '../../common/models/TccProfile';
 import { ScalingDriver } from '../../common/classes/LogicalCpuController';
 import { TUXEDODevice } from '../../common/models/DefaultProfiles';
 

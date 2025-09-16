@@ -17,11 +17,11 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ITccProfile } from '../../../common/models/TccProfile';
+import { Component, type OnDestroy, type OnInit } from '@angular/core';
+import type { ITccProfile } from '../../../common/models/TccProfile';
 import { ProfileStates } from '../../../common/models/TccSettings';
 import { CompatibilityService } from '../compatibility.service';
-import { IStateInfo, StateService } from '../state.service';
+import { type IStateInfo, StateService } from '../state.service';
 import { UtilsService } from '../utils.service';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';

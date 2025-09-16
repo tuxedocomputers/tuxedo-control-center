@@ -18,10 +18,10 @@
  */
 
 import { DaemonWorker } from './DaemonWorker';
-import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
+import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
-import { TuxedoIOAPI, ObjWrapper } from '../../native-lib/TuxedoIOAPI';
-import { ITccProfile } from 'src/common/models/TccProfile';
+import { TuxedoIOAPI, type ObjWrapper } from '../../native-lib/TuxedoIOAPI';
+import type { ITccProfile } from 'src/common/models/TccProfile';
 
 export class WebcamWorker extends DaemonWorker {
 

@@ -17,8 +17,8 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Injectable, OnDestroy } from '@angular/core';
-import { IGeneralCPUInfo, ILogicalCoreInfo, IPstateInfo, IDisplayBrightnessInfo } from '../../common/models/ICpuInfos';
+import { Injectable, type OnDestroy } from '@angular/core';
+import type { IGeneralCPUInfo, ILogicalCoreInfo, IPstateInfo, IDisplayBrightnessInfo } from '../../common/models/ICpuInfos';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({

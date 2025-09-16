@@ -22,7 +22,7 @@ const mockfs: any = require('mock-fs');
 
 import { DriveController } from "./DriveController";
 import * as child_process from 'child_process';
-import { IDrive } from '../models/IDrive';
+import type { IDrive } from '../models/IDrive';
 
 const sizeDriveSda: number = 488397168;
 const sizeDriveSda1: number = 162799056;

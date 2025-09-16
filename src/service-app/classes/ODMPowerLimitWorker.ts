@@ -18,10 +18,10 @@
  */
 
 import { DaemonWorker } from './DaemonWorker';
-import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
+import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
-import { TuxedoIOAPI as ioAPI, TDPInfo} from '../../native-lib/TuxedoIOAPI';
-import { ITccODMPowerLimits } from 'src/common/models/TccProfile';
+import { TuxedoIOAPI as ioAPI, type TDPInfo} from '../../native-lib/TuxedoIOAPI';
+import type { ITccODMPowerLimits } from 'src/common/models/TccProfile';
 
 export class ODMPowerLimitWorker extends DaemonWorker {
 

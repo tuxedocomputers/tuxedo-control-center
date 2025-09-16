@@ -20,7 +20,7 @@
 import * as path from 'path';
 import * as fs from 'fs';
 import * as xliff from 'xliff';
-import { DefaultProfileIDs, IProfileTextMappings, LegacyDefaultProfileIDs } from '../common/models/DefaultProfiles';
+import { DefaultProfileIDs, type IProfileTextMappings, LegacyDefaultProfileIDs } from '../common/models/DefaultProfiles';
 
 /**
  * Loading of angular generated translation files. Workaround

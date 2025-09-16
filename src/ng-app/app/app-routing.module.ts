@@ -18,7 +18,7 @@
  */
 
 import { NgModule } from "@angular/core";
-import { Routes, RouterModule } from "@angular/router";
+import { type Routes, RouterModule } from "@angular/router";
 
 import { LoaderResolver } from "./loader.resolver";
 import {

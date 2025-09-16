@@ -18,8 +18,8 @@
  */
 
 import { DaemonWorker } from './DaemonWorker';
-import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
-import { ProfileStates } from '../../common/models/TccSettings';
+import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
+import type { ProfileStates } from '../../common/models/TccSettings';
 import { determineState } from '../../common/classes/StateUtils';
 
 export class StateSwitcherWorker extends DaemonWorker {

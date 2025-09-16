@@ -20,7 +20,7 @@
 import { Component, Inject } from "@angular/core";
 import { FormControl } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import {
+import type {
     DialogChoiceComponent,
     WaitingDialogData,
 } from "../dialog-choice/dialog-choice.component";

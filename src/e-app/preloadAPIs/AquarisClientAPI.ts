@@ -17,8 +17,8 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { DeviceInfo, PumpVoltage, RGBState } from "../LCT21001";
-import { aquarisAPIHandle, AquarisAPIFunctions, AquarisState } from "../../common/models/IAquarisAPI"
+import type { DeviceInfo, PumpVoltage, RGBState } from "../LCT21001";
+import { aquarisAPIHandle, AquarisAPIFunctions, type AquarisState } from "../../common/models/IAquarisAPI"
 const { ipcRenderer } = require('electron');
 
 // for preload script

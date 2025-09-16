@@ -17,25 +17,25 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, OnInit, Input, OnDestroy, ViewChild, Output, EventEmitter } from '@angular/core';
-import { ITccProfile, ITccProfileDisplay } from '../../../common/models/TccProfile';
+import { Component, type OnInit, Input, type OnDestroy, ViewChild, Output, EventEmitter } from '@angular/core';
+import type { ITccProfile, ITccProfileDisplay } from '../../../common/models/TccProfile';
 import { UtilsService } from '../utils.service';
-import { ITccSettings } from '../../../common/models/TccSettings';
+import type { ITccSettings } from '../../../common/models/TccSettings';
 import { ConfigService } from '../config.service';
-import { StateService, IStateInfo } from '../state.service';
+import { StateService, type IStateInfo } from '../state.service';
 import { SysFsService } from '../sys-fs.service';
-import { IGeneralCPUInfo } from 'src/common/models/ICpuInfos';
+import type { IGeneralCPUInfo } from 'src/common/models/ICpuInfos';
 import { Subscription } from 'rxjs';
-import { FormGroup, FormBuilder, Validators, FormControl, ValidatorFn, AbstractControl, FormArray } from '@angular/forms';
-import { MatInput } from '@angular/material/input';
+import { type FormGroup, FormBuilder, Validators, FormControl, type ValidatorFn, type AbstractControl, type FormArray } from '@angular/forms';
+import type { MatInput } from '@angular/material/input';
 import { CompatibilityService } from '../compatibility.service';
 import { TccDBusClientService } from '../tcc-dbus-client.service';
-import { TDPInfo } from '../../../native-lib/TuxedoIOAPI';
+import type { TDPInfo } from '../../../native-lib/TuxedoIOAPI';
 import { FanCustomChartComponent } from '../fan-custom-chart/fan-custom-chart.component';
-import { ITccFanProfile } from 'src/common/models/TccFanTable';
-import { IDisplayFreqRes, IDisplayMode } from 'src/common/models/DisplayFreqRes';
-import { SystemProfileInfo } from 'src/common/models/ISystemProfileInfo';
-import { GridParamsProfileSettings, GridParamsSettings, IGridParams } from "src/common/models/IGridParams";
+import type { ITccFanProfile } from 'src/common/models/TccFanTable';
+import type { IDisplayFreqRes, IDisplayMode } from 'src/common/models/DisplayFreqRes';
+import type { SystemProfileInfo } from 'src/common/models/ISystemProfileInfo';
+import { GridParamsProfileSettings, GridParamsSettings, type IGridParams } from "src/common/models/IGridParams";
 
 function minControlValidator(comparisonControl: AbstractControl): ValidatorFn {
     return (thisControl: AbstractControl): { min: number; actual: unknown } | null => {

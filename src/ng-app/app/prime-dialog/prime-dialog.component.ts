@@ -17,10 +17,10 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, OnInit } from "@angular/core";
+import { Component, type OnInit } from "@angular/core";
 import { UtilsService } from "../utils.service";
 import { ConfigService } from "../config.service";
-import { IpcRendererEvent } from "electron";
+import type { IpcRendererEvent } from "electron";
 
 @Component({
     selector: "app-prime-dialog",

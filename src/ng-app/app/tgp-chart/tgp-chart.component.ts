@@ -17,8 +17,8 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, ElementRef, EventEmitter, Input, ViewChild } from "@angular/core";
-import { Chart, ChartConfiguration, TooltipItem } from "chart.js";
+import { Component, type ElementRef, type EventEmitter, Input, ViewChild } from "@angular/core";
+import { Chart, type ChartConfiguration, type TooltipItem } from "chart.js";
 import {
     chartAnimation,
     chartMaintainAspectRatio,

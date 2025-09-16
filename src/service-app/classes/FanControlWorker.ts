@@ -18,19 +18,19 @@
  */
 
 import { DaemonWorker } from "./DaemonWorker";
-import { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
-import {
+import type { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
+import type {
     ITccFanProfile,
     ITccFanTableEntry,
 } from "../../common/models/TccFanTable";
 import { FanControlTuxedoIO } from "./FanControlTuxedoIO";
 import { FanControlPwm } from "./FanControlPwm";
-import { FanControlLogic } from "./FanControlLogic";
+import type { FanControlLogic } from "./FanControlLogic";
 import { getCurrentCustomProfile } from "./FanControlUtils";
-import { FanControlBaseClass } from "./FanControlBaseClass";
+import type { FanControlBaseClass } from "./FanControlBaseClass";
 import { FanData } from "../../common/models/IFanData";
 import { FanControlTuxi } from "./FanControlTuxi";
-import { TUXEDODevice } from "src/common/models/DefaultProfiles";
+import type { TUXEDODevice } from "src/common/models/DefaultProfiles";
 
 export class FanControlWorker extends DaemonWorker {
     private fanApi: FanControlBaseClass;

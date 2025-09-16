@@ -22,7 +22,7 @@ import type { IpcMainEvent, IpcMainInvokeEvent } from "electron";
 import { Subject } from "rxjs";
 import { DBusDisplayBrightnessGnome } from "../../common/classes/DBusDisplayBrightnessGnome";
 import { userConfig } from "./initMain";
-import { MessageBus } from "dbus-next";
+import type { MessageBus } from "dbus-next";
 '../../common/classes/DBusDisplayBrightnessGnome';
 
 export type BrightnessModeString = 'light' | 'dark' | 'system';

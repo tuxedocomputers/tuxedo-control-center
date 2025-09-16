@@ -17,18 +17,18 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, type OnInit, ViewChild, type OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfigService } from '../config.service';
-import { ITccProfile } from '../../../common/models/TccProfile';
+import type { ITccProfile } from '../../../common/models/TccProfile';
 import { UtilsService } from '../utils.service';
 import { FormControl, Validators } from '@angular/forms';
-import { MatInput } from '@angular/material/input';
-import { StateService, IStateInfo } from '../state.service';
+import type { MatInput } from '@angular/material/input';
+import { StateService, type IStateInfo } from '../state.service';
 import { Subscription } from 'rxjs';
-import { ITccSettings } from '../../../common/models/TccSettings';
+import type { ITccSettings } from '../../../common/models/TccSettings';
 import { ProfileConflictDialogService } from "../profile-conflict-dialog/profile-conflict-dialog.service";
-import { IProfileConflictDialogResult } from '../profile-conflict-dialog/profile-conflict-dialog.component';
+import type { IProfileConflictDialogResult } from '../profile-conflict-dialog/profile-conflict-dialog.component';
 
 
 enum InputMode {

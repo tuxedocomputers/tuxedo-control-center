@@ -17,14 +17,14 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, type OnDestroy, type OnInit, Output } from "@angular/core";
 import { UtilsService } from "../utils.service";
 import { FormControl } from "@angular/forms";
-import { MatCheckboxChange } from "@angular/material/checkbox";
+import type { MatCheckboxChange } from "@angular/material/checkbox";
 import { ChargeType } from "src/common/classes/PowerSupplyController";
-import { MatRadioChange } from "@angular/material/radio";
-import { GridParamsSettings, IGridParams } from "src/common/models/IGridParams";
-import { ConfirmDialogData } from "../dialog-confirm/dialog-confirm.component";
+import type { MatRadioChange } from "@angular/material/radio";
+import { GridParamsSettings, type IGridParams } from "src/common/models/IGridParams";
+import type { ConfirmDialogData } from "../dialog-confirm/dialog-confirm.component";
 
 class ThresholdPresets {
     constructor(

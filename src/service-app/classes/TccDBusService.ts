@@ -18,8 +18,8 @@
  */
 
 import { DaemonWorker } from './DaemonWorker';
-import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
-import { TccDBusInterface, TccDBusData, TccDBusOptions } from './TccDBusInterface';
+import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
+import { TccDBusInterface, type TccDBusData, TccDBusOptions } from './TccDBusInterface';
 import * as dbus from 'dbus-next';
 
 import { TuxedoIOAPI } from '../../native-lib/TuxedoIOAPI';

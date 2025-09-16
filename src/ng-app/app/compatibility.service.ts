@@ -20,10 +20,10 @@
 import { Injectable } from '@angular/core';
 import { SysFsService } from './sys-fs.service';
 import { TccDBusClientService } from './tcc-dbus-client.service';
-import { IdGpuInfo, IiGpuInfo } from "src/common/models/TccGpuValues";
-import { IDBusFanData, TimeData } from 'src/common/models/IFanData';
-import { SystemProfileInfo, deviceSystemProfileInfo } from 'src/common/models/ISystemProfileInfo';
-import { ICpuPower } from 'src/common/models/TccPowerSettings';
+import type { IdGpuInfo, IiGpuInfo } from "src/common/models/TccGpuValues";
+import type { IDBusFanData, TimeData } from 'src/common/models/IFanData';
+import { type SystemProfileInfo, deviceSystemProfileInfo } from 'src/common/models/ISystemProfileInfo';
+import type { ICpuPower } from 'src/common/models/TccPowerSettings';
 
 @Injectable({
     providedIn: "root",

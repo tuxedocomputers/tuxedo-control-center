@@ -19,7 +19,7 @@
 
 import { Injectable } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { WebcamDevice, WebcamDeviceInformation } from 'src/common/models/TccWebcamSettings';
+import type { WebcamDevice, WebcamDeviceInformation } from 'src/common/models/TccWebcamSettings';
 
 // using a service to store values because DOM does not always update otherwise
 // https://stackoverflow.com/questions/69749023/angular-variable-value-change-doesnt-reflect-in-dom

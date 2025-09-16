@@ -17,11 +17,11 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, type OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FormErrorStateMatcher } from 'src/ng-app/common/formErrorStateMatcher';
 import { UtilsService } from '../utils.service';
-import { IDrive } from "../../../common/models/IDrive";
+import type { IDrive } from "../../../common/models/IDrive";
 
 @Component({
     selector: 'app-change-crypt-password',

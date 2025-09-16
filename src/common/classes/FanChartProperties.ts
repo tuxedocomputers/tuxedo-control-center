@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {
+import type {
     BubbleDataPoint,
     CartesianScaleTypeRegistry,
     ChartDataset,
@@ -28,7 +28,7 @@ import {
     Tick,
 } from "chart.js";
 import { formatTemp } from "./FanUtils";
-import {_DeepPartialObject } from "chart.js/dist/types/utils";
+import type {_DeepPartialObject } from "chart.js/dist/types/utils";
 
 export const chartInteraction: _DeepPartialObject<CoreInteractionOptions> = {
     mode: "index",
