@@ -137,7 +137,7 @@ export class SysFsPropertyNumList extends SysFsPropertyIO<number[]> {
                 if (value[i] === currentStart) {
                     resultArray.push(currentStart.toString());
                 } else {
-                    resultArray.push(currentStart + '-' + value[i]);
+                    resultArray.push(`${currentStart}-${value[i]}`);
                 }
                 if (i !== value?.length - 1) {
                     currentStart = value[i + 1];

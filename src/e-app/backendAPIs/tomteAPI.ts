@@ -48,11 +48,7 @@ async function resetToDefaults(): Promise<boolean> {
         }
         catch(err: unknown)
         {
-            console.error("One of the reset commands failed, here is their output: Function 1 Command: "
-            + command1 + " Results: " + res1 +
-            " Function 2 Command: " + command2 + " Results: " + res2 +
-            " Function 3 Command: " + command3 + " Results: " + res3
-            );
+            console.error(`One of the reset commands failed, here is their output: Function 1 Command: ${command1} Results: ${res1} Function 2 Command: ${command2} Results: ${res2} Function 3 Command: ${command3} Results: ${res3}`);
             resolve(false);
         }
     });
@@ -60,7 +56,7 @@ async function resetToDefaults(): Promise<boolean> {
 
 async function getModuleDescription(moduleName: string, langId: string): Promise<string> {
     return new Promise<string>(async (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): Promise<void> => {
-        const command: string = "LANGUAGE=" + langId + " tuxedo-tomte description " + moduleName;
+        const command: string = `LANGUAGE=${langId} tuxedo-tomte description ${moduleName}`;
     try
     {
         const results: string = await execCmd(command);
@@ -68,7 +64,7 @@ async function getModuleDescription(moduleName: string, langId: string): Promise
     }
     catch (err: unknown)
     {
-        console.error("tomteAPI: getModuleDescription failed =>", err)
+        console.error(`tomteAPI: getModuleDescription failed => ${err}`)
         resolve("");
     }
     });
@@ -80,7 +76,7 @@ async function removeModule(moduleName: string): Promise<void> {
         await execCmd(command).then((): void => {
             resolve();
         }).catch((err: unknown): void => {
-            console.error("tomteAPI: removeModule failed =>", err)
+            console.error(`tomteAPI: removeModule failed => ${err}`)
             reject();
         })
     });
@@ -92,7 +88,7 @@ async function installModule(moduleName: string): Promise<void> {
         await execCmd(command).then((): void => {
             resolve();
         }).catch((err: unknown): void => {
-            console.error("tomteAPI: installModule failed =>", err)
+            console.error(`tomteAPI: installModule failed => ${err}`)
             reject();
         })
     });
@@ -104,31 +100,31 @@ async function unBlockModule(moduleName: string): Promise<void> {
         await execCmd(command).then((): void => {
             resolve();
         }).catch((err: unknown): void => {
-            console.error("tomteAPI: unBlockModule failed =>", err)
+            console.error(`tomteAPI: unBlockModule failed => ${err}`)
             reject();
         })
     });
 }
 
 async function blockModule(moduleName: string): Promise<void> {
-    const command: string = "pkexec tuxedo-tomte block " + moduleName;
+    const command: string = `pkexec tuxedo-tomte block ${moduleName}`;
     return new Promise<void>(async (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): Promise<void> => {
         await execCmd(command).then((): void => {
             resolve();
         }).catch((err: unknown): void => {
-            console.error("tomteAPI: blockModule failed =>", err)
+            console.error(`tomteAPI: blockModule failed => ${err}`)
             reject();
         })
     });
 }
 
 async function setMode(mode: string): Promise<void> {
-    const command: string = "pkexec tuxedo-tomte " + mode;
+    const command: string = `pkexec tuxedo-tomte ${mode}`;
     return new Promise<void>(async (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): Promise<void> => {
         await execCmd(command).then((): void => {
             resolve();
         }).catch((err: unknown): void => {
-            console.error("tomteAPI: setMode failed =>", err)
+            console.error(`tomteAPI: setMode failed => ${err}`)
             reject();
         })
     });
@@ -165,7 +161,7 @@ function parseTomteListJson(rawTomteListOutput: string | undefined): ITomteInfor
         }
         catch (err: unknown)
         {
-            console.error("tomteAPI: parseTomteListJson failed =>", err)
+            console.error(`tomteAPI: parseTomteListJson failed => ${err}`)
             tomteInformation.jsonError = true;
         }
         finally {
@@ -178,7 +174,7 @@ async function getTomteInformation(): Promise<ITomteInformation> {
             const command: string = "tuxedo-tomte listjson"
             let results: string;
             try {
-                results = await execCmd(command + "");
+                results = await execCmd(`${command}`);
                 results = results.replace(/^[^\{]*\{/, "{"); // delete everything up to the first occurance of {
             }
             catch {
@@ -215,7 +211,7 @@ export const tomteHandlers: Map<string, (...args: any[]) => any> = new Map<strin
             removeModule(moduleName).then((): void => {
                 resolve(true);
             }).catch((err: unknown): void => {
-                console.error("tomteAPI: removeModule failed =>", err)
+                console.error(`tomteAPI: removeModule failed => ${err}`)
                 resolve(false);
             })
         });
@@ -227,7 +223,7 @@ export const tomteHandlers: Map<string, (...args: any[]) => any> = new Map<strin
             installModule(moduleName).then((): void => {
                 resolve(true);
             }).catch((err: unknown): void => {
-                console.error("tomteAPI: installModule failed =>", err)
+                console.error(`tomteAPI: installModule failed => ${err}`)
                 resolve(false);
             })
         });
@@ -238,7 +234,7 @@ export const tomteHandlers: Map<string, (...args: any[]) => any> = new Map<strin
             unBlockModule(moduleName).then((): void => {
                 resolve(true);
             }).catch((err: unknown): void => {
-                console.error("tomteAPI: unBlockModule failed =>", err)
+                console.error(`tomteAPI: unBlockModule failed => ${err}`)
                 resolve(false);
             })
         });
@@ -249,7 +245,7 @@ export const tomteHandlers: Map<string, (...args: any[]) => any> = new Map<strin
             blockModule(moduleName).then((): void => {
                 resolve(true);
             }).catch((err: unknown): void => {
-                console.error("tomteAPI: blockModule failed =>", err)
+                console.error(`tomteAPI: blockModule failed => ${err}`)
                 resolve(false);
             })
         });
@@ -260,7 +256,7 @@ export const tomteHandlers: Map<string, (...args: any[]) => any> = new Map<strin
             setMode(mode).then((): void => {
                 resolve(true);
             }).catch((err: unknown): void => {
-                console.error("tomteAPI: setMode failed =>", err)
+                console.error(`tomteAPI: setMode failed => ${err}`)
                 resolve(false);
             })
         });

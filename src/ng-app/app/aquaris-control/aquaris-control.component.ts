@@ -174,7 +174,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
     }
 
     public rgbToHex(red: number, green: number, blue: number): string {
-        return '#' + red.toString(16).padStart(2, '0') + green.toString(16).padStart(2, '0') + blue.toString(16).padStart(2, '0');
+        return `#${red.toString(16).padStart(2, '0')}${green.toString(16).padStart(2, '0')}${blue.toString(16).padStart(2, '0')}`;
     }
 
     public hexToRed(hex: string): number {
@@ -288,7 +288,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
                     await this.aquaris.writeRGBOff();
                 }
             } catch (err: unknown) {
-                console.error("aquaris-control: failed writing led state =>", err);
+                console.error(`aquaris-control: failed writing led state => ${err}`);
             }
             await this.triggerSave();
         }
@@ -305,7 +305,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
                     await this.aquaris.writeFanOff();
                 }
             } catch (err: unknown) {
-                console.error("aquaris-control: failed writing fan state =>", err);
+                console.error(`aquaris-control: failed writing fan state => ${err}`);
             }
             await this.triggerSave();
         }
@@ -348,7 +348,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
                     await this.aquaris.writePumpOff();
                 }
             } catch (err: unknown) {
-                console.error("aquaris-control: writePumpMode failed =>", err)
+                console.error(`aquaris-control: writePumpMode failed => ${err}`)
             }
             await this.triggerSave();
         }
@@ -408,7 +408,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
             await this.updateState();
             localStorage.setItem('aquarisLastConnected', deviceUUID);
         } catch (err: unknown) {
-            console.error("aquaris-control: buttonConnect failed =>", err)
+            console.error(`aquaris-control: buttonConnect failed => ${err}`)
             await this.aquaris.disconnect();
             this.isConnected = false;
         } finally {
@@ -449,7 +449,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
                 this.ctrlDeviceList.setValue([this.selectedDeviceUUID]);
             }
         } catch (err: unknown) {
-            console.error("aquaris-control: disconnect failed =>", err);
+            console.error(`aquaris-control: disconnect failed => ${err}`);
         } finally {
             this.isDisconnecting = false;
         }

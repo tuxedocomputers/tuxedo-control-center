@@ -54,7 +54,7 @@ async function getDGpuPowerState(busPath: string): Promise<string> {
 
             return powerState.trim();
         } catch (err: unknown) {
-            console.error("powerAPI: getDGpuPowerState failed =>", err);
+            console.error(`powerAPI: getDGpuPowerState failed => ${err}`);
         }
     }
     return "-1";
@@ -72,7 +72,7 @@ function getBusPath(driver: string): string {
     if (driver === "nvidia") {
         devicePattern = "DRIVER=nvidia";
     } else if (driver === "amd") {
-        devicePattern = "PCI_ID=" + amdDGpuDeviceIdString;
+        devicePattern = `PCI_ID=${amdDGpuDeviceIdString}`;
     }
 
     if (devicePattern) {
@@ -89,7 +89,7 @@ ipcMain.handle('prime-select', async (event: IpcMainInvokeEvent, selectedState: 
                 `pkexec prime-select ${selectedState}`
             ));
         } catch (err: unknown) {
-          console.error("powerAPI: prime-select failed =>", err)
+          console.error(`powerAPI: prime-select failed => ${err}`)
           reject(err);
         }
       });

@@ -49,7 +49,7 @@ export class DBusDisplayBrightnessGnome {
                     }
                 });
             }).catch((err: unknown): void => {
-                console.error("DBusDisplayBrightnessGnome: constructor failed =>", err)
+                console.error(`DBusDisplayBrightnessGnome: constructor failed => ${err}`)
             });
         }
     }
@@ -83,7 +83,7 @@ export class DBusDisplayBrightnessGnome {
                 }
                 resolve(false);
             } catch (err: unknown) {
-                console.error("DBusDisplayBrightnessGnome: isAvailable failed =>", err)
+                console.error(`DBusDisplayBrightnessGnome: isAvailable failed => ${err}`)
                 resolve(false);
             }
         });
@@ -109,7 +109,7 @@ export class DBusDisplayBrightnessGnome {
                     resolve(this.interface);
                 }
             ).catch((err: unknown): void => {
-                console.error("DBusDisplayBrightnessGnome: getInterface failed =>", err)
+                console.error(`DBusDisplayBrightnessGnome: getInterface failed => ${err}`)
                 this.interface = undefined;
                 resolve(this.interface);
             });
@@ -127,7 +127,7 @@ export class DBusDisplayBrightnessGnome {
                     reject(new Error('Interface not available'));
                 }
             } catch (err: unknown) {
-                console.error("DBusDisplayBrightnessGnome: getBrightness failed =>", err)
+                console.error(`DBusDisplayBrightnessGnome: getBrightness failed => ${err}`)
                 reject(err);
             }
         });
@@ -143,7 +143,7 @@ export class DBusDisplayBrightnessGnome {
                     reject(new Error('Interface not available'));
                 }
             } catch (err: unknown) {
-                console.error("DBusDisplayBrightnessGnome: setBrightness failed =>", err)
+                console.error(`DBusDisplayBrightnessGnome: setBrightness failed => ${err}`)
                 reject(err);
             }
         });

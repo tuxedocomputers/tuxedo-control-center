@@ -190,11 +190,11 @@ export class MainGuiComponent implements OnInit, OnDestroy {
 
     public getProfileLink(state: IStateInfo): string {
         if (state.value === ProfileStates.AC) {
-            return 'profile-manager/' + this.state.getCurrentChargingProfileId()
+            return `profile-manager/${this.state.getCurrentChargingProfileId()}`
         }
 
         if (state.value === ProfileStates.BAT) {
-            return 'profile-manager/' + this.state.getCurrentBatteryProfileId()
+            return `profile-manager/${this.state.getCurrentBatteryProfileId()}`
         }
     }
 }

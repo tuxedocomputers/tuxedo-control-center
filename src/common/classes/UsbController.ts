@@ -63,7 +63,7 @@ export class UsbController extends SysFsController {
             fs.writeFileSync(path.join(UsbController.USB_DRIVER_PATH, 'bind'), this.deviceIdString);
             return true;
         } catch (err: unknown) {
-            console.error("UsbController: enableDevice failed =>", err)
+            console.error(`UsbController: enableDevice failed => ${err}`)
             return false;
         }
     }
@@ -73,7 +73,7 @@ export class UsbController extends SysFsController {
             fs.writeFileSync(path.join(UsbController.USB_DRIVER_PATH, 'unbind'), this.deviceIdString);
             return true;
         } catch (err: unknown) {
-            console.error("UsbController: disableDevice failed =>", err)
+            console.error(`UsbController: disableDevice failed => ${err}`)
             return false;
         }
     }

@@ -140,7 +140,7 @@ export async function writeTextFile(filePath: string, fileData: string | Buffer,
           }
         });
       } catch (err: unknown) {
-        console.error("utilsAPI: writeTextFile failed =>", err)
+        console.error(`utilsAPI: writeTextFile failed => ${err}`)
         reject(err);
       }
     });
@@ -157,7 +157,7 @@ export async function readTextFile(filePath: string): Promise<string> {
             }
           });
         } catch (err: unknown) {
-          console.error("utilsAPI: readTextFile failed =>", err)
+          console.error(`utilsAPI: readTextFile failed => ${err}`)
           reject(err);
         }
       });
@@ -189,7 +189,7 @@ export function execCmdSync(cmd: string):string {
         try {
             return child_process.execSync(cmd).toString();
         } catch (err: unknown) {
-            console.error("utilsAPI: execCmdSync failed =>", err)
+            console.error(`utilsAPI: execCmdSync failed => ${err}`)
             return err.toString();
         }
 }
@@ -220,7 +220,7 @@ export async function execFileSync(arg: string): Promise<unknown | string> {
             return data.toString();
         }
         catch (err: unknown) {
-            console.error("utilsAPI: execFileSync failed =>", err)
+            console.error(`utilsAPI: execFileSync failed => ${err}`)
             return err;
         }
 }
@@ -235,7 +235,7 @@ export async function loadTranslation(langId: string): Promise<void> {
             await translation.loadLanguage(langId);
             canLoadTranslation = true;
         } catch (err: unknown) {
-            console.log("\nloadTranslation: watch mode, waiting for translation\n    =>", err)
+            console.log(`utilsAPI: loadTranslation: watch mode, waiting for translation => ${err}`)
             await new Promise<void>((resolve: () => void): NodeJS.Timeout => setTimeout(resolve, 3000));
         }
     }
@@ -244,13 +244,13 @@ export async function loadTranslation(langId: string): Promise<void> {
     try {
         await translation.loadLanguage(langId);
     } catch (err: unknown) {
-        console.log('Failed loading translation => ' + err);
+        console.log(`utilsAPI: Failed loading translation => ${err}`);
         const fallbackLangId = 'en';
-        console.log('fallback to \'' + fallbackLangId + '\'');
+        console.log(`utilsAPI: fallback to '${fallbackLangId}'`);
         try {
             await translation.loadLanguage(fallbackLangId);
         } catch (err: unknown) {
-            console.error("translationAndTheme: loadLanguage failed =>", err)
+            console.error(`utilsAPI: loadTranslation: loadLanguage failed => ${err}`)
         }
     }
 }

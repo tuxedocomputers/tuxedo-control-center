@@ -165,7 +165,7 @@ export class SupportComponent implements OnInit {
       systeminfoStepper.selected.completed = true;
       systeminfoStepper.next();
     }).catch((err: unknown): void => {
-      console.error("support: buttonStartSysteminfo failed =>", err)
+      console.error(`support: buttonStartSysteminfo failed => ${err}`)
       this.systeminfoRunOutput = err.toString();
     }).finally((): void => {
       this.systeminfoRunProgress = false;

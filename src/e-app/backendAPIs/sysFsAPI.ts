@@ -42,7 +42,7 @@ import type { IDisplayBrightnessInfo } from "../../common/models/ICpuInfos";
         };
         infoArray.push(info);
       } catch (err: unknown) {
-        console.error("sysFsAPI: get-display-brightness-info-sync failed =>", err)
+        console.error(`sysFsAPI: get-display-brightness-info-sync failed => ${err}`)
       }
     }
     event.returnValue = infoArray;

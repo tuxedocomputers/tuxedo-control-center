@@ -69,7 +69,7 @@ export class NgTranslations {
     }
 
     public async loadLanguage(langId?: string): Promise<void> {
-        const fileName: string = 'lang.' + langId + '.xlf';
+        const fileName: string = `lang.${langId}.xlf`;
         if (langId !== undefined) {
             this.translationMap = await this.loadFile(fileName);
         }
@@ -81,16 +81,16 @@ export class NgTranslations {
             const xlfPath: string = path.join(__dirname, '..', '..', 'ng-app', 'en-US', 'assets', 'locale', fileName);
             fs.readFile(xlfPath, (err: any, xmlBuffer: Buffer): void => {
                 if (err) {
-                    reject("NgTranslations: loadFile readFile failed => " + err);
+                    reject(`NgTranslations: loadFile readFile failed => ${err}`);
                 } else {
                     xliff.xliff12ToJs(xmlBuffer.toString(), (err: unknown, jsXlf: any): void => {
                         if (err) {
-                            reject("NgTranslations: loadFile xliff12ToJs failed =>" + err);
+                            reject(`NgTranslations: loadFile xliff12ToJs failed => ${err}`);
                         } else {
                             try {
                                 resolve(this.parseJS(jsXlf, target));
                             } catch (err: unknown) {
-                                reject("NgTranslations: loadFile parseJS failed =>" + err);
+                                reject(`NgTranslations: loadFile parseJS failed => ${err}`);
                             }
                         }
                     });

@@ -65,15 +65,15 @@ export class ShutdownTimerComponent implements OnInit {
         const result: string = await window.ipc.getScheduledShutdown();
         try {
             if (result) {
-                const resultJSON: string = ('{"' + result.toString().replace(/\s+/g, '","').replace(/=/g, '":"') + '"}').replace(/.""}/g, '}');
+                const resultJSON: string = (`{"${result.toString().replace(/\s+/g, '","').replace(/=/g, '":"')}"}`).replace(/.""}/g, '}');
                 const resultDate: Date = new Date(Number.parseInt(JSON.parse(resultJSON).USEC) / 1000);
-                this.appliedTime = resultDate.getHours().toString().padStart(2, "0") + ":" + resultDate.getMinutes().toString().padStart(2, "0");
+                this.appliedTime = `${resultDate.getHours().toString().padStart(2, "0")}:${resultDate.getMinutes().toString().padStart(2, "0")}`;
             }
             if (!result) {
                 console.log("shutdown-timer: updateTime: getScheduledShutdown() did not return data")
             }
         }catch(err: unknown) {
-            console.error("shutdown-timer: updateTime failed =>", err)
+            console.error(`shutdown-timer: updateTime failed => ${err}`)
             this.appliedTime = "";
         }
     }

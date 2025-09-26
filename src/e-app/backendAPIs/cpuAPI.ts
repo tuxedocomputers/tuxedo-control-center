@@ -96,7 +96,7 @@ ipcMain.handle('get-general-cpu-info-async', (event: IpcMainInvokeEvent): Promis
     }
     resolve(cpuInfo);
         } catch (err: unknown) {
-          console.error("cpuAPI: get-general-cpu-info-async failed =>", err)
+          console.error(`cpuAPI: get-general-cpu-info-async failed => ${err}`)
           reject(err);
         }
       });
@@ -218,12 +218,12 @@ ipcMain.handle('get-general-cpu-info-async', (event: IpcMainInvokeEvent): Promis
         };
         coreInfoList.push(coreInfo);
       } catch (err: unknown) {
-        console.error("cpuAPI: get-logical-core-info-async loop failed =>", err)
+        console.error(`cpuAPI: get-logical-core-info-async loop failed => ${err}`)
       }
     }
    resolve(coreInfoList);
     } catch (err: unknown) {
-      console.error("cpuAPI: get-logical-core-info-async failed =>", err)
+      console.error(`cpuAPI: get-logical-core-info-async failed => ${err}`)
       reject(err);
     }
   });
@@ -237,7 +237,7 @@ ipcMain.handle('get-general-cpu-info-async', (event: IpcMainInvokeEvent): Promis
             }
             resolve(false)
         } catch (err: unknown) {
-          console.error("cpuAPI: get-intel-pstate-turbo-value-async failed =>", err)
+          console.error(`cpuAPI: get-intel-pstate-turbo-value-async failed => ${err}`)
           reject(err);
         }
       });
@@ -247,8 +247,8 @@ ipcMain.handle('get-general-cpu-info-async', (event: IpcMainInvokeEvent): Promis
     try {
         const scalingDriver: string = ScalingDriver.acpi_cpufreq
         return scalingDriver; 
-    } catch (error) {
-        console.error("cpuApi: comp-get-scaling-driver-acpi-cpu-freq-sync failed =>", error);
-        throw error;
+    } catch (err: unknown) {
+        console.error(`cpuApi: comp-get-scaling-driver-acpi-cpu-freq-sync failed => ${err}`);
+        throw err;
     }
 });

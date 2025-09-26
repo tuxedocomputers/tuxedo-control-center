@@ -201,7 +201,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
     {
         try{
             const documentsPath: string = await this.utils.getPath('documents');
-            const result: string = await this.utils.saveFileDialog({defaultPath: documentsPath + "/TCC_Profiles_Backup_" + Date.now().toString() + ".json"});
+            const result: string = await this.utils.saveFileDialog({defaultPath: `${documentsPath}/TCC_Profiles_Backup_${Date.now().toString()}.json`});
             if (result) {
                 const profiles: ITccProfile[] = this.config.getCustomProfiles();
                 await this.utils.writeTextFile(result, JSON.stringify(profiles));     
@@ -209,7 +209,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
         }
         catch(err: unknown)
         {
-            console.error("profile-manager: exportProfiles failed =>", err)
+            console.error(`profile-manager: exportProfiles failed => ${err}`)
         }
 
     }
@@ -235,7 +235,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
         }
         catch (err: unknown)
         {
-            console.error("profile-manager: importProfiles readTextFile failed =>", err)
+            console.error(`profile-manager: importProfiles readTextFile failed => ${err}`)
             this.utils.pageDisabled = false;
             return;
         }
@@ -249,7 +249,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
         }
         catch(err: unknown)
         {
-            console.error("profile-manager: importProfiles parse failed =>", err)
+            console.error(`profile-manager: importProfiles parse failed => ${err}`)
             this.utils.pageDisabled = false;
             return;
         }

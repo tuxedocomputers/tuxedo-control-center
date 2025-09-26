@@ -102,7 +102,7 @@ export class ODMProfileWorker extends DaemonWorker {
             // Make sure a valid one could be found before proceeding, otherwise abort
             if (availableProfiles.value.includes(chosenODMProfileName)) {
                 this.tccd.logLine(
-                    "ODMProfileWorker: Setting ODM profile '" + chosenODMProfileName + "' "
+                    `ODMProfileWorker: Setting ODM profile '${chosenODMProfileName}'`
                 );
                 if (!ioAPI.setODMPerformanceProfile(chosenODMProfileName)) {
                     this.tccd.logLine(
@@ -111,9 +111,7 @@ export class ODMProfileWorker extends DaemonWorker {
                 }
             } else {
                 this.tccd.logLine(
-                    "ODMProfileWorker: Unexpected error, default profile name '" +
-                        chosenODMProfileName +
-                        "' not valid"
+                    `ODMProfileWorker: Unexpected error, default profile name '${chosenODMProfileName}' not valid`
                 );
             }
         }

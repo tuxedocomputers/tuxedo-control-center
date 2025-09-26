@@ -294,7 +294,7 @@ private transformPrimeStatus(status: string): string {
                     resolve(true);
                 })
                 .catch((err: unknown): void => {
-                    console.error("config.service: pkexecSetPrimeSelectAsync failed =>", err)
+                    console.error(`config.service: pkexecSetPrimeSelectAsync failed => ${err}`)
                     resolve(false);
                 });
         });

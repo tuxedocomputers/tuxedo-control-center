@@ -42,7 +42,7 @@ export class ProgramManagementService {
             }
             resolve(false)
           }).catch((err: unknown): void => {
-            console.error("pgmsService: isInstalled failed =>", err)
+            console.error(`pgmsService: isInstalled failed => ${err}`)
             this.isCheckingInstallation.set(name, false);
             resolve(false);
           });
@@ -56,7 +56,7 @@ export class ProgramManagementService {
           this.isInProgress.set(name, false);
           resolve(true);
         }).catch((err: unknown): void => {
-          console.error("pgmsService: install failed =>", err)
+          console.error(`pgmsService: install failed => ${err}`)
           this.isInProgress.set(name, false);
           resolve(false);
         });
@@ -70,7 +70,7 @@ export class ProgramManagementService {
           this.isInProgress.set(name, false);
           resolve(true);
         }).catch((err: unknown): void => {
-          console.error("pgmsService: remove failed =>", err)
+          console.error(`pgmsService: remove failed => ${err}`)
           this.isInProgress.set(name, false);
           resolve(false);
         });
@@ -79,8 +79,8 @@ export class ProgramManagementService {
 
     public run(name: string): void {
         child_process.spawn(name, { detached: true, stdio: 'ignore' }).on('error', (err: Error): void => {
-            console.log("\"" + name + "\" could not be executed.")
-            dialog.showMessageBox({ title: "Notice", buttons: ["OK"], message: "\"" + name + "\" could not be executed." })
+            console.log(`"${name}" could not be executed.`)
+            dialog.showMessageBox({ title: "Notice", buttons: ["OK"], message: `"${name}" could not be executed.` })
         });
     }
   }

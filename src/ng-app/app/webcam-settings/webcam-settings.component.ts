@@ -189,7 +189,7 @@ export class WebcamSettingsComponent implements OnInit {
                     resolve(JSON.parse(data.toString()));
                 })
                 .catch((err: unknown): void => {
-                    console.error("webcam-settings: getWebcamPaths failed =>", err);
+                    console.error(`webcam-settings: getWebcamPaths failed => ${err}`);
                     resolve(null);
                 });
         });
@@ -266,7 +266,7 @@ export class WebcamSettingsComponent implements OnInit {
                 const data: string = await window.webcamAPI.getSelectedWebcamSettings(this.selectedWebcam.path);
                 resolve(data);
             } catch (err: unknown) {
-                console.error("webcam-settings: getWebcamSettings failed =>", err);
+                console.error(`webcam-settings: getWebcamSettings failed => ${err}`);
                 this.mutex.release();
                 this.webcamNotAvailabledDialog();
                 await this.reloadWebcamList(undefined);
@@ -371,7 +371,7 @@ export class WebcamSettingsComponent implements OnInit {
             try {
                 await window.webcamAPI.executeWebcamCtrls(devicePath, parameter, value);
             } catch (err: unknown) {
-                console.error("webcam-settings: executeWebcamCtrls failed =>", err);
+                console.error(`webcam-settings: executeWebcamCtrls failed => ${err}`);
                 this.mutex.release();
                 this.webcamNotAvailabledDialog();
                 await this.reloadWebcamList(undefined);
@@ -397,7 +397,7 @@ export class WebcamSettingsComponent implements OnInit {
                 try {
                     await window.webcamAPI.executeFilteredCtrls(devicePath, filteredControls);
                 } catch (err: unknown) {
-                    console.error("webcam-settings: executeWebcamCtrlsList failed =>", err);
+                    console.error(`webcam-settings: executeWebcamCtrlsList failed => ${err}`);
                     this.mutex.release();
                     this.webcamNotAvailabledDialog();
                     await this.reloadWebcamList(undefined);

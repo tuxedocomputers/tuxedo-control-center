@@ -194,12 +194,12 @@ export class TomteGuiComponent implements OnInit {
         Opens Dialog containing given errormessage
         Also logs the error to the browser console
     */
-    private async throwErrorMessage(errorMessage: string | undefined): Promise<void>
+    private async throwErrorMessage(err: string | undefined): Promise<void>
     {
-        console.error("tomte-gui: throwErrorMessage =>", errorMessage);
+        console.error(`tomte-gui: throwErrorMessage => ${err}`);
         const askToClose: ConfirmDialogResult = await this.utils.confirmDialog({
             title: $localize `:@@tomteGuiDialogErrorTitle:An Error occured!`,
-            description: errorMessage,
+            description: err,
             linkLabel: ``,
             linkHref: null,
             buttonAbortLabel: ``,
@@ -315,7 +315,7 @@ export class TomteGuiComponent implements OnInit {
         {
 
             await window.tomteAPI.removeModule(name).catch((err: unknown): void => {
-                console.error("tomote-gui: tomteModuleInstallButton removeModule failed =>", err);
+                console.error(`tomote-gui: tomteModuleInstallButton removeModule failed => ${err}`);
                 this.utils.pageDisabled = false;
                 this.tomtelist();
                 return;
@@ -325,7 +325,7 @@ export class TomteGuiComponent implements OnInit {
         {
 
             await window.tomteAPI.installModule(name).catch((err: unknown): void => {
-                console.error("tomote-gui: tomteModuleInstallButton installModule failed =>", err);
+                console.error(`tomote-gui: tomteModuleInstallButton installModule failed => ${err}`);
                 this.utils.pageDisabled = false;
                 this.tomtelist();
                 return;
@@ -351,14 +351,14 @@ export class TomteGuiComponent implements OnInit {
         this.utils.pageDisabled = true;
         if (isBlocked) {
             await window.tomteAPI.unBlockModule(name).catch((err: unknown): void => {
-                console.error("tomote-gui: tomteBlockButton unBlockModule failed =>", err);
+                console.error(`tomote-gui: tomteBlockButton unBlockModule failed => ${err}`);
                 this.utils.pageDisabled = false;
                 return;
             });
         }
         else {
             await window.tomteAPI.blockModule(name).catch((err: unknown): void => {
-                console.error("tomote-gui: tomteBlockButton blockModule failed =>", err);
+                console.error(`tomote-gui: tomteBlockButton blockModule failed => ${err}`);
                 this.utils.pageDisabled = false;
                 return;
             });
@@ -384,7 +384,7 @@ export class TomteGuiComponent implements OnInit {
         }
         this.utils.pageDisabled = true;
         await window.tomteAPI.setMode(mode.value).catch((err: unknown): void => {
-            console.error("tomote-gui: tomteModeButton failed =>", err);
+            console.error(`tomote-gui: tomteModeButton failed => ${err}`);
             this.utils.pageDisabled = false;
             return;
           });

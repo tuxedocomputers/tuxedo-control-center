@@ -198,7 +198,7 @@ export class ConfigHandler {
             }
             fs.writeFileSync(filePath, fileData, writeFileOptions);
         } catch (err: unknown) {
-            console.error("ConfigHandler: writeConfig failed =>", err)
+            console.error(`ConfigHandler: writeConfig failed => ${err}`)
             throw err;
         }
     }
@@ -212,7 +212,7 @@ export class ConfigHandler {
             }
             await fs.promises.writeFile(filePath, fileData, writeFileOptions);
         } catch (err: unknown) {
-            console.error("ConfigHandler: writeConfigAsync failed =>", err)
+            console.error(`ConfigHandler: writeConfigAsync failed => ${err}`)
             throw err;
         }
     }
@@ -258,7 +258,7 @@ export class ConfigHandler {
         try {
             return this.readProfiles(device);
         } catch (err: unknown) {
-            console.error("ConfigHandler: getCustomProfilesNoThrow failed =>", err)
+            console.error(`ConfigHandler: getCustomProfilesNoThrow failed => ${err}`)
             return this.getDefaultCustomProfiles(device);
         }
     }
@@ -271,7 +271,7 @@ export class ConfigHandler {
         try {
             return this.readSettings();
         } catch (err: unknown) {
-            console.error("ConfigHandler: getSettingsNoThrow failed =>", err)
+            console.error(`ConfigHandler: getSettingsNoThrow failed => ${err}`)
             return this.getDefaultSettings(device);
         }
     }

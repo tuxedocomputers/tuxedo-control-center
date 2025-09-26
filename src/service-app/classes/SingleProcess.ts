@@ -50,7 +50,7 @@ export class SingleProcess {
                     try {
                         process.kill(pid, 'SIGINT');
                     } catch (err: unknown) {
-                        console.error("SingleProcess: stop failed =>", err)
+                        console.error(`SingleProcess: stop failed => ${err}`)
                         resolve(false);
                     }
                 }
@@ -81,7 +81,7 @@ export class SingleProcess {
             fs.writeFileSync(this.pidPath, pid.toString());
             return true;
         } catch (err: unknown) {
-            console.error("SingleProcess: writePid failed =>", err)
+            console.error(`SingleProcess: writePid failed => ${err}`)
             return false;
         }
     }
@@ -101,7 +101,7 @@ export class SingleProcess {
             }
             return Number.NaN;
         } catch (err: unknown) {
-            console.error("SingleProcess: readPid failed =>", err)
+            console.error(`SingleProcess: readPid failed => ${err}`)
             return Number.NaN;
         }
     }
@@ -117,7 +117,7 @@ export class SingleProcess {
             fs.unlinkSync(this.pidPath);
             return true;
         } catch (err: unknown) {
-            console.error("SingleProcess: removePid failed =>", err)
+            console.error(`SingleProcess: removePid failed => ${err}`)
             return false;
         }
     }
@@ -138,7 +138,7 @@ export class SingleProcess {
             try {
                 return fs.existsSync(`/proc/${intPid}`)
             } catch (err: unknown) {
-                console.error("SingleProcess: isRunning failed =>", err)
+                console.error(`SingleProcess: isRunning failed => ${err}`)
                 isRunning = false;
             }
         }

@@ -85,7 +85,7 @@ export class CpuController {
                 }
             }
         } catch (err: unknown) {
-            console.error("CpuController: getAvailableLogicalCores failed =>", err)
+            console.error(`CpuController: getAvailableLogicalCores failed => ${err}`)
         }
     }
 
@@ -259,9 +259,7 @@ export class CpuController {
             if (availableGovernors.includes(governor)) {
                 core.scalingGovernor.writeValue(governor);
             } else {
-                throw Error('setGovernor: choosen governor \''
-                 + governor + '\' is not available (' + core.cpuPath
-                 + ') available are: ' + JSON.stringify(availableGovernors));
+                throw Error(`CpuController: setGovernor: Choosen governor '${governor}' is not available (${core.cpuPath}), available are: ${JSON.stringify(availableGovernors)}`);
             }
         }
     }

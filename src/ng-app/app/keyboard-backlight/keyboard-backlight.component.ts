@@ -72,7 +72,7 @@ export class KeyboardBacklightComponent implements OnInit {
     // Converts integer value: 0xRRGGBBAA or 0xRRGGBB to a string value "#RRGGBB"
     private intToRGBSharpString(input: number): string {
         const hex: string = input.toString(16).padStart(input <= 0xffffff ? 6 : 8, "0");
-        return "#" + hex.substring(0, 6);
+        return `#${hex.substring(0, 6)}`;
     }
 
     // Converts a string value: "#RRGGBB" to an integer value: 0xRRGGBBAA

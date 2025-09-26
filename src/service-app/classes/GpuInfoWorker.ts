@@ -252,7 +252,7 @@ export class GpuInfoWorker extends DaemonWorker {
             const stdout: string = await execCommandAsync("which nvidia-smi");
             return stdout.trim()?.length > 0;
         } catch (err: unknown) {
-            console.error("GpuInfoWorker: checkNvidiaSmiInstalled: ", err);
+            console.error(`GpuInfoWorker: checkNvidiaSmiInstalled: ${err}`);
             return false;
         }
     }
@@ -266,7 +266,7 @@ export class GpuInfoWorker extends DaemonWorker {
             const gpuInfo: IdGpuInfo = this.parseOutput(stdout);
             return gpuInfo;
         } catch (err: unknown) {
-            console.error("GpuInfoWorker: getNvidiaDGpuPowerValues failed =>", err);
+            console.error(`GpuInfoWorker: getNvidiaDGpuPowerValues failed => ${err}`);
             return this.getDefaultValuesDGpu();
         }
     }

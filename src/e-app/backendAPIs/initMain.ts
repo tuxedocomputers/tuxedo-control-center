@@ -85,7 +85,7 @@ app.whenReady().then(async (): Promise<void> => {
         }
         await loadTranslation(await userConfig.get('langId'));
     } catch (err: unknown) {
-        console.error("initMain: Error determining user language: ", err);
+        console.error(`initMain: Error determining user language: ${err}`);
         quitCurrentTccSession();
     }
 
@@ -93,7 +93,7 @@ app.whenReady().then(async (): Promise<void> => {
         const success: boolean = globalShortcut.register(startTCCAccelerator, (): void => {
             activateTccGui();
         });
-        if (!success) { console.log('Failed to register global shortcut'); }
+        if (!success) { console.log('initMain: Failed to register global shortcut'); }
     }
 
     // Initialize brightness mode from user config
@@ -125,7 +125,7 @@ function exitIfProcessExists(): void {
                 .toString()
                 .trim();
         } catch(err: unknown) {
-            console.log("initMain: exitIfProcessExists failed =>", err)
+            console.log(`initMain: exitIfProcessExists failed => ${err}`)
         }
         
         if (singletonLock) {
@@ -144,7 +144,7 @@ function exitIfProcessExists(): void {
             app.exit(0);
         }
     } else {
-        console.log("TUXEDO Control Center is already running");
+        console.log("initMain: TUXEDO Control Center is already running");
         app.exit(0);
     }
 }
@@ -162,7 +162,7 @@ async function startDbusAndInit(): Promise<void> {
 }
 
 async function initTray(): Promise<void> {
-    tray.state.tccGUIVersion = 'v' + app.getVersion();
+    tray.state.tccGUIVersion = `v${app.getVersion()}`;
     tray.state.isAutostartTrayInstalled = isAutostartTrayInstalled();
     tray.state.fnLockSupported = await fnLockSupported();
     tray.state.hasAquaris = await hasAquaris();
@@ -234,7 +234,7 @@ async function initMain(): Promise<void> {
             if (dbusAvailable) {
                 const tccdVersion: string = await tccDBus.tccdVersion();
                 if (tccdVersion?.length > 0 && tccdVersion !== app.getVersion()) {
-                    console.log('Other tccd version detected, restarting..');
+                    console.log('initMain: Other tccd version detected, restarting..');
                     process.on('exit', function (): void {
                         child_process.spawn(
                             process.argv[0],
@@ -277,7 +277,7 @@ function installAutostartTray(): boolean {
         );
         return true;
     } catch (err: unknown) {
-        console.error("initMain: installAutostartTray failed =>", err)
+        console.error(`initMain: installAutostartTray failed => ${err}`)
         return false;
     }
 }
@@ -289,7 +289,7 @@ function removeAutostartTray(): boolean {
         }
         return true;
     } catch (err: unknown) {
-        console.error("initMain: removeAutostartTray failed =>", err)
+        console.error(`initMain: removeAutostartTray failed => ${err}`)
         return false;
     }
 }
@@ -298,7 +298,7 @@ function isAutostartTrayInstalled(): boolean {
     try {
         return fs.existsSync(path.join(autostartLocation, autostartDesktopFilename));
     } catch (err: unknown) {
-        console.error("initMain: isAutostartTrayInstalled failed =>", err)
+        console.error(`initMain: isAutostartTrayInstalled failed => ${err}`)
         return false;
     }
 }
@@ -311,7 +311,7 @@ function userConfigDirExists(): boolean {
     try {
         return fs.existsSync(tccConfigDir);
     } catch (err: unknown) {
-        console.error("initMain: userConfigDirExists failed =>", err)
+        console.error(`initMain: userConfigDirExists failed => ${err}`)
         return false;
     }
 }
@@ -321,7 +321,7 @@ function createUserConfigDir(): boolean {
         fs.mkdirSync(tccConfigDir);
         return true;
     } catch (err: unknown) {
-        console.error("initMain: createUserConfigDir failed =>", err)
+        console.error(`initMain: createUserConfigDir failed => ${err}`)
         return false;
     }
 }
@@ -337,7 +337,7 @@ async function getPrimeAvailable(): Promise<[boolean, string]> {
         }
         return [false, "-1"];
     } catch (err: unknown) {
-        console.error("initMain: getPrimeAvailable failed =>", err)
+        console.error(`initMain: getPrimeAvailable failed => ${err}`)
         return [false, "-1"];
     }
 }
@@ -407,7 +407,7 @@ export async function updateTrayProfiles(): Promise<void> {
             await tray.create();
         }
     } catch (err: unknown) {
-        console.error("initMain: updateTrayProfiles failed =>", err)
+        console.error(`initMain: updateTrayProfiles failed => ${err}`)
     }
 }
 
@@ -429,7 +429,7 @@ async function getProfiles(): Promise<TccProfile[]> {
             result = JSON.parse(profilesJSON);
         }
     } catch (err: unknown) {
-        console.error("initMain: getProfiles failed =>", err)
+        console.error(`initMain: getProfiles failed => ${err}`)
     }
     return result;
 }
@@ -449,7 +449,7 @@ async function getActiveProfile(): Promise<TccProfile> {
             result = JSON.parse(activeProfileJSON);
         }
     } catch(err: unknown) {
-        console.error("initMain: getActiveProfile failed =>", err)
+        console.error(`initMain: getActiveProfile failed => ${err}`)
     }
     return result;
 }

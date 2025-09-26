@@ -78,7 +78,7 @@ export async function activateTccGui(module?: string): Promise<void> {
         tccWindow.focus();
         const baseURL: string = tccWindow.webContents.getURL().split("#")[0];
         if (module !== undefined) {
-            tccWindow.loadURL(baseURL + '#' + module);
+            tccWindow.loadURL(`${baseURL}#${module}`);
         }
     } else {
         if (!tccWindowLoading) {

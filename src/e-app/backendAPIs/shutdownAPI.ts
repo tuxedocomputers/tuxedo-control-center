@@ -24,7 +24,7 @@ import * as fs from 'node:fs';
 
 ipcMain.handle('set-shutdown-time', async (event: IpcMainInvokeEvent, selectedHour: number, selectedMinute: number): Promise<string> => {
     return new Promise<string>(async (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): Promise<void> => {
-        await execCmd("pkexec shutdown -h " + selectedHour + ":" + selectedMinute)
+        await execCmd(`pkexec shutdown -h ${selectedHour}:${selectedMinute}`)
         .then((results: string) => {resolve(results)})
         .catch((): void => {resolve("")});
     });
@@ -44,7 +44,7 @@ ipcMain.handle('get-scheduled-shutdown', async (event: IpcMainInvokeEvent): Prom
         if (available) {
             await execCmd("cat /run/systemd/shutdown/scheduled")
             .then((results: string): void => {resolve(results)})
-            .catch((err: unknown): void => {console.error("shutdownAPI: get-scheduled-shutdown failed =>", err); resolve("")});
+            .catch((err: unknown): void => {console.error(`shutdownAPI: get-scheduled-shutdown failed => ${err}`); resolve("")});
         } else {
             resolve("")
         }

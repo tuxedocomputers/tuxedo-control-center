@@ -52,7 +52,7 @@ async function getSystemInfos(): Promise<Buffer> {
        reject(err);
           });
         } catch (err: unknown) {
-          console.error("systemInfosAPI: getSystemInfos failed =>", err)
+          console.error(`systemInfosAPI: getSystemInfos failed => ${err}`)
           reject(err);
         }
       });
@@ -71,7 +71,7 @@ async function runSystemInfos(ticketNumber: string): Promise<void> {
             const data: Buffer = await getSystemInfos();
             fileData = data.toString();
           } catch (err: unknown) {
-            console.error("systemInfosAPI: runSystemInfos: Download failed =>", err)
+            console.error(`systemInfosAPI: runSystemInfos: Download failed => ${err}`)
             reject('Failed to download systeminfos.sh');
             return;
           }
@@ -81,7 +81,7 @@ async function runSystemInfos(ticketNumber: string): Promise<void> {
             updateSystemInfosLabel(`Writing ${systemInfosFilePath}`);
             await writeTextFile(systemInfosFilePath, fileData, { mode: 0o755 });
           } catch (err: unknown) {
-            console.error("systemInfosAPI: runSystemInfos: Write failed =>", err)
+            console.error(`systemInfosAPI: runSystemInfos: Write failed => ${err}`)
             reject(`Failed to write ${systemInfosFilePath}`);
             return;
           }
@@ -101,7 +101,7 @@ async function runSystemInfos(ticketNumber: string): Promise<void> {
               reject(`${systemInfosFilePath} does not exist`);
             }
           } catch (err: unknown) {
-            console.error("systemInfosAPI: runSystemInfos: Check failed =>", err)
+            console.error(`systemInfosAPI: runSystemInfos: Check failed => ${err}`)
             reject("Failed to check systeminfos.sh");
             return;
           }
@@ -111,7 +111,7 @@ async function runSystemInfos(ticketNumber: string): Promise<void> {
             updateSystemInfosLabel(`Running ${systemInfosFilePath}`);
             await execCmd('pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY XDG_SESSION_TYPE=$XDG_SESSION_TYPE XDG_CURRENT_DESKTOP=$XDG_CURRENT_DESKTOP sh ' + systemInfosFilePath + ' ' + ticketNumber);
           } catch (err: unknown) {
-            console.error("systemInfosAPI: runSystemInfos failed =>", err)
+            console.error(`systemInfosAPI: runSystemInfos failed => ${err}`)
             reject('systeminfos.sh failed');
           }
           resolve();

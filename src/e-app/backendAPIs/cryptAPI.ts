@@ -35,7 +35,7 @@ async function changeCryptPassword(newPassword: string, oldPassword: string, con
         oneliner += `printf '%s\\n' '${oldPassword}' '${newPassword}' '${confirmPassword}' | /usr/sbin/cryptsetup -q luksChangeKey --force-password ${drive.devPath} && `
     }
     oneliner = oneliner.slice(0, -4); // remove the tailing " && "
-    return await execCmd(`pkexec /bin/sh -c "` + oneliner + `"`);
+    return await execCmd(`pkexec /bin/sh -c "${oneliner}"`);
 }
 
 ipcMain.handle('change-crypt-password', async (event: IpcMainInvokeEvent, newPassword: string, oldPassword: string, confirmPassword: string): Promise<string> => {
@@ -49,7 +49,7 @@ ipcMain.handle('drive-controller-get-drives', (event: IpcMainInvokeEvent): Promi
         try {
             resolve( DriveController.getDrives());
         } catch (err: unknown) {
-          console.error("cryptAPI: drive-controller-get-drives failed =>", err)
+          console.error(`cryptAPI: drive-controller-get-drives failed => ${err}`)
           reject(err);
         }
       });

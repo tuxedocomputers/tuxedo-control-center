@@ -49,7 +49,7 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
                 console.log("DisplayRefreshrateWorker: w not available")
             }
         } catch (err: unknown) {
-            console.error("DisplayRefreshrateWorker: onStart failed =>", err);
+            console.error(`DisplayRefreshrateWorker: onStart failed => ${err}`);
             this.wAvailable = false;
         }
     }

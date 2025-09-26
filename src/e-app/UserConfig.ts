@@ -43,11 +43,11 @@ export class UserConfig {
         try {
             await this.readConfig();
         } catch (err: unknown) {
-            console.error("UserConfig: set failed =>", err)
+            console.error(`UserConfig: set failed => ${err}`)
 
             // todo: error handling
             if ((err as any).code === 'ENOENT') {
-                console.log('Config file (' + this.configFile + ') does not exist. Will be created.');
+                console.log(`Config file (${this.configFile}) does not exist and will be created.`);
             } else {
                 await this.setProgressDone();
                 throw err;
@@ -63,7 +63,7 @@ export class UserConfig {
         try {
             await this.readConfig();
         } catch (err: unknown) {
-            console.error("UserConfig: get failed =>", err)
+            console.error(`UserConfig: get failed => ${err}`)
 
             // todo: error handling
             if ((err as any).code !== 'ENOENT') {

@@ -54,7 +54,7 @@ export class StateSwitcherWorker extends DaemonWorker {
             if (newActiveProfileId !== undefined) {
                 this.tccd.setCurrentProfileById(newActiveProfileId);
             } else {
-                this.tccd.logLine('StateSwitcherWorker: Undefined state mapping for ' + newState.toString());
+                this.tccd.logLine(`StateSwitcherWorker: Undefined state mapping for ${newState.toString()}`);
             }
 
             this.tccd.updateDBusActiveProfileData();
@@ -85,7 +85,7 @@ export class StateSwitcherWorker extends DaemonWorker {
             this.currentState = newState;
             this.currentStateProfileId = newStateProfileId;
             if (newStateProfileId === undefined) {
-                this.tccd.logLine('StateSwitcherWorker: Undefined state mapping for ' + newState.toString());
+                this.tccd.logLine(`StateSwitcherWorker: Undefined state mapping for ${newState.toString()}`);
             } else {
                 this.tccd.setCurrentProfileById(newStateProfileId);
             }

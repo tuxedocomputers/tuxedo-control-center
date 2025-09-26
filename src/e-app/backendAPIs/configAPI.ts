@@ -44,9 +44,9 @@ async function pkexecWriteCustomProfilesAsync(newProfileList: ITccProfile[]): Pr
         if (environmentIsProduction) {
             tccdExec = TccPaths.TCCD_EXEC_FILE;
         } else {
-            tccdExec = cwd + '/dist/tuxedo-control-center/data/service/tccd';
+            tccdExec = `${cwd}/dist/tuxedo-control-center/data/service/tccd`;
         }
-        await execFile('pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath)
+        await execFile(`pkexec ${tccdExec} --new_profiles ${tmpProfilesPath}`)
             .then((): void => resolve(true))
             .catch((): void => resolve(false));
         });
@@ -61,17 +61,17 @@ function pkexecWriteCustomProfiles(profiles: ITccProfile[]): boolean
     if (environmentIsProduction) {
         tccdExec = TccPaths.TCCD_EXEC_FILE;
     } else {
-        tccdExec = cwd + '/dist/tuxedo-control-center/data/service/tccd';
+        tccdExec = `${cwd}/dist/tuxedo-control-center/data/service/tccd`;
     }
     // https://stackoverflow.com/questions/57484453/how-to-get-err-stderr-from-execsync
     try
     {
-        execFileSync('pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath);
+        execFileSync(`pkexec ${tccdExec} --new_profiles ${tmpProfilesPath}`);
         return true;
     }
     catch(err: unknown)
     {
-        console.error("configAPI: pkexecWriteCustomProfiles failed =>", err)
+        console.error(`configAPI: pkexecWriteCustomProfiles failed => ${err}`)
         return false;
     }
 }
@@ -127,10 +127,10 @@ ipcMain.on('config-set-active-profile', (event: IpcMainEvent, profileId: string,
     if (environmentIsProduction) {
         tccdExec = TccPaths.TCCD_EXEC_FILE;
     } else {
-        tccdExec = cwd + '/dist/tuxedo-control-center/data/service/tccd';
+        tccdExec = `${cwd}/dist/tuxedo-control-center/data/service/tccd`;
     }
     // todo: error handling
-    execFile('pkexec ' + tccdExec + ' --new_settings ' + tmpSettingsPath);
+    execFile(`pkexec ${tccdExec} --new_settings ${tmpSettingsPath}`);
 });
 
 

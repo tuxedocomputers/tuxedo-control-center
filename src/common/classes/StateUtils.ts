@@ -38,7 +38,7 @@ export function determineState(): ProfileStates {
         }
         powerAc = powerSupplies.find((powerSupply: PowerSupplyController): boolean => powerSupply.type.readValue() === 'Mains');
     } catch (err: unknown) {
-        console.error("StateUtils: determineState find failed =>", err)
+        console.error(`StateUtils: determineState find failed => ${err}`)
     }
 
 
@@ -52,7 +52,7 @@ export function determineState(): ProfileStates {
                 state = ProfileStates.BAT;
             }
         } catch (err: unknown) {
-            console.error("StateUtils: determineState readValue failed =>", err)
+            console.error(`StateUtils: determineState readValue failed => ${err}`)
         }
     }
 

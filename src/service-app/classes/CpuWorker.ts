@@ -65,7 +65,7 @@ export class CpuWorker extends DaemonWorker {
                 this.applyCpuProfile(this.activeProfile);
             }
         } catch (err: unknown) {
-            console.error("CpuWorker: onWork failed =>", err)
+            console.error(`CpuWorker: onWork failed => ${err}`)
         }
     }
 
@@ -105,7 +105,7 @@ export class CpuWorker extends DaemonWorker {
                 return chosenName;
             }
         } catch (err: unknown) {
-            console.error("CpuWorker: findDefaultGovernor failed =>", err)
+            console.error(`CpuWorker: findDefaultGovernor failed => ${err}`)
             return chosenName;
         }
     }
@@ -144,7 +144,7 @@ export class CpuWorker extends DaemonWorker {
                 return chosenName;
             }
         } catch (err: unknown) {
-            console.error("CpuWorker: findPerformanceGovernor failed =>", err)
+            console.error(`CpuWorker: findPerformanceGovernor failed => ${err}`)
             return chosenName;
         }
     }
@@ -194,7 +194,7 @@ export class CpuWorker extends DaemonWorker {
                 }
             }
         } catch (err: unknown) {
-            console.error("CpuWorker: applyCpuProfile failed =>", err)
+            console.error(`CpuWorker: applyCpuProfile failed => ${err}`)
         }
     }
 
@@ -211,7 +211,7 @@ export class CpuWorker extends DaemonWorker {
                 this.cpuCtrl.intelPstate.noTurbo.writeValue(false);
             }
         } catch (err: unknown) {
-            console.error("CpuWorker: setCpuDefaultConfig failed =>", err)
+            console.error(`CpuWorker: setCpuDefaultConfig failed => ${err}`)
         }
     }
 
@@ -289,8 +289,7 @@ export class CpuWorker extends DaemonWorker {
                     }
                     if (maxFreq !== maxFreqProfile) {
                         cpuFreqValidConfig = false;
-                        this.tccd.logLine('CpuWorker: Unexpected value core' + core.coreIndex + ' maximum scaling frequency '
-                            + ' => ' + maxFreq + ' instead of ' + maxFreqProfile);
+                        this.tccd.logLine(`CpuWorker: Unexpected value core${core.coreIndex} maximum scaling frequency => ${maxFreq} instead of ${maxFreqProfile}`);
                     }
                 }
             }
@@ -302,8 +301,7 @@ export class CpuWorker extends DaemonWorker {
                 if (governorProfile !== undefined) {
                     if (currentGovernor !== governorProfile) {
                         cpuFreqValidConfig = false;
-                        this.tccd.logLine('CpuWorker: Unexpected value core' + core.coreIndex + ' scaling governor '
-                            + ' => \'' + currentGovernor + '\' instead of \'' + governorProfile + '\'');
+                        this.tccd.logLine(`CpuWorker: Unexpected value core${core.coreIndex} scaling governor => '${currentGovernor}' instead of '${governorProfile}'`);
                     }
                 }
             }
@@ -325,8 +323,7 @@ export class CpuWorker extends DaemonWorker {
                 if (performancePreferenceProfile !== undefined && performancePreferenceProfile !== 'default') {
                     if (currentPerformancePreference !== performancePreferenceProfile) {
                         cpuFreqValidConfig = false;
-                        this.tccd.logLine('CpuWorker: Unexpected value core' + core.coreIndex + ' energy performance preference => \''
-                            + currentPerformancePreference + '\' instead of \'' + performancePreferenceProfile + '\'');
+                        this.tccd.logLine(`CpuWorker: Unexpected value core${core.coreIndex} energy performance preference => '${currentPerformancePreference}' instead of '${performancePreferenceProfile}'`);
                     }
                 }
             }
@@ -367,8 +364,7 @@ export class CpuWorker extends DaemonWorker {
             if (profileNoTurbo !== undefined) {
                 if (currentNoTurbo !== profileNoTurbo) {
                     cpuFreqValidConfig = false;
-                    this.tccd.logLine('CpuWorker: Unexpected value noTurbo => \''
-                        + currentNoTurbo + '\' instead of \'' + profileNoTurbo + '\'');
+                    this.tccd.logLine(`CpuWorker: Unexpected value noTurbo => '${currentNoTurbo}' instead of '${profileNoTurbo}'`);
                 }
             }
         }

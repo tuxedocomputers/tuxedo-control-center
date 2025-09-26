@@ -103,10 +103,10 @@ export class FanControlWorker extends DaemonWorker {
             }
             
             this.fanApi = null;
-            console.log("FanControlWorker: Fan API not available")
+            console.log("FanControlWorker: onStart: Fan API not available")
         }
     }
-    
+
     public async onWork(): Promise<void> {
         try {
             const fanControlEnabled: boolean =
@@ -114,12 +114,13 @@ export class FanControlWorker extends DaemonWorker {
             const sensorCollection: boolean =
                 this.tccd.dbusData.sensorDataCollectionStatus;
 
-            await this.handleRetryInit();
+            await this.checkFanApiAvailable();
             if (this.fanReadAvailable) {
-                await this.handleFanControl(
-                    fanControlEnabled,
-                    sensorCollection,
-                );
+                await this.checkFanControlAvailable(fanControlEnabled);
+
+                if (this.fanApi && this.mapStatus && (fanControlEnabled || sensorCollection)) {
+                    await this.updateFanControlValues(fanControlEnabled);
+                }
             }
             
             if (this.fanCheckCounter < 20) {
@@ -145,7 +146,7 @@ export class FanControlWorker extends DaemonWorker {
             await fanApiInstance.checkAvailable();
         if (this.fanReadAvailable) {
             if (name) {
-                console.log(`FanControlWorker: ${name} available`);
+                console.log(`FanControlWorker: initializeFanControl: ${name} available`);
 
             }
             await this.initializeFanControlApi(
@@ -155,9 +156,9 @@ export class FanControlWorker extends DaemonWorker {
             const numberFans: number = await fanApiInstance.getNumberFans();
 
             if (numberFans === 1) {
-                console.log(`FanControlWorker: Detected ${numberFans} fan`);
+                console.log(`FanControlWorker: initializeFanControl: Detected ${numberFans} fan`);
             } else {
-                console.log(`FanControlWorker: Detected ${numberFans} fans`);
+                console.log(`FanControlWorker: initializeFanControl: Detected ${numberFans} fans`);
             }
             return true;
         }
@@ -183,12 +184,12 @@ export class FanControlWorker extends DaemonWorker {
         }
     }
 
-    private async handleRetryInit(): Promise<void> {
+    private async checkFanApiAvailable(): Promise<void> {
         const fanApiUnavailable: boolean =
             this.fanApi === undefined || this.fanApi === null;
         if (fanApiUnavailable && this.retryFanInitCounter > 0) {
             console.log(
-                "FanControlWorker: Fan API not defined, retrying initialization",
+                "FanControlWorker: checkFanApiAvailable: Fan API not defined, retrying initialization",
             );
             this.retryFanInitCounter = this.retryFanInitCounter - 1;
             this.onStart(true);
@@ -196,35 +197,30 @@ export class FanControlWorker extends DaemonWorker {
         }
 
         if (fanApiUnavailable && this.retryFanInitCounter === 0) {
-            console.log("FanControlWorker: Fan API initialization failed");
+            console.log("FanControlWorker: checkFanApiAvailable: Fan API initialization failed");
             this.retryFanInitCounter = this.retryFanInitCounter - 1;
         }
     }
 
-    private async handleFanControl(
-        fanControlEnabled: boolean,
-        sensorCollection: boolean,
+    private async checkFanControlAvailable(
+        fanControlEnabled: boolean
     ): Promise<void> {
         if (this.fanApi) {
             if (this.mapStatus === false) {
                 console.log(
-                    "FanControlWorker: Mapping failed, retrying initialization",
+                    "FanControlWorker: checkFanControlAvailable: No fans found, retrying initialization",
                 );
                 await this.initializeFanControlApi(fanControlEnabled);
                 await this.setFanProfile();
 
                 const numberFans: number = await this.fanApi.getNumberFans();
                 if (numberFans === 1) {
-                    console.log(`FanControlWorker: Detected ${numberFans} fan`);
+                    console.log(`FanControlWorker: checkFanControlAvailable: Detected ${numberFans} fan`);
                 } else {
                     console.log(
-                        `FanControlWorker: Detected ${numberFans} fans`,
+                        `FanControlWorker: checkFanControlAvailable: Detected ${numberFans} fans`,
                     );
                 }
-            }
-
-            if (this.mapStatus && (fanControlEnabled || sensorCollection)) {
-                await this.fanControl(fanControlEnabled);
             }
         }
     }
@@ -245,7 +241,7 @@ export class FanControlWorker extends DaemonWorker {
             await this.setPreviousFans();
             return;
         }
-        console.log("FanControlWorker: No fans found");
+        console.log("FanControlWorker: initializeFanControlApi: No fan interfaces found");
     }
 
     public async isEqual(
@@ -263,18 +259,18 @@ export class FanControlWorker extends DaemonWorker {
             ? await getCurrentCustomProfile(this.activeProfile)
             : this.tccd.getCurrentFanProfile(this.activeProfile);
 
-        console.log("FanControlWorker: Setting fan profile");
+        console.log("FanControlWorker: setFanProfile: Setting fan profile");
         await this.fanApi.setFanProfileValues(
             this.activeProfile,
             currentFanProfile
         );
     }
 
-    private async fanControl(fanControlEnabled: boolean): Promise<void> {
+    private async updateFanControlValues(fanControlEnabled: boolean): Promise<void> {
         const fans: Map<number, FanControlLogic> = await this.fanApi.getFans();
 
         if (fans.size === 0) {
-            console.log("FanControlWorker: Trying to set amount of fans");
+            console.log("FanControlWorker: updateFanControlValues: No fans found, retrying initialization");
             await this.initializeFanControlApi(fanControlEnabled);
             return;
         }
@@ -284,7 +280,7 @@ export class FanControlWorker extends DaemonWorker {
         for (const fanNumber of fans.keys()) {
             const fanIndex: number = fanNumber - 1;
 
-            await this.updateFan(fanIndex, fans.get(fanNumber));
+            await this.updateFanDbusData(fanIndex, fans.get(fanNumber));
         }
     }
 
@@ -310,7 +306,7 @@ export class FanControlWorker extends DaemonWorker {
         }
     }
 
-    private async updateFan(
+    private async updateFanDbusData(
         fanIndex: number,
         fanLogic: FanControlLogic
     ): Promise<void> {
@@ -325,16 +321,16 @@ export class FanControlWorker extends DaemonWorker {
                 const currentSpeedPercent: number =
                     await this.fanApi.getFanSpeedPercent(fanIndex);
 
-                await this.setDbusData(
+                await this.setFanDbusData(
                     fanIndex,
                     temperature,
                     currentSpeedPercent
                 );
             } else {
-                await this.setDbusData(fanIndex, temperature, -1);
+                await this.setFanDbusData(fanIndex, temperature, -1);
             }
         } else {
-            console.log("FanControlWorker: Invalid temperature");
+            console.log("FanControlWorker: updateFanDbusData: Invalid temperature");
         }
     }
 
@@ -345,7 +341,7 @@ export class FanControlWorker extends DaemonWorker {
             : -1;
     }
 
-    private async setDbusData(
+    private async setFanDbusData(
         fanIndex: number,
         currentFanTemp: number,
         currentSpeedPercent: number

@@ -75,7 +75,7 @@ export class KeyboardVisualComponent implements OnInit {
                 return
             }
             console.error("keyboard-visual: updateHeight: failed to get document element")
-            // todo: further error handling, if code reaches here it means that tuxed-drivers is properly
+            // todo: further error handling, if code reaches here it means that tuxedo-drivers is properly
             // installed but there is no backlight hardware to control
         }
     }

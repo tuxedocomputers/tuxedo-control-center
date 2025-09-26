@@ -39,7 +39,7 @@ export class TccDBusController {
         try {
             this.bus = dbus.systemBus();
         } catch (err: unknown) {
-            console.error("dbusController: constructor failed =>", err)
+            console.error(`dbusController: constructor failed => ${err}`)
         }
     }
 
@@ -49,7 +49,7 @@ export class TccDBusController {
             this.interface = proxyObject.getInterface(this.interfaceName);
             return true;
         } catch (err: unknown) {
-            console.error("dbusController: init failed =>", err)
+            console.error(`dbusController: init failed => ${err}`)
             app.exit(0);
             return false;
         }
@@ -97,11 +97,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getNVIDIAPowerCTRLDefaultPowerLimit failed =>", err.text)
+                console.error(`dbusController: getNVIDIAPowerCTRLDefaultPowerLimit failed => ${err?.text}`);
                 return -1
             }
 
-            console.error("dbusController: getNVIDIAPowerCTRLDefaultPowerLimit failed =>", err)
+            console.error(`dbusController: getNVIDIAPowerCTRLDefaultPowerLimit failed => ${err}`)
             return -1;
         }
     }
@@ -115,11 +115,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getNVIDIAPowerCTRLMaxPowerLimit failed =>", err.text)
+                console.error(`dbusController: getNVIDIAPowerCTRLMaxPowerLimit failed => ${err?.text}`);
                 return -1
             }
 
-            console.error("dbusController: getNVIDIAPowerCTRLMaxPowerLimit failed =>", err)
+            console.error(`dbusController: getNVIDIAPowerCTRLMaxPowerLimit failed => ${err}`)
             return -1;
         }
     }
@@ -133,11 +133,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getNVIDIAPowerCTRLAvailable failed =>", err.text)
+                console.error(`dbusController: getNVIDIAPowerCTRLAvailable failed => ${err?.text}`);
                 return false
             }
 
-            console.error("dbusController: getNVIDIAPowerCTRLAvailable failed =>", err)
+            console.error(`dbusController: getNVIDIAPowerCTRLAvailable failed => ${err}`)
             return false;
         }
     }
@@ -150,11 +150,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getIsUnsupportedConfigurableTGPDevice failed =>", err.text)
+                console.error(`dbusController: getIsUnsupportedConfigurableTGPDevice failed => ${err?.text}`);
                 return false
             }
 
-            console.error("dbusController: getIsUnsupportedConfigurableTGPDevice failed =>", err)
+            console.error(`dbusController: getIsUnsupportedConfigurableTGPDevice failed => ${err}`)
             return false;
         }
     }
@@ -167,11 +167,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: tuxedoWmiAvailable failed =>", err.text)
+                console.error(`dbusController: tuxedoWmiAvailable failed => ${err?.text}`);
                 return false
             }
 
-            console.error("dbusController: tuxedoWmiAvailable failed =>", err)
+            console.error(`dbusController: tuxedoWmiAvailable failed => ${err}`)
             return false;
         }
     }
@@ -185,11 +185,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: fanHwmonAvailable failed =>", err.text)
+                console.error(`dbusController: fanHwmonAvailable failed => ${err?.text}`);
                 return false
             }
 
-            console.error("dbusController: fanHwmonAvailable failed =>", err)
+            console.error(`dbusController: fanHwmonAvailable failed => ${err}`)
             return false;
         }
     }
@@ -203,11 +203,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: deviceHasAquaris failed =>", err.text)
+                console.error(`dbusController: deviceHasAquaris failed => ${err?.text}`);
                 return false
             }
 
-            console.error("dbusController: deviceHasAquaris failed =>", err)
+            console.error(`dbusController: deviceHasAquaris failed => ${err}`)
             return false;
         }
     }
@@ -221,11 +221,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: tccdVersion failed =>", err.text)
+                console.error(`dbusController: tccdVersion failed => ${err?.text}`);
                 return ''
             }
 
-            console.error("dbusController: tccdVersion failed =>", err)
+            console.error(`dbusController: tccdVersion failed => ${err}`)
             return '';
         }
     }
@@ -239,11 +239,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getDeviceJSON failed =>", err.text)
+                console.error(`dbusController: getDeviceJSON failed => ${err?.text}`);
                 return '{}'
             }
 
-            console.error("dbusController: getDeviceJSON failed =>", err)
+            console.error(`dbusController: getDeviceJSON failed => ${err}`)
             return '{}';
         }
     }
@@ -257,11 +257,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getFanDataJSON failed =>", err.text)
+                console.error(`dbusController: getFanDataJSON failed => ${err?.text}`);
                 return '{}';
             }
 
-            console.error("dbusController: getFanDataJSON failed =>", err)
+            console.error(`dbusController: getFanDataJSON failed => ${err}`)
             return '{}';
         }
     }
@@ -276,11 +276,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getDisplayModesJSON failed =>", err.text)
+                console.error(`dbusController: getDisplayModesJSON failed => ${err?.text}`);
                 return undefined
             }
 
-            console.error("dbusController: getDisplayModesJSON failed =>", err)
+            console.error(`dbusController: getDisplayModesJSON failed => ${err}`)
 
             return undefined;
         }
@@ -295,11 +295,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getIsX11 failed =>", err.text)
+                console.error(`dbusController: getIsX11 failed => ${err?.text}`);
                 return -1
             }
 
-            console.error("dbusController: getIsX11 failed =>", err)
+            console.error(`dbusController: getIsX11 failed => ${err}`)
             return -1;
         }
     }
@@ -314,11 +314,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: webcamSWAvailable failed =>", err.text)
+                console.error(`dbusController: webcamSWAvailable failed => ${err?.text}`);
                 return false
             }
 
-            console.error("dbusController: webcamSWAvailable failed =>", err)
+            console.error(`dbusController: webcamSWAvailable failed => ${err}`)
             return false;
         }
     }
@@ -332,11 +332,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getWebcamSWStatus failed =>", err.text)
+                console.error(`dbusController: getWebcamSWStatus failed => ${err?.text}`);
                 return false
             }
 
-            console.error("dbusController: getWebcamSWStatus failed =>", err)
+            console.error(`dbusController: getWebcamSWStatus failed => ${err}`)
             return false;
         }
     }
@@ -350,11 +350,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getForceYUV420OutputSwitchAvailable failed =>", err.text)
+                console.error(`dbusController: getForceYUV420OutputSwitchAvailable failed => ${err?.text}`);
                 return false
             }
 
-            console.error("dbusController: getForceYUV420OutputSwitchAvailable failed =>", err)
+            console.error(`dbusController: getForceYUV420OutputSwitchAvailable failed => ${err}`)
             return false;
         }
     }
@@ -368,11 +368,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getIGpuInfoValuesJSON failed =>", err.text)
+                console.error(`dbusController: getIGpuInfoValuesJSON failed => ${err?.text}`);
                 return undefined
             }
 
-            console.error("dbusController: getIGpuInfoValuesJSON failed =>", err)
+            console.error(`dbusController: getIGpuInfoValuesJSON failed => ${err}`)
             return undefined;
         }
     }
@@ -386,11 +386,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getDGpuInfoValuesJSON failed =>", err.text)
+                console.error(`dbusController: getDGpuInfoValuesJSON failed => ${err?.text}`);
                 return undefined
             }
 
-            console.error("dbusController: getDGpuInfoValuesJSON failed =>", err)
+            console.error(`dbusController: getDGpuInfoValuesJSON failed => ${err}`)
             return undefined;
         }
     }
@@ -404,11 +404,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getIGpuAvailable failed =>", err.text)
+                console.error(`dbusController: getIGpuAvailable failed => ${err?.text}`);
                 return undefined
             }
 
-            console.error("dbusController: getIGpuAvailable failed =>", err)
+            console.error(`dbusController: getIGpuAvailable failed => ${err}`)
             return undefined;
         }
     }
@@ -422,11 +422,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getDGpuAvailable failed =>", err.text)
+                console.error(`dbusController: getDGpuAvailable failed => ${err?.text}`);
                 return undefined
             }
 
-            console.error("dbusController: getDGpuAvailable failed =>", err)
+            console.error(`dbusController: getDGpuAvailable failed => ${err}`)
             return undefined;
         }
     }
@@ -440,11 +440,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getPrimeState failed =>", err.text)
+                console.error(`dbusController: getPrimeState failed => ${err?.text}`);
                 return undefined
             }
 
-            console.error("dbusController: getPrimeState failed =>", err)
+            console.error(`dbusController: getPrimeState failed => ${err}`)
             return undefined;
         }
     }
@@ -458,11 +458,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getCpuPowerValuesJSON failed =>", err.text)
+                console.error(`dbusController: getCpuPowerValuesJSON failed => ${err?.text}`);
                 return undefined
             }
 
-            console.error("dbusController: getCpuPowerValuesJSON failed =>", err)
+            console.error(`dbusController: getCpuPowerValuesJSON failed => ${err}`)
             return undefined;
         }
     }
@@ -476,11 +476,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: consumeModeReapplyPending failed =>", err.text)
+                console.error(`dbusController: consumeModeReapplyPending failed => ${err?.text}`);
                 return false
             }
 
-            console.error("dbusController: consumeModeReapplyPending failed =>", err)
+            console.error(`dbusController: consumeModeReapplyPending failed => ${err}`)
 
             return false;
         }
@@ -495,11 +495,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getActiveProfileJSON failed =>", err.text)
+                console.error(`dbusController: getActiveProfileJSON failed => ${err?.text}`);
                 return undefined
             }
 
-            console.error("dbusController: getActiveProfileJSON failed failed =>", err)
+            console.error(`dbusController: getActiveProfileJSON failed => ${err}`)
             return undefined;
         }
     }
@@ -513,11 +513,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: setTempProfileById failed =>", err.text)
+                console.error(`dbusController: setTempProfileById failed => ${err?.text}`);
                 return false
             }
 
-            console.error("dbusController: setTempProfileById failed =>", err)
+            console.error(`dbusController: setTempProfileById failed => ${err}`)
             return false;
         }
     }
@@ -531,11 +531,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getProfilesJSON failed =>", err.text)
+                console.error(`dbusController: getProfilesJSON failed => ${err?.text}`);
                 return undefined
             }
 
-            console.error("dbusController: getProfilesJSON failed =>", err)
+            console.error(`dbusController: getProfilesJSON failed => ${err}`)
             return undefined;
         }
     }
@@ -549,11 +549,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getCustomProfilesJSON failed =>", err.text)
+                console.error(`dbusController: getCustomProfilesJSON failed => ${err?.text}`);
                 return undefined
             }
 
-            console.error("dbusController: getCustomProfilesJSON failed =>", err)
+            console.error(`dbusController: getCustomProfilesJSON failed => ${err}`)
             return undefined;
         }
     }
@@ -567,11 +567,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getDefaultProfilesJSON failed =>", err.text)
+                console.error(`dbusController: getDefaultProfilesJSON failed => ${err?.text}`);
                 return undefined
             }
 
-            console.error("dbusController: getDefaultProfilesJSON failed =>", err)
+            console.error(`dbusController: getDefaultProfilesJSON failed => ${err}`)
             return undefined;
         }
     }
@@ -585,11 +585,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getDefaultValuesProfileJSON failed =>", err.text)
+                console.error(`dbusController: getDefaultValuesProfileJSON failed => ${err?.text}`);
                 return undefined
             }
 
-            console.error("dbusController: getDefaultValuesProfileJSON failed =>", err)
+            console.error(`dbusController: getDefaultValuesProfileJSON failed => ${err}`)
             return undefined;
         }
     }
@@ -603,11 +603,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getSettingsJSON failed =>", err.text)
+                console.error(`dbusController: getSettingsJSON failed => ${err?.text}`);
                 return undefined
             }
 
-            console.error("dbusController: getSettingsJSON failed =>", err)
+            console.error(`dbusController: getSettingsJSON failed => ${err}`)
             return undefined;
         }
     }
@@ -621,11 +621,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: odmProfilesAvailable failed =>", err.text)
+                console.error(`dbusController: odmProfilesAvailable failed => ${err?.text}`);
                 return undefined
             }
 
-            console.error("dbusController: odmProfilesAvailable failed =>", err)
+            console.error(`dbusController: odmProfilesAvailable failed => ${err}`)
             return undefined;
         }
     }
@@ -639,11 +639,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: odmPowerLimits failed =>", err.text)
+                console.error(`dbusController: odmPowerLimits failed => ${err?.text}`);
                 return undefined
             }
 
-            console.error("dbusController: odmPowerLimits failed =>", err)
+            console.error(`dbusController: odmPowerLimits failed => ${err}`)
             return undefined;
         }
     }
@@ -657,11 +657,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: odmPowerLimitsJSON failed =>", err.text)
+                console.error(`dbusController: odmPowerLimitsJSON failed => ${err?.text}`);
                 return undefined
             }
 
-            console.error("dbusController: odmPowerLimitsJSON failed =>", err)
+            console.error(`dbusController: odmPowerLimitsJSON failed => ${err}`)
             return undefined;
         }
     }
@@ -675,11 +675,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getKeyboardBacklightCapabilitiesJSON failed =>", err.text)
+                console.error(`dbusController: getKeyboardBacklightCapabilitiesJSON failed => ${err?.text}`);
                 return undefined
             }
 
-            console.error("dbusController: getKeyboardBacklightCapabilitiesJSON failed =>", err)
+            console.error(`dbusController: getKeyboardBacklightCapabilitiesJSON failed => ${err}`)
             return undefined;
         }
     }
@@ -693,11 +693,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getKeyboardBacklightStatesJSON failed =>", err.text)
+                console.error(`dbusController: getKeyboardBacklightStatesJSON failed => ${err?.text}`);
                 return undefined
             }
 
-            console.error("dbusController: getKeyboardBacklightStatesJSON failed =>", err)
+            console.error(`dbusController: getKeyboardBacklightStatesJSON failed => ${err}`)
             return undefined;
         }
     }
@@ -711,11 +711,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: setKeyboardBacklightStatesJSON failed =>", err.text)
+                console.error(`dbusController: setKeyboardBacklightStatesJSON failed => ${err?.text}`);
                 return undefined
             }
 
-            console.error("dbusController: setKeyboardBacklightStatesJSON failed =>", err)
+            console.error(`dbusController: setKeyboardBacklightStatesJSON failed => ${err}`)
             return undefined;
         }
     }
@@ -729,11 +729,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getFansMinSpeed failed =>", err.text)
+                console.error(`dbusController: getFansMinSpeed failed => ${err?.text}`);
                 return undefined
             }
 
-            console.error("dbusController: getFansMinSpeed failed =>", err)
+            console.error(`dbusController: getFansMinSpeed failed => ${err}`)
             return undefined;
         }
     }
@@ -747,11 +747,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getFansOffAvailable failed =>", err.text)
+                console.error(`dbusController: getFansOffAvailable failed => ${err?.text}`);
                 return undefined
             }
 
-            console.error("dbusController: getFansOffAvailable failed =>", err)
+            console.error(`dbusController: getFansOffAvailable failed => ${err}`)
             return undefined;
         }
     }
@@ -765,11 +765,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getChargingProfilesAvailable failed =>", err.text)
+                console.error(`dbusController: getChargingProfilesAvailable failed => ${err?.text}`);
                 return []
             }
 
-            console.error("dbusController: getChargingProfilesAvailable failed =>", err)
+            console.error(`dbusController: getChargingProfilesAvailable failed => ${err}`)
             return [];
         }
     }
@@ -783,11 +783,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getCurrentChargingProfile failed =>", err.text)
+                console.error(`dbusController: getCurrentChargingProfile failed => ${err?.text}`);
                 return ''
             }
 
-            console.error("dbusController: getCurrentChargingProfile failed =>", err)
+            console.error(`dbusController: getCurrentChargingProfile failed => ${err}`)
             return '';
         }
     }
@@ -801,11 +801,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: setChargingProfile failed =>", err.text)
+                console.error(`dbusController: setChargingProfile failed => ${err?.text}`);
                 return false
             }
 
-            console.error("dbusController: setChargingProfile failed =>", err)
+            console.error(`dbusController: setChargingProfile failed => ${err}`)
             return false;
         }
     }
@@ -819,11 +819,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getChargingPrioritiesAvailable failed =>", err.text)
+                console.error(`dbusController: getChargingPrioritiesAvailable failed => ${err?.text}`);
                 return []
             }
 
-            console.error("dbusController: getChargingPrioritiesAvailable failed =>", err)
+            console.error(`dbusController: getChargingPrioritiesAvailable failed => ${err}`)
             return [];
         }
     }
@@ -837,11 +837,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getCurrentChargingPriority failed =>", err.text)
+                console.error(`dbusController: getCurrentChargingPriority failed => ${err?.text}`);
                 return ''
             }
 
-            console.error("dbusController: getCurrentChargingPriority failed =>", err)
+            console.error(`dbusController: getCurrentChargingPriority failed => ${err}`)
             return '';
         }
     }
@@ -855,11 +855,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: setChargingPriority failed =>", err.text)
+                console.error(`dbusController: setChargingPriority failed => ${err?.text}`);
                 return false
             }
 
-            console.error("dbusController: setChargingPriority failed =>", err)
+            console.error(`dbusController: setChargingPriority failed => ${err}`)
             return false;
         }
     }
@@ -873,11 +873,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getChargeStartAvailableThresholds failed =>", err.text)
+                console.error(`dbusController: getChargeStartAvailableThresholds failed => ${err?.text}`);
                 return []
             }
 
-            console.error("dbusController: getChargeStartAvailableThresholds failed =>", err)
+            console.error(`dbusController: getChargeStartAvailableThresholds failed => ${err}`)
             return [];
         }
     }
@@ -891,12 +891,12 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getChargeEndAvailableThresholds failed =>", err.text)
+                console.error(`dbusController: getChargeEndAvailableThresholds failed => ${err?.text}`);
                 return []
             }
 
 
-            console.error("dbusController: getChargeEndAvailableThresholds failed =>", err)
+            console.error(`dbusController: getChargeEndAvailableThresholds failed => ${err}`)
             return [];
         }
     }
@@ -910,11 +910,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getChargeStartThreshold failed =>", err.text)
+                console.error(`dbusController: getChargeStartThreshold failed => ${err?.text}`);
                 return undefined
             }
 
-            console.error("dbusController: getChargeStartThreshold failed =>", err)
+            console.error(`dbusController: getChargeStartThreshold failed => ${err}`)
             return undefined;
         }
     }
@@ -928,11 +928,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: setChargeStartThreshold failed =>", err.text)
+                console.error(`dbusController: setChargeStartThreshold failed => ${err?.text}`);
                 return false
             }
 
-            console.error("dbusController: setChargeStartThreshold failed =>", err)
+            console.error(`dbusController: setChargeStartThreshold failed => ${err}`)
             return false;
         }
     }
@@ -946,11 +946,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getChargeEndThreshold failed =>", err.text)
+                console.error(`dbusController: getChargeEndThreshold failed => ${err?.text}`);
                 return undefined
             }
 
-            console.error("dbusController: getChargeEndThreshold failed =>", err)
+            console.error(`dbusController: getChargeEndThreshold failed => ${err}`)
             return undefined;
         }
     }
@@ -964,11 +964,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: setChargeEndThreshold failed =>", err.text)
+                console.error(`dbusController: setChargeEndThreshold failed => ${err?.text}`);
                 return false
             }
 
-            console.error("dbusController: setChargeEndThreshold failed =>", err)
+            console.error(`dbusController: setChargeEndThreshold failed => ${err}`)
             return false;
         }
     }
@@ -982,11 +982,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getChargeType failed =>", err.text)
+                console.error(`dbusController: getChargeType failed => ${err?.text}`);
                 return ChargeType.Unknown.toString();
             }
 
-            console.error("dbusController: getChargeType failed =>", err)
+            console.error(`dbusController: getChargeType failed => ${err}`)
             return ChargeType.Unknown.toString();
         }
     }
@@ -1000,11 +1000,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: setChargeType failed =>", err.text)
+                console.error(`dbusController: setChargeType failed => ${err?.text}`);
                 return false
             }
 
-            console.error("dbusController: setChargeType failed =>", err)
+            console.error(`dbusController: setChargeType failed => ${err}`)
             return false;
         }
     }
@@ -1018,11 +1018,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getFnLockSupported failed =>", err.text)
+                console.error(`dbusController: getFnLockSupported failed => ${err?.text}`);
                 return false
             }
 
-            console.error("dbusController: getFnLockSupported failed =>", err)
+            console.error(`dbusController: getFnLockSupported failed => ${err}`)
             return false;
         }
     }
@@ -1036,11 +1036,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getFnLockStatus failed =>", err.text)
+                console.error(`dbusController: getFnLockStatus failed => ${err?.text}`);
                 return false
             }
 
-            console.error("dbusController: getFnLockStatus failed =>", err)
+            console.error(`dbusController: getFnLockStatus failed => ${err}`)
             return false;
         }
     }
@@ -1054,11 +1054,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: setFnLockStatus failed =>", err.text)
+                console.error(`dbusController: setFnLockStatus failed => ${err?.text}`);
                 return false
             }
 
-            console.error("dbusController: setFnLockStatus failed =>", err)
+            console.error(`dbusController: setFnLockStatus failed => ${err}`)
             return false;
         }
     }
@@ -1072,11 +1072,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: setSensorDataCollectionStatus failed =>", err.text)
+                console.error(`dbusController: setSensorDataCollectionStatus failed => ${err?.text}`);
                 return false
             }
 
-            console.error("dbusController: setSensorDataCollectionStatus failed =>", err)
+            console.error(`dbusController: setSensorDataCollectionStatus failed => ${err}`)
             return false;
         }
     }
@@ -1090,11 +1090,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: getSensorDataCollectionStatus failed =>", err.text)
+                console.error(`dbusController: getSensorDataCollectionStatus failed => ${err?.text}`);
                 return false
             }
 
-            console.error("dbusController: getSensorDataCollectionStatus failed =>", err)
+            console.error(`dbusController: getSensorDataCollectionStatus failed => ${err}`)
             return false;
         }
     }
@@ -1108,11 +1108,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: setDGpuD0Metrics failed =>", err.text)
+                console.error(`dbusController: setDGpuD0Metrics failed => ${err?.text}`);
                 return false
             }
 
-            console.error("dbusController: setDGpuD0Metrics failed =>", err)
+            console.error(`dbusController: setDGpuD0Metrics failed => ${err}`)
             return false;
         }
     }
@@ -1126,11 +1126,11 @@ export class TccDBusController {
             this.dbusStatus = false
 
             if (err instanceof dbus.DBusError) {
-                console.error("dbusController: onModeReapplyPendingChanged failed =>", err.text)
+                console.error(`dbusController: onModeReapplyPendingChanged failed => ${err?.text}`);
                 return false
             }
 
-            console.error("dbusController: oncall failed =>", err)
+            console.error(`dbusController: onModeReapplyPendingChanged failed => ${err}`)
             return false;
         }
     }
@@ -1139,7 +1139,7 @@ export class TccDBusController {
         try {
             this.bus.disconnect();
         } catch (err: unknown) {
-            console.error("dbusController: disconnect failed =>", err)
+            console.error(`dbusController: disconnect failed => ${err}`)
 
         }
     }

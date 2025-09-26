@@ -41,7 +41,7 @@ function getWebcamCtrlPythonPath(): string {
         webcamCtrolsPath = TccPaths.TCCD_PYTHON_CAMERACTRL_FILE;
     } else {
         webcamCtrolsPath =
-            cwd + "/src/cameractrls/cameractrls.py";
+            `${cwd}/src/cameractrls/cameractrls.py`;
     }
     return webcamCtrolsPath;
 }
@@ -120,14 +120,13 @@ export const webcamHandlers: Map<string, (...args: any[]) => any> = new Map<stri
 
     .set(WebcamAPIFunctions.getSelectedWebcamSettings, (selectedWebcamPath: string): Promise<string> => {
         return new Promise<string>(async (resolve: (value: string | PromiseLike<string>) => void): Promise<void> => {
-            resolve(await execCmd("python3 " + getWebcamCtrlPythonPath() + ` -d ${selectedWebcamPath} -j`))
+            resolve(await execCmd(`python3 ${getWebcamCtrlPythonPath()} -d ${selectedWebcamPath} -j`))
         });
     })
 
     .set(WebcamAPIFunctions.executeWebcamCtrls, (devicePath: string, parameter: string, value: string): Promise<string> => {
         return new Promise<string>(async (resolve: (value: string | PromiseLike<string>) => void): Promise<void> => {
-            resolve(await execCmd("python3 " + getWebcamCtrlPythonPath() +
-            ` -d ${devicePath} -c ${parameter}=${value}`))
+            resolve(await execCmd(`python3 ${getWebcamCtrlPythonPath()} -d ${devicePath} -c ${parameter}=${value}`))
         });
     })
 
@@ -141,7 +140,7 @@ export const webcamHandlers: Map<string, (...args: any[]) => any> = new Map<stri
 
     .set(WebcamAPIFunctions.getWebcamPaths, async (): Promise<string> => {
         return new Promise<string>(async (resolve: (value: string | PromiseLike<string>) => void): Promise<void> => {
-            const result: { data: string; error: unknown } = await execFile("python3 " + getWebcamCtrlPythonPath() + " -i");
+            const result: { data: string; error: unknown } = await execFile(`python3 ${getWebcamCtrlPythonPath()} -i`);
             resolve(result.data);
             });
     })
@@ -154,10 +153,10 @@ export const webcamHandlers: Map<string, (...args: any[]) => any> = new Map<stri
             if (environmentIsProduction) {
                 tccdExec = TccPaths.TCCD_EXEC_FILE;
             } else {
-                tccdExec = cwd + '/dist/tuxedo-control-center/data/service/tccd';
+                tccdExec = `${cwd}/dist/tuxedo-control-center/data/service/tccd`;
             }
             child_process.exec(
-                'pkexec ' + tccdExec + ' --new_webcam ' + tmpWebcamPath,
+                `pkexec ${tccdExec} --new_webcam ${tmpWebcamPath}`,
             (err: unknown, stdout: string, stderr: string): void => {
                 if (err) {
                     resolve(false);

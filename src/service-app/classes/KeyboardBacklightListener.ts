@@ -113,12 +113,12 @@ export class KeyboardBacklightListener {
         if (this.keyboardBacklightCapabilities.maxRed != undefined) {
             for (let i: number = 0; i < this.ledsRGBZones?.length ; ++i) {
                 if (this.ledsRGBZones[i]) {
-                    if (await fileOKAsync(this.ledsRGBZones[i] + "/multi_intensity")) {
+                    if (await fileOKAsync(`${this.ledsRGBZones[i]}/multi_intensity`)) {
                         (function(i: number): void {
-                            fs.watch(this.ledsRGBZones[i] + "/multi_intensity", (async function(): Promise<void> {
+                            fs.watch(`${this.ledsRGBZones[i]}/multi_intensity`, (async function(): Promise<void> {
                                 if (!(await this.sysDBusUPowerProps.Get('org.freedesktop.UPower', 'LidIsClosed')).value) {
                                     const keyboardBacklightStatesNew: Array<KeyboardBacklightStateInterface> = this.tccd.settings.keyboardBacklightStates;
-                                    const colors: number[] = (await fs.promises.readFile(this.ledsRGBZones[i] + "/multi_intensity")).toString().split(' ').map(Number);
+                                    const colors: number[] = (await fs.promises.readFile(`${this.ledsRGBZones[i]}/multi_intensity`)).toString().split(' ').map(Number);
                                     if (keyboardBacklightStatesNew && keyboardBacklightStatesNew[i] && colors) {
                                         keyboardBacklightStatesNew[i].red = colors[0];
                                         keyboardBacklightStatesNew[i].green = colors[1];
@@ -166,38 +166,38 @@ export class KeyboardBacklightListener {
         this.keyboardBacklightCapabilities.modes = [KeyboardBacklightColorModes.static];
 
         let ledsWhitePath;
-        if (fileOK(this.ledsWhiteOnly + "/max_brightness")) {
+        if (fileOK(`${this.ledsWhiteOnly}/max_brightness`)) {
             ledsWhitePath = this.ledsWhiteOnly;
-        } else if (fileOK(this.ledsWhiteOnlyNB05 + "/max_brightness")) {
+        } else if (fileOK(`${this.ledsWhiteOnlyNB05}/max_brightness`)) {
             ledsWhitePath = this.ledsWhiteOnlyNB05;
         }
 
         if (ledsWhitePath) {
             console.log("KeyboardBacklightListener: Detected white only keyboard backlight");
-            this.keyboardBacklightCapabilities.maxBrightness = Number(fs.readFileSync(ledsWhitePath + "/max_brightness"));
+            this.keyboardBacklightCapabilities.maxBrightness = Number(fs.readFileSync(`${ledsWhitePath}/max_brightness`));
             this.keyboardBacklightCapabilities.zones = 1;
         }
         else {
             this.updateLEDSRGBZonesForPerKeyKBL();
 
-            if (this.ledsRGBZones?.length <= 3 && fileOK(this.ledsRGBZones[0] + "/max_brightness")) {
+            if (this.ledsRGBZones?.length <= 3 && fileOK(`${this.ledsRGBZones[0]}/max_brightness`)) {
                 console.log("KeyboardBacklightListener: Detected RGB zone keyboard backlight");
-                this.keyboardBacklightCapabilities.maxBrightness = Number(fs.readFileSync(this.ledsRGBZones[0] + "/max_brightness"));
+                this.keyboardBacklightCapabilities.maxBrightness = Number(fs.readFileSync(`${this.ledsRGBZones[0]}/max_brightness`));
                 this.keyboardBacklightCapabilities.maxRed = 0xff;
                 this.keyboardBacklightCapabilities.maxGreen = 0xff;
                 this.keyboardBacklightCapabilities.maxBlue = 0xff;
                 this.keyboardBacklightCapabilities.zones = 1;
-                if (fileOK(this.ledsRGBZones[1] + "/max_brightness")) {
+                if (fileOK(`${this.ledsRGBZones[1]}/max_brightness`)) {
                     this.keyboardBacklightCapabilities.zones++;
                 }
-                if (fileOK(this.ledsRGBZones[2] + "/max_brightness")) {
+                if (fileOK(`${this.ledsRGBZones[2]}/max_brightness`)) {
                     console.log("KeyboardBacklightListener: Detected RGB 3 zone keyboard backlight");
                     this.keyboardBacklightCapabilities.zones++;
                 }
             }
-            else if (this.ledsRGBZones?.length > 3 && fileOK(this.ledsRGBZones[0] + "/max_brightness")) {
+            else if (this.ledsRGBZones?.length > 3 && fileOK(`${this.ledsRGBZones[0]}/max_brightness`)) {
                 console.log("KeyboardBacklightListener: Detected per-key RGB keyboard backlight");
-                this.keyboardBacklightCapabilities.maxBrightness = Number(fs.readFileSync(this.ledsRGBZones[0] + "/max_brightness"));
+                this.keyboardBacklightCapabilities.maxBrightness = Number(fs.readFileSync(`${this.ledsRGBZones[0]}/max_brightness`));
                 this.keyboardBacklightCapabilities.maxRed = 0xff;
                 this.keyboardBacklightCapabilities.maxGreen = 0xff;
                 this.keyboardBacklightCapabilities.maxBlue = 0xff;
@@ -265,7 +265,7 @@ export class KeyboardBacklightListener {
     }
 
     private async setBufferInput(ledPath: string, bufferOn: boolean): Promise<void> {
-        const bufferedInputPath: string = ledPath + '/device/controls/buffer_input';
+        const bufferedInputPath: string = `${ledPath}/device/controls/buffer_input`;
         if (await fileOKAsync(bufferedInputPath)) {
             if (bufferOn) {
                 await fs.promises.appendFile(bufferedInputPath, '1');
@@ -283,7 +283,7 @@ export class KeyboardBacklightListener {
             try {
                 await this.sysDBusUPowerKbdBacklightInterface.SetBrightness(keyboardBacklightStatesNew[0].brightness);
             } catch (err: unknown) {
-                console.error("KeyboardBacklightListener: setKeyboardBacklightStates failed =>", err)
+                console.error(`KeyboardBacklightListener: setKeyboardBacklightStates failed => ${err}`)
                 // todo: error handling
                 if (err instanceof dbus.DBusError) {
                     console.log("Failed to write brightness using UPower: Try restarting upower.service followed by tccd.service using systemctl.")
@@ -295,12 +295,13 @@ export class KeyboardBacklightListener {
             }
             for (let i: number = 0; i < this.ledsRGBZones?.length ; ++i) {
                 if (this.ledsRGBZones[i]) {
-                    if (await fileOKAsync(this.ledsRGBZones[i] + "/multi_intensity")) {
+                    if (await fileOKAsync(`${this.ledsRGBZones[i]}/multi_intensity`)) {
                         if (keyboardBacklightStatesNew && keyboardBacklightStatesNew[i]) {
-                            await fs.promises.appendFile(this.ledsRGBZones[i] + "/multi_intensity",
-                                keyboardBacklightStatesNew[i].red.toString() + " " +
-                                keyboardBacklightStatesNew[i].green.toString() + " " +
-                                keyboardBacklightStatesNew[i].blue.toString());
+                            const red: string = keyboardBacklightStatesNew[i].red.toString();
+                            const green: string = keyboardBacklightStatesNew[i].green.toString();
+                            const blue: string = keyboardBacklightStatesNew[i].blue.toString();
+
+                            await fs.promises.appendFile(`${this.ledsRGBZones[i]}/multi_intensity`,`${red} ${green} ${blue}`);
                         }
                     }
                 }

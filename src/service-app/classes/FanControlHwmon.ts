@@ -220,9 +220,9 @@ export class FanControlHwmon extends FanControlBaseClass {
                 });
             } else {
                 console.log(`FanControlHwmon: matchLabels: Failed to set fan with index ${fanIndex} and label ${fanLabel}`)
-                console.log("FanControlHwmon: matchLabels: fanLabelMap: ", this.fanLabelMap)
-                console.log("FanControlHwmon: matchLabels: tempLabelMap: ", this.tempLabelMap)
-                console.log("FanControlHwmon: matchLabels: tempInputMap: ", this.tempInputMap)
+                console.log(`FanControlHwmon: matchLabels: fanLabelMap: ${this.fanLabelMap}`)
+                console.log(`FanControlHwmon: matchLabels: tempLabelMap: ${this.tempLabelMap}`)
+                console.log(`FanControlHwmon: matchLabels: tempInputMap: ${this.tempInputMap}`)
                 this.tccd.onExit()
                 process.exit(0)
             }
@@ -407,7 +407,7 @@ export class FanControlHwmon extends FanControlBaseClass {
                 return fanFiles.length;
             }
         } catch (err: unknown) {
-            console.error("FanControlHwmon: getNumberFanInterfaces failed =>", err);
+            console.error(`FanControlHwmon: getNumberFanInterfaces failed => ${err}`);
             return;
         }
     }
@@ -426,7 +426,7 @@ export class FanControlHwmon extends FanControlBaseClass {
                 return fanFiles.length;
             }
         } catch (err: unknown) {
-            console.error("FanControlHwmon: getNumberTemp failed =>", err);
+            console.error(`FanControlHwmon: getNumberTemp failed => ${err}`);
             return;
         }
     }

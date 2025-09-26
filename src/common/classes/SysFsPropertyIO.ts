@@ -54,7 +54,7 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
             const readValue: string = fs.readFileSync(this.readPath, { flag: 'r' }).toString();
             return this.convertStringToType(readValue);
         } catch (err: unknown) {
-            throw Error('Could not read value from path: ' + this.readPath + ' => ' + err);
+            throw Error(`SysFsPropertyIO: Could not read value from path: ${this.readPath} => ${err}`);
         }
     }
 
@@ -66,7 +66,7 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
             const readValue: string = (await fsp.readFile(this.readPath, { flag: 'r' })).toString();
             return this.convertStringToType(readValue);
         } catch (err: unknown) {
-            throw Error('Could not read value from path: ' + this.readPath + ' => ' + err);
+            throw Error(`SysFsPropertyIO: Could not read value from path: ${this.readPath} => ${err}`);
         }
     }
 
@@ -106,12 +106,12 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
         const stringValue: string = this.convertTypeToString(value);
         try {
             if (!fs.existsSync(this.writePath)) {
-                throw Error('Could not write value, no file found: ' + this.writePath);
+                throw Error(`SysFsPropertyIO: Could not write value, no file found: ${this.writePath}`);
             } else {
                 fs.writeFileSync(this.writePath, stringValue, { flag: 'w' });
             }
         } catch (err: unknown) {
-            throw Error('Could not write value \'' + stringValue + '\' to path: ' + this.writePath + ' => ' + err);
+            throw Error(`SysFsPropertyIO: Could not write value '${stringValue}' to path: ${this.writePath} => ${err}`);
         }
     }
 
@@ -123,7 +123,7 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
         try {
             return await fsp.writeFile(this.writePath, stringValue, { flag: 'w' });
         } catch (err: unknown) {
-            throw Error('Could not write value \'' + stringValue + '\' to path: ' + this.writePath + ' => ' + err);
+            throw Error(`SysFsPropertyIO: Could not write value '${stringValue}' to path: ${this.writePath} => ${err}`);
         }
     }
 

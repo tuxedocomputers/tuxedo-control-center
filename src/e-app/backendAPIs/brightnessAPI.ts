@@ -41,12 +41,12 @@ let dbusDriverNames: string[] = [];
 try {
     sessionBus = dbus.sessionBus();
 } catch (err: unknown) {
-    console.error("brightnessAPI: dbus.sessionBus failed =>", err)
+    console.error(`brightnessAPI: dbus.sessionBus failed => ${err}`)
     sessionBus = undefined;
 }
 
 
-initDusDisplayBrightness().then((): void => {
+initDbusDisplayBrightness().then((): void => {
     const driversList: string[] = [];
     if (displayBrightnessNotSupported === false) {
     driversList.push(displayBrightnessGnome.getDescriptiveString());
@@ -58,7 +58,7 @@ export async function displayBrightnessGnomeCleanup(): Promise<void> {
     displayBrightnessGnome.cleanUp();
 }
 
-async function initDusDisplayBrightness(): Promise<void> {
+async function initDbusDisplayBrightness(): Promise<void> {
     return new Promise<void>(async (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): Promise<void> => {
     if (sessionBus === undefined) {
     displayBrightnessNotSupported = true;
@@ -74,7 +74,7 @@ async function initDusDisplayBrightness(): Promise<void> {
         currentDisplayBrightness = result;
         displayBrightnessSubject.next(currentDisplayBrightness);
     } catch (err: unknown) {
-        console.error("brightnessAPI: initDusDisplayBrightness failed =>", err)
+        console.error(`brightnessAPI: initDbusDisplayBrightness failed => ${err}`)
         displayBrightnessNotSupported = true;
         return;
     }
@@ -91,7 +91,7 @@ async function initDusDisplayBrightness(): Promise<void> {
 }
 
 async function setDisplayBrightness(valuePercent: number): Promise<void> {
-return displayBrightnessGnome.setBrightness(valuePercent).catch((err: unknown): void => {console.error("brightnessAPI: setDisplayBrightness failed =>", err)});
+return displayBrightnessGnome.setBrightness(valuePercent).catch((err: unknown): void => {console.error(`brightnessAPI: setDisplayBrightness failed => ${err}`)});
 }
 
 ipcMain.handle('set-display-brightness-gnome', (event: IpcMainInvokeEvent, valuePercent: number): Promise<void> => {

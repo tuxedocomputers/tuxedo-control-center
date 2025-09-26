@@ -94,7 +94,7 @@ export class LCT21001 {
         this.device = await this.adapter.getDevice(deviceUUID);
 
         let rssi, deviceName: string;
-        try { rssi = await this.device.getRSSI(); } catch (err: unknown) {console.error("LCT21001: connect getRSSI failed =>", err)}
+        try { rssi = await this.device.getRSSI(); } catch (err: unknown) {console.error(`LCT21001: connect getRSSI failed => ${err}`)}
         if (rssi === undefined) {
             throw Error('connect(): device appears offline/unavailable');
         }
@@ -131,10 +131,10 @@ export class LCT21001 {
             // Data written on disconnect by original control, seems to reset
             // or turn off configured parameters
             try { await this.writeReset(); } catch(err: unknown) {
-                console.error("LCT21001: disconnect writeReset failed =>", err)
+                console.error(`LCT21001: disconnect writeReset failed => ${err}`)
             }
             try { await this.device.disconnect(); } catch (err: unknown) {
-                console.error("LCT21001: disconnect failed =>", err)
+                console.error(`LCT21001: disconnect failed => ${err}`)
             }
             this.device = undefined;
             this.connectedModel = undefined;
@@ -154,7 +154,7 @@ export class LCT21001 {
 
             return true;
         } catch (err: unknown) {
-            console.error("LCT21001: startDiscover failed =>", err)
+            console.error(`LCT21001: startDiscover failed => ${err}`)
             return false;
         }
     }
@@ -162,7 +162,7 @@ export class LCT21001 {
     async stopDiscover(): Promise<void> {
         // Clean-up other initialized stuff
         if (this.adapter !== undefined && await this.adapter.isDiscovering()) {
-            await this.adapter.stopDiscovery().catch((err: unknown): void => console.error("LCT21001: stopDiscover failed =>", err));
+            await this.adapter.stopDiscovery().catch((err: unknown): void => console.error(`LCT21001: stopDiscover failed => ${err}`))
         }
 
         if (this.destroy !== undefined) {
@@ -174,7 +174,7 @@ export class LCT21001 {
         try {
             return await this.adapter?.isDiscovering();
         } catch (err: unknown) {
-            console.error("LCT21001: isDiscovering failed =>", err)
+            console.error(`LCT21001: isDiscovering failed => ${err}`)
             return false;
         }
     }
@@ -225,7 +225,7 @@ export class LCT21001 {
             // todo: testing
             result = !!await this.device?.isConnected();
         } catch (err: unknown) {
-            console.error("LCT21001: isConnected failed =>", err)
+            console.error(`LCT21001: isConnected failed => ${err}`)
             result = false;
         }
 

@@ -379,7 +379,7 @@ export class TccDBusClientService implements OnDestroy {
                 this.activeProfile.next(activeProfile);
                 this.previousActiveProfileJSON = activeProfileJSON;
             }
-        } catch(err: unknown) { console.error("tcc-dbus-client: dbusUpdate: unexpected error parsing profile =>", err); }
+        } catch(err: unknown) { console.error(`tcc-dbus-client: dbusUpdate: unexpected error parsing profile => ${err}`); }
     }
 
     const defaultProfilesJSON: string = await window.dbusAPI.getDefaultProfilesJSON();
@@ -400,7 +400,7 @@ export class TccDBusClientService implements OnDestroy {
                 this.previousDefaultValuesProfileJSON = defaultValuesProfileJSON;
             }
         } catch (err: unknown) {
-            console.error("tcc-dbus-client: dbusUpdate: unexpected error parsing profile lists =>",  err);
+            console.error(`tcc-dbus-client: dbusUpdate: unexpected error parsing profile lists => ${err}`);
         }
 
         this.dataLoaded = true;
@@ -412,7 +412,7 @@ export class TccDBusClientService implements OnDestroy {
                 this.settings.next(JSON.parse(settingsJSON));
                 this.previousSettingsJSON = settingsJSON;
             }
-        } catch (err: unknown) { console.error("tcc-dbus-client: dbusUpdate: unexpected error parsing settings =>", err); }
+        } catch (err: unknown) { console.error(`tcc-dbus-client: dbusUpdate: unexpected error parsing settings => ${err}`); }
     }
   }
 

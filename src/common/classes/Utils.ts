@@ -30,7 +30,7 @@ export function getDirectories(source: string): string[] {
             .filter((dirent: Dirent): boolean => dirent.isDirectory())
             .map((dirent: Dirent): string => dirent.name);
     } catch (err: unknown) {
-        console.error("Utils: getDirectories failed =>", err)
+        console.error(`Utils: getDirectories failed => ${err}`)
         return [];
     }
 }
@@ -42,7 +42,7 @@ export function getFiles(source: string): string[] {
             .filter((dirent: Dirent): boolean => dirent.isFile())
             .map((dirent: Dirent): string => dirent.name);
     } catch (err: unknown) {
-        console.error("Utils: getFiles failed =>", err)
+        console.error(`Utils: getFiles failed => ${err}`)
         return [];
     }
 }
@@ -54,7 +54,7 @@ export function getSymbolicLinks(source: string): string[] {
             .filter((dirent: Dirent): boolean => dirent.isSymbolicLink())
             .map((dirent: Dirent): string => dirent.name);
     } catch (err: unknown) {
-        console.error("Utils: getSymbolicLinks failed =>", err)
+        console.error(`Utils: getSymbolicLinks failed => ${err}`)
         return [];
     }
 }
@@ -91,7 +91,7 @@ export function fileOK(path: string): boolean {
         }
         return false
     } catch (err: unknown) {
-        console.error("Utils: fileOK failed =>", err)
+        console.error(`Utils: fileOK failed => ${err}`)
         return false;
     }
 }
@@ -110,7 +110,7 @@ export async function fileOKAsync(path: string): Promise<boolean> {
         }
         return false
     } catch (err: unknown) {
-        console.error("Utils: fileOKAsync failed =>", err)
+        console.error(`Utils: fileOKAsync failed => ${err}`)
         return false;
     }
 }
@@ -121,10 +121,10 @@ export function delay(ms: number): Promise<void> {
 
 export async function execCommandAsync(command: string, logging?: boolean): Promise<string> {
     return new Promise((resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
-        child_process.exec(command, (error: unknown, stdout: string, stderr: string): void => {
-            if (error) {
+        child_process.exec(command, (err: unknown, stdout: string, stderr: string): void => {
+            if (err) {
                 if (logging ?? true) {
-                    console.error("Utils: execCommandAsync failed =>", error);
+                    console.error(`Utils: execCommandAsync failed => ${err}`);
                 };
                 resolve("");
             } else {
@@ -138,7 +138,7 @@ export function execCommandSync(command: string): string {
     try {
         return child_process.execSync(command).toString();
     } catch (err: unknown) {
-        console.error("Utils: execCommandSync failed =>", err);
+        console.error(`Utils: execCommandSync failed => ${err}`);
         return undefined;
     }
 }

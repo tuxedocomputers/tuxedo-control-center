@@ -104,7 +104,7 @@ export class ChangeCryptPasswordComponent implements OnInit {
             this.errortext_cryptsetup = '';
             return true;
         } catch (err: unknown) {
-            console.error("change-crypt-password: changeCryptPassword failed =>", err)
+            console.error(`change-crypt-password: changeCryptPassword failed => ${err}`)
             this.successtext_cryptsetup = '';
             this.errortext_cryptsetup = $localize `:@@errornewpassword:Error: Could not change crypt password (wrong old crypt password?)`;
             return false;

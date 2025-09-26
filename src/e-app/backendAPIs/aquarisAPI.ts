@@ -102,7 +102,7 @@ async function updateDeviceState(dev: LCT21001, current: AquarisState, next: Aqu
             } while (updatedSomething);
             aquarisIoProgress = false;
         } catch (err: unknown) {
-            console.error("aquarisAPI: updateDeviceState failed =>", err);
+            console.error(`aquarisAPI: updateDeviceState failed => ${err}`);
         } finally {
             aquarisIoProgress = false;
         }
@@ -209,7 +209,7 @@ export const aquarisHandlers: Map<string, (...args: any[]) => any> = new Map<str
             aquarisStateExpected.deviceUUID = deviceUUID;
             await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected, true);
         } catch (err: unknown) {
-            console.error("aquarisAPI: connect failed =>", err);
+            console.error(`aquarisAPI: connect failed => ${err}`);
         }
     })
 
@@ -309,7 +309,7 @@ ipcMain.handle('comp-get-has-aquaris', (event: IpcMainInvokeEvent): Promise<bool
             try {
               resolve(hasAquaris());
             } catch (err: unknown) {
-              console.error("aquarisAPI: comp-get-has-aquaris failed =>", err)
+              console.error(`aquarisAPI: comp-get-has-aquaris failed => ${err}`)
               reject(err);
             }
           });

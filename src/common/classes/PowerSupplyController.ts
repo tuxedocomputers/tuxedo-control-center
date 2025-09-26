@@ -81,13 +81,13 @@ export class PowerSupplyController extends SysFsController {
         const psDevices: string[] = SysFsController.getDeviceList('/sys/class/power_supply');
         const ctrlBatteries: PowerSupplyController[] = [];
         for (const devString of psDevices) {
-            const ps = new PowerSupplyController('/sys/class/power_supply/' + devString);
+            const ps = new PowerSupplyController(`/sys/class/power_supply/${devString}`);
             try {
                 if ((await ps.type.readValueA()).trim() === 'Battery') {
                     ctrlBatteries.push(ps);
                 }
             } catch (err: unknown) {
-                console.error("PowerSupplyController: getPowerSupplyBatteries failed =>", err)
+                console.error(`PowerSupplyController: getPowerSupplyBatteries failed => ${err}`)
             }
         }
         return ctrlBatteries;

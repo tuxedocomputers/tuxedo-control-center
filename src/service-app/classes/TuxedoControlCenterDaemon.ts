@@ -94,7 +94,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     async main(): Promise<void> {
 
         if (process.argv.includes('--version')) {
-            this.logLine('TUXEDO Control Center v' + tccPackage.version + ' node: ' + process.version + ' arch:' + os.arch());
+            this.logLine(`TUXEDO Control Center v${tccPackage.version} node: ${process.version} arch:${os.arch()}`);
             process.exit();
         }
 
@@ -143,7 +143,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
                 try {
                     await worker.work();
                 } catch (err: unknown) {
-                    console.error(`TuxedoControlCenterDaemon: Failed executing onWork() of ${worker.name} =>`, err)
+                    console.error(`TuxedoControlCenterDaemon: Failed executing onWork() of ${worker.name} => ${err}`)
                 }
             }, worker.timeout);
         }
@@ -156,7 +156,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
                 worker.updateProfile(this.getCurrentProfile());
                 await worker.start();
             } catch (err: unknown) {
-                console.error("TuxedoControlCenterDaemon: Failed executing onStart =>", err)
+                console.error(`TuxedoControlCenterDaemon: Failed executing onStart => ${err}`)
             }
         }
     }
@@ -179,7 +179,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
     public async catchError(err: Error): Promise<void> {
         this.logLine('Tccd Exception');
-        const errorLine: string = err.name + ': ' + err.message;
+        const errorLine: string = `${err.name}: ${err.message}`;
         this.logLine(errorLine);
         if (err.stack !== undefined) {
             this.logLine(err.stack);
@@ -200,8 +200,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
                 await worker.exit();
             } catch (err: unknown) {
                 console.error(
-                    "TuxedoControlCenterDaemon: Failed executing onExit() =>",
-                    err,
+                    `TuxedoControlCenterDaemon: Failed executing onExit() => ${err}`
                 );
             }
         }
@@ -216,11 +215,11 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             if (!await this.start()) {
                 throw Error('Couldn\'t start daemon. It is probably already running');
             } else {
-                this.logLine('Starting daemon v' + tccPackage.version + ' (node: ' + process.version + ' arch: ' + os.arch() + ')');
+                this.logLine(`Starting daemon v${tccPackage.version} (node: ${process.version} arch: ${os.arch()})`);
                 const modInfo = new ModuleInfo();
                 if (TuxedoIOAPI.wmiAvailable()) {
                     TuxedoIOAPI.getModuleInfo(modInfo);
-                    this.logLine('tuxedo-io ver ' + modInfo.version + ' [ interface: ' + modInfo.activeInterface + ' ]');
+                    this.logLine(`tuxedo-io ver ${modInfo.version} [ interface: ${modInfo.activeInterface} ]`);
                 }
             }
         } else if (process.argv.includes('--stop')) {
@@ -242,7 +241,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             if (settingsSaved || profilesSaved || webcamSaved) {
                 const pidNumber: number = this.readPid();
                 if (Number.isNaN(pidNumber)) {
-                    console.log('Failed to locate running tccd process. Cannot reload config.');
+                    console.log("TuxedoControlCenterDaemon: Failed to locate running tccd process. Cannot reload config.");
                     process.exit(1);
                 } else {
                     process.kill(pidNumber, 'SIGHUP');
@@ -278,11 +277,11 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
                     // Attempt to find by name
                     const profileByName: ITccProfile = defaultProfilesFilled.concat(customProfilesFilled).find((p: ITccProfile): boolean => p.name === this.settings.stateMap[stateDescriptor]);
                     if (profileByName !== undefined) {
-                        console.log('Missing state id assignment for \'' + stateId + '\' but found profile by name \'' + profileByName.name + '\'');
+                        console.log(`TuxedoControlCenterDaemon: Missing state id assignment for '${stateId}' but found profile by name '${profileByName.name}'`);
                         this.settings.stateMap[stateDescriptor] = profileByName.id;
                     } else {
                         // Otherwise default to default values profile
-                        console.log('Missing state id assignment for \'' + stateId + '\' default to + \'' + defaultValuesProfileFilled.id + '\'');
+                        console.log(`TuxedoControlCenterDaemon: Missing state id assignment for '${stateId}' default to '${defaultValuesProfileFilled.id}'`);
                         this.settings.stateMap[stateDescriptor] = defaultValuesProfileFilled.id;
                         needsTuxedoDefault = true;
                     }
@@ -296,13 +295,13 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
                     customProfilesFilled = [ defaultValuesProfileFilled ].concat(customProfilesFilled);
                     this.customProfiles = customProfilesFilled;
                     this.config.writeProfiles(this.customProfiles);
-                    console.log(`Added '${defaultValuesProfileFilled.name}' to profiles`);
+                    console.log(`TuxedoControlCenterDaemon: Added '${defaultValuesProfileFilled.name}' to profiles`);
                 }
             }
 
             // Write updated settings
             this.config.writeSettings(this.settings);
-            console.log('Saved updated settings');
+            console.log('TuxedoControlCenterDaemon: Saved updated settings');
         }
 
         const allProfilesFilled: ITccProfile[] = defaultProfilesFilled.concat(customProfilesFilled);
@@ -321,11 +320,11 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             const activeProfileName: string = this.activeProfile.name;
             let foundSameProfile: boolean = this.setCurrentProfileById(activeProfileId);
             if (!foundSameProfile) {
-                console.log('loadConfigsAndProfiles: profile by id not found: ' + activeProfileId)
+                console.log(`TuxedoControlCenterDaemon: loadConfigsAndProfiles: profile by id not found: ${activeProfileId}`)
                 foundSameProfile = this.setCurrentProfileByName(activeProfileName);
             }
             if (!foundSameProfile) {
-                console.log('loadConfigsAndProfiles: profile by name not found: ' + activeProfileName);
+                console.log(`TuxedoControlCenterDaemon: loadConfigsAndProfiles: profile by name not found: ${activeProfileName}`);
                 // Fallback
                 this.activeProfile = this.getDefaultProfile();
             }
@@ -338,14 +337,14 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         const outputPorts: string[][] = TuxedoIOAPI.getOutputPorts();
         // Delete additional cards from settings
         if (this.settings.ycbcr420Workaround?.length > outputPorts?.length) {
-            this.logLine('Additional ycbcr420Workaround card in settings');
+            this.logLine('TuxedoControlCenterDaemon: Additional ycbcr420Workaround card in settings');
             this.settings.ycbcr420Workaround = this.settings.ycbcr420Workaround.slice(0, outputPorts?.length)
             missingSetting = true;
         }
         for (let card: number = 0; card < outputPorts?.length; card++) {
             // Add card to settings if missing
             if (this.settings.ycbcr420Workaround?.length <= card) {
-                this.logLine('Missing ycbcr420Workaround card in settings');
+                this.logLine('TuxedoControlCenterDaemon: Missing ycbcr420Workaround card in settings');
                 this.settings.ycbcr420Workaround[card] = {};
                 missingSetting = true;
             }
@@ -359,7 +358,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
                         }
                     }
                     if (!stillAvailable) {
-                        this.logLine('Additional ycbcr420Workaround port in settings');
+                        this.logLine('TuxedoControlCenterDaemon: Additional ycbcr420Workaround port in settings');
                         delete this.settings.ycbcr420Workaround[card][settingsPort];
                         missingSetting = true;
                     }
@@ -369,7 +368,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             if (outputPorts[card] !== undefined) {
                 for (const port of outputPorts[card]) {
                     if (this.settings.ycbcr420Workaround[card][port] === undefined) {
-                        this.logLine('Missing ycbcr420Workaround port in settings');
+                        this.logLine('TuxedoControlCenterDaemon: Missing ycbcr420Workaround port in settings');
                         this.settings.ycbcr420Workaround[card][port] = false;
                         missingSetting = true;
                     }
@@ -388,49 +387,49 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             // If settings are missing, attempt to recreate default
             // TODO purge settings no longer in ITccSettings
             if (this.settings.stateMap === undefined) {
-                this.logLine('Missing statemap');
+                this.logLine('TuxedoControlCenterDaemon: Missing statemap');
                 this.settings.stateMap = this.config.getDefaultSettings(device).stateMap;
                 missingSetting = true;
             }
             if (this.settings.cpuSettingsEnabled === undefined) {
-                this.logLine('Missing cpuSettingsEnabled setting');
+                this.logLine('TuxedoControlCenterDaemon: Missing cpuSettingsEnabled setting');
                 this.settings.cpuSettingsEnabled = this.config.getDefaultSettings(device).cpuSettingsEnabled;
                 missingSetting = true;
             }
             if (this.settings.fanControlEnabled === undefined) {
-                this.logLine('Missing fanControlEnabled setting');
+                this.logLine('TuxedoControlCenterDaemon: Missing fanControlEnabled setting');
                 this.settings.fanControlEnabled = this.config.getDefaultSettings(device).fanControlEnabled;
                 missingSetting = true;
             }
             if (this.settings.keyboardBacklightControlEnabled === undefined) {
-                this.logLine('Missing keyboardBacklightControlEnabled setting');
+                this.logLine('TuxedoControlCenterDaemon: Missing keyboardBacklightControlEnabled setting');
                 this.settings.keyboardBacklightControlEnabled = this.config.getDefaultSettings(device).keyboardBacklightControlEnabled;
                 missingSetting = true;
             }
             if (this.settings.ycbcr420Workaround === undefined) {
-                this.logLine('Missing ycbcr420Workaround setting');
+                this.logLine('TuxedoControlCenterDaemon: Missing ycbcr420Workaround setting');
                 this.settings.ycbcr420Workaround = this.config.getDefaultSettings(device).ycbcr420Workaround;
                 missingSetting = true;
             }
             if (this.settings.chargingProfile === undefined) {
-                this.logLine('Missing chargingProfile setting');
+                this.logLine('TuxedoControlCenterDaemon: Missing chargingProfile setting');
                 this.settings.chargingProfile = this.config.getDefaultSettings(device).chargingProfile;
                 missingSetting = true;
             }
             if (this.settings.chargingPriority === undefined) {
-                this.logLine('Missing chargingPriority setting');
+                this.logLine('TuxedoControlCenterDaemon: Missing chargingPriority setting');
                 this.settings.chargingPriority = this.config.getDefaultSettings(device).chargingPriority;
                 missingSetting = true;
             }
             if (this.settings.keyboardBacklightStates === undefined) {
-                this.logLine('Missing keyboardBacklightStates setting');
+                this.logLine('TuxedoControlCenterDaemon: Missing keyboardBacklightStates setting');
                 this.settings.keyboardBacklightStates = this.config.getDefaultSettings(device).keyboardBacklightStates;
                 missingSetting = true;
             }
             missingSetting = this.syncOutputPortsSetting();
 
             if (missingSetting) {
-                throw Error('Missing setting');
+                throw Error('TuxedoControlCenterDaemon: Missing setting');
             }
         } catch (dummy: unknown) {
             // No settings available, create default settings
@@ -440,9 +439,9 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
                     this.syncOutputPortsSetting();
                 }
                 this.config.writeSettings(this.settings);
-                this.logLine(`TuxedoControlCenterDaemon: Filled missing settings with default: ${this.config.pathSettings}"`);
+                this.logLine(`TuxedoControlCenterDaemon: Filled missing settings with default: "${this.config.pathSettings}"`);
             } catch (err: unknown) {
-                console.error(`TuxedoControlCenterDaemon: Failed to fill missing settings with default: ${this.config.pathSettings} =>`, err);
+                console.error(`TuxedoControlCenterDaemon: Failed to fill missing settings with default: ${this.config.pathSettings} => ${err}`)
             }
         }
 
@@ -452,16 +451,16 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             this.customProfiles = this.config.getDefaultCustomProfiles(device);
             try {
                 this.config.writeProfiles(this.customProfiles);
-                this.logLine('Wrote default profiles: ' + this.config.pathProfiles);
+                this.logLine(`TuxedoControlCenterDaemon: Wrote default profiles: ${this.config.pathProfiles}`);
             } catch (err: unknown) {
-                console.error(`TuxedoControlCenterDaemon: Failed to write default profiles: ${this.config.pathProfiles} =>`, err)
+                console.error(`TuxedoControlCenterDaemon: Failed to write default profiles: ${this.config.pathProfiles} => ${err}`)
             }
         }
 
         try {
             this.autosave = this.config.readAutosave();
         } catch (err: unknown) {
-            console.error(`TuxedoControlCenterDaemon: Failed to read autosave ${this.config.pathAutosave} =>`, err)
+            console.error(`TuxedoControlCenterDaemon: Failed to read autosave ${this.config.pathAutosave} => ${err}`)
             // It probably doesn't exist yet so create a structure for saving
             this.autosave = this.config.getDefaultAutosave();
         }
@@ -676,7 +675,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
         if (profile.id === undefined) {
             profile.id = generateProfileId();
-            console.log(`(fillDeviceSpecificDefaults) Generated id (${profile.id}) for ${profile.name}`);
+            console.log(`TuxedoControlCenterDaemon: fillDeviceSpecificDefaults: Generated id (${profile.id}) for ${profile.name}`);
         }
 
         if (profile.description === 'undefined') {
@@ -866,11 +865,11 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
                 try {
                     this.config.writeConfig<T>(newConfig, targetConfigPath, { mode: writeFileMode });
                 } catch (err: unknown) {
-                    console.error(`TuxedoControlCenterDaemon: Error on write option ${optionString} =>`, err)
+                    console.error(`TuxedoControlCenterDaemon: Error on write option ${optionString} => ${err}`)
                     return false;
                 }
             } catch (err: unknown) {
-                console.error(`TuxedoControlCenterDaemon: Error on read option ${optionString}: with path ${newConfigPath} =>`, err)
+                console.error(`TuxedoControlCenterDaemon: Error on read option ${optionString}: with path ${newConfigPath} => ${err}`)
                 return false;
             }
             return true;

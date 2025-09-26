@@ -85,7 +85,7 @@ export class SysFsService implements OnDestroy {
               };
               resolve (pstateInfo);
         } catch (err: unknown) {
-          console.error("sys-fs.service: getPstateInfo failed =>", err)
+          console.error(`sys-fs.service: getPstateInfo failed => ${err}`)
           reject(err);
         }
       });;
