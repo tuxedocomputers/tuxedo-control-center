@@ -39,10 +39,13 @@ const amdIGpuDeviceIds: string[] = [
     // 8845HS (Phoenix3)
     "1900",
     
+    // 9955HX (Granite Ridge)
+    "13C0",
+
     // Ryzen AI 7 350
     "1114",
     
-    // Ryzen AI 9 HX 370
+    // Ryzen AI 9 365 / Ryzen AI 9 HX 370
     "150E",
 ];
 
