@@ -26,7 +26,7 @@ export interface WebcamDeviceInformation {
     min?: number;
     name: string;
     step?: number;
-    options?: string[];
+    options?: number[] | string[];
     title: string;
     type: string;
 }

@@ -486,8 +486,9 @@ export class WebcamSettingsComponent implements OnInit {
         setting: WebcamDeviceInformation
     ): ValidatorFn {
         return (control: AbstractControl): ValidationErrors | null => {
-            let errors: { min?: number, max?: number, type?: string, options?: string[]; actual: unknown} = null;
+            let errors: { min?: number, max?: number, type?: string, options?: number[] | string[]; actual: unknown} = null;
             const value: boolean | number | string = control.value;
+
             if (setting.type === "slider") {
                 if (typeof value !== "number") {
                     errors = { type: "number", actual: typeof value };
@@ -504,13 +505,12 @@ export class WebcamSettingsComponent implements OnInit {
                     errors = { type: "boolean", actual: typeof value };
             }
             if (setting.type === "menu") {
-                if (typeof value !== "string") {
-                    errors = { type: "string", actual: typeof value };
-                }
-                if (typeof value === "string" && !setting.options.includes(value)) {
+                if ((typeof value === "number" && !(setting.options as number[]).includes(value)) || 
+                    (typeof value === "string" && !(setting.options as string[]).includes(value))) {
                     errors = { options: setting.options, actual: value };
                 }
             }
+
             return errors;
         };
     }
