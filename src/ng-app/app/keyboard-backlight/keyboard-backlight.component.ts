@@ -223,8 +223,8 @@ export class KeyboardBacklightComponent implements OnInit {
     public onColorPickerInput(color: string, selectedZones: number[]): void {
         this.triggerColorPickerTimeout(selectedZones);
 
-        let colorHex: string[] = this.chosenColorHex;
-        for (let zone of selectedZones) {
+        const colorHex: string[] = this.chosenColorHex;
+        for (const zone of selectedZones) {
             colorHex[zone] = color;
         }
 

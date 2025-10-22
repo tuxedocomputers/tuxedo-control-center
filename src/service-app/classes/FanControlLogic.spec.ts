@@ -128,7 +128,7 @@ describe('FanLogic ValueBuffer', (): void => {
                 referenceBuffer.addValue(randomTemp);
             }
 
-            let bufferInfo: string = `for buffer:           ${JSON.stringify(buffer.getBufferCopy())}\n` +
+            const bufferInfo: string = `for buffer:           ${JSON.stringify(buffer.getBufferCopy())}\n` +
                              `    reference buffer: ${JSON.stringify(referenceBuffer.getBufferCopy())}\n\n`;
             expect(buffer.getBufferCopy())
                 .withContext(bufferInfo)

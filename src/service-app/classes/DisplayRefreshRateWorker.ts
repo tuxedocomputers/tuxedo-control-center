@@ -62,7 +62,7 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
             .toString()
             .split("\n");
 
-        let loggedInUsers: string[] = [];
+        const loggedInUsers: string[] = [];
 
         for (const line of userInformation) {
             const result: RegExpMatchArray = line.match(/^([^\s\d]+)/);

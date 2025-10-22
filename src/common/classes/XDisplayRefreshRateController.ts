@@ -169,13 +169,13 @@ export class XDisplayRefreshRateController {
         const displayNameRegex = /(eDP\S*|LVDS\S*)/;
 
         // for example "1920x1080" and "1920x1080i"
-        var resolutionRegex: RegExp = /\s+[0-9]{3,4}x[0-9]{3,4}[a-z]?/;
+        const resolutionRegex: RegExp = /\s+[0-9]{3,4}x[0-9]{3,4}[a-z]?/;
 
         // for example "60.00*+", "50.00", "59.94" and 59.99"
-        var freqRegex: RegExp = /[0-9]{1,3}\.[0-9]{2}[*]?[+]?/g;
+        const freqRegex: RegExp = /[0-9]{1,3}\.[0-9]{2}[*]?[+]?/g;
 
         // matches currently active config, for example "2560x1440 165.00*+ 40.00 +"
-        var fullLineRegex: RegExp =
+        const fullLineRegex: RegExp =
             /\s+[0-9]{3,4}x[0-9]{3,4}[a-z]?(\s+[0-9]{1,3}\.[0-9]{2}[*]?[+]?)+/;
 
         const newDisplayModes: IDisplayFreqRes = {

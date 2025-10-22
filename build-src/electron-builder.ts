@@ -46,7 +46,7 @@ process.argv.forEach((parameter, index, array) => {
     }
 
     if (parameter.startsWith('fnameadd')) {
-        let parts = parameter.split('=');
+        const parts = parameter.split('=');
         if (parts.length === 2) {
             filenameAddition = parts[1].trim();
         }

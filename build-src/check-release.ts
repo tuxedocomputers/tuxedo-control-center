@@ -37,7 +37,7 @@ async function checkRelease(versionToCheck?: string): Promise<boolean> {
     // Check last changelog version entry
     try {
         const changelog = (await fsp.readFile('CHANGELOG.md')).toString();
-        let result = changelog.match(/\[(.*?)\]/);
+        const result = changelog.match(/\[(.*?)\]/);
         printResult('Version in changelog', releaseVersion === result[1]);
     } catch (err) {
         console.log('Failed to process changelog => ' + err);
@@ -48,11 +48,11 @@ async function checkRelease(versionToCheck?: string): Promise<boolean> {
     let tagCheck = true;
     try {
         const searchedTagName = `v${releaseVersion}`;
-        let result = await exec(`git tag -l "${searchedTagName}" -n1`);
-        let match = result.stdout.match(/^(\S*)\s*(.*)/);
+        const result = await exec(`git tag -l "${searchedTagName}" -n1`);
+        const match = result.stdout.match(/^(\S*)\s*(.*)/);
         if (match.length >= 3) {
-            let tagName = match[1].trim();
-            let tagMessage = match[2].trim();
+            const tagName = match[1].trim();
+            const tagMessage = match[2].trim();
 
             if (tagName !== searchedTagName) {
                 tagCheck = false;

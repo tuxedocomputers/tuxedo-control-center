@@ -54,7 +54,7 @@ contextBridge.exposeInMainWorld(
     setBrightnessMode: (mode: BrightnessModeString): Promise<void> => ipcRenderer.invoke('set-brightness-mode', mode),
     getShouldUseDarkColors: (): Promise<boolean> => ipcRenderer.invoke('get-should-use-dark-colors'),
     onUpdateBrightnessMode: (callback: () => void): void => {
-        var channelname: string = 'update-brightness-mode';
+        const channelname: string = 'update-brightness-mode';
         if(callbacks.indexOf(channelname) < 0)
         {
             callbacks.push(channelname);
@@ -62,7 +62,7 @@ contextBridge.exposeInMainWorld(
         }
     },
     onDbusDead: (callback: () => void): void => {
-        var channelname: string = 'dbus-died';
+        const channelname: string = 'dbus-died';
         if(callbacks.indexOf(channelname) < 0)
         {
             callbacks.push(channelname);
@@ -76,7 +76,7 @@ contextBridge.exposeInMainWorld(
     primeWindowClose: (): void => ipcRenderer.send("prime-window-close"),
     primeWindowShow: (): void => ipcRenderer.send("prime-window-show"),
     onSetPrimeSelectMode: (callback: (event: IpcRendererEvent, primeSelectMode: string) => void): void => {
-        var channelname: string = "set-prime-select-mode";
+        const channelname: string = "set-prime-select-mode";
         if(callbacks.indexOf(channelname) < 0)
         {
             callbacks.push(channelname);
@@ -84,7 +84,7 @@ contextBridge.exposeInMainWorld(
         }
     },
     onUpdateSystemInfosLabel: (callback: (event: IpcRendererEvent, text: string) => void): void => {
-        var channelname: string = 'update-systeminfos-label';
+        const channelname: string = 'update-systeminfos-label';
         if(callbacks.indexOf(channelname) < 0)
         {
             callbacks.push(channelname);
@@ -134,7 +134,7 @@ contextBridge.exposeInMainWorld(
     {
     // https://github.com/electron/electron/issues/21437
     onApplyControls: (callback: () => void): void => {
-        var channelname: string = 'apply-controls';
+        const channelname: string = 'apply-controls';
         if(callbacks.indexOf(channelname) < 0)
         {
             callbacks.push(channelname);
@@ -142,7 +142,7 @@ contextBridge.exposeInMainWorld(
         }
     },
     onExternalWebcamPreviewClosed: (callback: () => void): void => {
-        var channelname: string = 'external-webcam-preview-closed';
+        const channelname: string = 'external-webcam-preview-closed';
         if(callbacks.indexOf(channelname) < 0)
         {
             callbacks.push(channelname);
@@ -150,7 +150,7 @@ contextBridge.exposeInMainWorld(
         }
     },
     onVideoEnded: (callback: () => void): void => {
-        var channelname: string = 'video-ended';
+        const channelname: string = 'video-ended';
         if(callbacks.indexOf(channelname) < 0)
         {
             callbacks.push(channelname);
@@ -158,7 +158,7 @@ contextBridge.exposeInMainWorld(
         }
     },
     onSettingWebcamWithLoading: (callback: (event: IpcRendererEvent, config: WebcamConstraints) => void): void => {
-        var channelname: string = "setting-webcam-with-loading";
+        const channelname: string = "setting-webcam-with-loading";
         if(callbacks.indexOf(channelname) < 0)
         {
             callbacks.push(channelname);

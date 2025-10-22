@@ -1223,7 +1223,7 @@ export class WebcamSettingsComponent implements OnInit {
 
     public getPercentValue(preset: string): string {
         const { max, min } = this.getMinMaxOptionValues(preset);
-        let current: number = Number(this.webcamFormGroup?.get(preset)?.value);
+        const current: number = Number(this.webcamFormGroup?.get(preset)?.value);
         
         if (max !== undefined && min !== undefined && current !== undefined) {
             const roundingDigits: number = this.getRoundingDigits(preset);

@@ -53,9 +53,9 @@ async function main() {
 
         let filenameAddition = '';
         if (automaticVersion) {
-            let gitDescribe = await getGitDescribe();
-            let gitBranch = await getCurrentBranch();
-            let version = gitDescribe.slice(1);
+            const gitDescribe = await getGitDescribe();
+            const gitBranch = await getCurrentBranch();
+            const version = gitDescribe.slice(1);
 
             const addBranchNameToFilename = version.includes('-') &&
                                             gitBranch !== '';
