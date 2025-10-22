@@ -30,3 +30,8 @@ export interface IFanDataInputs {
     fanLabel?: SysFsPropertyString;
     tempLabel?: SysFsPropertyString;
 }
+
+export interface IFanTempData {
+    tempLabel: string;
+    tempInput: SysFsPropertyInteger;
+}

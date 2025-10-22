@@ -18,7 +18,7 @@
  */
 
 import 'jasmine';
-const mockfs: any = require('mock-fs');
+const mock: typeof import("mock-fs") = require('mock-fs');
 
 import { DriveController } from "./DriveController";
 import * as child_process from 'child_process';
@@ -30,7 +30,7 @@ const sizeDriveSda2: number = 162799056;
 
 describe('DriveController', (): void => {
     beforeEach((): void => {
-        mockfs({
+        mock({
             '/sys/class/block/': {
                 'sda': {
                     'size': sizeDriveSda.toString()
@@ -69,7 +69,7 @@ describe('DriveController', (): void => {
     });
 
     afterEach((): void => {
-        mockfs.restore();
+        mock.restore();
     });
 
     it('get child info', async (): Promise<void> => {

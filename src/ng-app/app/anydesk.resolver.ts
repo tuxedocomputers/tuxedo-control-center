@@ -28,7 +28,7 @@ import { filter, first } from "rxjs/operators";
 export class AnydeskInstalledResolver implements Resolve<boolean> {
     resolve(): Observable<boolean> {
         return from(window.pgms.anydeskInstalled()).pipe(
-            filter((value: any): any => value !== undefined),
+            filter((value: boolean): boolean => value !== undefined),
             first()
         );
     }

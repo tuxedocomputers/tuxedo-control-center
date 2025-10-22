@@ -34,7 +34,7 @@ async function getSystemInfos(): Promise<Buffer> {
           const dataArray: Buffer[] = [];
           const request: ClientRequest = https.get(systemInfosURL, (response: IncomingMessage): void => {
 
-            response.on('data', (data: any): void => {
+            response.on('data', (data: Buffer<ArrayBufferLike>): void => {
               dataArray.push(data);
             });
 

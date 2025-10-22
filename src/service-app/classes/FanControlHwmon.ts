@@ -20,7 +20,7 @@
 import * as fs from "node:fs";
 import type { SysFsPropertyInteger } from "../../common/classes/SysFsProperties";
 import { FanControlBaseClass } from "./FanControlBaseClass";
-import type { IFanDataInputs } from "../../common/models/ITccFans";
+import type { IFanDataInputs, IFanTempData } from "../../common/models/ITccFans";
 import { FAN_LOGIC } from "./FanControlLogic";
 import type { FanControlLogic } from "./FanControlLogic";
 
@@ -38,7 +38,7 @@ export class FanControlHwmon extends FanControlBaseClass {
     private sensorValueMap: Map<string, number> = new Map<string, number>();
     private fanLabelMap: Map<number, string> = new Map<number, string>();
     private tempLabelMap: Map<number, string> = new Map<number, string>();
-    private fanTempMap: Map<number, { tempLabel: string; tempInput: SysFsPropertyInteger }> = new Map<number, { tempLabel: string; tempInput: SysFsPropertyInteger }>();
+    private fanTempMap: Map<number, IFanTempData> = new Map<number, IFanTempData>();
     private tempCache: Map<string, number> = new Map<string, number>();
 
 
@@ -232,7 +232,7 @@ export class FanControlHwmon extends FanControlBaseClass {
     private printLabelInformation(): void {
         const fanInfo: string = Array.from(this.fanTempMap)
             .map(
-                ([key, value]: [number, any]): string =>
+                ([key, value]: [number, IFanTempData]): string =>
                     `Fan Index: ${key}, Temperature Label: ${value?.tempLabel}`,
             )
             .join(" | ");
@@ -352,7 +352,7 @@ export class FanControlHwmon extends FanControlBaseClass {
     }
 
     public async getFanTemperature(fanIndex: number): Promise<number> {
-        const fanData: { tempLabel: string; tempInput: SysFsPropertyInteger } = this.fanTempMap.get(fanIndex + 1);
+        const fanData: IFanTempData = this.fanTempMap.get(fanIndex + 1);
         if (!fanData) {
             console.warn(`No fan data found for index: ${fanIndex}`);
             return -1;
@@ -458,7 +458,7 @@ export class FanControlHwmon extends FanControlBaseClass {
 
     public testMatchLabels(): Map<
         number,
-        { tempLabel: string; tempInput: SysFsPropertyInteger }
+        IFanTempData
     > {
         this.matchLabels();
         return this.fanTempMap;

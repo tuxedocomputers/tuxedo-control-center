@@ -46,7 +46,7 @@ export class UserConfig {
             console.error(`UserConfig: set failed => ${err}`)
 
             // todo: error handling
-            if ((err as any).code === 'ENOENT') {
+            if ((err as NodeJS.ErrnoException)?.code === "ENOENT") {
                 console.log(`Config file (${this.configFile}) does not exist and will be created.`);
             } else {
                 await this.setProgressDone();
@@ -66,7 +66,7 @@ export class UserConfig {
             console.error(`UserConfig: get failed => ${err}`)
 
             // todo: error handling
-            if ((err as any).code !== 'ENOENT') {
+            if ((err as NodeJS.ErrnoException)?.code !== 'ENOENT') {
                 await this.setProgressDone();
                 throw err;
             }

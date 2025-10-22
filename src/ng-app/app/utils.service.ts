@@ -27,7 +27,7 @@ import { type ChoiceDialogData, type ConfirmChoiceResult, DialogChoiceComponent,
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import type { ITccProfile } from '../../common/models/TccProfile';
 import { DefaultProfileIDs, type IProfileTextMappings, LegacyDefaultProfileIDs } from '../../common/models/DefaultProfiles';
-import { DialogInputTextComponent } from './dialog-input-text/dialog-input-text.component';
+import { DialogInputTextComponent, InputDialogData } from './dialog-input-text/dialog-input-text.component';
 import { DialogWaitingComponent } from './dialog-waiting/dialog-waiting.component';
 import type * as fs from 'fs';
 import type { OpenDialogReturnValue, SaveDialogReturnValue } from 'electron';
@@ -251,7 +251,7 @@ export class UtilsService {
       autoFocus: false,
       disableClose: disableClose
     });
-    let result: ConfirmChoiceResult =  await dialogRef.afterClosed().toPromise();
+    let result: ConfirmChoiceResult = await dialogRef.afterClosed().toPromise();
     if (result === undefined) {
       result = {
         value: undefined,
@@ -278,7 +278,7 @@ export class UtilsService {
     return status;
   }
 
-  public async inputTextDialog(config: any): Promise<string> {
+  public async inputTextDialog(config: InputDialogData): Promise<string> {
     const dialogRef: MatDialogRef<DialogInputTextComponent, string> = this.dialog.open(DialogInputTextComponent, {
       minWidth: 350,
       data: config,

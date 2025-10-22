@@ -20,7 +20,7 @@
 import type { Dirent } from "fs";
 
 const fs: typeof import("fs") = require("fs");
-const child_process: any = require("child_process");
+const child_process: typeof import("child_process") = require("child_process");
 
 
 export function getDirectories(source: string): string[] {

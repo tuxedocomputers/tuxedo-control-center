@@ -23,6 +23,7 @@ const mock: typeof import("mock-fs") = require("mock-fs");
 import { FanControlTuxi } from "./FanControlTuxi";
 import { SysFsPropertyInteger } from "../../common/classes/SysFsProperties";
 import { TUXEDODevice } from "../../common/models/DefaultProfiles";
+import { IFanTempData } from "src/common/models/ITccFans";
 
 describe("FanControlTuxi", (): void => {
     it("Sirius Gen 2: check hwmon path", async (): Promise<void> => {
@@ -164,10 +165,10 @@ describe("FanControlTuxi", (): void => {
 
         const fanTempMap: Map<
             number,
-            { tempLabel: string; tempInput: SysFsPropertyInteger }
+            IFanTempData
         > = new Map<
             number,
-            { tempLabel: string; tempInput: SysFsPropertyInteger }
+            IFanTempData
         >();
         fanTempMap.set(1, {
             tempLabel: "cpu0",

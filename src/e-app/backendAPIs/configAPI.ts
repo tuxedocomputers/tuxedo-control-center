@@ -98,7 +98,7 @@ async function pkexecWriteConfigAsync(settings: ITccSettings, profiles: ITccProf
                 " --new_settings " +
                 tmpSettingsPath
         )
-            .then((data: any): any => {
+            .then((data: { data: string; error: unknown }): void => {
                 if (data.error) {
                     resolve(false);
                 } else {

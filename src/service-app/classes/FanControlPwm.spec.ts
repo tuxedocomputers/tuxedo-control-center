@@ -22,6 +22,7 @@ const mock: typeof import("mock-fs") = require("mock-fs");
 
 import { FanControlPwm } from "./FanControlPwm";
 import { SysFsPropertyInteger } from "../../common/classes/SysFsProperties";
+import { IFanTempData } from "src/common/models/ITccFans";
 
 describe("FanControlPwm", (): void => {
     it("Pulse Gen 4: check pwm available", async (): Promise<void> => {
@@ -119,10 +120,10 @@ describe("FanControlPwm", (): void => {
 
         const fanTempMap: Map<
             number,
-            { tempLabel: string; tempInput: SysFsPropertyInteger }
+            IFanTempData
         > = new Map<
             number,
-            { tempLabel: string; tempInput: SysFsPropertyInteger }
+            IFanTempData
         >();
         fanTempMap.set(1, {
             tempLabel: "cpu0",

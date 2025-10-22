@@ -552,7 +552,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
         const deviceNamesCheck: Map<string, string> = await this.getUserDeviceNames();
         const chosenName: string = deviceNamesCheck.get(this.selectedDeviceUUID);
         const hasName: boolean = chosenName !== undefined;
-        const dialogRef: MatDialogRef<DialogInputTextComponent, any> = this.dialog.open(DialogInputTextComponent, {
+        const dialogRef: MatDialogRef<DialogInputTextComponent, string> = this.dialog.open(DialogInputTextComponent, {
             minWidth: 350,
             data: {
                 title: $localize `:@@aqDialogSelectNameTitle:Device name`,

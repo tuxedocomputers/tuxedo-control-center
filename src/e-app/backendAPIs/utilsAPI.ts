@@ -84,8 +84,7 @@ ipcMain.handle('show-open-dialog', async (event: IpcMainInvokeEvent, arg: Electr
     });
 });
 
-// todo: make cleaner
-ipcMain.handle('get-path', (event: IpcMainInvokeEvent, arg: any): Promise<string>  => {
+ipcMain.handle('get-path', (event: IpcMainInvokeEvent, arg: "documents"): Promise<string>  => {
     return new Promise<string>((resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
         const requestedPath: string = app.getPath(arg);
         resolve(requestedPath);
@@ -93,7 +92,7 @@ ipcMain.handle('get-path', (event: IpcMainInvokeEvent, arg: any): Promise<string
 });
 
 
-ipcMain.on('show-tcc-window', (event: IpcMainEvent,): void => {
+ipcMain.on('show-tcc-window', (event: IpcMainEvent): void => {
     if(!tccWindow.isVisible()) {
         tccWindow.show();
     }

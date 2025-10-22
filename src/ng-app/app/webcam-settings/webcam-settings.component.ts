@@ -56,7 +56,7 @@ import { WebcamService } from "../webcam.service";
 export class WebcamSettingsComponent implements OnInit {
     public gridParams: IGridParams = GridParamsSettings;
 
-    public video: any;
+    public video: HTMLVideoElement;
 
     private timer: NodeJS.Timeout = null;
     private mutex: Mutex = new Mutex();
@@ -125,7 +125,11 @@ export class WebcamSettingsComponent implements OnInit {
     }
 
     public async ngOnInit(): Promise<void> {
-        this.video = document.getElementById("video")
+        const video = document.getElementById("video");
+
+        if (video instanceof HTMLVideoElement) {
+            this.video = video;
+        }
 
         this.webcamGuard.setLoadingStatus(true);
         // register callback for IPC signal from main

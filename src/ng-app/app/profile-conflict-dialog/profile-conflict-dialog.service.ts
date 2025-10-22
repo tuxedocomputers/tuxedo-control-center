@@ -54,7 +54,7 @@ export class ProfileConflictDialogService {
 
   public async openConflictModal(oldProfile: ITccProfile, importedProfile: ITccProfile,): Promise<IProfileConflictDialogResult>
     {
-        return new Promise<IProfileConflictDialogResult>((resolve: (value: IProfileConflictDialogResult | PromiseLike<IProfileConflictDialogResult>) => void, reject: (reason?: any) => void): void  => {
+        return new Promise<IProfileConflictDialogResult>((resolve: (value: IProfileConflictDialogResult | PromiseLike<IProfileConflictDialogResult>) => void, reject: (reason?: unknown) => void): void  => {
             this.open(oldProfile,importedProfile);
 
             this.closed().subscribe((confirmed: IProfileConflictDialogResult): void => {
