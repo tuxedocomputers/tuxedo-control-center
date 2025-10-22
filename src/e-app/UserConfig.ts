@@ -92,10 +92,15 @@ export class UserConfig {
             fs.readFile(this.configFile, (err: unknown, data: Buffer): void => {
                 if (err) {
                     reject(err);
-                } else {
+                }
+
+                try {
                     this.data = JSON.parse(data.toString());
                     this.validateValues();
                     resolve();
+                } catch (err: unknown) {
+                    console.error(`UserConfig: readConfig failed => ${err}`)
+                    this.data = {};
                 }
             });
         });
