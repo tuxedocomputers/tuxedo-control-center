@@ -136,11 +136,13 @@ export class UtilsService {
   }
 
   public formatCpuFrequency(frequency: number): string {
-    return this.decimalPipe.transform(frequency / 1000000, '1.1-1');
+    const frequencyGHz = frequency / 1000000
+    return frequencyGHz > 0 && frequencyGHz < 0.1 ? "<0.1" : this.decimalPipe.transform(frequencyGHz, '1.1-1');
   }
 
   public formatGpuFrequency(frequency: number): string {
-    return this.decimalPipe.transform(frequency / 1000, '1.1-1');
+    const frequencyGHz = frequency / 1000
+    return frequencyGHz > 0 && frequencyGHz < 0.1 ? "<0.1" :  this.decimalPipe.transform(frequencyGHz, '1.1-1');
   }
 
   public quit(): void
