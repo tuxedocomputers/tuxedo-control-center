@@ -1,1 +1,8 @@
 usr/share/metainfo/com.tuxedocomputers.tcc.metainfo.xml
+usr/share/polkit-1/actions/com.tuxedocomputers.tccd.policy
+usr/share/polkit-1/actions/com.tuxedocomputers.tomte.policy
+usr/share/dbus-1/system.d/com.tuxedocomputers.tccd.conf
+usr/lib/udev/rules.d/99-tuxedo-webcam.rules
+usr/share/applications/tuxedo-control-center.desktop
+etc/skel/.config/autostart/tuxedo-control-center-tray.desktop
+usr/bin/tuxedo-control-center
