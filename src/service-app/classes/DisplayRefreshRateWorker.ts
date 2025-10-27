@@ -24,7 +24,7 @@ import type {
     IDisplayMode,
 } from "../../common/models/DisplayFreqRes";
 import type { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
-import * as child_process from "child_process";
+import * as child_process from "node:child_process";
 import type { ITccProfile } from "src/common/models/TccProfile";
 import { execCommandAsync } from "../../common/classes/Utils";
 

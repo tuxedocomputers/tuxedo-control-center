@@ -18,7 +18,7 @@
  */
 
 const fs: typeof import("fs") = require("fs");
-import type { Dirent } from "fs";
+import type { Dirent } from "node:fs";
 
 export abstract class SysFsController {
 

@@ -19,9 +19,9 @@
 
 import { SysFsController } from './SysFsController';
 import { SysFsPropertyIntegerHex, SysFsPropertyString } from './SysFsProperties';
-import * as path from 'path';
-import * as fs from 'fs';
-import type { Dirent } from "fs";
+import * as path from 'node:path';
+import * as fs from 'node:fs';
+import type { Dirent } from "node:fs";
 
 export class UsbController extends SysFsController {
 

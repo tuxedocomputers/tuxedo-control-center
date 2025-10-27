@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as fs from 'fs';
+import * as fs from 'node:fs';
 
 export class UserConfig {
     private data: object;

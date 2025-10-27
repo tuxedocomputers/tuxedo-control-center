@@ -17,8 +17,8 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as fs from 'fs';
-import * as path from 'path';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 import { type ITccSettings, defaultSettings, deviceCustomSettings } from '../models/TccSettings';
 import { generateProfileId, type ITccProfile } from '../models/TccProfile';
 import { defaultProfiles } from '../models/profiles/LegacyProfiles';

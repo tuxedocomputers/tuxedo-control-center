@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as path from 'path';
+import * as path from 'node:path';
 import { LogicalCpuController, ScalingDriver } from './LogicalCpuController';
 import { SysFsPropertyInteger, SysFsPropertyNumList, SysFsPropertyBoolean, SysFsPropertyString } from './SysFsProperties';
 import { IntelPstateController } from './IntelPStateController';

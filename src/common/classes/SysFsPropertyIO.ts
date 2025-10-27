@@ -20,7 +20,7 @@
 const fs: typeof import("fs") = require("fs");
 const fsp: typeof import("fs").promises = require("fs").promises;
 import type { ISysFsProperty } from '../models/IDeviceProperty';
-import type { FSWatcher } from "fs";
+import type { FSWatcher } from "node:fs";
 
 /**
  * Base (abstract) IO class for communicating with devices in /sys

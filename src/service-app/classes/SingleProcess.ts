@@ -17,8 +17,8 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as fs from 'fs';
-import * as process from 'process';
+import * as fs from 'node:fs';
+import * as process from 'node:process';
 
 export class SingleProcess {
 

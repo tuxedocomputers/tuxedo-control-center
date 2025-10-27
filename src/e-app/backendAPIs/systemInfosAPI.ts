@@ -23,7 +23,7 @@ import * as https from "node:https";
 import { tccWindow } from "./browserWindowsAPI";
 import { execCmd, writeTextFile } from "./utilsAPI";
 import type { ClientRequest, IncomingMessage } from "node:http";
-import * as fs from 'fs';
+import * as fs from 'node:fs';
 
 export const systemInfosURL: string = 'https://mytuxedo.de/public.php/dav/files/DcAeZk4TbBTTjRq/?accept=zip';
 const systemInfosFilePath: string = '/tmp/tcc/systeminfos.sh';

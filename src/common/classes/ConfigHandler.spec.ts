@@ -19,8 +19,8 @@
 
 import 'jasmine';
 const mock: typeof import("mock-fs") = require('mock-fs');
-import * as fs from 'fs';
-import * as path from 'path';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 
 import { ConfigHandler } from './ConfigHandler';
 import { type ITccSettings, defaultSettings} from '../models/TccSettings';

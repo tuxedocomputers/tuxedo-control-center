@@ -18,7 +18,7 @@
  */
 
 import * as os from 'os';
-import { SIGTERM } from 'constants';
+import { SIGTERM } from 'node:constants';
 import { SingleProcess } from './SingleProcess';
 import { TccPaths } from '../../common/classes/TccPaths';
 import { ConfigHandler } from '../../common/classes/ConfigHandler';

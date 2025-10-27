@@ -17,9 +17,8 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as process from 'process';
-import * as readline from 'readline';
-import { SIGINT, SIGTERM } from 'constants';
+import * as process from 'node:process';
+import { SIGINT } from 'node:constants';
 
 const dataList: string[] = [];
 

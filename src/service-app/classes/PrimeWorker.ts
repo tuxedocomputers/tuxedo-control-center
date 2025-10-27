@@ -20,7 +20,7 @@
 import { DaemonWorker } from "./DaemonWorker";
 import type { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
 import { execCommandAsync, delay } from "../../common/classes/Utils";
-import * as fs from "fs";
+import * as fs from "node:fs";
 
 export class PrimeWorker extends DaemonWorker {
     private primeSupported: Boolean;

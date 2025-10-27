@@ -1,7 +1,7 @@
 
-import * as fsp from 'fs/promises';
+import * as fsp from 'node:fs/promises';
 import * as util from 'util';
-import * as child_process from 'child_process';
+import * as child_process from 'node:child_process';
 const exec = util.promisify(child_process.exec);
 
 function printResult(topic: string, success: boolean) {

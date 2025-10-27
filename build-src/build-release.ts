@@ -18,7 +18,7 @@
  */
 
 import * as util from 'util';
-import * as child_process from 'child_process';
+import * as child_process from 'node:child_process';
 const execp = util.promisify(child_process.exec);
 
 const tccPackage = require('../package.json');

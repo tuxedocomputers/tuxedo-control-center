@@ -17,8 +17,8 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as path from 'path';
-import * as fs from 'fs';
+import * as path from 'node:path';
+import * as fs from 'node:fs';
 import * as xliff from 'xliff';
 import { DefaultProfileIDs, type IProfileTextMappings, LegacyDefaultProfileIDs } from '../common/models/DefaultProfiles';
 

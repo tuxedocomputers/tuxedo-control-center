@@ -24,7 +24,7 @@ import {
     SysFsPropertyInteger,
     SysFsPropertyString,
 } from "../../common/classes/SysFsProperties";
-import * as path from "path";
+import * as path from "node:path";
 import { IntelRAPLController } from "../../common/classes/IntelRAPLController";
 import { PowerController } from "../../common/classes/PowerController";
 import {

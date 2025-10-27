@@ -21,7 +21,7 @@ import 'jasmine';
 const mock: typeof import("mock-fs") = require('mock-fs');
 
 import { DriveController } from "./DriveController";
-import * as child_process from 'child_process';
+const child_process = require('node:child_process');
 import type { IDrive } from '../models/IDrive';
 
 const sizeDriveSda: number = 488397168;

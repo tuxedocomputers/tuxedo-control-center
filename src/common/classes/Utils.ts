@@ -17,10 +17,10 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type { Dirent } from "fs";
+import type { Dirent } from "node:fs";
 
-const fs: typeof import("fs") = require("fs");
-const child_process: typeof import("child_process") = require("child_process");
+const fs: typeof import("fs") = require("node:fs");
+const child_process: typeof import("child_process") = require("node:child_process");
 
 
 export function getDirectories(source: string): string[] {
