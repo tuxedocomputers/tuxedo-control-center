@@ -28,45 +28,41 @@ export class SingleProcess {
      * Start process
      */
     protected async start(): Promise<boolean> {
-        return new Promise<boolean>(async (resolve: (value: boolean | PromiseLike<boolean>) => void): Promise<void> => {
-            if (this.isRunning()) {
-                resolve(false);
-            } else {
-                const result: boolean = this.writePid(process.pid);
-                resolve(result);
-            }
-        });
+        if (this.isRunning()) {
+            return false;
+        } else {
+            const result: boolean = this.writePid(process.pid);
+            return result;
+        }
     }
 
     /**
      * Stop process
      */
     protected async stop(): Promise<boolean> {
-        return new Promise<boolean>(async (resolve: (value: boolean | PromiseLike<boolean>) => void): Promise<void> => {
-            const pid: number = this.readPid();
+        const pid: number = this.readPid();
 
-            if (!Number.isNaN(pid)) { // If there is a PID in file
-                if (this.isRunning()) {
-                    try {
-                        process.kill(pid, 'SIGINT');
-                    } catch (err: unknown) {
-                        console.error(`SingleProcess: stop failed => ${err}`)
-                        resolve(false);
-                    }
+        if (!Number.isNaN(pid)) { // If there is a PID in file
+            if (this.isRunning()) {
+                try {
+                    process.kill(pid, 'SIGINT');
+                } catch (err: unknown) {
+                    console.error(`SingleProcess: stop failed => ${err}`)
+                    return false;
                 }
             }
+        }
 
-            // Stay a while... and listen, if process quits in time
-            const nrRetries: number = 50;
-            const retryDelay: number = 100;
-            let count: number = 0;
-            while (this.isRunning() && count < nrRetries) { await new Promise(done => setTimeout(done, retryDelay)); count += 1; }
-            if (count >= nrRetries) {
-                resolve(false);
-            } else {
-                resolve(true);
-            }
-        });
+        // Stay a while... and listen, if process quits in time
+        const nrRetries: number = 50;
+        const retryDelay: number = 100;
+        let count: number = 0;
+        while (this.isRunning() && count < nrRetries) { await new Promise(done => setTimeout(done, retryDelay)); count += 1; }
+        if (count >= nrRetries) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     /**

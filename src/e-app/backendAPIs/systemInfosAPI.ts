@@ -119,7 +119,5 @@ async function runSystemInfos(ticketNumber: string): Promise<void> {
       }
 
 ipcMain.handle('run-systeminfos', async (event: IpcMainInvokeEvent, ticketNumber: string): Promise<void> => {
-    return new Promise<void>(async (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): Promise<void> => {
-        resolve(runSystemInfos(ticketNumber));
-    });
+    return runSystemInfos(ticketNumber);
 });

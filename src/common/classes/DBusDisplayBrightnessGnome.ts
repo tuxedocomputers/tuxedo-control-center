@@ -68,25 +68,22 @@ export class DBusDisplayBrightnessGnome {
     }
 
     public async isAvailable(): Promise<boolean> {
+        try {
+            const isGnome: boolean = this.isGnome()
 
-        return new Promise<boolean>(async (resolve: (value: boolean | PromiseLike<boolean>) => void): Promise<void> => {
-            try {
-                const isGnome: boolean = this.isGnome()
-
-                if (isGnome) {
-                    const iface: dbus.ClientInterface = await this.getInterface();
-                    if (iface === undefined) {
-                        resolve(false);
-                    } else {
-                        resolve(true);
-                    }
+            if (isGnome) {
+                const iface: dbus.ClientInterface = await this.getInterface();
+                if (iface === undefined) {
+                    return false;
+                } else {
+                    return true;
                 }
-                resolve(false);
-            } catch (err: unknown) {
-                console.error(`DBusDisplayBrightnessGnome: isAvailable failed => ${err}`)
-                resolve(false);
             }
-        });
+            return false;
+        } catch (err: unknown) {
+            console.error(`DBusDisplayBrightnessGnome: isAvailable failed => ${err}`)
+            return false;
+        }
     }
 
     public setOnPropertiesChanged(f: OnChangedFunction): void {
@@ -117,35 +114,32 @@ export class DBusDisplayBrightnessGnome {
     }
 
     public async getBrightness(): Promise<number> {
-        return new Promise<number>(async (resolve: (value: number | PromiseLike<number>) => void, reject: (reason?: unknown) => void): Promise<void> => {
-            try {
-                const iface: dbus.ClientInterface = await this.getInterface();
-                if (iface !== undefined) {
-                    const result: dbus.Variant = await iface.Get(this.propertyInterface, this.methodName);
-                    resolve(result.value);
-                } else {
-                    reject(new Error('Interface not available'));
-                }
-            } catch (err: unknown) {
-                console.error(`DBusDisplayBrightnessGnome: getBrightness failed => ${err}`)
-                reject(err);
+        try {
+            const iface: dbus.ClientInterface = await this.getInterface();
+            if (iface !== undefined) {
+                const result: dbus.Variant = await iface.Get(this.propertyInterface, this.methodName);
+                return result.value;
+            } else {
+                throw(new Error('Interface not available'));
             }
-        });
+        } catch (err: unknown) {
+            console.error(`DBusDisplayBrightnessGnome: getBrightness failed => ${err}`)
+            throw(err);
+        }
     }
+
     public async setBrightness(valuePercent: number): Promise<void> {
-        return new Promise<void>(async (resolve: (value?: void) => void, reject: (reason?: unknown) => void): Promise<void> => {
-            try {
-                const iface: dbus.ClientInterface = await this.getInterface();
-                if (iface !== undefined) {
-                    await iface.Set(this.propertyInterface, this.methodName, new dbus.Variant(this.methodReturnType, valuePercent));
-                    resolve();
-                } else {
-                    reject(new Error('Interface not available'));
-                }
-            } catch (err: unknown) {
-                console.error(`DBusDisplayBrightnessGnome: setBrightness failed => ${err}`)
-                reject(err);
+        try {
+            const iface: dbus.ClientInterface = await this.getInterface();
+            if (iface !== undefined) {
+                await iface.Set(this.propertyInterface, this.methodName, new dbus.Variant(this.methodReturnType, valuePercent));
+                return;
+            } else {
+                throw(new Error('Interface not available'));
             }
-        });
+        } catch (err: unknown) {
+            console.error(`DBusDisplayBrightnessGnome: setBrightness failed => ${err}`)
+            throw(err);
+        }
     }
 }

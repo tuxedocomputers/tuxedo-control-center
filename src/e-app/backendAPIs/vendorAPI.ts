@@ -24,7 +24,5 @@ import { VendorService } from "../../common/classes/Vendor.service";
 const vendorService: VendorService = new VendorService();
 
 ipcMain.handle('get-cpu-vendor', async (event: IpcMainEvent, status: any): Promise<string> => {
-    return new Promise<string>(async (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): Promise<void> => {
-        resolve(vendorService.getCpuVendor());
-    });
+    return vendorService.getCpuVendor();
 });

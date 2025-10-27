@@ -23,111 +23,91 @@ import { execCmd, execFile } from './utilsAPI';
 
 // todo: refactor
 async function resetToDefaults(): Promise<boolean> {
-    return new Promise<boolean>(async (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): Promise<void> => {
-        const command1: string = "pkexec tuxedo-tomte AUTOMATIC";
-        const command2: string = "pkexec tuxedo-tomte unblock all";
-        const command3: string = "pkexec tuxedo-tomte reconfigure all";
-        let res1: {
-            data: string;
-            error: unknown;
-        }
-        let res2: {
-            data: string;
-            error: unknown;
-        };
-        let res3: {
-            data: string;
-            error: unknown;
-        };
-        try
-        {
-            res1 = await execFile(command1);
-            res2 = await execFile(command2);
-            res3 = await execFile(command3);
-            resolve(true);
-        }
-        catch(err: unknown)
-        {
-            console.error(`One of the reset commands failed, here is their output: Function 1 Command: ${command1} Results: ${res1} Function 2 Command: ${command2} Results: ${res2} Function 3 Command: ${command3} Results: ${res3}`);
-            resolve(false);
-        }
-    });
+    const command1: string = "pkexec tuxedo-tomte AUTOMATIC";
+    const command2: string = "pkexec tuxedo-tomte unblock all";
+    const command3: string = "pkexec tuxedo-tomte reconfigure all";
+
+    try
+    {
+        await execFile(command1);
+        await execFile(command2);
+        await execFile(command3);
+        return true;
+    }
+    catch(err: unknown)
+    {
+        console.error(`tomteAPI: resetToDefaults failed => ${err}`)
+        return false;
+    }
 }
 
 async function getModuleDescription(moduleName: string, langId: string): Promise<string> {
-    return new Promise<string>(async (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): Promise<void> => {
         const command: string = `LANGUAGE=${langId} tuxedo-tomte description ${moduleName}`;
     try
     {
         const results: string = await execCmd(command);
-        resolve(results);
+        return results;
     }
     catch (err: unknown)
     {
         console.error(`tomteAPI: getModuleDescription failed => ${err}`)
-        resolve("");
+        throw(err);
     }
-    });
 }
 
 async function removeModule(moduleName: string): Promise<void> {
     const command: string = "yes | pkexec tuxedo-tomte remove " + moduleName;
-    return new Promise<void>(async (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): Promise<void> => {
-        await execCmd(command).then((): void => {
-            resolve();
-        }).catch((err: unknown): void => {
-            console.error(`tomteAPI: removeModule failed => ${err}`)
-            reject();
-        })
-    });
+
+    await execCmd(command).then((): void => {
+        return;
+    }).catch((err: unknown): void => {
+        console.error(`tomteAPI: removeModule failed => ${err}`)
+        throw(err);
+    })
 }
 
 async function installModule(moduleName: string): Promise<void> {
     const command: string = "pkexec tuxedo-tomte configure " + moduleName;
-    return new Promise<void>(async (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): Promise<void> => {
-        await execCmd(command).then((): void => {
-            resolve();
-        }).catch((err: unknown): void => {
-            console.error(`tomteAPI: installModule failed => ${err}`)
-            reject();
-        })
-    });
+
+    await execCmd(command).then((): void => {
+        return;
+    }).catch((err: unknown): void => {
+        console.error(`tomteAPI: installModule failed => ${err}`)
+        throw(err);
+    })
 }
 
 async function unBlockModule(moduleName: string): Promise<void> {
     const command: string = "pkexec tuxedo-tomte unblock " + moduleName;
-    return new Promise<void>(async (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): Promise<void> => {
-        await execCmd(command).then((): void => {
-            resolve();
-        }).catch((err: unknown): void => {
-            console.error(`tomteAPI: unBlockModule failed => ${err}`)
-            reject();
-        })
-    });
+
+    await execCmd(command).then((): void => {
+        return;
+    }).catch((err: unknown): void => {
+        console.error(`tomteAPI: unBlockModule failed => ${err}`)
+        throw(err);
+    })
 }
 
 async function blockModule(moduleName: string): Promise<void> {
     const command: string = `pkexec tuxedo-tomte block ${moduleName}`;
-    return new Promise<void>(async (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): Promise<void> => {
-        await execCmd(command).then((): void => {
-            resolve();
-        }).catch((err: unknown): void => {
-            console.error(`tomteAPI: blockModule failed => ${err}`)
-            reject();
-        })
-    });
+
+    await execCmd(command).then((): void => {
+        return;
+    }).catch((err: unknown): void => {
+        console.error(`tomteAPI: blockModule failed => ${err}`)
+        throw(err);
+    })
 }
 
 async function setMode(mode: string): Promise<void> {
     const command: string = `pkexec tuxedo-tomte ${mode}`;
-    return new Promise<void>(async (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): Promise<void> => {
-        await execCmd(command).then((): void => {
-            resolve();
-        }).catch((err: unknown): void => {
-            console.error(`tomteAPI: setMode failed => ${err}`)
-            reject();
-        })
-    });
+
+    await execCmd(command).then((): void => {
+        return;
+    }).catch((err: unknown): void => {
+        console.error(`tomteAPI: setMode failed => ${err}`)
+        throw(err);
+    })
 }
 
 
@@ -170,21 +150,19 @@ function parseTomteListJson(rawTomteListOutput: string | undefined): ITomteInfor
     }
 
 async function getTomteInformation(): Promise<ITomteInformation> {
-        return new Promise<ITomteInformation>(async (resolve: (value: ITomteInformation | PromiseLike<ITomteInformation>) => void, reject: (reason?: unknown) => void): Promise<void> => {
-            const command: string = "tuxedo-tomte listjson"
-            let results: string;
-            try {
-                results = await execCmd(`${command}`);
-                results = results.replace(/^[^\{]*\{/, "{"); // delete everything up to the first occurance of {
-            }
-            catch {
-                results = "";
-            }
-            finally {
-                const tomteInformation: ITomteInformation = parseTomteListJson(results);
-                resolve(tomteInformation);
-            }
-    });
+    const command: string = "tuxedo-tomte listjson"
+    let results: string;
+    try {
+        results = await execCmd(`${command}`);
+        results = results.replace(/^[^\{]*\{/, "{"); // delete everything up to the first occurance of {
+    }
+    catch {
+        results = "";
+    }
+    finally {
+        const tomteInformation: ITomteInformation = parseTomteListJson(results);
+        return tomteInformation;
+    }
 }
 export const tomteHandlers: Map<string, (...args: any[]) => any> = new Map<string, (...args: any[]) => any>()
     .set(TomteAPIFunctions.resetToDefaults, (): Promise<boolean> => {

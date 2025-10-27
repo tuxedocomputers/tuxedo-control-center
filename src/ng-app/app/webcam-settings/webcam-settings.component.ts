@@ -232,27 +232,26 @@ export class WebcamSettingsComponent implements OnInit {
 
     private async setWebcamDeviceInformation(): Promise<WebcamDevice[]> {
         const devices: (InputDeviceInfo | MediaDeviceInfo)[] = await this.getWebcamDevices();
-        return new Promise<WebcamDevice[]>(async (resolve: (value: WebcamDevice[] | PromiseLike<WebcamDevice[]>) => void, reject: (reason?: unknown) => void): Promise<void> => {
-            const dropdownData: WebcamDevice[] = [];
-            const webcamPaths: WebcamPath = await this.getWebcamPaths();
-            if (devices?.length !== 0 && webcamPaths !== null) {
-                for (const [webcamPath, webcamId] of Object.entries(
-                    webcamPaths
-                )) {
-                    const [label, deviceId] = this.getDeviceData(
-                        devices,
-                        webcamId
-                    );
-                    dropdownData.push({
-                        label: label,
-                        deviceId: deviceId,
-                        id: webcamId,
-                        path: webcamPath,
-                    });
-                }
+
+        const dropdownData: WebcamDevice[] = [];
+        const webcamPaths: WebcamPath = await this.getWebcamPaths();
+        if (devices?.length !== 0 && webcamPaths !== null) {
+            for (const [webcamPath, webcamId] of Object.entries(
+                webcamPaths
+            )) {
+                const [label, deviceId] = this.getDeviceData(
+                    devices,
+                    webcamId
+                );
+                dropdownData.push({
+                    label: label,
+                    deviceId: deviceId,
+                    id: webcamId,
+                    path: webcamPath,
+                });
             }
-            resolve(dropdownData);
-        });
+        }
+        return dropdownData;
     }
 
     private async webcamNotAvailabledDialog(): Promise<void> {
@@ -264,18 +263,15 @@ export class WebcamSettingsComponent implements OnInit {
         this.utils.confirmDialog(config).then();
     }
 
-    private getWebcamSettings(): Promise<string> {
-        return new Promise<string>(async (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): Promise<void> => {
-            try {
-                const data: string = await window.webcamAPI.getSelectedWebcamSettings(this.selectedWebcam.path);
-                resolve(data);
-            } catch (err: unknown) {
-                console.error(`webcam-settings: getWebcamSettings failed => ${err}`);
-                this.mutex.release();
-                this.webcamNotAvailabledDialog();
-                await this.reloadWebcamList(undefined);
-            }
-        });
+    private async getWebcamSettings(): Promise<string> {
+        try {
+            return window.webcamAPI.getSelectedWebcamSettings(this.selectedWebcam.path);
+        } catch (err: unknown) {
+            console.error(`webcam-settings: getWebcamSettings failed => ${err}`);
+            this.mutex.release();
+            this.webcamNotAvailabledDialog();
+            await this.reloadWebcamList(undefined);
+        }
     }
 
     private handleVideoEnded(): void {

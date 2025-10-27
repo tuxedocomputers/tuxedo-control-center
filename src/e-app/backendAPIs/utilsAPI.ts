@@ -78,10 +78,7 @@ ipcMain.handle('show-save-dialog', async (event: IpcMainInvokeEvent, arg: Electr
 
 
 ipcMain.handle('show-open-dialog', async (event: IpcMainInvokeEvent, arg: Electron.OpenDialogOptions): Promise<OpenDialogReturnValue> => {
-    return new Promise<OpenDialogReturnValue>(async (resolve: (value: OpenDialogReturnValue | PromiseLike<OpenDialogReturnValue>) => void, reject: (reason?: unknown) => void): Promise<void> => {
-        const results: Promise<OpenDialogReturnValue> = dialog.showOpenDialog(arg);
-        resolve(results);
-    });
+    return dialog.showOpenDialog(arg);
 });
 
 ipcMain.handle('get-path', (event: IpcMainInvokeEvent, arg: "documents"): Promise<string>  => {

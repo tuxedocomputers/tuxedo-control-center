@@ -39,18 +39,14 @@ async function changeCryptPassword(newPassword: string, oldPassword: string, con
 }
 
 ipcMain.handle('change-crypt-password', async (event: IpcMainInvokeEvent, newPassword: string, oldPassword: string, confirmPassword: string): Promise<string> => {
-    return new Promise<string>(async (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): Promise<void> => {
-        resolve(changeCryptPassword(newPassword, oldPassword, confirmPassword));
-    });
+    return changeCryptPassword(newPassword, oldPassword, confirmPassword)
 });
 
 ipcMain.handle('drive-controller-get-drives', (event: IpcMainInvokeEvent): Promise<IDrive[]> => {
-    return new Promise<IDrive[]>(async (resolve: (value: IDrive[] | PromiseLike<IDrive[]>) => void, reject: (reason?: unknown) => void): Promise<void> => {
-        try {
-            resolve( DriveController.getDrives());
-        } catch (err: unknown) {
-          console.error(`cryptAPI: drive-controller-get-drives failed => ${err}`)
-          reject(err);
-        }
-      });
-  });
+    try {
+        return DriveController.getDrives();
+    } catch (err: unknown) {
+        console.error(`cryptAPI: drive-controller-get-drives failed => ${err}`)
+        throw(err);
+    }
+});

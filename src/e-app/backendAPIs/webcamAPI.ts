@@ -119,30 +119,25 @@ export const webcamHandlers: Map<string, (...args: any[]) => any> = new Map<stri
     })
 
     .set(WebcamAPIFunctions.getSelectedWebcamSettings, (selectedWebcamPath: string): Promise<string> => {
-        return new Promise<string>(async (resolve: (value: string | PromiseLike<string>) => void): Promise<void> => {
-            resolve(await execCmd(`python3 ${getWebcamCtrlPythonPath()} -d ${selectedWebcamPath} -j`))
-        });
+        return execCmd(`python3 ${getWebcamCtrlPythonPath()} -d ${selectedWebcamPath} -j`);
     })
 
     .set(WebcamAPIFunctions.executeWebcamCtrls, (devicePath: string, parameter: string, value: string): Promise<string> => {
-        return new Promise<string>(async (resolve: (value: string | PromiseLike<string>) => void): Promise<void> => {
-            resolve(await execCmd(`python3 ${getWebcamCtrlPythonPath()} -d ${devicePath} -c ${parameter}=${value}`))
-        });
+       return execCmd(`python3 ${getWebcamCtrlPythonPath()} -d ${devicePath} -c ${parameter}=${value}`);
     })
 
     .set(WebcamAPIFunctions.executeFilteredWebcamCtrls, async (devicePath: string, filteredControls: string): Promise<string> => {
-        return new Promise<string>(async (resolve: (value: string | PromiseLike<string>) => void): Promise<void> => {
-            resolve(await execCmd(
-                `python3 ${getWebcamCtrlPythonPath()} -d ${devicePath} -c ${filteredControls}`
-                ))
-        });
+       return execCmd(`python3 ${getWebcamCtrlPythonPath()} -d ${devicePath} -c ${filteredControls}`);
     })
 
     .set(WebcamAPIFunctions.getWebcamPaths, async (): Promise<string> => {
-        return new Promise<string>(async (resolve: (value: string | PromiseLike<string>) => void): Promise<void> => {
-            const result: { data: string; error: unknown } = await execFile(`python3 ${getWebcamCtrlPythonPath()} -i`);
-            resolve(result.data);
-            });
+        const result: { data: string; error: unknown } = await execFile(`python3 ${getWebcamCtrlPythonPath()} -i`);
+
+        if (result.error) {
+            throw("webcamAPI: getWebcamPaths failed");
+        }
+
+        return result.data;
     })
 
     .set(WebcamAPIFunctions.writeConfig, (webcamSettings: WebcamPreset[]): Promise<boolean> => {

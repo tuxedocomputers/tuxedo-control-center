@@ -59,7 +59,6 @@ export async function displayBrightnessGnomeCleanup(): Promise<void> {
 }
 
 async function initDbusDisplayBrightness(): Promise<void> {
-    return new Promise<void>(async (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): Promise<void> => {
     if (sessionBus === undefined) {
     displayBrightnessNotSupported = true;
     } else {
@@ -86,8 +85,6 @@ async function initDbusDisplayBrightness(): Promise<void> {
         }
     );
     }
-    resolve();
-});
 }
 
 async function setDisplayBrightness(valuePercent: number): Promise<void> {
