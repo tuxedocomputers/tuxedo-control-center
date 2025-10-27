@@ -24,7 +24,7 @@
     "build-ng-prod": "npm run copy-changelog && ng build --configuration production --aot true --optimization true --build-optimizer true",
     "build-electron": "tsc -p ./src/e-app",
     "build-service": "tsc -p ./src/service-app && cp ./src/package.json ./dist/tuxedo-control-center/service-app/package.json && run-s bundle-service",
-    "bundle-service": "cp ./build/Release/TuxedoIOAPI.node ./dist/tuxedo-control-center/service-app/native-lib && pkg --target node24-linux-x64 --output ./dist/tuxedo-control-center/data/service/tccd ./dist/tuxedo-control-center/service-app/package.json",
+    "bundle-service": "cp ./build/Release/TuxedoIOAPI.node ./dist/tuxedo-control-center/service-app/native-lib && pkg --compress=Brotli --target node24-linux-x64 --output ./dist/tuxedo-control-center/data/service/tccd ./dist/tuxedo-control-center/service-app/package.json",
     "build-native": "node-gyp configure && node-gyp rebuild",
     "copy-files": "run-s copy-package-json copy-dist-files copy-cameractls copy-udev-rule",
     "copy-package-json": "cp ./src/package.json ./dist/tuxedo-control-center/package.json",
