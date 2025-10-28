@@ -62,13 +62,14 @@ if (buildSteps.length === 0) {
  * Function for create the deb Package
  */
 async function buildDeb(filenameAddition: string): Promise<void> {
-    const config = {
+    const config: builder.Configuration = {
         appId: 'tuxedocontrolcenter',
         artifactName: '${productName}_${version}' + filenameAddition + '.${ext}',
         directories: {
             output: './dist/packages'
         },
 
+        compression: "maximum",
         files: [
             distSrc + '/**/*'
         ],
@@ -96,6 +97,7 @@ async function buildDeb(filenameAddition: string): Promise<void> {
             icon: distSrc + '/data/dist-data/tuxedo-control-center_256.svg',
         },
         deb: {
+            compression: "xz",
             depends: ['tuxedo-drivers (>= 4.0.0) | tuxedo-keyboard (>= 3.1.2)', 'libayatana-appindicator3-1'],
             category: 'System',
             afterInstall: "./build-src/after_install.sh",
@@ -133,6 +135,8 @@ async function buildRpm(filenameAddition: string): Promise<void> {
         directories: {
             output: './dist/packages'
         },
+
+        compression: "maximum",
         files: [
             distSrc + '/**/*'
         ],
@@ -158,6 +162,7 @@ async function buildRpm(filenameAddition: string): Promise<void> {
             icon: distSrc + '/data/dist-data/tuxedo-control-center_256.svg',
         },
         rpm: {
+            compression: "xz",
             depends: ['(tuxedo-drivers >= 4.0.0 or tuxedo-keyboard >= 3.1.2)', '(libayatana-appindicator3-1 or libappindicator or libappindicator3-1)'],
             afterInstall: './build-src/dummy.sh',
             afterRemove: './build-src/after_remove.sh',
