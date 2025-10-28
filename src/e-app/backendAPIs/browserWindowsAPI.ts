@@ -145,6 +145,7 @@ export async function createPrimeWindow(langId: string, primeSelectMode: string)
         "..",
         "..",
         "ng-app",
+        "browser",
         langId,
         "index.html"
     );
@@ -211,7 +212,7 @@ async function createTccWindow(langId: string, module?: string): Promise<void> {
             console.error('Failed to set sensor data collection status after multiple attempts')
         }
     });
-    const indexPath: string = path.join(__dirname, '..', '..', '..', 'ng-app', langId, 'index.html');
+    const indexPath: string = path.join(__dirname, '..', '..', '..', 'ng-app', 'browser', langId, 'index.html');
     if (module !== undefined) {
         await tccWindow.loadFile(indexPath, { hash: '/' + module });
     } else {
@@ -265,6 +266,7 @@ export async function createWebcamPreview(langId: string, arg: WebcamConstraints
         "..",
         "..",
         "ng-app",
+        "browser",
         langId,
         "index.html"
     );

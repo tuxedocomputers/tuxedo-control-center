@@ -21,11 +21,10 @@
       "prefix": "app",
       "architect": {
         "build": {
-          "builder": "@angular-devkit/build-angular:browser",
+          "builder": "@angular-devkit/build-angular:application",
           "options": {
             "outputPath": "dist/tuxedo-control-center/ng-app",
             "index": "src/ng-app/index.html",
-            "main": "src/ng-app/main.ts",
             "polyfills": ["zone.js", "src/ng-app/process.ts"],
             "tsConfig": "tsconfig.app.json",
             "aot": true,
@@ -58,8 +57,6 @@
               "sourceMap": false,
               "namedChunks": false,
               "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": false,
               "budgets": [
                 {
                   "type": "initial",

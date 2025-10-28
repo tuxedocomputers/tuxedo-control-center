@@ -19,7 +19,6 @@
 
 import type { ITccFanTableEntry } from "../models/TccFanTable";
 const fsp: typeof import("fs").promises = require("fs").promises;
-import * as path from "path";
 
 async function interpolatePoints(
     points: ITccFanTableEntry[],
@@ -78,12 +77,14 @@ export function manageCriticalTemperature(temp: number, speed: number): number {
 
 export async function getHwmonPathWithName(name: string): Promise<string> {
     try {
-        const basePath = "/sys/class/hwmon/";
+        const basePath = "/sys/class/hwmon";
         const hwmonDirs: string[] = await fsp.readdir(basePath);
 
         for (const dirName of hwmonDirs) {
-            const dirPath: string = path.join(basePath, dirName);
-            const nameFilePath: string = path.join(dirPath, "name");
+            // can't use window.ipc, import "path" or node:path
+            const dirPath: string = `${basePath}/${dirName}`;
+            // example: /sys/class/hwmon/hwmon4/name
+            const nameFilePath: string = `${dirPath}/name`;
 
             try {
                 const content: string = await fsp.readFile(

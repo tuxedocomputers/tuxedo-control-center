@@ -17,8 +17,6 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import "@angular/localize/init";
-
 import {
     Component,
     EventEmitter,
