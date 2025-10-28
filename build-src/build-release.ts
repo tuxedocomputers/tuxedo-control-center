@@ -22,6 +22,8 @@ import * as child_process from 'node:child_process';
 const execp = util.promisify(child_process.exec);
 
 const tccPackage = require('../package.json');
+const packageName = tccPackage.name;
+const packageVersion = tccPackage.version;
 
 async function getGitDescribe() {
     return (await execp("git describe")).stdout.trim();
@@ -37,10 +39,7 @@ async function setVersion(version: string) {
 }
 
 async function main() {
-
     let automaticVersion = false;
-    let isStart = false;
-    let isEnd = false;
 
     process.argv.forEach((parameter, index, array) => {
         if (parameter.includes('autoversion')) {
@@ -48,10 +47,9 @@ async function main() {
         }
     });
 
-    const previousVersion = tccPackage.version;
     try {
+        let filenameAddition: string = "";
 
-        let filenameAddition = '';
         if (automaticVersion) {
             const gitDescribe = await getGitDescribe();
             const gitBranch = await getCurrentBranch();
@@ -72,14 +70,13 @@ async function main() {
         console.log((await execp("npm run build-prod")).stdout);
         console.log('Run electron-builder');
         console.log((await execp(`npm run electron-builder "fnameadd=${filenameAddition}"`)).stdout);
-
     } catch (err) {
         console.log('Error on build => ' + err);
         process.exit(1);
     } finally {
         if (automaticVersion) {
-            console.log(`Restore version: '${previousVersion}' `);
-            await setVersion(previousVersion);
+            console.log(`Restore version: '${packageVersion}' `);
+            await setVersion(packageVersion);
         }
     }
 }
