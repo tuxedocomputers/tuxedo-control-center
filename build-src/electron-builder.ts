@@ -64,37 +64,36 @@ if (buildSteps.length === 0) {
 async function buildDeb(filenameAddition: string): Promise<void> {
     const config: builder.Configuration = {
         appId: 'tuxedocontrolcenter',
-        artifactName: '${productName}_${version}' + filenameAddition + '.${ext}',
+        artifactName: `\${productName}_\${version}${filenameAddition}.\${ext}`,
         directories: {
             output: './dist/packages'
         },
-
         compression: "maximum",
         files: [
-            distSrc + '/**/*'
+            `${distSrc}/**/*`
         ],
         extraResources: [
-            distSrc + '/data/service/tccd',
-            distSrc + '/data/service/TuxedoIOAPI.node',
-            distSrc + '/data/CHANGELOG.md',
-            distSrc + '/data/dist-data/tccd.service',
-            distSrc + '/data/dist-data/tccd-sleep.service',
-            distSrc + '/data/dist-data/tuxedo-control-center_256.svg',
-            distSrc + '/data/dist-data/tuxedo-control-center.desktop',
-            distSrc + '/data/dist-data/tuxedo-control-center-tray.desktop',
-            distSrc + '/data/dist-data/com.tuxedocomputers.tccd.policy',
-            distSrc + '/data/dist-data/com.tuxedocomputers.tccd.conf',
-            distSrc + '/data/camera/cameractrls.py',
-            distSrc + '/data/dist-data/99-webcam.rules',
-            distSrc + '/data/dist-data/com.tuxedocomputers.tomte.policy',
-            distSrc + '/data/camera/v4l2_kernel_names.json'
+            `${distSrc}/data/service/tccd`,
+            `${distSrc}/data/service/TuxedoIOAPI.node`,
+            `${distSrc}/data/CHANGELOG.md`,
+            `${distSrc}/data/dist-data/tccd.service`,
+            `${distSrc}/data/dist-data/tccd-sleep.service`,
+            `${distSrc}/data/dist-data/tuxedo-control-center_256.svg`,
+            `${distSrc}/data/dist-data/tuxedo-control-center.desktop`,
+            `${distSrc}/data/dist-data/tuxedo-control-center-tray.desktop`,
+            `${distSrc}/data/dist-data/com.tuxedocomputers.tccd.policy`,
+            `${distSrc}/data/dist-data/com.tuxedocomputers.tccd.conf`,
+            `${distSrc}/data/camera/cameractrls.py`,
+            `${distSrc}/data/dist-data/99-webcam.rules`,
+            `${distSrc}/data/dist-data/com.tuxedocomputers.tomte.policy`,
+            `${distSrc}/data/camera/v4l2_kernel_names.json`
         ],
         linux: {
             target: [
                 'deb'
             ],
             category: 'System',
-            icon: distSrc + '/data/dist-data/tuxedo-control-center_256.svg',
+            icon: `${distSrc}/data/dist-data/tuxedo-control-center_256.svg`,
         },
         deb: {
             compression: "xz",
@@ -131,35 +130,34 @@ async function buildDeb(filenameAddition: string): Promise<void> {
 async function buildRpm(filenameAddition: string): Promise<void> {
     const config: builder.Configuration = {
         appId: 'tuxedocontrolcenter',
-        artifactName: '${productName}_${version}' + filenameAddition + '.${ext}',
+        artifactName: `\${productName}_\${version}${filenameAddition}.\${ext}`,
         directories: {
             output: './dist/packages'
         },
-
         compression: "maximum",
         files: [
-            distSrc + '/**/*'
+            `${distSrc}/**/*`
         ],
         extraResources: [
-            distSrc + '/data/service/tccd',
-            distSrc + '/data/service/TuxedoIOAPI.node',
-            distSrc + '/data/dist-data/tccd.service',
-            distSrc + '/data/dist-data/tccd-sleep.service',
-            distSrc + '/data/dist-data/tuxedo-control-center_256.svg',
-            distSrc + '/data/dist-data/tuxedo-control-center.desktop',
-            distSrc + '/data/dist-data/tuxedo-control-center-tray.desktop',
-            distSrc + '/data/dist-data/com.tuxedocomputers.tccd.policy',
-            distSrc + '/data/dist-data/com.tuxedocomputers.tccd.conf',
-            distSrc + '/data/camera/cameractrls.py',
-            distSrc + '/data/camera/v4l2_kernel_names.json',
-            distSrc + '/data/dist-data/99-webcam.rules'
+            `${distSrc}/data/service/tccd`,
+            `${distSrc}/data/service/TuxedoIOAPI.node`,
+            `${distSrc}/data/dist-data/tccd.service`,
+            `${distSrc}/data/dist-data/tccd-sleep.service`,
+            `${distSrc}/data/dist-data/tuxedo-control-center_256.svg`,
+            `${distSrc}/data/dist-data/tuxedo-control-center.desktop`,
+            `${distSrc}/data/dist-data/tuxedo-control-center-tray.desktop`,
+            `${distSrc}/data/dist-data/com.tuxedocomputers.tccd.policy`,
+            `${distSrc}/data/dist-data/com.tuxedocomputers.tccd.conf`,
+            `${distSrc}/data/camera/cameractrls.py`,
+            `${distSrc}/data/camera/v4l2_kernel_names.json`,
+            `${distSrc}/data/dist-data/99-webcam.rules`
         ],
         linux: {
             target: [
                 'rpm'
             ],
             category: 'System',
-            icon: distSrc + '/data/dist-data/tuxedo-control-center_256.svg',
+            icon: `${distSrc}/data/dist-data/tuxedo-control-center_256.svg`,
         },
         rpm: {
             compression: "xz",
@@ -199,12 +197,12 @@ async function startBuild() {
     console.log(`Filename addition: '${filenameAddition}'`);
     try {
         for (const step of buildSteps) {
-            console.log('Build step: ' + step.name);
+            console.log(`Build step: ${step.name}`);
             await step(filenameAddition);
             console.log('\n');
         }
     } catch (err) {
-        console.log('Error on build => ' + err);
+        console.log(`Error on build => ${err}`);
         process.exit(1);
     }
 }
