@@ -551,6 +551,8 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         dmiSKUDeviceMap.set('IBP14I08MK2', TUXEDODevice.IBPG8);
         dmiSKUDeviceMap.set('IBP16I08MK2', TUXEDODevice.IBPG8);
         dmiSKUDeviceMap.set('OMNIA08IMK2', TUXEDODevice.IBPG8);
+        dmiSKUDeviceMap.set('IBP14A10MK1 / IBP15A10MK1', TUXEDODevice.IBPG10AMD);
+        dmiSKUDeviceMap.set('IIBP14A10MK1 / IBP15A10MK1', TUXEDODevice.IBPG10AMD);
         dmiSKUDeviceMap.set('POLARIS1XA02', TUXEDODevice.POLARIS1XA02);
         dmiSKUDeviceMap.set('POLARIS1XI02', TUXEDODevice.POLARIS1XI02);
         dmiSKUDeviceMap.set('POLARIS1XA03', TUXEDODevice.POLARIS1XA03);
@@ -571,6 +573,8 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         dmiSKUDeviceMap.set('STELLSL15I06', TUXEDODevice.STELLSL15I06);
         dmiSKUDeviceMap.set('AURA14GEN3', TUXEDODevice.AURA14G3);
         dmiSKUDeviceMap.set('AURA15GEN3', TUXEDODevice.AURA15G3);
+        dmiSKUDeviceMap.set('STELLARIS16A07', TUXEDODevice.STELLARIS16A07);
+        dmiSKUDeviceMap.set('STELLARIS16I07', TUXEDODevice.STELLARIS16I07);
         dmiSKUDeviceMap.set('SIRIUS1601', TUXEDODevice.SIRIUS1601);
         dmiSKUDeviceMap.set('SIRIUS1602', TUXEDODevice.SIRIUS1602);
 
@@ -672,6 +676,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     // todo: function too long, could be splitted with cpu, display, webcam, fan, odm subfunctions
     private fillDeviceSpecificDefaults(inputProfile: ITccProfile): ITccProfile {
         const profile: ITccProfile = JSON.parse(JSON.stringify(inputProfile));
+        const dev: TUXEDODevice = this.identifyDevice();
 
         if (profile.id === undefined) {
             profile.id = generateProfileId();
@@ -811,8 +816,8 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             }
         }
 
-        const defaultODMProfileName: string = ODMProfileWorker.getDefaultODMPerformanceProfile();
-        const availableODMProfiles: string[] = ODMProfileWorker.getAvailableODMPerformanceProfiles();
+        const defaultODMProfileName: string = ODMProfileWorker.getDefaultODMPerformanceProfile(dev);
+        const availableODMProfiles: string[] = ODMProfileWorker.getAvailableODMPerformanceProfiles(dev);
         if (profile.odmProfile === undefined || !availableODMProfiles.includes(profile.odmProfile.name)) {
             profile.odmProfile = {
                 name: defaultODMProfileName

@@ -27,6 +27,7 @@ import {
     SysFsPropertyStringList,
 } from "../../common/classes/SysFsProperties";
 import type { ITccODMProfile } from "src/common/models/TccProfile";
+import { TUXEDODevice } from '../../common/models/DefaultProfiles';
 
 export class ODMProfileWorker extends DaemonWorker {
     private static tuxedoPlatformProfile: SysFsPropertyString = new SysFsPropertyString(
@@ -48,6 +49,7 @@ export class ODMProfileWorker extends DaemonWorker {
     }
 
     public async onStart(): Promise<void> {
+        const dev = this.tccd.identifyDevice();
 
         if (
             ODMProfileWorker.tuxedoPlatformProfile.isAvailable() &&
@@ -56,6 +58,7 @@ export class ODMProfileWorker extends DaemonWorker {
             console.log("ODMProfileWorker: Tuxedo platform profile available")
             this.ODM(ODMProfileWorker.tuxedoPlatformProfile, ODMProfileWorker.tuxedoPlatformProfileChoices);
         } else if (
+            !ODMProfileWorker.hasQuirkNoPlatformProfile(dev) &&
             ODMProfileWorker.platformProfile.isAvailable() &&
             ODMProfileWorker.platformProfileChoices.isAvailable()
         ) {
@@ -128,7 +131,16 @@ export class ODMProfileWorker extends DaemonWorker {
         return chosenODMProfileName;
     }
 
-    public static getDefaultODMPerformanceProfile(): string {
+    private static hasQuirkNoPlatformProfile(dev: TUXEDODevice): boolean {
+
+        const quirkNoPlatformProfile = [
+            TUXEDODevice.IBPG10AMD,
+        ].includes(dev);
+
+        return quirkNoPlatformProfile;
+    }
+
+    public static getDefaultODMPerformanceProfile(dev: TUXEDODevice): string {
         if (
             this.tuxedoPlatformProfile.isAvailable() &&
             this.tuxedoPlatformProfileChoices.isAvailable()
@@ -138,6 +150,7 @@ export class ODMProfileWorker extends DaemonWorker {
                 return availableProfiles[availableProfiles?.length-1];
             }
         } else if (
+            !ODMProfileWorker.hasQuirkNoPlatformProfile(dev) &&
             ODMProfileWorker.platformProfile.isAvailable() &&
             ODMProfileWorker.platformProfileChoices.isAvailable()
         ) {
@@ -153,7 +166,7 @@ export class ODMProfileWorker extends DaemonWorker {
         return '';
     }
 
-    public static getAvailableODMPerformanceProfiles(): string[] {
+    public static getAvailableODMPerformanceProfiles(dev: TUXEDODevice): string[] {
         if (
             this.tuxedoPlatformProfile.isAvailable() &&
             this.tuxedoPlatformProfileChoices.isAvailable()
@@ -163,6 +176,7 @@ export class ODMProfileWorker extends DaemonWorker {
                 return availableProfiles;
             }
         } else if (
+            !ODMProfileWorker.hasQuirkNoPlatformProfile(dev) &&
             ODMProfileWorker.platformProfile.isAvailable() &&
             ODMProfileWorker.platformProfileChoices.isAvailable()
         ) {

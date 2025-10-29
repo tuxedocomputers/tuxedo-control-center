@@ -1,5 +1,31 @@
 # Changelog
 
+## [2.1.20] - 2025-09-10
+### Fixed
+- Revert the Sirius "start TCC" shortcut due to an issue with keyboard input in certain applications in Wayland
+
+## [2.1.19] - 2025-09-08
+### Added
+- Aquaris support for Stellaris Gen7
+- Extra "start TCC" shortcut key F14 to support the Sirius gauge key (on Wayland)
+
+### Fixed
+- Issue with "System profiles" not changing power limits for InfinityBook Pro Gen10 AMD
+
+## [2.1.18] - 2025-08-01
+### Added
+- Dashboard support for new AMD iGPUs (IBP Gen10 AMD)
+- Dashboard support for new Intel iGPUs (Stellaris Gen7 Intel)
+
+### Fixed
+- Systeminfos: Ticket number format hint
+- Suspend for certain devices where wakeup fails when cores are disabled
+- Non used platform profiles for IBP Gen10 AMD
+
+## [2.1.17] - 2025-07-10
+### Fixed
+- Download of system diagnostics script failing, URL adjusted
+
 ## [2.1.16] - 2024-12-18
 ### Changed
 - Descriptive text when no keyboard backlight control is found updated to reflect current
