@@ -26,7 +26,7 @@ import {
     type OnInit,
     ViewChild,
 } from "@angular/core";
-import { Chart, type ChartConfiguration, type TooltipItem } from "chart.js";
+import { Chart, type ChartTypeRegistry, type ChartConfiguration, type TooltipItem } from "chart.js";
 import {
     chartAnimation,
     chartMaintainAspectRatio,
@@ -191,15 +191,19 @@ export class FanChartComponent implements OnInit, OnDestroy, AfterViewInit {
 
                     tooltip: {
                         callbacks: {
-                            label: (context: TooltipItem<"line">): string => {
-                                return `${context.dataset.label}: ${context.formattedValue} %`;
+                            label:(
+                                tooltipItem: TooltipItem<keyof ChartTypeRegistry>,
+                            ): string => {
+                                return `${tooltipItem.dataset.label}: ${tooltipItem.formattedValue} %`;
                             },
-                            title: (context: TooltipItem<"line">[]): string => {
-                                return formatTemp(
-                                    context[0].dataIndex,
-                                    this.fahrenheit
-                                );
-                            },
+                            title: (
+                                tooltipItems: TooltipItem<keyof ChartTypeRegistry>[]
+                            ): string => {
+                                if (!tooltipItems.length) return "";
+
+                                const dataIndex = tooltipItems[0].dataIndex;
+                                return formatTemp(dataIndex, this.fahrenheit);
+                            }
                         },
                     },
                 },
