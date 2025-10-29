@@ -266,6 +266,47 @@ export class FanControlWorker extends DaemonWorker {
         );
     }
 
+    private async updateTempLogic(
+        fans: Map<number, FanControlLogic>,
+        fanNumber: number,
+    ) {
+        const fanIndex = fanNumber - 1;
+        const fanLogic = fans.get(fanNumber);
+        const temp = await this.getTemperature(fanIndex);
+        fanLogic.reportTemperature(temp);
+        return { fanLogic, fanIndex, temp };
+    }
+
+    private async setFansWithMaxSpeed(fans: Map<number, FanControlLogic>) {
+        const fanNumbers = Array.from(fans.keys());
+
+        const fanInformationArray: {
+            fanLogic: FanControlLogic;
+            fanIndex: number;
+            temp: number;
+        }[] = await Promise.all(
+            fanNumbers.map(async (fanNumber: number) => {
+                return await this.updateTempLogic(fans, fanNumber);
+            }),
+        );
+
+        const speedArray: number[] = fanInformationArray.map(({ fanLogic }) =>
+            fanLogic.getSpeedPercent(),
+        );
+        const maxSpeed = Math.max(...speedArray);
+
+        await Promise.all(
+            fanInformationArray.map(async ({ fanLogic, fanIndex, temp }) => {
+                await this.updateFanDbusData(
+                    fanIndex,
+                    fanLogic,
+                    maxSpeed,
+                    temp,
+                );
+            }),
+        );
+    }
+    
     private async updateFanControlValues(fanControlEnabled: boolean): Promise<void> {
         const fans: Map<number, FanControlLogic> = await this.fanApi.getFans();
 
@@ -276,26 +317,17 @@ export class FanControlWorker extends DaemonWorker {
         }
 
         await this.fanApi.clearTempValues();
-
-        for (const fanNumber of fans.keys()) {
-            const fanIndex: number = fanNumber - 1;
-
-            await this.updateFanDbusData(fanIndex, fans.get(fanNumber));
-        }
+        await this.setFansWithMaxSpeed(fans);
     }
 
     private async writeFanSpeed(
         fanLogic: FanControlLogic,
         fanIndex: number,
-        temperature: number
+        calculatedSpeed: number
     ): Promise<void> {
         if (!fanLogic) return;
 
-        fanLogic.reportTemperature(temperature);
-
         if (this.tccd.settings.fanControlEnabled) {
-            const calculatedSpeed: number = fanLogic.getSpeedPercent();
-
             if (
                 this.previousTempValues.get(fanIndex) !== calculatedSpeed &&
                 calculatedSpeed > -1
@@ -308,13 +340,13 @@ export class FanControlWorker extends DaemonWorker {
 
     private async updateFanDbusData(
         fanIndex: number,
-        fanLogic: FanControlLogic
+        fanLogic: FanControlLogic,
+        calculatedSpeed: number,
+        temperature: number
     ): Promise<void> {
-        const temperature: number = await this.getTemperature(fanIndex);
-
         if (temperature > -1) {
             if (this.fanWriteAvailable) {
-                await this.writeFanSpeed(fanLogic, fanIndex, temperature);
+                await this.writeFanSpeed(fanLogic, fanIndex, calculatedSpeed);
             }
 
             if (this.tccd.dbusData.sensorDataCollectionStatus) {
