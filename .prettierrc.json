@@ -1,9 +1,17 @@
 {
-    "printWidth": 80,
+    "printWidth": 120,
     "tabWidth": 4,
-    "singleQuote": false,
+    "singleQuote": true,
     "requirePragma": false,
     "bracketSpacing": true,
     "bracketSameLine": true,
-    "arrowParens": "always"
+    "arrowParens": "always",
+    "overrides": [
+        {
+            "files": "*.html",
+            "options": {
+                "printWidth": 200
+            }
+        }
+    ]
 }
