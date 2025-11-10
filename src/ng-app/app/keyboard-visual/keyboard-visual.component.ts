@@ -17,21 +17,14 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {
-    Component,
-    EventEmitter,
-    HostListener,
-    Input,
-    type OnInit,
-    Output,
-} from "@angular/core";
-import type { KeyboardBacklightCapabilitiesInterface } from "src/common/models/TccSettings";
+import { Component, EventEmitter, HostListener, Input, type OnInit, Output } from '@angular/core';
+import type { KeyboardBacklightCapabilitiesInterface } from 'src/common/models/TccSettings';
 
 @Component({
-    selector: "app-keyboard-visual",
-    templateUrl: "./keyboard-visual.component.html",
-    styleUrls: ["./keyboard-visual.component.scss"],
-    standalone: false
+    selector: 'app-keyboard-visual',
+    templateUrl: './keyboard-visual.component.html',
+    styleUrls: ['./keyboard-visual.component.scss'],
+    standalone: false,
 })
 export class KeyboardVisualComponent implements OnInit {
     @Input()
@@ -45,7 +38,7 @@ export class KeyboardVisualComponent implements OnInit {
     public ngOnInit(): void {
         this.selectedZones = Array.from(
             { length: this.keyboardBacklightCapabilities.zones },
-            (_: unknown, i: number): number => i
+            (_: unknown, i: number): number => i,
         );
         this.selectedZonesChange.emit(this.selectedZones);
     }
@@ -55,7 +48,7 @@ export class KeyboardVisualComponent implements OnInit {
         this.updateHeight();
     }
 
-    @HostListener("window:resize")
+    @HostListener('window:resize')
     public onResize(): void {
         this.updateHeight();
     }
@@ -64,17 +57,17 @@ export class KeyboardVisualComponent implements OnInit {
         if (this.viewInitialized) {
             let el: HTMLElement;
             if (this.keyboardBacklightCapabilities.zones === 4) {
-                el = document.getElementById("Svg4Zones");
+                el = document.getElementById('Svg4Zones');
             } else {
-                el = document.getElementById("Svg1+3Zones");
+                el = document.getElementById('Svg1+3Zones');
             }
 
             if (el) {
                 const rect: DOMRect = el.getBoundingClientRect();
                 this.divHeight = rect.height;
-                return
+                return;
             }
-            console.error("keyboard-visual: updateHeight: failed to get document element")
+            console.error('keyboard-visual: updateHeight: failed to get document element');
             // todo: further error handling, if code reaches here it means that tuxedo-drivers is properly
             // installed but there is no backlight hardware to control
         }
@@ -115,7 +108,7 @@ export class KeyboardVisualComponent implements OnInit {
         if (zones === 3) {
             return `${832.61151 + zone * 16}, 535.06891`;
         } else {
-            return "832.61151, 535.06891";
+            return '832.61151, 535.06891';
         }
     }
 
@@ -131,17 +124,15 @@ export class KeyboardVisualComponent implements OnInit {
         }
 
         this.selectedZonesChange.emit(this.addOrRemoveSelectedZones(zone));
-        const gElements: NodeListOf<Element> = document.querySelectorAll("g.key-group");
+        const gElements: NodeListOf<Element> = document.querySelectorAll('g.key-group');
         gElements.forEach((g: SVGGraphicsElement): void => {
-            const isSelected: boolean = this.selectedZones.includes(
-                Number.parseInt(g.dataset.zone)
-            );
+            const isSelected: boolean = this.selectedZones.includes(Number.parseInt(g.dataset.zone));
             if (isSelected) {
-                g.classList.remove("unselected");
-                g.classList.add("selected");
+                g.classList.remove('unselected');
+                g.classList.add('selected');
             } else {
-                g.classList.add("unselected");
-                g.classList.remove("selected");
+                g.classList.add('unselected');
+                g.classList.remove('selected');
             }
         });
     }

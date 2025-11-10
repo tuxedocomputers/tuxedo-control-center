@@ -30,7 +30,7 @@ export interface ITccFanTableEntry {
 
 export const defaultFanProfiles: ITccFanProfile[] = [
     {
-        name: "Silent",
+        name: 'Silent',
         tableCPU: [
             { temp: 0, speed: 0 },
             { temp: 1, speed: 0 },
@@ -239,7 +239,7 @@ export const defaultFanProfiles: ITccFanProfile[] = [
         ],
     },
     {
-        name: "Quiet",
+        name: 'Quiet',
         tableCPU: [
             { temp: 0, speed: 0 },
             { temp: 1, speed: 0 },
@@ -448,7 +448,7 @@ export const defaultFanProfiles: ITccFanProfile[] = [
         ],
     },
     {
-        name: "Balanced",
+        name: 'Balanced',
         tableCPU: [
             { temp: 0, speed: 0 },
             { temp: 1, speed: 0 },
@@ -657,7 +657,7 @@ export const defaultFanProfiles: ITccFanProfile[] = [
         ],
     },
     {
-        name: "Cool",
+        name: 'Cool',
         tableCPU: [
             { temp: 0, speed: 0 },
             { temp: 1, speed: 0 },
@@ -866,7 +866,7 @@ export const defaultFanProfiles: ITccFanProfile[] = [
         ],
     },
     {
-        name: "Freezy",
+        name: 'Freezy',
         tableCPU: [
             { temp: 0, speed: 20 },
             { temp: 1, speed: 20 },
@@ -1075,7 +1075,7 @@ export const defaultFanProfiles: ITccFanProfile[] = [
         ],
     },
     {
-        name: "Custom",
+        name: 'Custom',
     },
 ];
 

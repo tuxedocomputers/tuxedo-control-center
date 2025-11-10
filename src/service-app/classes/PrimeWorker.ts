@@ -17,16 +17,16 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { DaemonWorker } from "./DaemonWorker";
-import type { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
-import { execCommandAsync, delay } from "../../common/classes/Utils";
-import * as fs from "node:fs";
+import { DaemonWorker } from './DaemonWorker';
+import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
+import { execCommandAsync, delay } from '../../common/classes/Utils';
+import * as fs from 'node:fs';
 
 export class PrimeWorker extends DaemonWorker {
     private primeSupported: Boolean;
 
     constructor(tccd: TuxedoControlCenterDaemon) {
-        super(10000, "PrimeWorker", tccd);
+        super(10000, 'PrimeWorker', tccd);
     }
 
     public async onStart(): Promise<void> {
@@ -49,7 +49,7 @@ export class PrimeWorker extends DaemonWorker {
             this.primeSupported = primeSupported;
         }
         if (!primeSupported) {
-            this.tccd.dbusData.primeState = JSON.stringify("-1");
+            this.tccd.dbusData.primeState = JSON.stringify('-1');
         }
     }
 
@@ -58,36 +58,27 @@ export class PrimeWorker extends DaemonWorker {
     // only supporting gpu switch on systems which can use prime-select since primary focus is Tuxdeo OS and Ubuntu
     // other operating systems may handle this differently and thus can't easily be supported
     private async checkPrimeSupported(): Promise<boolean> {
-        const offloadingStatus: boolean =
-            fs.existsSync(
-                "/var/lib/ubuntu-drivers-common/requires_offloading"
-            ) === true;
+        const offloadingStatus: boolean = fs.existsSync('/var/lib/ubuntu-drivers-common/requires_offloading') === true;
 
-        const primeAvailable: string = (
-            await execCommandAsync("which prime-select | cat")
-        )
-            .toString()
-            .trim();
+        const primeAvailable: string = (await execCommandAsync('which prime-select | cat')).toString().trim();
 
         return offloadingStatus && !!primeAvailable;
     }
 
     private async checkPrimeStatus(): Promise<string> {
-        return this.transformPrimeStatus(
-            await execCommandAsync("prime-select query")
-        );
+        return this.transformPrimeStatus(await execCommandAsync('prime-select query'));
     }
 
     private transformPrimeStatus(status: string): string {
         switch (status) {
-            case "nvidia":
-                return "dGPU";
-            case "intel":
-                return "iGPU";
-            case "on-demand":
-                return "on-demand";
+            case 'nvidia':
+                return 'dGPU';
+            case 'intel':
+                return 'iGPU';
+            case 'on-demand':
+                return 'on-demand';
             default:
-                return "off";
+                return 'off';
         }
     }
 }

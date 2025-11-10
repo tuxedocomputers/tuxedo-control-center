@@ -17,31 +17,28 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { TuxedoIOAPI as ioAPI } from "../../native-lib/TuxedoIOAPI";
-import type { ObjWrapper } from "../../native-lib/TuxedoIOAPI";
-import { FanControlBaseClass } from "./FanControlBaseClass";
-import { FAN_LOGIC } from "./FanControlLogic";
+import { TuxedoIOAPI as ioAPI } from '../../native-lib/TuxedoIOAPI';
+import type { ObjWrapper } from '../../native-lib/TuxedoIOAPI';
+import { FanControlBaseClass } from './FanControlBaseClass';
+import { FAN_LOGIC } from './FanControlLogic';
 
 export class FanControlTuxedoIO extends FanControlBaseClass {
-    public async initFanControl(
-        fanWriteAvailable: boolean,
-        fanControlEnabled: boolean,
-    ): Promise<void> {
+    public async initFanControl(fanWriteAvailable: boolean, fanControlEnabled: boolean): Promise<void> {
         if (fanWriteAvailable) {
             if (fanControlEnabled) {
                 ioAPI.setEnableModeSet(true);
-                console.log("FanControlTuxedoIO: Enabling manual mode");
+                console.log('FanControlTuxedoIO: Enabling manual mode');
             }
             if (!fanControlEnabled) {
                 ioAPI.setFansAuto();
                 ioAPI.setEnableModeSet(false);
-                console.log("FanControlTuxedoIO: Enabling automatic mode");
+                console.log('FanControlTuxedoIO: Enabling automatic mode');
             }
 
             this.tccd.dbusData.fansOffAvailable = ioAPI.getFansOffAvailable();
             this.tccd.dbusData.fansMinSpeed = ioAPI.getFansMinSpeed();
         } else {
-            console.log("FanControlTuxedoIO: Fan write not available");
+            console.log('FanControlTuxedoIO: Fan write not available');
         }
     }
 
@@ -53,7 +50,7 @@ export class FanControlTuxedoIO extends FanControlBaseClass {
                 this.getFanTemperature(1, false),
                 this.getFanTemperature(2, false),
             ]);
-            
+
             // todo: maybe add change into tuxedo-drivers to return -1 if value not available
             if (fanTemp0 > 1 && numberInterfaces >= 1) {
                 this.setFan(1, FAN_LOGIC.CPU);
@@ -69,18 +66,17 @@ export class FanControlTuxedoIO extends FanControlBaseClass {
                 return false;
             }
         }
-        
 
         return true;
     }
-    
+
     public async getNumberFansAvailable(): Promise<number> {
         const [fanTemp0, fanTemp1, fanTemp2] = await Promise.all([
             this.getFanTemperature(0, false),
             this.getFanTemperature(1, false),
             this.getFanTemperature(2, false),
         ]);
-                
+
         if (fanTemp2 > 1 && fanTemp1 > 1 && fanTemp0 > 1) {
             return 3;
         }
@@ -95,10 +91,7 @@ export class FanControlTuxedoIO extends FanControlBaseClass {
 
     public async getFanSpeedPercent(fanIndex: number): Promise<number> {
         const currentSpeedPercent: ObjWrapper<number> = { value: -1 };
-        const speedReadSuccess: boolean = ioAPI.getFanSpeedPercent(
-            fanIndex,
-            currentSpeedPercent
-        );
+        const speedReadSuccess: boolean = ioAPI.getFanSpeedPercent(fanIndex, currentSpeedPercent);
 
         if (!speedReadSuccess) {
             console.log(`FanControlTuxedoIO: Fan speed read with IO API index ${fanIndex} failed`);
@@ -109,11 +102,8 @@ export class FanControlTuxedoIO extends FanControlBaseClass {
 
     public async getFanTemperature(fanIndex: number, logging?: boolean): Promise<number> {
         const currentTemperatureCelcius: ObjWrapper<number> = { value: -1 };
-        const tempReadSuccess: boolean = ioAPI.getFanTemperature(
-            fanIndex,
-            currentTemperatureCelcius
-        );
-                
+        const tempReadSuccess: boolean = ioAPI.getFanTemperature(fanIndex, currentTemperatureCelcius);
+
         if (!tempReadSuccess && (logging ?? true)) {
             console.log(`FanControlTuxedoIO: Fan temperature read with IO API index ${fanIndex} failed`);
         }
@@ -121,20 +111,14 @@ export class FanControlTuxedoIO extends FanControlBaseClass {
         return currentTemperatureCelcius.value;
     }
 
-    public async writeFanSpeed(
-        fanIndex: number,
-        calculatedSpeed: number
-    ): Promise<void> {
-        const speedWriteSuccess: boolean = ioAPI.setFanSpeedPercent(
-            fanIndex,
-            calculatedSpeed
-        );
+    public async writeFanSpeed(fanIndex: number, calculatedSpeed: number): Promise<void> {
+        const speedWriteSuccess: boolean = ioAPI.setFanSpeedPercent(fanIndex, calculatedSpeed);
 
         if (!speedWriteSuccess) {
             console.log(`FanControlTuxedoIO: Fan speed write with IO API index ${fanIndex} failed`);
         }
     }
-    
+
     public async getNumberFanInterfaces(): Promise<number> {
         return ioAPI.getNumberFans();
     }
@@ -153,6 +137,6 @@ export class FanControlTuxedoIO extends FanControlBaseClass {
     public async exit(): Promise<void> {
         ioAPI.setFansAuto(); // required to avoid high fan speed on wakeup for certain devices
         ioAPI.setEnableModeSet(false);
-        console.log("FanControlTuxedoIO: Enabling automatic mode")
+        console.log('FanControlTuxedoIO: Enabling automatic mode');
     }
 }

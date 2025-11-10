@@ -20,19 +20,18 @@
 import { DaemonWorker } from './DaemonWorker';
 import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
-import { TuxedoIOAPI as ioAPI, type TDPInfo} from '../../native-lib/TuxedoIOAPI';
+import { TuxedoIOAPI as ioAPI, type TDPInfo } from '../../native-lib/TuxedoIOAPI';
 import type { ITccODMPowerLimits } from 'src/common/models/TccProfile';
 
 export class ODMPowerLimitWorker extends DaemonWorker {
-
     constructor(tccd: TuxedoControlCenterDaemon) {
-        super(5000, "ODMPowerlimitWorker", tccd);
+        super(5000, 'ODMPowerlimitWorker', tccd);
     }
 
     public async onStart(): Promise<void> {
         let odmPowerLimitSettings: ITccODMPowerLimits = this.activeProfile.odmPowerLimits;
         if (odmPowerLimitSettings === undefined) {
-            odmPowerLimitSettings = { tdpValues: [] }
+            odmPowerLimitSettings = { tdpValues: [] };
         }
 
         const tdpInfo: TDPInfo[] = [];
@@ -48,7 +47,9 @@ export class ODMPowerLimitWorker extends DaemonWorker {
                 newTDPValues = tdpInfo.map((tdpEntry: TDPInfo): number => tdpEntry.max);
             }
 
-            this.tccd.logLine(`ODMPowerLimitWorker: Setting ODM TDPs ${JSON.stringify(newTDPValues.map((tdpValue: number): string => `${tdpValue} W`))}`);
+            this.tccd.logLine(
+                `ODMPowerLimitWorker: Setting ODM TDPs ${JSON.stringify(newTDPValues.map((tdpValue: number): string => `${tdpValue} W`))}`,
+            );
             const writeSuccess: boolean = ioAPI.setTDPValues(newTDPValues);
             if (writeSuccess) {
                 for (let i: number = 0; i < tdpInfo?.length && i < newTDPValues?.length; ++i) {
@@ -57,16 +58,11 @@ export class ODMPowerLimitWorker extends DaemonWorker {
             } else {
                 this.tccd.logLine('ODMPowerLimitWorker: Failed to write TDP values');
             }
-
         }
         this.tccd.dbusData.odmPowerLimitsJSON = JSON.stringify(tdpInfo);
     }
 
-    public async onWork(): Promise<void> {
+    public async onWork(): Promise<void> {}
 
-    }
-
-    public async onExit(): Promise<void> {
-
-    }
+    public async onExit(): Promise<void> {}
 }

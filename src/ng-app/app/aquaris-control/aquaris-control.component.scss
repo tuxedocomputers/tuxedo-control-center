@@ -16,12 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
- 
+
 .theme-page-title {
     flex-flow: column nowrap;
     align-items: center;
 
-    opacity: 1.0;
+    opacity: 1;
 
     .icon-link-info {
         position: absolute;
@@ -49,36 +49,45 @@
         .value {
             font-weight: normal;
         }
-        
+
         .inner-connection-status {
             display: flex;
             align-items: center;
-            
+
             .connection-status-dot {
                 display: inline-block;
                 height: 24px;
                 width: 24px;
                 border-radius: 50%;
                 transform-origin: center;
-    
+
                 margin: 10px;
-    
+
                 background-color: gray;
-            
+
                 @keyframes pulse-frames {
-                    0%   { opacity: 0.3; transform: scale(0.42); }
-                    50%  { opacity: 0.7; transform: scale(0.83); }
-                    100% { opacity: 0.3; transform: scale(0.42);}
+                    0% {
+                        opacity: 0.3;
+                        transform: scale(0.42);
+                    }
+                    50% {
+                        opacity: 0.7;
+                        transform: scale(0.83);
+                    }
+                    100% {
+                        opacity: 0.3;
+                        transform: scale(0.42);
+                    }
                 }
-            
+
                 &.searching {
                     background-color: gray;
-                    animation: pulse-frames 1.0s infinite;
+                    animation: pulse-frames 1s infinite;
                 }
-            
+
                 &.connected {
                     transform: scale(0.42);
-                    background-color: rgba(100, 209, 113, 1.00);
+                    background-color: rgba(100, 209, 113, 1);
                 }
             }
         }
@@ -108,7 +117,7 @@
             align-items: center;
 
             width: 100%;
-            
+
             .title {
                 font-size: 18px;
             }
@@ -128,7 +137,7 @@
                 display: flex;
                 align-items: center;
             }
-            
+
             mat-button-toggle-group {
                 margin: 25px 0px;
                 font-size: 0.7em;
@@ -155,7 +164,7 @@
                         transform: scale(1.4);
                         transform-origin: center;
                     }
-                    
+
                     .description {
                         display: block;
                         margin: 40px auto;
@@ -176,7 +185,7 @@
 
 .device-list-wrapper {
     border-radius: 4px;
-    border: 1px solid rgba(0,0,0,.2);
+    border: 1px solid rgba(0, 0, 0, 0.2);
     margin: 24px 0;
     padding: 10px;
     min-height: 200px;
@@ -191,21 +200,21 @@
     width: 600px;
 
     font-size: 1.2em;
-    
+
     .title {
         font-size: 18px;
         font-weight: bold;
         padding-bottom: 16px;
     }
-    
+
     .description {
         font-size: 16px;
     }
-    
+
     .demo {
         display: flex;
         align-items: center;
-        
+
         .description {
             padding-right: 16px;
             font-size: 16px;

@@ -21,10 +21,9 @@ import { SysFsController } from './SysFsController';
 import { SysFsPropertyIntegerHex, SysFsPropertyString } from './SysFsProperties';
 import * as path from 'node:path';
 import * as fs from 'node:fs';
-import type { Dirent } from "node:fs";
+import type { Dirent } from 'node:fs';
 
 export class UsbController extends SysFsController {
-
     private static readonly USB_DEVICES_PATH: string = '/sys/bus/usb/devices';
     private static readonly USB_DRIVER_PATH: string = '/sys/bus/usb/drivers/usb';
 
@@ -36,8 +35,8 @@ export class UsbController extends SysFsController {
 
     public static getUsbDriverDeviceList(): string[] {
         return SysFsController.getDeviceListDirent(UsbController.USB_DRIVER_PATH)
-        .filter((dirent: Dirent): boolean => dirent.isDirectory() || dirent.isSymbolicLink())
-        .map((dirent: Dirent): string => dirent.name);
+            .filter((dirent: Dirent): boolean => dirent.isDirectory() || dirent.isSymbolicLink())
+            .map((dirent: Dirent): string => dirent.name);
     }
     // End static stuff
 
@@ -63,7 +62,7 @@ export class UsbController extends SysFsController {
             fs.writeFileSync(path.join(UsbController.USB_DRIVER_PATH, 'bind'), this.deviceIdString);
             return true;
         } catch (err: unknown) {
-            console.error(`UsbController: enableDevice failed => ${err}`)
+            console.error(`UsbController: enableDevice failed => ${err}`);
             return false;
         }
     }
@@ -73,7 +72,7 @@ export class UsbController extends SysFsController {
             fs.writeFileSync(path.join(UsbController.USB_DRIVER_PATH, 'unbind'), this.deviceIdString);
             return true;
         } catch (err: unknown) {
-            console.error(`UsbController: disableDevice failed => ${err}`)
+            console.error(`UsbController: disableDevice failed => ${err}`);
             return false;
         }
     }

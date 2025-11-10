@@ -22,22 +22,12 @@ import { SysFsPropertyBoolean, SysFsPropertyInteger, SysFsPropertyString } from 
 
 export class IntelPstateController {
     constructor(public readonly basePath: string) {
-        this.noTurbo = new SysFsPropertyBoolean(
-            path.join(basePath, "no_turbo"),
-        );
-        this.maxPerfPct = new SysFsPropertyInteger(
-            path.join(basePath, "max_perf_pct"),
-        );
-        this.minPerfPct = new SysFsPropertyInteger(
-            path.join(basePath, "min_perf_pct"),
-        );
-        this.numPstates = new SysFsPropertyInteger(
-            path.join(basePath, "num_pstates"),
-        );
-        this.status = new SysFsPropertyString(path.join(basePath, "status"));
-        this.turboPct = new SysFsPropertyInteger(
-            path.join(basePath, "turbo_pct"),
-        );
+        this.noTurbo = new SysFsPropertyBoolean(path.join(basePath, 'no_turbo'));
+        this.maxPerfPct = new SysFsPropertyInteger(path.join(basePath, 'max_perf_pct'));
+        this.minPerfPct = new SysFsPropertyInteger(path.join(basePath, 'min_perf_pct'));
+        this.numPstates = new SysFsPropertyInteger(path.join(basePath, 'num_pstates'));
+        this.status = new SysFsPropertyString(path.join(basePath, 'status'));
+        this.turboPct = new SysFsPropertyInteger(path.join(basePath, 'turbo_pct'));
     }
 
     public readonly noTurbo: SysFsPropertyBoolean;

@@ -17,24 +17,24 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, type ElementRef, type EventEmitter, Input, ViewChild } from "@angular/core";
-import { Chart, ChartTypeRegistry, type ChartConfiguration, type TooltipItem } from "chart.js";
+import { Component, type ElementRef, type EventEmitter, Input, ViewChild } from '@angular/core';
+import { Chart, ChartTypeRegistry, type ChartConfiguration, type TooltipItem } from 'chart.js';
 import {
     chartAnimation,
     chartMaintainAspectRatio,
     chartResponsive,
     createBarChartDataset,
-} from "src/common/classes/FanChartProperties";
-import { UtilsService } from "../utils.service";
+} from 'src/common/classes/FanChartProperties';
+import { UtilsService } from '../utils.service';
 
 @Component({
-    selector: "app-tgp-chart",
-    templateUrl: "./tgp-chart.component.html",
-    styleUrl: "./tgp-chart.component.scss",
+    selector: 'app-tgp-chart',
+    templateUrl: './tgp-chart.component.html',
+    styleUrl: './tgp-chart.component.scss',
     standalone: false,
 })
 export class TgpChartComponent {
-    @ViewChild("chartCanvas") chartCanvas!: ElementRef;
+    @ViewChild('chartCanvas') chartCanvas!: ElementRef;
     private chart: Chart;
 
     @Input()
@@ -45,8 +45,8 @@ export class TgpChartComponent {
     @Input()
     public nvidiaPowerCTRLDefaultPowerLimit: number;
     private dataCollectionTimeout: NodeJS.Timeout = null;
-    
-    private textColor: string = ""
+
+    private textColor: string = '';
 
     @Input() private nvidiaPowerCTRLMaxPowerLimitEvent: EventEmitter<number>;
     @Input() private updateTGPChartEvent: EventEmitter<void>;
@@ -56,56 +56,50 @@ export class TgpChartComponent {
     }
 
     public ngOnInit(): void {
-        this.nvidiaPowerCTRLMaxPowerLimitEvent.subscribe(
-            (data: number): void => {
-                this.nvidiaPowerCTRLMaxPowerLimit = data;
-                this.resetDataCollectionTimeout();
-            }
-        );
-        
-        this.updateTGPChartEvent.subscribe(
-            (): void => {
-                this.updateChart()
-            }
-        );
+        this.nvidiaPowerCTRLMaxPowerLimitEvent.subscribe((data: number): void => {
+            this.nvidiaPowerCTRLMaxPowerLimit = data;
+            this.resetDataCollectionTimeout();
+        });
+
+        this.updateTGPChartEvent.subscribe((): void => {
+            this.updateChart();
+        });
     }
 
     // this.chart.config._config.options.plugins.tooltip.animation is sometimes set to false
     public ngDoCheck(): void {
         if (this.chart) {
-            this.chart.options.plugins.tooltip.animation = chartAnimation
+            this.chart.options.plugins.tooltip.animation = chartAnimation;
         }
     }
-    
+
     public ngAfterViewInit(): void {
         this.initChart();
     }
 
     public initChart(): void {
         const chartConfiguration: ChartConfiguration = {
-            type: "bar",
+            type: 'bar',
             data: {
-                labels: ["TGP"],
+                labels: ['TGP'],
                 datasets: createBarChartDataset(
                     $localize`:@@configurableGraphicsPower:Configurable graphics power (cTGP)`,
                     [this.nvidiaPowerCTRLDefaultPowerLimit + this.cTGPOffset],
                     $localize`:@@dynamicBoostRange:Dynamic Boost range`,
                     [
                         Math.min(
-                            this.nvidiaPowerCTRLMaxPowerLimit -
-                                this.nvidiaPowerCTRLDefaultPowerLimit -
-                                this.cTGPOffset,
-                            25
+                            this.nvidiaPowerCTRLMaxPowerLimit - this.nvidiaPowerCTRLDefaultPowerLimit - this.cTGPOffset,
+                            25,
                         ),
-                    ]
+                    ],
                 ),
             },
             options: {
                 normalized: true,
-                indexAxis: "y",
+                indexAxis: 'y',
                 scales: {
                     x: {
-                        type: "linear",
+                        type: 'linear',
                         min: 0,
                         max: this.nvidiaPowerCTRLMaxPowerLimit,
                         stacked: true,
@@ -126,14 +120,10 @@ export class TgpChartComponent {
                 plugins: {
                     tooltip: {
                         callbacks: {
-                            label: (
-                                tooltipItem: TooltipItem<
-                                    keyof ChartTypeRegistry
-                                >,
-                            ): string => {
+                            label: (tooltipItem: TooltipItem<keyof ChartTypeRegistry>): string => {
                                 return `${tooltipItem.dataset.label}: ${tooltipItem.formattedValue} W`;
                             },
-                        }
+                        },
                     },
                     datalabels: {
                         color: this.textColor,
@@ -148,31 +138,25 @@ export class TgpChartComponent {
             },
         };
 
-        const ctx = this.chartCanvas.nativeElement.getContext(
-            "2d"
-        ) as CanvasRenderingContext2D;
+        const ctx = this.chartCanvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
 
         this.chart = new Chart(ctx, chartConfiguration);
     }
 
     public updateChart(): void {
         if (this.chart) {
-            this.chart.data.datasets[0].data = [
-                this.nvidiaPowerCTRLDefaultPowerLimit + this.cTGPOffset,
-            ];
+            this.chart.data.datasets[0].data = [this.nvidiaPowerCTRLDefaultPowerLimit + this.cTGPOffset];
 
             this.chart.data.datasets[1].data = [
                 Math.min(
-                    this.nvidiaPowerCTRLMaxPowerLimit -
-                        this.nvidiaPowerCTRLDefaultPowerLimit -
-                        this.cTGPOffset,
-                    25
+                    this.nvidiaPowerCTRLMaxPowerLimit - this.nvidiaPowerCTRLDefaultPowerLimit - this.cTGPOffset,
+                    25,
                 ),
             ];
             this.chart.update();
             return;
         }
-        console.error("No tgp chart found");
+        console.error('No tgp chart found');
     }
 
     // todo: deduplicate

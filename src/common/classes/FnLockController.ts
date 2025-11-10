@@ -17,14 +17,14 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { SysFsPropertyBoolean } from "./SysFsProperties";
+import { SysFsPropertyBoolean } from './SysFsProperties';
 
 export class FnLockController {
-    private fnLock: SysFsPropertyBoolean = new SysFsPropertyBoolean("/sys/devices/platform/tuxedo_keyboard/fn_lock");
+    private fnLock: SysFsPropertyBoolean = new SysFsPropertyBoolean('/sys/devices/platform/tuxedo_keyboard/fn_lock');
 
     public getFnLockSupported: () => boolean = (): boolean => this.fnLock.isAvailable();
 
-    public getFnLockStatus: () => boolean  = (): boolean => this.fnLock.readValueNT();
+    public getFnLockStatus: () => boolean = (): boolean => this.fnLock.readValueNT();
 
     public setFnLockStatus: (status: boolean) => void = (status: boolean): void => this.fnLock.writeValue(status);
 }

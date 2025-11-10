@@ -26,9 +26,9 @@ export interface IGeneralCPUInfo {
     energyPerformanceAvailablePreferences: string[];
     reducedAvailableFreq: number;
     boost: boolean;
-  }
-  
-  export interface ILogicalCoreInfo {
+}
+
+export interface ILogicalCoreInfo {
     index: number;
     online: boolean;
     scalingCurFreq: number;
@@ -45,14 +45,14 @@ export interface IGeneralCPUInfo {
     coreSiblingsList: number[];
     physicalPackageId: number;
     threadSiblingsList: number[];
-  }
-  
-  export interface IDisplayBrightnessInfo {
+}
+
+export interface IDisplayBrightnessInfo {
     driver: string;
     brightness: number;
     maxBrightness: number;
-  }
-  
-  export interface IPstateInfo {
+}
+
+export interface IPstateInfo {
     noTurbo: boolean;
-  }
+}

@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type { IntelRAPLController } from "./IntelRAPLController";
+import type { IntelRAPLController } from './IntelRAPLController';
 
 export class PowerController {
     private intelRAPL: IntelRAPLController;
@@ -36,20 +36,14 @@ export class PowerController {
         if (!this.RAPLPowerStatus) return -1;
         const energyIncrement: number = this.intelRAPL.getEnergy() - this.currentEnergy;
         const delay: number = this.getDelay();
-        const powerDraw: number =
-            delay && this.currentEnergy > 0
-                ? energyIncrement / delay / 1000000
-                : -1;
+        const powerDraw: number = delay && this.currentEnergy > 0 ? energyIncrement / delay / 1000000 : -1;
         this.currentEnergy += energyIncrement;
         return powerDraw;
     }
 
     private getDelay(): number {
         const currentTime: number = Date.now();
-        const timeDifference: number =
-            this.lastUpdateTime > 0
-                ? (currentTime - this.lastUpdateTime) / 1000
-                : -1;
+        const timeDifference: number = this.lastUpdateTime > 0 ? (currentTime - this.lastUpdateTime) / 1000 : -1;
         this.lastUpdateTime = currentTime;
         return timeDifference;
     }

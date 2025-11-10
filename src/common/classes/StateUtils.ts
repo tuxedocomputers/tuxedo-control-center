@@ -36,11 +36,12 @@ export function determineState(): ProfileStates {
             const newPowerSupply = new PowerSupplyController(path.join(pathPowerSupplies, powerSupplyName));
             powerSupplies.push(newPowerSupply);
         }
-        powerAc = powerSupplies.find((powerSupply: PowerSupplyController): boolean => powerSupply.type.readValue() === 'Mains');
+        powerAc = powerSupplies.find(
+            (powerSupply: PowerSupplyController): boolean => powerSupply.type.readValue() === 'Mains',
+        );
     } catch (err: unknown) {
-        console.error(`StateUtils: determineState find failed => ${err}`)
+        console.error(`StateUtils: determineState find failed => ${err}`);
     }
-
 
     // Attempt to find state depending on 'Mains' online status
     if (powerAc !== undefined) {
@@ -52,7 +53,7 @@ export function determineState(): ProfileStates {
                 state = ProfileStates.BAT;
             }
         } catch (err: unknown) {
-            console.error(`StateUtils: determineState readValue failed => ${err}`)
+            console.error(`StateUtils: determineState readValue failed => ${err}`);
         }
     }
 

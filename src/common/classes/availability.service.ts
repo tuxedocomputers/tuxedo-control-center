@@ -17,14 +17,10 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {
-    amdDGpuDeviceIdString,
-    amdIGpuDeviceIdString,
-} from "./AmdDeviceIDs";
-import { intelIGpuDeviceIdString } from "./IntelDeviceIDs";
-import { countLines, execCommandSync } from "./Utils";
-import type { IDeviceCounts } from "src/common/models/TccGpuValues";
-
+import { amdDGpuDeviceIdString, amdIGpuDeviceIdString } from './AmdDeviceIDs';
+import { intelIGpuDeviceIdString } from './IntelDeviceIDs';
+import { countLines, execCommandSync } from './Utils';
+import type { IDeviceCounts } from 'src/common/models/TccGpuValues';
 
 export class AvailabilityService {
     private iGpuAvailable: boolean = false;
@@ -36,8 +32,7 @@ export class AvailabilityService {
 
     constructor() {
         const devices: IDeviceCounts = this.getDevices();
-        this.iGpuAvailable =
-            devices.intelIGpuDevices === 1 || devices.amdIGpuDevices === 1;
+        this.iGpuAvailable = devices.intelIGpuDevices === 1 || devices.amdIGpuDevices === 1;
         this.dGpuAvailable =
             devices.nvidiaDevices !== devices.amdDGpuDevices &&
             (devices.nvidiaDevices === 1 || devices.amdDGpuDevices === 1);
@@ -56,15 +51,9 @@ export class AvailabilityService {
     // but some laptops show iGPU when bios is in dGPU mode.
     private getDevices(): IDeviceCounts {
         return {
-            intelIGpuDevices: this.countDevicesMatchingPattern(
-                intelIGpuDeviceIdString
-            ),
-            amdIGpuDevices: this.countDevicesMatchingPattern(
-                amdIGpuDeviceIdString
-            ),
-            amdDGpuDevices: this.countDevicesMatchingPattern(
-                amdDGpuDeviceIdString
-            ),
+            intelIGpuDevices: this.countDevicesMatchingPattern(intelIGpuDeviceIdString),
+            amdIGpuDevices: this.countDevicesMatchingPattern(amdIGpuDeviceIdString),
+            amdDGpuDevices: this.countDevicesMatchingPattern(amdDGpuDeviceIdString),
             nvidiaDevices: this.countNvidiaDevices(),
         };
     }
@@ -77,7 +66,7 @@ export class AvailabilityService {
     }
 
     private countNvidiaDevices(): number {
-        const nvidiaVendorId = "10DE";
+        const nvidiaVendorId = '10DE';
         const grepCmd = `grep -lx '0x${nvidiaVendorId.toLowerCase()}' /sys/bus/pci/devices/*/vendor || :`;
         const output: string = execCommandSync(grepCmd);
 
@@ -85,12 +74,10 @@ export class AvailabilityService {
         // example: "0000:01:00.1" and "0000:01:00.2" belong to the device "0000:01:00"
         const distinctPaths: string[] = [
             ...new Set(
-                output
-                    .match(/\/sys\/bus\/pci\/devices\/([^\s]+)/g)
-                    ?.map((path: string): string => {
-                        const prefix: string = path.split("/")[5];
-                        return prefix.substring(0, prefix.lastIndexOf("."));
-                    })
+                output.match(/\/sys\/bus\/pci\/devices\/([^\s]+)/g)?.map((path: string): string => {
+                    const prefix: string = path.split('/')[5];
+                    return prefix.substring(0, prefix.lastIndexOf('.'));
+                }),
             ),
         ];
         return distinctPaths?.length || 0;

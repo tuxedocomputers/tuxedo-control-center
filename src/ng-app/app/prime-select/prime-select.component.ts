@@ -17,32 +17,32 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, type OnInit } from "@angular/core";
-import { ConfigService } from "../config.service";
-import { UtilsService } from "../utils.service";
-import { TccDBusClientService } from "../tcc-dbus-client.service";
-import { Subscription } from "rxjs";
-import { first } from "rxjs/operators";
-import type { ConfirmChoiceResult } from "../dialog-choice/dialog-choice.component";
-import { Mutex } from "async-mutex";
+import { Component, type OnInit } from '@angular/core';
+import { ConfigService } from '../config.service';
+import { UtilsService } from '../utils.service';
+import { TccDBusClientService } from '../tcc-dbus-client.service';
+import { Subscription } from 'rxjs';
+import { first } from 'rxjs/operators';
+import type { ConfirmChoiceResult } from '../dialog-choice/dialog-choice.component';
+import { Mutex } from 'async-mutex';
 
 @Component({
-    selector: "app-prime-select",
-    templateUrl: "./prime-select.component.html",
-    styleUrls: ["./prime-select.component.scss"],
-    standalone: false
+    selector: 'app-prime-select',
+    templateUrl: './prime-select.component.html',
+    styleUrls: ['./prime-select.component.scss'],
+    standalone: false,
 })
 export class PrimeSelectComponent implements OnInit {
     public primeState: string;
     public activeState: string;
-    public primeSelectValues: string[] = ["iGPU", "dGPU", "on-demand"];
+    public primeSelectValues: string[] = ['iGPU', 'dGPU', 'on-demand'];
     private subscriptions: Subscription = new Subscription();
     private mutex = new Mutex();
 
     constructor(
         private utils: UtilsService,
         private config: ConfigService,
-        private tccdbus: TccDBusClientService
+        private tccdbus: TccDBusClientService,
     ) {}
 
     public async ngOnInit(): Promise<void> {
@@ -68,10 +68,10 @@ export class PrimeSelectComponent implements OnInit {
         if (this.mutex.isLocked()) return;
 
         this.mutex.acquire();
-        
+
         const status: string = await this.askProceedDialog();
 
-        if (status === "CANCEL" || status === undefined) {
+        if (status === 'CANCEL' || status === undefined) {
             this.activeState = this.primeState;
             this.mutex.release();
             return;
@@ -82,24 +82,20 @@ export class PrimeSelectComponent implements OnInit {
             description: $localize`:@@primeSelectDialogApplyProfileDescription:Do not power off your device until the process is complete.`,
         };
 
-        const pkexecSetPrimeSelectAsync: Promise<boolean> =
-            this.config.pkexecSetPrimeSelectAsync(selectedPrimeStatus);
+        const pkexecSetPrimeSelectAsync: Promise<boolean> = this.config.pkexecSetPrimeSelectAsync(selectedPrimeStatus);
 
         // todo: use boolean instead
-        const isSuccessful: boolean = await this.utils.waitingDialog(
-            config,
-            pkexecSetPrimeSelectAsync
-        );
+        const isSuccessful: boolean = await this.utils.waitingDialog(config, pkexecSetPrimeSelectAsync);
 
         if (isSuccessful) {
             this.activeState = this.primeState = selectedPrimeStatus;
-            if (status === "REBOOT") {
+            if (status === 'REBOOT') {
                 window.ipc.issueReboot();
             }
         } else {
             this.activeState = this.primeState;
         }
-        
+
         this.mutex.release();
     }
 
@@ -110,15 +106,15 @@ export class PrimeSelectComponent implements OnInit {
             labelData: [
                 {
                     label: $localize`:@@dialogAbort:Cancel`,
-                    value: "CANCEL",
+                    value: 'CANCEL',
                 },
                 {
                     label: $localize`:@@dialogInstantReboot:Instant Reboot`,
-                    value: "REBOOT",
+                    value: 'REBOOT',
                 },
                 {
                     label: $localize`:@@dialogRebootLater:Reboot later`,
-                    value: "NO_REBOOT",
+                    value: 'NO_REBOOT',
                 },
             ],
         };

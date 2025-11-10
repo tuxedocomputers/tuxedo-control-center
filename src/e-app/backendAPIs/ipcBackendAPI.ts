@@ -17,13 +17,13 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-require("./utilsAPI");
-require("./cpuAPI");
-require("./sysFsAPI");
-require("./configAPI");
-require("./systemInfosAPI");
-require("./powerAPI");
-require("./cryptAPI");
-require("./pgmsAPI");
-require("./vendorAPI");
-require("./shutdownAPI");
+require('./utilsAPI');
+require('./cpuAPI');
+require('./sysFsAPI');
+require('./configAPI');
+require('./systemInfosAPI');
+require('./powerAPI');
+require('./cryptAPI');
+require('./pgmsAPI');
+require('./vendorAPI');
+require('./shutdownAPI');

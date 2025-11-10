@@ -19,7 +19,7 @@
 
 import type { WebcamConstraints, WebcamPreset } from '../../common/models/TccWebcamSettings';
 import { clearWebcamWindow, tccWindow, webcamWindow, createWebcamPreview } from './browserWindowsAPI';
-import { userConfig } from "./initMain";
+import { userConfig } from './initMain';
 import { ConfigHandler } from '../../common/classes/ConfigHandler';
 import { TccPaths } from '../../common/classes/TccPaths';
 import * as child_process from 'node:child_process';
@@ -32,7 +32,7 @@ const webcamConfigHandler: ConfigHandler = new ConfigHandler(
     TccPaths.WEBCAM_FILE,
     TccPaths.V4L2_NAMES_FILE,
     TccPaths.AUTOSAVE_FILE,
-    TccPaths.FANTABLES_FILE
+    TccPaths.FANTABLES_FILE,
 );
 
 function getWebcamCtrlPythonPath(): string {
@@ -40,8 +40,7 @@ function getWebcamCtrlPythonPath(): string {
     if (environmentIsProduction) {
         webcamCtrolsPath = TccPaths.TCCD_PYTHON_CAMERACTRL_FILE;
     } else {
-        webcamCtrolsPath =
-            `${cwd}/src/cameractrls/cameractrls.py`;
+        webcamCtrolsPath = `${cwd}/src/cameractrls/cameractrls.py`;
     }
     return webcamCtrolsPath;
 }
@@ -49,7 +48,7 @@ function getWebcamCtrlPythonPath(): string {
 export const webcamHandlers: Map<string, (...args: any[]) => any> = new Map<string, (...args: any[]) => any>()
     .set(WebcamAPIFunctions.settingWebcamWithLoading, async (arg: any): Promise<void> => {
         if (webcamWindow != null) {
-            webcamWindow.webContents.send("setting-webcam-with-loading", arg);
+            webcamWindow.webContents.send('setting-webcam-with-loading', arg);
         }
     })
 
@@ -60,7 +59,7 @@ export const webcamHandlers: Map<string, (...args: any[]) => any> = new Map<stri
             }
             webcamWindow.focus();
         } else {
-            userConfig.get("langId").then((langId: string): void => {
+            userConfig.get('langId').then((langId: string): void => {
                 createWebcamPreview(langId, arg);
             });
         }
@@ -74,38 +73,37 @@ export const webcamHandlers: Map<string, (...args: any[]) => any> = new Map<stri
     })
 
     .set(WebcamAPIFunctions.applyControls, (): void => {
-        tccWindow.webContents.send("apply-controls");
+        tccWindow.webContents.send('apply-controls');
     })
 
     .set(WebcamAPIFunctions.videoEnded, (): void => {
-        tccWindow.webContents.send("video-ended");
+        tccWindow.webContents.send('video-ended');
     })
 
     .set(WebcamAPIFunctions.readv4l2Values, (path: string): Promise<string[][]> => {
-        return new Promise<string[][]>((resolve: (value: string[][] | PromiseLike<string[][]>) => void, reject: (reason?: unknown) => void): void => {
-            let res: string[][];
-            if (path)
-            {
-                res = webcamConfigHandler.readV4l2Names(path);
-            }
-            else
-            {
-                res = webcamConfigHandler.readV4l2Names();
-            }
-            resolve(res);
-        });
+        return new Promise<string[][]>(
+            (
+                resolve: (value: string[][] | PromiseLike<string[][]>) => void,
+                reject: (reason?: unknown) => void,
+            ): void => {
+                let res: string[][];
+                if (path) {
+                    res = webcamConfigHandler.readV4l2Names(path);
+                } else {
+                    res = webcamConfigHandler.readV4l2Names();
+                }
+                resolve(res);
+            },
+        );
     })
 
     // todo: simplify readV4l2Names
     .set(WebcamAPIFunctions.readv4l2ValuesCwd, (path: string): Promise<string[][]> => {
         return new Promise<string[][]>((resolve: (value: string[][] | PromiseLike<string[][]>) => void): void => {
             let res: string[][];
-            if (path)
-            {
+            if (path) {
                 res = webcamConfigHandler.readV4l2Names(cwd + path);
-            }
-            else
-            {
+            } else {
                 res = webcamConfigHandler.readV4l2Names();
             }
             resolve(res);
@@ -113,28 +111,36 @@ export const webcamHandlers: Map<string, (...args: any[]) => any> = new Map<stri
     })
 
     .set(WebcamAPIFunctions.readWebcamSettings, (): Promise<WebcamPreset[]> => {
-        return new Promise<WebcamPreset[]>((resolve: (value: WebcamPreset[] | PromiseLike<WebcamPreset[]>) => void): void => {
-            resolve(webcamConfigHandler.readWebcamSettings());
-        });
+        return new Promise<WebcamPreset[]>(
+            (resolve: (value: WebcamPreset[] | PromiseLike<WebcamPreset[]>) => void): void => {
+                resolve(webcamConfigHandler.readWebcamSettings());
+            },
+        );
     })
 
     .set(WebcamAPIFunctions.getSelectedWebcamSettings, (selectedWebcamPath: string): Promise<string> => {
         return execCmd(`python3 ${getWebcamCtrlPythonPath()} -d ${selectedWebcamPath} -j`);
     })
 
-    .set(WebcamAPIFunctions.executeWebcamCtrls, (devicePath: string, parameter: string, value: string): Promise<string> => {
-       return execCmd(`python3 ${getWebcamCtrlPythonPath()} -d ${devicePath} -c ${parameter}=${value}`);
-    })
+    .set(
+        WebcamAPIFunctions.executeWebcamCtrls,
+        (devicePath: string, parameter: string, value: string): Promise<string> => {
+            return execCmd(`python3 ${getWebcamCtrlPythonPath()} -d ${devicePath} -c ${parameter}=${value}`);
+        },
+    )
 
-    .set(WebcamAPIFunctions.executeFilteredWebcamCtrls, async (devicePath: string, filteredControls: string): Promise<string> => {
-       return execCmd(`python3 ${getWebcamCtrlPythonPath()} -d ${devicePath} -c ${filteredControls}`);
-    })
+    .set(
+        WebcamAPIFunctions.executeFilteredWebcamCtrls,
+        async (devicePath: string, filteredControls: string): Promise<string> => {
+            return execCmd(`python3 ${getWebcamCtrlPythonPath()} -d ${devicePath} -c ${filteredControls}`);
+        },
+    )
 
     .set(WebcamAPIFunctions.getWebcamPaths, async (): Promise<string> => {
         const result: { data: string; error: unknown } = await execFile(`python3 ${getWebcamCtrlPythonPath()} -i`);
 
         if (result.error) {
-            throw("webcamAPI: getWebcamPaths failed");
+            throw 'webcamAPI: getWebcamPaths failed';
         }
 
         return result.data;
@@ -152,14 +158,13 @@ export const webcamHandlers: Map<string, (...args: any[]) => any> = new Map<stri
             }
             child_process.exec(
                 `pkexec ${tccdExec} --new_webcam ${tmpWebcamPath}`,
-            (err: unknown, stdout: string, stderr: string): void => {
-                if (err) {
-                    resolve(false);
-                } else {
-                    resolve(true);
-                }
-            });
+                (err: unknown, stdout: string, stderr: string): void => {
+                    if (err) {
+                        resolve(false);
+                    } else {
+                        resolve(true);
+                    }
+                },
+            );
         });
-    })
-
-
+    });

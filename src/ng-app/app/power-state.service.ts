@@ -17,20 +17,19 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Injectable } from "@angular/core";
+import { Injectable } from '@angular/core';
 
 @Injectable({
-    providedIn: "root",
+    providedIn: 'root',
 })
 export class PowerStateService {
     private busPath: string;
 
-    constructor(
-    ) {
+    constructor() {
         if (window.power.getNvidiaDGpuCount() === 1) {
-            this.busPath = this.getBusPath("nvidia");
+            this.busPath = this.getBusPath('nvidia');
         } else if (window.power.getAmdDGpuCount() === 1) {
-            this.busPath = this.getBusPath("amd");
+            this.busPath = this.getBusPath('amd');
         }
     }
 

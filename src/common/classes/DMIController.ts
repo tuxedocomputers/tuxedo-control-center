@@ -25,21 +25,11 @@ export class DMIController extends SysFsController {
     constructor(public readonly basePath: string) {
         super();
 
-        this.boardName = new SysFsPropertyString(
-            path.join(basePath, "board_name"),
-        );
-        this.productSKU = new SysFsPropertyString(
-            path.join(basePath, "product_sku"),
-        );
-        this.boardVendor = new SysFsPropertyString(
-            path.join(basePath, "board_vendor"),
-        );
-        this.chassisVendor = new SysFsPropertyString(
-            path.join(basePath, "chassis_vendor"),
-        );
-        this.sysVendor = new SysFsPropertyString(
-            path.join(basePath, "sys_vendor"),
-        );
+        this.boardName = new SysFsPropertyString(path.join(basePath, 'board_name'));
+        this.productSKU = new SysFsPropertyString(path.join(basePath, 'product_sku'));
+        this.boardVendor = new SysFsPropertyString(path.join(basePath, 'board_vendor'));
+        this.chassisVendor = new SysFsPropertyString(path.join(basePath, 'chassis_vendor'));
+        this.sysVendor = new SysFsPropertyString(path.join(basePath, 'sys_vendor'));
     }
 
     public readonly boardName: SysFsPropertyString;

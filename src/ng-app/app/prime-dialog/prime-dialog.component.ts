@@ -17,26 +17,26 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, type OnInit } from "@angular/core";
-import { UtilsService } from "../utils.service";
-import { ConfigService } from "../config.service";
-import type { IpcRendererEvent } from "electron";
+import { Component, type OnInit } from '@angular/core';
+import { UtilsService } from '../utils.service';
+import { ConfigService } from '../config.service';
+import type { IpcRendererEvent } from 'electron';
 
 @Component({
-    selector: "app-prime-dialog",
-    templateUrl: "./prime-dialog.component.html",
-    styleUrls: ["./prime-dialog.component.scss"],
-    standalone: false
+    selector: 'app-prime-dialog',
+    templateUrl: './prime-dialog.component.html',
+    styleUrls: ['./prime-dialog.component.scss'],
+    standalone: false,
 })
 export class PrimeDialogComponent implements OnInit {
     private primeSelectMode: string;
     public langId: string;
 
-    public dialogStatus: string = "info";
+    public dialogStatus: string = 'info';
 
     constructor(
         private config: ConfigService,
-        private utils: UtilsService
+        private utils: UtilsService,
     ) {}
 
     public ngOnInit(): void {
@@ -47,8 +47,7 @@ export class PrimeDialogComponent implements OnInit {
             setTimeout(async (): Promise<void> => {
                 window.ipc.primeWindowShow();
             }, 250);
-        }
-        );
+        });
         this.langId = this.utils.getCurrentLanguageId();
     }
 
@@ -57,14 +56,12 @@ export class PrimeDialogComponent implements OnInit {
     }
 
     public async applyPrimeConfig(rebootStatus: string): Promise<void> {
-        this.setDialogStatus("loading");
+        this.setDialogStatus('loading');
 
-        const status: boolean = await this.config.pkexecSetPrimeSelectAsync(
-            this.primeSelectMode
-        );
+        const status: boolean = await this.config.pkexecSetPrimeSelectAsync(this.primeSelectMode);
 
         if (status) {
-            if (rebootStatus === "REBOOT") {
+            if (rebootStatus === 'REBOOT') {
                 window.ipc.issueReboot();
             }
             window.ipc.primeWindowClose();

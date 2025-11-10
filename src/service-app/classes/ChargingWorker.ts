@@ -24,12 +24,15 @@ import { ChargingPriorityController } from '../../common/classes/ChargingPriorit
 import { ChargeType, PowerSupplyController } from '../../common/classes/PowerSupplyController';
 
 export class ChargingWorker extends DaemonWorker {
-
-    private chargingProfile: ChargingProfileController = new ChargingProfileController('/sys/devices/platform/tuxedo_keyboard/charging_profile');
-    private chargingPriority: ChargingPriorityController = new ChargingPriorityController('/sys/devices/platform/tuxedo_keyboard/charging_priority');
+    private chargingProfile: ChargingProfileController = new ChargingProfileController(
+        '/sys/devices/platform/tuxedo_keyboard/charging_profile',
+    );
+    private chargingPriority: ChargingPriorityController = new ChargingPriorityController(
+        '/sys/devices/platform/tuxedo_keyboard/charging_priority',
+    );
 
     constructor(tccd: TuxedoControlCenterDaemon) {
-        super(10000, "ChargingWorker", tccd);
+        super(10000, 'ChargingWorker', tccd);
     }
 
     public async onStart(): Promise<void> {
@@ -39,7 +42,7 @@ export class ChargingWorker extends DaemonWorker {
                     this.tccd.settings.chargingProfile = this.chargingProfile.chargingProfile.readValue();
                     this.tccd.saveSettings();
                 } catch (err: unknown) {
-                    console.error(`ChargingWorker: Error init charging profile => ${err}`)
+                    console.error(`ChargingWorker: Error init charging profile => ${err}`);
                 }
             }
             this.applyChargingProfile();
@@ -51,27 +54,29 @@ export class ChargingWorker extends DaemonWorker {
                     this.tccd.settings.chargingPriority = this.chargingPriority.chargingPrio.readValue();
                     this.tccd.saveSettings();
                 } catch (err: unknown) {
-                    console.error(`ChargingWorker: Error init charging priority => ${err}`)
+                    console.error(`ChargingWorker: Error init charging priority => ${err}`);
                 }
             }
             this.applyChargingPriority();
         }
     }
 
-    public async onWork(): Promise<void> {
+    public async onWork(): Promise<void> {}
 
-    }
-
-    public async onExit(): Promise<void> {
-
-    }
+    public async onExit(): Promise<void> {}
 
     public hasChargingProfile(): boolean {
-        return this.chargingProfile.chargingProfile.isAvailable() && this.chargingProfile.chargingProfilesAvailable.isAvailable();
+        return (
+            this.chargingProfile.chargingProfile.isAvailable() &&
+            this.chargingProfile.chargingProfilesAvailable.isAvailable()
+        );
     }
 
     public hasChargingPriority(): boolean {
-        return this.chargingPriority.chargingPrio.isAvailable() && this.chargingPriority.chargingPriosAvailable.isAvailable();
+        return (
+            this.chargingPriority.chargingPrio.isAvailable() &&
+            this.chargingPriority.chargingPriosAvailable.isAvailable()
+        );
     }
 
     public async applyChargingProfile(chargingProfileDescriptor?: string): Promise<boolean> {
@@ -85,14 +90,18 @@ export class ChargingWorker extends DaemonWorker {
                 const profileToSet: string = this.tccd.settings.chargingProfile;
                 const currentProfile: string = this.chargingProfile.chargingProfile.readValue();
                 const profilesAvailable: string[] = this.chargingProfile.chargingProfilesAvailable.readValue();
-                if (profileToSet !== null && profileToSet !== currentProfile && profilesAvailable.includes(profileToSet)) {
+                if (
+                    profileToSet !== null &&
+                    profileToSet !== currentProfile &&
+                    profilesAvailable.includes(profileToSet)
+                ) {
                     this.chargingProfile.chargingProfile.writeValue(profileToSet);
                     this.tccd.logLine(`ChargingWorker: Applied charging profile '${profileToSet}'`);
                 }
                 return true;
             }
         } catch (err: unknown) {
-            console.error(`ChargingWorker: Failed applying charging profile => ${err}`)
+            console.error(`ChargingWorker: Failed applying charging profile => ${err}`);
         }
 
         return false;
@@ -115,7 +124,7 @@ export class ChargingWorker extends DaemonWorker {
             }
             return [];
         } catch (err: unknown) {
-            console.error(`ChargingWorker: getChargingProfilesAvailable failed => ${err}`)
+            console.error(`ChargingWorker: getChargingProfilesAvailable failed => ${err}`);
             return [];
         }
     }
@@ -138,7 +147,7 @@ export class ChargingWorker extends DaemonWorker {
                 return true;
             }
         } catch (err: unknown) {
-            console.error(`ChargingWorker: Failed applying charging priority => ${err}`)
+            console.error(`ChargingWorker: Failed applying charging priority => ${err}`);
         }
         return false;
     }
@@ -155,13 +164,13 @@ export class ChargingWorker extends DaemonWorker {
     // todo: gets called inside global settings menu periodically, status shouldn't change often
     public getChargingPrioritiesAvailable(): string[] {
         try {
-            const chargingPriosAvailable: boolean = this.chargingPriority.chargingPriosAvailable.isAvailable()
+            const chargingPriosAvailable: boolean = this.chargingPriority.chargingPriosAvailable.isAvailable();
             if (chargingPriosAvailable) {
                 return this.chargingPriority.chargingPriosAvailable.readValue();
             }
-            return []
+            return [];
         } catch (err: unknown) {
-            console.error(`ChargingWorker: getChargingPrioritiesAvailable failed => ${err}`)
+            console.error(`ChargingWorker: getChargingPrioritiesAvailable failed => ${err}`);
             return [];
         }
     }
@@ -178,7 +187,7 @@ export class ChargingWorker extends DaemonWorker {
             // Read available thresholds if list is available
             return await bat.chargeControlStartAvailableThresholds.readValueA();
         } catch (err: unknown) {
-            console.error(`ChargingWorker: getChargeStartAvailableThresholds failed => ${err}`)
+            console.error(`ChargingWorker: getChargeStartAvailableThresholds failed => ${err}`);
             // Default to 0-100 if the unofficial available lists are not there
             return Array.from(Array(101).keys());
         }
@@ -196,7 +205,7 @@ export class ChargingWorker extends DaemonWorker {
             // Read available thresholds if list is available
             return await bat.chargeControlEndAvailableThresholds.readValueA();
         } catch (err: unknown) {
-            console.error(`ChargingWorker: getChargeEndAvailableThresholds failed => ${err}`)
+            console.error(`ChargingWorker: getChargeEndAvailableThresholds failed => ${err}`);
 
             // Default to 0-100 if the unofficial available lists are not there
             return Array.from(Array(101).keys());
@@ -207,11 +216,11 @@ export class ChargingWorker extends DaemonWorker {
     public async getChargeStartThreshold(): Promise<number> {
         const bat: PowerSupplyController = await PowerSupplyController.getFirstBattery();
         try {
-            const available: boolean = bat.chargeControlStartThreshold.isAvailable()
+            const available: boolean = bat.chargeControlStartThreshold.isAvailable();
             if (available) {
                 return await bat.chargeControlStartThreshold.readValueA();
             }
-            return -1
+            return -1;
         } catch (err: unknown) {
             return undefined;
         }
@@ -221,13 +230,13 @@ export class ChargingWorker extends DaemonWorker {
         const bat: PowerSupplyController = await PowerSupplyController.getFirstBattery();
         try {
             // todo: make fully async
-            const writable: boolean = bat.chargeControlStartThreshold.isWritable()
+            const writable: boolean = bat.chargeControlStartThreshold.isWritable();
             if (writable) {
                 await bat.chargeControlStartThreshold.writeValueA(value);
                 return true;
             }
         } catch (err: unknown) {
-            console.error(`ChargingWorker: Failed writing start threshold => ${err}`)
+            console.error(`ChargingWorker: Failed writing start threshold => ${err}`);
             return false;
         }
 
@@ -238,13 +247,13 @@ export class ChargingWorker extends DaemonWorker {
     public async getChargeEndThreshold(): Promise<number> {
         const bat: PowerSupplyController = await PowerSupplyController.getFirstBattery();
         try {
-            const available: boolean = bat.chargeControlEndThreshold.isAvailable()
+            const available: boolean = bat.chargeControlEndThreshold.isAvailable();
             if (available) {
                 return await bat.chargeControlEndThreshold.readValueA();
             }
-            return -1
+            return -1;
         } catch (err: unknown) {
-            console.error(`ChargingWorker: getChargeEndThreshold failed => ${err}`)
+            console.error(`ChargingWorker: getChargeEndThreshold failed => ${err}`);
             undefined;
         }
     }
@@ -253,13 +262,13 @@ export class ChargingWorker extends DaemonWorker {
         const bat: PowerSupplyController = await PowerSupplyController.getFirstBattery();
         try {
             // todo: make fully async
-            const writable: boolean = bat.chargeControlEndThreshold.isWritable()
+            const writable: boolean = bat.chargeControlEndThreshold.isWritable();
             if (writable) {
                 await bat.chargeControlEndThreshold.writeValueA(value);
                 return true;
             }
         } catch (err: unknown) {
-            console.error(`ChargingWorker: Failed writing end threshold => ${err}`)
+            console.error(`ChargingWorker: Failed writing end threshold => ${err}`);
             return false;
         }
 
@@ -271,13 +280,13 @@ export class ChargingWorker extends DaemonWorker {
         const bat: PowerSupplyController = await PowerSupplyController.getFirstBattery();
         try {
             // todo: make fully async
-            const available: boolean = bat.chargeType.isAvailable()
+            const available: boolean = bat.chargeType.isAvailable();
             if (available) {
                 return (await bat.chargeType.readValueA()).trim();
             }
-            return ""
+            return '';
         } catch (err: unknown) {
-            console.error(`ChargingWorker: getChargeType failed => ${err}`)
+            console.error(`ChargingWorker: getChargeType failed => ${err}`);
             return ChargeType.Unknown.toString();
         }
     }
@@ -286,13 +295,13 @@ export class ChargingWorker extends DaemonWorker {
         const bat: PowerSupplyController = await PowerSupplyController.getFirstBattery();
         try {
             // todo: make fully async
-            const writable: boolean = bat.chargeType.isWritable()
+            const writable: boolean = bat.chargeType.isWritable();
             if (writable) {
                 await bat.chargeType.writeValueA(chargeType.toString());
                 return true;
             }
         } catch (err: unknown) {
-            console.error(`ChargingWorker: Failed writing charge type => ${err}`)
+            console.error(`ChargingWorker: Failed writing charge type => ${err}`);
             return false;
         }
 

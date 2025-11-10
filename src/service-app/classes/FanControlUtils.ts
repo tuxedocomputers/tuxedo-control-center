@@ -17,18 +17,12 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {
-    type ITccFanProfile,
-    type ITccFanTableEntry,
-    customFanPreset,
-} from "../../common/models/TccFanTable";
+import { type ITccFanProfile, type ITccFanTableEntry, customFanPreset } from '../../common/models/TccFanTable';
 
-import { interpolatePointsArray } from "../../common/classes/FanUtils";
-import type { ITccProfile } from "src/common/models/TccProfile";
+import { interpolatePointsArray } from '../../common/classes/FanUtils';
+import type { ITccProfile } from 'src/common/models/TccProfile';
 
-export async function getCustomFanCurve(
-    profile: ITccProfile
-): Promise<ITccFanProfile> {
+export async function getCustomFanCurve(profile: ITccProfile): Promise<ITccFanProfile> {
     if (profile.fan.customFanCurve === undefined) {
         return customFanPreset;
     } else {
@@ -36,22 +30,22 @@ export async function getCustomFanCurve(
     }
 }
 
-export async function getCurrentCustomProfile(
-    activeProfile: ITccProfile
-): Promise<ITccFanProfile> {
-    const customFanCurve: ITccFanProfile =
-        await getCustomFanCurve(activeProfile);
+export async function getCurrentCustomProfile(activeProfile: ITccProfile): Promise<ITccFanProfile> {
+    const customFanCurve: ITccFanProfile = await getCustomFanCurve(activeProfile);
     const [tableCPU, tableGPU] = await Promise.all([
         interpolatePointsArray(customFanCurve.tableCPU),
         interpolatePointsArray(customFanCurve.tableGPU),
     ]);
 
-    const tccFanTable: (temp: number, i: number) => ITccFanTableEntry = (temp: number, i: number): ITccFanTableEntry => ({
+    const tccFanTable: (temp: number, i: number) => ITccFanTableEntry = (
+        temp: number,
+        i: number,
+    ): ITccFanTableEntry => ({
         temp: i,
         speed: temp,
     });
     const tccFanProfile: ITccFanProfile = {
-        name: "Custom",
+        name: 'Custom',
         tableCPU: tableCPU.map(tccFanTable),
         tableGPU: tableGPU.map(tccFanTable),
     };

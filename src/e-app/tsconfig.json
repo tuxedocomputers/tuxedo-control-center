@@ -1,14 +1,11 @@
 {
-  "extends": "../../tsconfig.json",
-  "compilerOptions": {
-    "outDir": "../../dist/tuxedo-control-center/e-app",
-    "rootDir": "../",
-    "module": "commonjs",
-    "types": ["node"],
-    "target": "esnext"
-  },
-  "exclude": [
-    "test.ts",
-    "**/*.spec.ts"
-  ]
+    "extends": "../../tsconfig.json",
+    "compilerOptions": {
+        "outDir": "../../dist/tuxedo-control-center/e-app",
+        "rootDir": "../",
+        "module": "commonjs",
+        "types": ["node"],
+        "target": "esnext"
+    },
+    "exclude": ["test.ts", "**/*.spec.ts"]
 }

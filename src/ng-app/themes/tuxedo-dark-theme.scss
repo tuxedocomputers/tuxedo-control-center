@@ -17,8 +17,8 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-@use "sass:map";
-@use "@angular/material" as mat;
+@use 'sass:map';
+@use '@angular/material' as mat;
 
 $palettes: (
     primary: (
@@ -161,8 +161,8 @@ html {
                     primary: $primary-palette,
                 ),
                 typography: (
-                    brand-family: "Titillium Web",
-                    plain-family: "Titillium Web",
+                    brand-family: 'Titillium Web',
+                    plain-family: 'Titillium Web',
                 ),
             )
         );

@@ -18,9 +18,9 @@
  */
 
 import 'jasmine';
-const mock: typeof import("mock-fs") = require('mock-fs');
+const mock: typeof import('mock-fs') = require('mock-fs');
 
-import { DriveController } from "./DriveController";
+import { DriveController } from './DriveController';
 const child_process = require('node:child_process');
 import type { IDrive } from '../models/IDrive';
 
@@ -32,39 +32,39 @@ describe('DriveController', (): void => {
     beforeEach((): void => {
         mock({
             '/sys/class/block/': {
-                'sda': {
-                    'size': sizeDriveSda.toString()
+                sda: {
+                    size: sizeDriveSda.toString(),
                 },
-                'sda1': {
-                    'size': sizeDriveSda1.toString(),
-                    'partition': '1'
+                sda1: {
+                    size: sizeDriveSda1.toString(),
+                    partition: '1',
                 },
-                'sda2': {
-                    'size': sizeDriveSda2.toString(),
-                    'partition': '2'
-                }
+                sda2: {
+                    size: sizeDriveSda2.toString(),
+                    partition: '2',
+                },
             },
             '/sys/block/': {
                 'dm-0': {},
                 'dm-1': {},
                 'dm-2': {},
-                'loop0': {},
-                'loop1': {},
-                'loop2': {},
-                'sda': {}
+                loop0: {},
+                loop1: {},
+                loop2: {},
+                sda: {},
             },
             '/dev/': {
                 'dm-0': {},
                 'dm-1': {},
                 'dm-2': {},
-                'loop0': {},
-                'loop1': {},
-                'loop2': {},
-                'sda': {},
-                'sda1': {},
-                'sda2': {},
-                'sda3': {},
-            }
+                loop0: {},
+                loop1: {},
+                loop2: {},
+                sda: {},
+                sda1: {},
+                sda2: {},
+                sda3: {},
+            },
         });
     });
 
@@ -73,18 +73,18 @@ describe('DriveController', (): void => {
     });
 
     it('get child info', async (): Promise<void> => {
-        spyOn(child_process, "execSync").and.returnValue(Buffer.from("ext4"));
+        spyOn(child_process, 'execSync').and.returnValue(Buffer.from('ext4'));
 
-        const drive: IDrive = await DriveController.getDeviceInfo("/sys/class/block/sda1");
+        const drive: IDrive = await DriveController.getDeviceInfo('/sys/class/block/sda1');
         expect(drive.isParent).toBe(false);
         expect(drive.crypt).toBe(false);
         expect(drive.size).toBe(sizeDriveSda1);
     });
 
     it('get child info - crypt', async (): Promise<void> => {
-        spyOn(child_process, "execSync").and.returnValue(Buffer.from("crypto_LUKS"));
+        spyOn(child_process, 'execSync').and.returnValue(Buffer.from('crypto_LUKS'));
 
-        const drive: IDrive = await DriveController.getDeviceInfo("/sys/class/block/sda2");
+        const drive: IDrive = await DriveController.getDeviceInfo('/sys/class/block/sda2');
         expect(drive.isParent).toBe(false);
         expect(drive.crypt).toBe(true);
     });

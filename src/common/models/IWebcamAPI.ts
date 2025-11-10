@@ -33,4 +33,4 @@ export enum WebcamAPIFunctions {
     executeFilteredWebcamCtrls = 'executeFilteredWebcamCtrls',
     getWebcamPaths = 'getWebcamPaths',
     writeConfig = 'writeConfig',
-};
+}

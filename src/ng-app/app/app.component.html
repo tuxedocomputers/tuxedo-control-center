@@ -17,9 +17,9 @@ You should have received a copy of the GNU General Public License
 along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
-<div *ngIf=pageDisabled() [ngClass]="{'global-spinner': pageDisabled()}">
+<div *ngIf="pageDisabled()" [ngClass]="{ 'global-spinner': pageDisabled() }">
     <i class="fas fa-cog fa-spin"></i>
 </div>
-<div class="pagewrap" [ngClass]="{'blur-no-input': pageDisabled()}">
+<div class="pagewrap" [ngClass]="{ 'blur-no-input': pageDisabled() }">
     <router-outlet></router-outlet>
 </div>

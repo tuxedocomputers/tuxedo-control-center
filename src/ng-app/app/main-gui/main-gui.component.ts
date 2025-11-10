@@ -25,16 +25,15 @@ import { type IStateInfo, StateService } from '../state.service';
 import { UtilsService } from '../utils.service';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { TccDBusClientService } from "../tcc-dbus-client.service";
+import { TccDBusClientService } from '../tcc-dbus-client.service';
 
 @Component({
-  selector: 'app-main-gui',
-  templateUrl: './main-gui.component.html',
-  styleUrls: ['./main-gui.component.scss'],
-  standalone: false
+    selector: 'app-main-gui',
+    templateUrl: './main-gui.component.html',
+    styleUrls: ['./main-gui.component.scss'],
+    standalone: false,
 })
 export class MainGuiComponent implements OnInit, OnDestroy {
-
     public profileSelect: string;
     public activeProfileName: string;
     private subscriptions: Subscription = new Subscription();
@@ -50,57 +49,51 @@ export class MainGuiComponent implements OnInit, OnDestroy {
         public compat: CompatibilityService,
         private route: ActivatedRoute,
         private dbus: TccDBusClientService,
-        ) {
-            const data = this.route.snapshot.data;
-            this.dataLoaded = data.loaded === true;
-        }
+    ) {
+        const data = this.route.snapshot.data;
+        this.dataLoaded = data.loaded === true;
+    }
 
     public buttonLanguageLabel: string;
 
     public ngOnInit(): void {
-
         this.updateLanguageName();
-        this.state.initializeProfileNames()
+        this.state.initializeProfileNames();
 
         if (!this.dataLoaded) {
-            console.error("main-gui: ngOnInit: dbus data not available");
+            console.error('main-gui: ngOnInit: dbus data not available');
             this.retryCount = 0;
 
             this.subscriptions.add(
-                this.dbus.dbusAvailable.subscribe(
-                    (dbusAvailable: boolean): void => {
-                        this.retryCount += 1;
+                this.dbus.dbusAvailable.subscribe((dbusAvailable: boolean): void => {
+                    this.retryCount += 1;
 
-                        if (!dbusAvailable && this.retryCount > 3) {
-                            alert(
-                                $localize`:@@msgboxMessageServiceUnavailable:The background service tccd is not available. Please check the corresponding system logs or restart this service manually.`,
-                            );
-                            this.subscriptions.unsubscribe();
-                            this.utils.quit();
-                        }
+                    if (!dbusAvailable && this.retryCount > 3) {
+                        alert(
+                            $localize`:@@msgboxMessageServiceUnavailable:The background service tccd is not available. Please check the corresponding system logs or restart this service manually.`,
+                        );
+                        this.subscriptions.unsubscribe();
+                        this.utils.quit();
+                    }
 
-                        if (!this.dbus.dataLoaded && this.retryCount > 3) {
-                            alert(
-                                $localize`:@@msgboxMessagDataUnavailable:Profiles are not available. Please check the corresponding system logs or restart tccd manually.`,
-                            );
-                            this.subscriptions.unsubscribe();
-                            this.utils.quit();
-                        }
+                    if (!this.dbus.dataLoaded && this.retryCount > 3) {
+                        alert(
+                            $localize`:@@msgboxMessagDataUnavailable:Profiles are not available. Please check the corresponding system logs or restart tccd manually.`,
+                        );
+                        this.subscriptions.unsubscribe();
+                        this.utils.quit();
+                    }
 
-                        if (dbusAvailable && this.dbus.dataLoaded) {
-                            console.log(
-                                "main-gui: ngOnInit: dbus data available",
-                            );
-                            this.subscriptions.unsubscribe();
-                        }
-                    },
-                ),
+                    if (dbusAvailable && this.dbus.dataLoaded) {
+                        console.log('main-gui: ngOnInit: dbus data available');
+                        this.subscriptions.unsubscribe();
+                    }
+                }),
             );
         }
 
-        window.ipc.onDbusDead( (): void => {
-            if(!this.dbusDead)
-            {
+        window.ipc.onDbusDead((): void => {
+            if (!this.dbusDead) {
                 this.dbusDead = true;
                 // TODO which behaviour makes the most sense?
                 this.utils.pageDisabled = true;
@@ -112,11 +105,10 @@ export class MainGuiComponent implements OnInit, OnDestroy {
 
     private async checkIfDbusIsBack(): Promise<void> {
         setTimeout(async (): Promise<void> => {
-            if(await window.dbusAPI.dbusAvailable()) {
+            if (await window.dbusAPI.dbusAvailable()) {
                 this.dbusDead = false;
                 this.utils.pageDisabled = false;
-            }
-            else {
+            } else {
                 this.checkIfDbusIsBack();
             }
         }, 100);
@@ -144,7 +136,7 @@ export class MainGuiComponent implements OnInit, OnDestroy {
         return this.utils.getCurrentLanguageId();
     }
 
-    public getLanguagesMenuArray(): { id: string, label: string, img: string }[] {
+    public getLanguagesMenuArray(): { id: string; label: string; img: string }[] {
         return this.utils.getLanguagesMenuArray();
     }
 
@@ -154,20 +146,24 @@ export class MainGuiComponent implements OnInit, OnDestroy {
 
     public buttonToggleLanguage(): void {
         window.webcamAPI.closeWebcamPreview();
-        this.utils.changeLanguage(this.utils.getLanguagesMenuArray().find((lang: {
-            id: string;
-            label: string;
-            img: string;
-        }): boolean => lang.id !== this.utils.getCurrentLanguageId()).id);
+        this.utils.changeLanguage(
+            this.utils
+                .getLanguagesMenuArray()
+                .find(
+                    (lang: { id: string; label: string; img: string }): boolean =>
+                        lang.id !== this.utils.getCurrentLanguageId(),
+                ).id,
+        );
         this.updateLanguageName();
     }
 
     public updateLanguageName(): void {
-        this.buttonLanguageLabel = this.utils.getLanguagesMenuArray().find((lang: {
-            id: string;
-            label: string;
-            img: string;
-        }): boolean => lang.id !== this.utils.getCurrentLanguageId()).label;
+        this.buttonLanguageLabel = this.utils
+            .getLanguagesMenuArray()
+            .find(
+                (lang: { id: string; label: string; img: string }): boolean =>
+                    lang.id !== this.utils.getCurrentLanguageId(),
+            ).label;
     }
 
     public getStateInputs(): IStateInfo[] {
@@ -180,21 +176,21 @@ export class MainGuiComponent implements OnInit, OnDestroy {
 
     public getStateProfileName(state: IStateInfo): string {
         if (state.value === ProfileStates.AC) {
-            return this.state.getCurrentChargingProfileName()
+            return this.state.getCurrentChargingProfileName();
         }
 
         if (state.value === ProfileStates.BAT) {
-            return this.state.getCurrentBatteryProfileName()
+            return this.state.getCurrentBatteryProfileName();
         }
     }
 
     public getProfileLink(state: IStateInfo): string {
         if (state.value === ProfileStates.AC) {
-            return `profile-manager/${this.state.getCurrentChargingProfileId()}`
+            return `profile-manager/${this.state.getCurrentChargingProfileId()}`;
         }
 
         if (state.value === ProfileStates.BAT) {
-            return `profile-manager/${this.state.getCurrentBatteryProfileId()}`
+            return `profile-manager/${this.state.getCurrentBatteryProfileId()}`;
         }
     }
 }

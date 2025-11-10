@@ -21,12 +21,12 @@ import type { ITccProfile } from '../../common/models/TccProfile';
 import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
 export abstract class DaemonWorker {
-
     constructor(
         public readonly timeout: number,
         public readonly name: string,
         // Also inject the state (i.e configs etc..)
-        protected tccd: TuxedoControlCenterDaemon) {}
+        protected tccd: TuxedoControlCenterDaemon,
+    ) {}
 
     public timer: NodeJS.Timeout;
 
@@ -37,9 +37,15 @@ export abstract class DaemonWorker {
     protected abstract onWork(): Promise<void>;
     protected abstract onExit(): Promise<void>;
 
-    public async start(): Promise<void> { await this.triggerWork(this.onStart); }
-    public async work(): Promise<void> { await this.triggerWork(this.onWork); }
-    public async exit(): Promise<void> { await this.triggerWork(this.onExit); }
+    public async start(): Promise<void> {
+        await this.triggerWork(this.onStart);
+    }
+    public async work(): Promise<void> {
+        await this.triggerWork(this.onWork);
+    }
+    public async exit(): Promise<void> {
+        await this.triggerWork(this.onExit);
+    }
 
     public updateProfile(activeProfile: ITccProfile): void {
         this.activeProfile = activeProfile;
@@ -49,5 +55,4 @@ export abstract class DaemonWorker {
         await eventFunction.call(this);
         this.previousProfile = this.activeProfile;
     }
-
 }

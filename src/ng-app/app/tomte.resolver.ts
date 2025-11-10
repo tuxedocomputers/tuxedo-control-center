@@ -17,20 +17,19 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Injectable } from "@angular/core";
-import type { Resolve } from "@angular/router";
-import { type Observable, from } from "rxjs";
-import { filter, first } from "rxjs/operators";
+import { Injectable } from '@angular/core';
+import type { Resolve } from '@angular/router';
+import { type Observable, from } from 'rxjs';
+import { filter, first } from 'rxjs/operators';
 
 @Injectable({
-    providedIn: "root",
+    providedIn: 'root',
 })
 export class TomteInstalledResolver implements Resolve<boolean> {
     resolve(): Observable<boolean> {
         return from(window.pgms.tomteInstalled()).pipe(
             filter((value: boolean): boolean => value !== undefined),
-            first()
+            first(),
         );
     }
 }
-    

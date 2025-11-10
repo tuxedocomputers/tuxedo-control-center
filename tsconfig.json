@@ -1,19 +1,16 @@
 {
-  "compileOnSave": false,
-  "compilerOptions": {
-    "baseUrl": "./",
-    "module": "esnext",
-    "outDir": "./dist/out-tsc",
-    "sourceMap": true,
-    "declaration": false,
-    "downlevelIteration": true,
-    "moduleResolution": "node",
-    "experimentalDecorators": true,
-    "importHelpers": true,
-    "target": "esnext",
-    "lib": [
-      "esnext",
-      "dom"
-    ]
-  }
+    "compileOnSave": false,
+    "compilerOptions": {
+        "baseUrl": "./",
+        "module": "esnext",
+        "outDir": "./dist/out-tsc",
+        "sourceMap": true,
+        "declaration": false,
+        "downlevelIteration": true,
+        "moduleResolution": "node",
+        "experimentalDecorators": true,
+        "importHelpers": true,
+        "target": "esnext",
+        "lib": ["esnext", "dom"]
+    }
 }

@@ -23,42 +23,41 @@ import { BehaviorSubject } from 'rxjs';
 import { FnLockController } from '../../common/classes/FnLockController';
 import type { ChargeType } from '../../common/classes/PowerSupplyController';
 
-
 /**
  * Structure for DBus interface data, passed to interface
  */
 export class TccDBusData {
     public dbusAvailable: boolean = false;
-    public device: string = "";
+    public device: string = '';
     public deviceHasAquaris: boolean = false;
-    public displayModesJSON: string = "{}";
+    public displayModesJSON: string = '{}';
     public isX11: number = -1;
     public tuxedoWmiAvailable: boolean = false;
     public fanHwmonAvailable: boolean = false;
-    public tccdVersion: string = ""
-    public fanData: string = "";
+    public tccdVersion: string = '';
+    public fanData: string = '';
     public webcamSwitchAvailable: boolean = false;
     public webcamSwitchStatus: boolean = false;
     public forceYUV420OutputSwitchAvailable: boolean = false;
-    public iGpuInfoValuesJSON: string = "{}";
-    public dGpuInfoValuesJSON: string = "{}";
+    public iGpuInfoValuesJSON: string = '{}';
+    public dGpuInfoValuesJSON: string = '{}';
     public iGpuAvailable: number = -1;
     public dGpuAvailable: number = -1;
-    public cpuPowerValuesJSON: string = "{}";
-    public primeState: string = "-1";
+    public cpuPowerValuesJSON: string = '{}';
+    public primeState: string = '-1';
     public modeReapplyPending: boolean;
-    public tempProfileName: string = "";
-    public tempProfileId: string = "";
-    public activeProfileJSON: string = "{}";
-    public profilesJSON: string = "{}";
-    public customProfilesJSON: string = "{}";
-    public defaultProfilesJSON: string = "{}";
-    public defaultValuesProfileJSON: string = "{}";
-    public settingsJSON: string = "{}";
-    public odmProfilesAvailable: string[] = [""]
-    public odmPowerLimitsJSON: string = "{}";
-    public keyboardBacklightCapabilitiesJSON: string = "{}";
-    public keyboardBacklightStatesJSON: string = "{}";
+    public tempProfileName: string = '';
+    public tempProfileId: string = '';
+    public activeProfileJSON: string = '{}';
+    public profilesJSON: string = '{}';
+    public customProfilesJSON: string = '{}';
+    public defaultProfilesJSON: string = '{}';
+    public defaultValuesProfileJSON: string = '{}';
+    public settingsJSON: string = '{}';
+    public odmProfilesAvailable: string[] = [''];
+    public odmPowerLimitsJSON: string = '{}';
+    public keyboardBacklightCapabilitiesJSON: string = '{}';
+    public keyboardBacklightStatesJSON: string = '{}';
     public keyboardBacklightStatesNewJSON: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
     public fansMinSpeed: number = -1;
     public fansOffAvailable: boolean = false;
@@ -80,7 +79,10 @@ export class TccDBusInterface extends dbus.interface.Interface {
     private fnLock: FnLockController = new FnLockController();
     private dataCollectionTimeout: NodeJS.Timeout | null = null;
 
-    constructor(private data: TccDBusData, options: TccDBusOptions = {}) {
+    constructor(
+        private data: TccDBusData,
+        options: TccDBusOptions = {},
+    ) {
         super('com.tuxedocomputers.tccd');
 
         this.interfaceOptions = options;
@@ -90,7 +92,7 @@ export class TccDBusInterface extends dbus.interface.Interface {
     }
 
     private resetDataCollectionTimeout(): void {
-        if(this.dataCollectionTimeout) {
+        if (this.dataCollectionTimeout) {
             clearTimeout(this.dataCollectionTimeout);
         }
 
@@ -100,18 +102,40 @@ export class TccDBusInterface extends dbus.interface.Interface {
     }
 
     // todo: functions should start with Get or Set
-    private GetDeviceName(): string { return this.data.device; }
-    private DeviceHasAquaris(): boolean { return this.data.deviceHasAquaris; }
-    private GetDisplayModesJSON(): string { return this.data.displayModesJSON; }
-    private GetIsX11(): number { return this.data.isX11; }
-    private TuxedoWmiAvailable(): boolean { return this.data.tuxedoWmiAvailable; }
-    private FanHwmonAvailable(): boolean { return this.data.fanHwmonAvailable; }
-    private TccdVersion(): string { return this.data.tccdVersion; }
-    private GetFanDataJSON(): string { return this.data.fanData; }
-    private WebcamSWAvailable(): boolean { return this.data.webcamSwitchAvailable; }
-    private GetWebcamSWStatus(): boolean { return this.data.webcamSwitchStatus; }
-    private GetForceYUV420OutputSwitchAvailable(): boolean { return this.data.forceYUV420OutputSwitchAvailable; }
-    
+    private GetDeviceName(): string {
+        return this.data.device;
+    }
+    private DeviceHasAquaris(): boolean {
+        return this.data.deviceHasAquaris;
+    }
+    private GetDisplayModesJSON(): string {
+        return this.data.displayModesJSON;
+    }
+    private GetIsX11(): number {
+        return this.data.isX11;
+    }
+    private TuxedoWmiAvailable(): boolean {
+        return this.data.tuxedoWmiAvailable;
+    }
+    private FanHwmonAvailable(): boolean {
+        return this.data.fanHwmonAvailable;
+    }
+    private TccdVersion(): string {
+        return this.data.tccdVersion;
+    }
+    private GetFanDataJSON(): string {
+        return this.data.fanData;
+    }
+    private WebcamSWAvailable(): boolean {
+        return this.data.webcamSwitchAvailable;
+    }
+    private GetWebcamSWStatus(): boolean {
+        return this.data.webcamSwitchStatus;
+    }
+    private GetForceYUV420OutputSwitchAvailable(): boolean {
+        return this.data.forceYUV420OutputSwitchAvailable;
+    }
+
     private GetIGpuInfoValuesJSON(): string {
         this.resetDataCollectionTimeout();
         return this.data.iGpuInfoValuesJSON;
@@ -122,19 +146,31 @@ export class TccDBusInterface extends dbus.interface.Interface {
         return this.data.dGpuInfoValuesJSON;
     }
 
-    private GetIGpuAvailable(): number { return this.data.iGpuAvailable; }
+    private GetIGpuAvailable(): number {
+        return this.data.iGpuAvailable;
+    }
 
-    private GetDGpuAvailable(): number { return this.data.dGpuAvailable; }
+    private GetDGpuAvailable(): number {
+        return this.data.dGpuAvailable;
+    }
 
-    private GetPrimeState(): string { return this.data.primeState; }
-    private GetCpuPowerValuesJSON(): string { return this.data.cpuPowerValuesJSON; }
+    private GetPrimeState(): string {
+        return this.data.primeState;
+    }
+    private GetCpuPowerValuesJSON(): string {
+        return this.data.cpuPowerValuesJSON;
+    }
 
-    private SetSensorDataCollectionStatus(status: boolean): void {this.data.sensorDataCollectionStatus = status}
+    private SetSensorDataCollectionStatus(status: boolean): void {
+        this.data.sensorDataCollectionStatus = status;
+    }
     private GetSensorDataCollectionStatus(): boolean {
         return this.data.sensorDataCollectionStatus;
     }
 
-    private SetDGpuD0Metrics(status: boolean): void { this.data.d0MetricsUsage = status; }
+    private SetDGpuD0Metrics(status: boolean): void {
+        this.data.d0MetricsUsage = status;
+    }
 
     private ConsumeModeReapplyPending(): boolean {
         // Unlikely, but possible race condition.
@@ -145,7 +181,9 @@ export class TccDBusInterface extends dbus.interface.Interface {
         }
         return false;
     }
-    private GetActiveProfileJSON(): string { return this.data.activeProfileJSON; }
+    private GetActiveProfileJSON(): string {
+        return this.data.activeProfileJSON;
+    }
     private SetTempProfile(profileName: string): boolean {
         this.data.tempProfileName = profileName;
         return true;
@@ -155,15 +193,33 @@ export class TccDBusInterface extends dbus.interface.Interface {
         this.interfaceOptions.triggerStateCheck();
         return true;
     }
-    private GetProfilesJSON(): string { return this.data.profilesJSON; }
-    private GetCustomProfilesJSON(): string { return this.data.customProfilesJSON; }
-    private GetDefaultProfilesJSON(): string { return this.data.defaultProfilesJSON; }
-    private GetDefaultValuesProfileJSON(): string { return this.data.defaultValuesProfileJSON; }
-    private GetSettingsJSON(): string { return this.data.settingsJSON; }
-    private ODMProfilesAvailable(): string[] { return this.data.odmProfilesAvailable; }
-    private ODMPowerLimitsJSON(): string { return this.data.odmPowerLimitsJSON; }
-    private GetKeyboardBacklightCapabilitiesJSON(): string { return this.data.keyboardBacklightCapabilitiesJSON; }
-    private GetKeyboardBacklightStatesJSON(): string { return this.data.keyboardBacklightStatesJSON; }
+    private GetProfilesJSON(): string {
+        return this.data.profilesJSON;
+    }
+    private GetCustomProfilesJSON(): string {
+        return this.data.customProfilesJSON;
+    }
+    private GetDefaultProfilesJSON(): string {
+        return this.data.defaultProfilesJSON;
+    }
+    private GetDefaultValuesProfileJSON(): string {
+        return this.data.defaultValuesProfileJSON;
+    }
+    private GetSettingsJSON(): string {
+        return this.data.settingsJSON;
+    }
+    private ODMProfilesAvailable(): string[] {
+        return this.data.odmProfilesAvailable;
+    }
+    private ODMPowerLimitsJSON(): string {
+        return this.data.odmPowerLimitsJSON;
+    }
+    private GetKeyboardBacklightCapabilitiesJSON(): string {
+        return this.data.keyboardBacklightCapabilitiesJSON;
+    }
+    private GetKeyboardBacklightStatesJSON(): string {
+        return this.data.keyboardBacklightStatesJSON;
+    }
     private SetKeyboardBacklightStatesJSON(keyboardBacklightStatesJSON: string): boolean {
         this.data.keyboardBacklightStatesNewJSON.next(keyboardBacklightStatesJSON);
         return true;
@@ -171,8 +227,12 @@ export class TccDBusInterface extends dbus.interface.Interface {
     public ModeReapplyPendingChanged(): boolean {
         return this.data.modeReapplyPending;
     }
-    private GetFansMinSpeed(): number { return this.data.fansMinSpeed; }
-    private GetFansOffAvailable(): boolean { return this.data.fansOffAvailable; }
+    private GetFansMinSpeed(): number {
+        return this.data.fansMinSpeed;
+    }
+    private GetFansOffAvailable(): boolean {
+        return this.data.fansOffAvailable;
+    }
     private async GetChargingProfilesAvailable(): Promise<string> {
         return JSON.stringify(await this.interfaceOptions.chargingWorker.getChargingProfilesAvailable());
     }
@@ -239,23 +299,22 @@ export class TccDBusInterface extends dbus.interface.Interface {
         return this.data.nvidiaPowerCTRLAvailable;
     }
     private GetIsUnsupportedConfigurableTGPDevice(): boolean {
-        return this.data.isUnsupportedConfigurableTGPDevice
+        return this.data.isUnsupportedConfigurableTGPDevice;
     }
 
     private dbusAvailable(): boolean {
-        return this.data.dbusAvailable
+        return this.data.dbusAvailable;
     }
 }
 
 TccDBusInterface.configureMembers({
-    properties: {
-    },
+    properties: {},
     methods: {
-        dbusAvailable: {outSignature: 'b'},
-        GetDeviceName: {outSignature: 's'},
-        DeviceHasAquaris: { outSignature: 'b'},
-        GetDisplayModesJSON: {outSignature: 's'},
-        GetIsX11: { outSignature: 'i'},
+        dbusAvailable: { outSignature: 'b' },
+        GetDeviceName: { outSignature: 's' },
+        DeviceHasAquaris: { outSignature: 'b' },
+        GetDisplayModesJSON: { outSignature: 's' },
+        GetIsX11: { outSignature: 'i' },
         TuxedoWmiAvailable: { outSignature: 'b' },
         FanHwmonAvailable: { outSignature: 'b' },
         TccdVersion: { outSignature: 's' },
@@ -263,16 +322,16 @@ TccDBusInterface.configureMembers({
         WebcamSWAvailable: { outSignature: 'b' },
         GetWebcamSWStatus: { outSignature: 'b' },
         GetForceYUV420OutputSwitchAvailable: { outSignature: 'b' },
-        GetIGpuInfoValuesJSON: { outSignature: "s" },
-        GetDGpuInfoValuesJSON: { outSignature: "s" },
-        GetIGpuAvailable: { outSignature: "i" },
+        GetIGpuInfoValuesJSON: { outSignature: 's' },
+        GetDGpuInfoValuesJSON: { outSignature: 's' },
+        GetIGpuAvailable: { outSignature: 'i' },
         GetDGpuAvailable: { outSignature: 'i' },
         GetPrimeState: { outSignature: 's' },
         GetCpuPowerValuesJSON: { outSignature: 's' },
         ConsumeModeReapplyPending: { outSignature: 'b' },
         GetActiveProfileJSON: { outSignature: 's' },
-        SetTempProfile: { inSignature: 's',  outSignature: 'b' },
-        SetTempProfileById: { inSignature: 's',  outSignature: 'b' },
+        SetTempProfile: { inSignature: 's', outSignature: 'b' },
+        SetTempProfileById: { inSignature: 's', outSignature: 'b' },
         GetProfilesJSON: { outSignature: 's' },
         GetCustomProfilesJSON: { outSignature: 's' },
         GetDefaultProfilesJSON: { outSignature: 's' },
@@ -282,7 +341,7 @@ TccDBusInterface.configureMembers({
         ODMPowerLimitsJSON: { outSignature: 's' },
         GetKeyboardBacklightCapabilitiesJSON: { outSignature: 's' },
         GetKeyboardBacklightStatesJSON: { outSignature: 's' },
-        SetKeyboardBacklightStatesJSON: { inSignature: 's',  outSignature: 'b' },
+        SetKeyboardBacklightStatesJSON: { inSignature: 's', outSignature: 'b' },
         GetFansMinSpeed: { outSignature: 'i' },
         GetFansOffAvailable: { outSignature: 'b' },
         GetChargingProfilesAvailable: { outSignature: 's' },
@@ -299,18 +358,18 @@ TccDBusInterface.configureMembers({
         SetChargeEndThreshold: { inSignature: 'i', outSignature: 'b' },
         GetChargeType: { outSignature: 's' },
         SetChargeType: { inSignature: 's', outSignature: 'b' },
-        GetFnLockSupported: { outSignature: "b" },
-        GetFnLockStatus: { outSignature: "b" },
-        SetFnLockStatus: { inSignature: "b" },
+        GetFnLockSupported: { outSignature: 'b' },
+        GetFnLockStatus: { outSignature: 'b' },
+        SetFnLockStatus: { inSignature: 'b' },
         SetSensorDataCollectionStatus: { inSignature: 'b' },
         GetSensorDataCollectionStatus: { outSignature: 'b' },
         SetDGpuD0Metrics: { inSignature: 'b' },
         GetNVIDIAPowerCTRLDefaultPowerLimit: { outSignature: 'i' },
         GetNVIDIAPowerCTRLMaxPowerLimit: { outSignature: 'i' },
         GetNVIDIAPowerCTRLAvailable: { outSignature: 'b' },
-        GetIsUnsupportedConfigurableTGPDevice: { outSignature: 'b' }
+        GetIsUnsupportedConfigurableTGPDevice: { outSignature: 'b' },
     },
     signals: {
-        ModeReapplyPendingChanged: { signature: 'b' }
-    }
+        ModeReapplyPendingChanged: { signature: 'b' },
+    },
 });

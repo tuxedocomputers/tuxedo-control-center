@@ -39,7 +39,7 @@
             transform-origin: center;
             stroke-width: 3px;
             stroke: var(--gauge-red);
-            opacity: .7;
+            opacity: 0.7;
             stroke-linecap: round;
         }
     }
@@ -59,7 +59,7 @@
 
     &.not-available .custom-value-text {
         bottom: 70px;
-        font-size: 2.0em;
+        font-size: 2em;
     }
 
     .unit-text {

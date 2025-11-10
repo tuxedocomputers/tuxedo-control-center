@@ -27,12 +27,13 @@ import type { MatInput } from '@angular/material/input';
 import { StateService, type IStateInfo } from '../state.service';
 import { Subscription } from 'rxjs';
 import type { ITccSettings } from '../../../common/models/TccSettings';
-import { ProfileConflictDialogService } from "../profile-conflict-dialog/profile-conflict-dialog.service";
+import { ProfileConflictDialogService } from '../profile-conflict-dialog/profile-conflict-dialog.service';
 import type { IProfileConflictDialogResult } from '../profile-conflict-dialog/profile-conflict-dialog.component';
 
-
 enum InputMode {
-    New, Copy, Edit
+    New,
+    Copy,
+    Edit,
 }
 
 class ProfileManagerButton {
@@ -41,22 +42,26 @@ class ProfileManagerButton {
         public disable: () => boolean,
         public click: () => void,
         public label: () => string,
-        public tooltip: () => string) { }
+        public tooltip: () => string,
+    ) {}
 }
 
 @Component({
     selector: 'app-profile-manager',
     templateUrl: './profile-manager.component.html',
     styleUrls: ['./profile-manager.component.scss'],
-    standalone: false
+    standalone: false,
 })
 export class ProfileManagerComponent implements OnInit, OnDestroy {
-
     public currentProfile: ITccProfile;
 
     public inputActive: boolean = false;
     public currentInputMode: InputMode;
-    public inputProfileName: FormControl = new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(50)]);
+    public inputProfileName: FormControl = new FormControl('', [
+        Validators.required,
+        Validators.minLength(1),
+        Validators.maxLength(50),
+    ]);
     public inputProfileNameLabel: string;
     private subscriptions: Subscription = new Subscription();
 
@@ -73,7 +78,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
     public buttonNew: ProfileManagerButton;
     public buttonDelete: ProfileManagerButton;
 
-    private profileIdToCopy: string = "";
+    private profileIdToCopy: string = '';
 
     constructor(
         private route: ActivatedRoute,
@@ -82,8 +87,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
         private utils: UtilsService,
         private router: Router,
         private dialogService: ProfileConflictDialogService,
-        ) { }
-
+    ) {}
 
     public ngOnInit(): void {
         this.defineButtons();
@@ -179,7 +183,9 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
                     newProfileId = await this.config.copyProfile(undefined, this.inputProfileName.value);
                     if (newProfileId !== undefined) {
                         this.inputActive = false;
-                        await this.router.navigate(['profile-manager', newProfileId], { relativeTo: this.route.parent });
+                        await this.router.navigate(['profile-manager', newProfileId], {
+                            relativeTo: this.route.parent,
+                        });
                     }
                     this.utils.pageDisabled = false;
                     break;
@@ -188,7 +194,9 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
                     newProfileId = await this.config.copyProfile(this.profileIdToCopy, this.inputProfileName.value);
                     if (newProfileId !== undefined) {
                         this.inputActive = false;
-                        await this.router.navigate(['profile-manager', newProfileId], { relativeTo: this.route.parent });
+                        await this.router.navigate(['profile-manager', newProfileId], {
+                            relativeTo: this.route.parent,
+                        });
                     }
                     this.utils.pageDisabled = false;
                     break;
@@ -196,35 +204,37 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
         }
     }
 
-
-    public async exportProfiles(): Promise<void>
-    {
-        try{
+    public async exportProfiles(): Promise<void> {
+        try {
             const documentsPath: string = await this.utils.getPath('documents');
-            const result: string = await this.utils.saveFileDialog({defaultPath: `${documentsPath}/TCC_Profiles_Backup_${Date.now().toString()}.json`});
+            const result: string = await this.utils.saveFileDialog({
+                defaultPath: `${documentsPath}/TCC_Profiles_Backup_${Date.now().toString()}.json`,
+            });
             if (result) {
                 const profiles: ITccProfile[] = this.config.getCustomProfiles();
-                await this.utils.writeTextFile(result, JSON.stringify(profiles));     
+                await this.utils.writeTextFile(result, JSON.stringify(profiles));
             }
+        } catch (err: unknown) {
+            console.error(`profile-manager: exportProfiles failed => ${err}`);
         }
-        catch(err: unknown)
-        {
-            console.error(`profile-manager: exportProfiles failed => ${err}`)
-        }
-
     }
 
-
-    public async importProfiles(): Promise<void>
-    {
+    public async importProfiles(): Promise<void> {
         this.utils.pageDisabled = true;
         const documentsPath: string = await this.utils.getPath('documents');
-        const importLabel: string = $localize `:@@pMgrImportLabelFileDialoge:Import`;
-        let profileSettings: string = "";
-        
-        try
-        {
-            const result: string[] = await this.utils.openFileDialog({ defaultPath: documentsPath, buttonLabel: importLabel, filters:[{name: "JSON Files", extensions: ["json"]} , { name: "All Files", extensions: ["*"] }], properties: ['openFile']});
+        const importLabel: string = $localize`:@@pMgrImportLabelFileDialoge:Import`;
+        let profileSettings: string = '';
+
+        try {
+            const result: string[] = await this.utils.openFileDialog({
+                defaultPath: documentsPath,
+                buttonLabel: importLabel,
+                filters: [
+                    { name: 'JSON Files', extensions: ['json'] },
+                    { name: 'All Files', extensions: ['*'] },
+                ],
+                properties: ['openFile'],
+            });
             if (result.length === 0) {
                 this.utils.pageDisabled = false;
                 return;
@@ -232,72 +242,67 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
             if (result.length === 1) {
                 profileSettings = await this.utils.readTextFile(result[0]);
             }
-        }
-        catch (err: unknown)
-        {
-            console.error(`profile-manager: importProfiles readTextFile failed => ${err}`)
+        } catch (err: unknown) {
+            console.error(`profile-manager: importProfiles readTextFile failed => ${err}`);
             this.utils.pageDisabled = false;
             return;
         }
 
         let profiles: ITccProfile[];
-        try
-        {
+        try {
             if (profileSettings) {
                 profiles = JSON.parse(profileSettings);
             }
-        }
-        catch(err: unknown)
-        {
-            console.error(`profile-manager: importProfiles parse failed => ${err}`)
+        } catch (err: unknown) {
+            console.error(`profile-manager: importProfiles parse failed => ${err}`);
             this.utils.pageDisabled = false;
             return;
         }
         const oldProfiles: ITccProfile[] = this.config.getCustomProfiles();
         let newProfiles: ITccProfile[] = [];
-        for (var i: number = 0; i < profiles?.length; i++)
-        {
-            const conflictProfileIndex:number = oldProfiles.findIndex((x: ITccProfile): boolean => x.id === profiles[i].id);
-            if (conflictProfileIndex !== -1)
-            {
-                const result: IProfileConflictDialogResult = await this.dialogService.openConflictModal(oldProfiles[conflictProfileIndex],profiles[i]);
-                if(result.action === "keepNew")
-                {
+        for (var i: number = 0; i < profiles?.length; i++) {
+            const conflictProfileIndex: number = oldProfiles.findIndex(
+                (x: ITccProfile): boolean => x.id === profiles[i].id,
+            );
+            if (conflictProfileIndex !== -1) {
+                const result: IProfileConflictDialogResult = await this.dialogService.openConflictModal(
+                    oldProfiles[conflictProfileIndex],
+                    profiles[i],
+                );
+                if (result.action === 'keepNew') {
                     newProfiles = newProfiles.concat(profiles[i]);
-                }
-                else if (result.action === "newName")
-                {
+                } else if (result.action === 'newName') {
                     const newProfile: ITccProfile = profiles[i];
                     newProfile.name = result.newName;
-                    newProfile.id = "generateNewID";
+                    newProfile.id = 'generateNewID';
                     newProfiles = newProfiles.concat(newProfile);
                 }
-            }
-            else
-            {
+            } else {
                 newProfiles = newProfiles.concat(profiles[i]);
             }
         }
-        if(newProfiles?.length > 0)
-            {
+        if (newProfiles?.length > 0) {
             const importSuccess: boolean = await this.config.importProfiles(newProfiles);
-            if (!importSuccess)
-            {
-                console.error("profile-manager: profile import failed")
+            if (!importSuccess) {
+                console.error('profile-manager: profile import failed');
             }
         }
         this.utils.pageDisabled = false;
     }
     public deleteProfile(profileId: string): void {
-        this.config.deleteCustomProfile(profileId).then(((success: boolean): void => {
+        this.config.deleteCustomProfile(profileId).then((success: boolean): void => {
             if (success) {
                 this.router.navigate(['profile-manager'], { relativeTo: this.route.parent });
             }
-        }));
+        });
     }
 
     public isCustomProfile(): boolean {
-        return this.config.getCustomProfiles().find((profile: ITccProfile): boolean => profile.id === this.currentProfile.id) !== undefined;
+        return (
+            this.config
+                .getCustomProfiles()
+                .find((profile: ITccProfile): boolean => profile.id === this.currentProfile.id) !== undefined
+        );
     }
 
     public isUsedProfile(): boolean {
@@ -318,14 +323,16 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
             (): void => {
                 this.currentInputMode = InputMode.New;
                 this.inputProfileName.setValue('');
-                this.inputProfileNameLabel = $localize `:@@cProfMgrNewProfileLabel:New profile`;
+                this.inputProfileNameLabel = $localize`:@@cProfMgrNewProfileLabel:New profile`;
                 this.inputActive = true;
-                setTimeout((): void => { this.inputFocus.focus(); },0);
+                setTimeout((): void => {
+                    this.inputFocus.focus();
+                }, 0);
             },
             // Label
             (): string => '',
             // Tooltip
-            (): string => $localize `:@@cProfMgrNewButtonTooltip:Create a new profile with default settings`,
+            (): string => $localize`:@@cProfMgrNewButtonTooltip:Create a new profile with default settings`,
         );
     }
 
@@ -334,14 +341,16 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
 
         this.currentInputMode = InputMode.Copy;
         this.inputProfileName.setValue('');
-        this.inputProfileNameLabel = $localize `:@@cProfMgrCopyProfileLabel:Copy this profile`;
+        this.inputProfileNameLabel = $localize`:@@cProfMgrCopyProfileLabel:Copy this profile`;
         this.inputActive = true;
-        setTimeout((): void => { this.inputFocus.focus(); }, 0);
+        setTimeout((): void => {
+            this.inputFocus.focus();
+        }, 0);
     }
 
     public cancelInput(): void {
         this.inputActive = false;
-        this.profileIdToCopy = "";
+        this.profileIdToCopy = '';
     }
 
     public profileNameExist(profileName: string): boolean {

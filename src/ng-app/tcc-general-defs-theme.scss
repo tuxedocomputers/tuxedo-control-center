@@ -24,7 +24,6 @@
     $foreground: map-get($theme, foreground);
     $background: map-get($theme, background);
 
-
     /*
      * Definitions for general use of theme colors not warranting their own file
      */
@@ -40,4 +39,3 @@
         color: mat.m2-get-color-from-palette($warn) !important;
     }
 }
- 

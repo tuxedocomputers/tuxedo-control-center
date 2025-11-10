@@ -24,18 +24,18 @@ import { TuxedoIOAPI, type ObjWrapper } from '../../native-lib/TuxedoIOAPI';
 import type { ITccProfile } from 'src/common/models/TccProfile';
 
 export class WebcamWorker extends DaemonWorker {
-
     constructor(tccd: TuxedoControlCenterDaemon) {
-        super(2000, "WebCamWorker", tccd);
+        super(2000, 'WebCamWorker', tccd);
     }
 
     public async onStart(): Promise<void> {
         this.updateWebcamStatus();
 
         const activeProfile: ITccProfile = this.activeProfile;
-        const settingsDefined: boolean = activeProfile.webcam !== undefined
-            && activeProfile.webcam.useStatus !== undefined
-            && activeProfile.webcam.status !== undefined;
+        const settingsDefined: boolean =
+            activeProfile.webcam !== undefined &&
+            activeProfile.webcam.useStatus !== undefined &&
+            activeProfile.webcam.status !== undefined;
 
         if (settingsDefined && this.tccd.dbusData.webcamSwitchAvailable) {
             // Always force webcam to selected setting, option to not set is removed for now
@@ -64,10 +64,7 @@ export class WebcamWorker extends DaemonWorker {
         this.updateWebcamStatus();
     }
 
-    public async onExit(): Promise<void> {
-
-    }
-
+    public async onExit(): Promise<void> {}
 
     private updateWebcamStatus(): void {
         // Use getter method to check for implemented functionality

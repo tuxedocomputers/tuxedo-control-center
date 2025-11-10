@@ -17,26 +17,23 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, Inject } from "@angular/core";
-import { FormControl } from "@angular/forms";
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import type {
-    DialogChoiceComponent,
-    WaitingDialogData,
-} from "../dialog-choice/dialog-choice.component";
+import { Component, Inject } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import type { DialogChoiceComponent, WaitingDialogData } from '../dialog-choice/dialog-choice.component';
 
 @Component({
-    selector: "app-dialog-waiting",
-    templateUrl: "./dialog-waiting.component.html",
-    styleUrls: ["./dialog-waiting.component.scss"],
-    standalone: false
+    selector: 'app-dialog-waiting',
+    templateUrl: './dialog-waiting.component.html',
+    styleUrls: ['./dialog-waiting.component.scss'],
+    standalone: false,
 })
 export class DialogWaitingComponent {
     public ctrlCheckboxNoBother: FormControl;
 
     constructor(
         public dialogRef: MatDialogRef<DialogChoiceComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: WaitingDialogData
+        @Inject(MAT_DIALOG_DATA) public data: WaitingDialogData,
     ) {
         this.ctrlCheckboxNoBother = new FormControl(false);
     }

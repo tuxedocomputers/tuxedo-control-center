@@ -17,57 +17,57 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { NgModule } from "@angular/core";
-import { type Routes, RouterModule } from "@angular/router";
+import { NgModule } from '@angular/core';
+import { type Routes, RouterModule } from '@angular/router';
 
-import { LoaderResolver } from "./loader.resolver";
+import { LoaderResolver } from './loader.resolver';
 import {
     ChargingProfilesAvailableResolver,
     ForceYUV420OutputSwitchResolver,
     PrimeSelectAvailableResolver,
-} from "./settings.resolver";
+} from './settings.resolver';
 
-import { ProfileManagerComponent } from "./profile-manager/profile-manager.component";
-import { SupportComponent } from "./support/support.component";
-import { InfoComponent } from "./info/info.component";
-import { DashboardComponent } from "./dashboard/dashboard.component";
-import { KeyboardBacklightComponent } from "./keyboard-backlight/keyboard-backlight.component";
-import { ToolsComponent } from "./tools/tool.component";
-import { GlobalSettingsComponent } from "./global-settings/global-settings.component";
-import { MainGuiComponent } from "./main-gui/main-gui.component";
-import { AquarisControlComponent } from "./aquaris-control/aquaris-control.component";
-import { WebcamSettingsComponent } from "./webcam-settings/webcam-settings.component";
-import { WebcamPreviewComponent } from "./webcam-preview/webcam-preview.component";
-import { WebcamSettingsGuard } from "./webcam.guard";
-import { TomteGuiComponent } from "./tomte-gui/tomte-gui.component";
-import { PrimeDialogComponent } from "./prime-dialog/prime-dialog.component";
+import { ProfileManagerComponent } from './profile-manager/profile-manager.component';
+import { SupportComponent } from './support/support.component';
+import { InfoComponent } from './info/info.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
+import { KeyboardBacklightComponent } from './keyboard-backlight/keyboard-backlight.component';
+import { ToolsComponent } from './tools/tool.component';
+import { GlobalSettingsComponent } from './global-settings/global-settings.component';
+import { MainGuiComponent } from './main-gui/main-gui.component';
+import { AquarisControlComponent } from './aquaris-control/aquaris-control.component';
+import { WebcamSettingsComponent } from './webcam-settings/webcam-settings.component';
+import { WebcamPreviewComponent } from './webcam-preview/webcam-preview.component';
+import { WebcamSettingsGuard } from './webcam.guard';
+import { TomteGuiComponent } from './tomte-gui/tomte-gui.component';
+import { PrimeDialogComponent } from './prime-dialog/prime-dialog.component';
 import {
     AmdGpuCountResolver,
     CpuVendorResolver,
     DGpuStatusResolver,
     IGpuStatusResolver,
     PowerStateStatusResolver,
-} from "./dashboard.resolver";
-import { X11StatusResolver } from "./x11.resolver";
-import { AnydeskInstalledResolver } from "./anydesk.resolver";
-import { AptInstalledResolver } from "./apt.resolver";
-import { TomteInstalledResolver } from "./tomte.resolver";
-import { WebfaiCreatorInstalledResolver } from "./webfaiCreator.resolver";
+} from './dashboard.resolver';
+import { X11StatusResolver } from './x11.resolver';
+import { AnydeskInstalledResolver } from './anydesk.resolver';
+import { AptInstalledResolver } from './apt.resolver';
+import { TomteInstalledResolver } from './tomte.resolver';
+import { WebfaiCreatorInstalledResolver } from './webfaiCreator.resolver';
 
 const routes: Routes = [
-    { path: "", redirectTo: "/main-gui/cpu-dashboard", pathMatch: "full" },
+    { path: '', redirectTo: '/main-gui/cpu-dashboard', pathMatch: 'full' },
     {
-        path: "main-gui",
+        path: 'main-gui',
         component: MainGuiComponent,
         resolve: { loaded: LoaderResolver },
         children: [
-            { path: "profile-manager", component: ProfileManagerComponent },
+            { path: 'profile-manager', component: ProfileManagerComponent },
             {
-                path: "profile-manager/:profileId",
+                path: 'profile-manager/:profileId',
                 component: ProfileManagerComponent,
             },
             {
-                path: "support",
+                path: 'support',
                 component: SupportComponent,
                 resolve: {
                     anydeskInstalled: AnydeskInstalledResolver,
@@ -76,9 +76,9 @@ const routes: Routes = [
                     x11Status: X11StatusResolver,
                 },
             },
-            { path: "info", component: InfoComponent },
+            { path: 'info', component: InfoComponent },
             {
-                path: "cpu-dashboard",
+                path: 'cpu-dashboard',
                 component: DashboardComponent,
                 resolve: {
                     powerStateStatus: PowerStateStatusResolver,
@@ -90,23 +90,21 @@ const routes: Routes = [
                     cpuVendor: CpuVendorResolver,
                 },
             },
-            { path: "tools", component: ToolsComponent },
+            { path: 'tools', component: ToolsComponent },
             {
-                path: "keyboard-backlight",
+                path: 'keyboard-backlight',
                 component: KeyboardBacklightComponent,
             },
             {
-                path: "camera-settings",
+                path: 'camera-settings',
                 component: WebcamSettingsComponent,
                 canDeactivate: [WebcamSettingsGuard],
             },
             {
-                path: "global-settings",
+                path: 'global-settings',
                 resolve: {
-                    forceYUV420OutputSwitchAvailable:
-                        ForceYUV420OutputSwitchResolver,
-                    chargingProfilesAvailable:
-                        ChargingProfilesAvailableResolver,
+                    forceYUV420OutputSwitchAvailable: ForceYUV420OutputSwitchResolver,
+                    chargingProfilesAvailable: ChargingProfilesAvailableResolver,
                     primeSelectAvailable: PrimeSelectAvailableResolver,
                     x11Status: X11StatusResolver,
                     aptInstalled: AptInstalledResolver,
@@ -114,21 +112,19 @@ const routes: Routes = [
                 component: GlobalSettingsComponent,
             },
             {
-                path: "global-settings/:routingFromDashboard",
+                path: 'global-settings/:routingFromDashboard',
                 resolve: {
-                    forceYUV420OutputSwitchAvailable:
-                        ForceYUV420OutputSwitchResolver,
-                    chargingProfilesAvailable:
-                        ChargingProfilesAvailableResolver,
+                    forceYUV420OutputSwitchAvailable: ForceYUV420OutputSwitchResolver,
+                    chargingProfilesAvailable: ChargingProfilesAvailableResolver,
                     primeSelectAvailable: PrimeSelectAvailableResolver,
                     x11Status: X11StatusResolver,
                     aptInstalled: AptInstalledResolver,
                 },
                 component: GlobalSettingsComponent,
             },
-            { path: "aquaris-control", component: AquarisControlComponent },
+            { path: 'aquaris-control', component: AquarisControlComponent },
             {
-                path: "tomte-gui",
+                path: 'tomte-gui',
                 component: TomteGuiComponent,
                 resolve: {
                     aptInstalled: AptInstalledResolver,
@@ -137,10 +133,10 @@ const routes: Routes = [
             },
         ],
     },
-    { path: "webcam-preview", component: WebcamPreviewComponent },
-    { path: "aquaris-control", component: AquarisControlComponent },
+    { path: 'webcam-preview', component: WebcamPreviewComponent },
+    { path: 'aquaris-control', component: AquarisControlComponent },
     {
-        path: "prime-dialog",
+        path: 'prime-dialog',
         component: PrimeDialogComponent,
     },
 ];

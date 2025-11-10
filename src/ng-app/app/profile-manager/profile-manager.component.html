@@ -27,36 +27,25 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         <div>
             <span class="info-options">
                 <mat-button-toggle-group [(ngModel)]="viewDetails">
-                    <mat-button-toggle [value]="false"><svg viewBox="0 0 512 512"><use href="./assets/images/icon_info.svg#Icon"></use></svg></mat-button-toggle>
-                    <mat-button-toggle [value]="true"><svg viewBox="0 0 512 512"><use href="./assets/images/icon_dashboard.svg#Icon"></use></svg></mat-button-toggle>
+                    <mat-button-toggle [value]="false"
+                        ><svg viewBox="0 0 512 512"><use href="./assets/images/icon_info.svg#Icon"></use></svg
+                    ></mat-button-toggle>
+                    <mat-button-toggle [value]="true"
+                        ><svg viewBox="0 0 512 512"><use href="./assets/images/icon_dashboard.svg#Icon"></use></svg
+                    ></mat-button-toggle>
                 </mat-button-toggle-group>
             </span>
             <span>
                 <mat-button-toggle-group [(ngModel)]="inputProfileFilter">
-                    <mat-button-toggle value="all" i18n="@@cProfMgrFilterAll"
-                        >All</mat-button-toggle
-                    >
-                    <mat-button-toggle
-                        value="default"
-                        i18n="@@cProfMgrFilterPreset"
-                        >Preset</mat-button-toggle
-                    >
-                    <mat-button-toggle
-                        value="custom"
-                        i18n="@@cProfMgrFilterCustom"
-                        >Custom</mat-button-toggle
-                    >
-                    <mat-button-toggle value="used" i18n="@@cProfMgrFilterUsed"
-                        >In use</mat-button-toggle
-                    >
+                    <mat-button-toggle value="all" i18n="@@cProfMgrFilterAll">All</mat-button-toggle>
+                    <mat-button-toggle value="default" i18n="@@cProfMgrFilterPreset">Preset</mat-button-toggle>
+                    <mat-button-toggle value="custom" i18n="@@cProfMgrFilterCustom">Custom</mat-button-toggle>
+                    <mat-button-toggle value="used" i18n="@@cProfMgrFilterUsed">In use</mat-button-toggle>
                 </mat-button-toggle-group>
             </span>
 
             <div class="menu-button">
-                <button
-                    mat-icon-button
-                    [matMenuTriggerFor]="menu"
-                    aria-label="Example icon-button with a menu">
+                <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
                     <mat-icon>more_vert</mat-icon>
                 </button>
                 <mat-menu #menu="matMenu">
@@ -73,9 +62,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </mat-menu>
             </div>
         </div>
-
     </mat-toolbar-row>
-    
+
     <!-- NEW PROFILE -->
     <mat-toolbar-row *ngIf="inputActive">
         <form (ngSubmit)="onInputSubmit()">
@@ -87,12 +75,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <button mat-stroked-button color="basic" (click)="cancelInput()" i18n="@@cProfMgrCancel">Cancel</button>
         </form>
     </mat-toolbar-row>
-
 </mat-toolbar>
 
-<div class="profile-manager-content" [ngClass]="{'offset': !currentProfile}" #profileManagerContent>
+<div class="profile-manager-content" [ngClass]="{ offset: !currentProfile }" #profileManagerContent>
     <div class="inner-profile-manager-content">
-        <div *ngIf="!currentProfile" >
+        <div *ngIf="!currentProfile">
             <app-profile-overview-tile
                 *ngFor="let profile of getProfilesForList()"
                 [profile]="profile"
@@ -102,18 +89,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 (copyClick)="copyProfile($event)"
                 [showDetails]="viewDetails">
             </app-profile-overview-tile>
-            <app-profile-overview-tile
-                *ngIf="['all', 'custom'].includes(inputProfileFilter)"
-                [addProfileTile]="true"
-                [hoverEffect]="true"
-                (click)="buttonNew.click()">
-            </app-profile-overview-tile>
+            <app-profile-overview-tile *ngIf="['all', 'custom'].includes(inputProfileFilter)" [addProfileTile]="true" [hoverEffect]="true" (click)="buttonNew.click()"> </app-profile-overview-tile>
         </div>
     </div>
 </div>
-<app-profile-details-edit #profileDetailsEdit
-    *ngIf="currentProfile !== undefined"
-    [profile]="currentProfile"
-    (scrollTo)="profileManagerContent.scrollTo({ top: $event, behavior: 'smooth' });">
+<app-profile-details-edit #profileDetailsEdit *ngIf="currentProfile !== undefined" [profile]="currentProfile" (scrollTo)="profileManagerContent.scrollTo({ top: $event, behavior: 'smooth' })">
 </app-profile-details-edit>
-

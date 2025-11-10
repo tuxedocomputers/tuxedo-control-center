@@ -26,7 +26,7 @@ const packageName = tccPackage.name;
 const packageVersion = tccPackage.version;
 
 async function getGitDescribe() {
-    return (await execp("git describe")).stdout.trim();
+    return (await execp('git describe')).stdout.trim();
 }
 
 async function getCurrentBranch() {
@@ -48,7 +48,7 @@ async function main() {
     });
 
     try {
-        let filenameAddition: string = "";
+        let filenameAddition: string = '';
         let newVersion = packageVersion;
 
         if (automaticVersion) {
@@ -56,8 +56,7 @@ async function main() {
             const gitBranch = await getCurrentBranch();
             const version = gitDescribe.slice(1);
 
-            const addBranchNameToFilename = version.includes('-') &&
-                                            gitBranch !== '';
+            const addBranchNameToFilename = version.includes('-') && gitBranch !== '';
 
             if (addBranchNameToFilename) {
                 filenameAddition = `_${gitBranch}`;
@@ -65,14 +64,17 @@ async function main() {
 
             console.log(`Set build version: '${version}'`);
             await setVersion(version);
-            newVersion = version
+            newVersion = version;
         }
         console.log('Run production build');
-        console.log((await execp("npm run build-prod")).stdout);
+        console.log((await execp('npm run build-prod')).stdout);
         console.log('Run electron-builder');
         console.log((await execp(`npm run electron-builder "fnameadd=${filenameAddition}"`)).stdout);
         console.log('Run deb compression');
-        console.log((await execp(`npm run deb-compression --deb-path="${packageName}_${newVersion}${filenameAddition}.deb"`)).stdout);
+        console.log(
+            (await execp(`npm run deb-compression --deb-path="${packageName}_${newVersion}${filenameAddition}.deb"`))
+                .stdout,
+        );
     } catch (err) {
         console.log('Error on build => ' + err);
         process.exit(1);
@@ -84,9 +86,11 @@ async function main() {
     }
 }
 
-main().then(() => {
-    process.exit(0);
-}).catch(err => {
-    console.log("error => " + err);
-    process.exit(1);
-})
+main()
+    .then(() => {
+        process.exit(0);
+    })
+    .catch((err) => {
+        console.log('error => ' + err);
+        process.exit(1);
+    });

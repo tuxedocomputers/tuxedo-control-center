@@ -17,11 +17,11 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { type ComponentFixture, TestBed } from "@angular/core/testing";
+import { type ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FanCustomChartComponent } from "./fan-custom-chart.component";
+import { FanCustomChartComponent } from './fan-custom-chart.component';
 
-describe("FanCustomChartComponent", () => {
+describe('FanCustomChartComponent', () => {
     let component: FanCustomChartComponent;
     let fixture: ComponentFixture<FanCustomChartComponent>;
 
@@ -37,7 +37,7 @@ describe("FanCustomChartComponent", () => {
         fixture.detectChanges();
     });
 
-    it("should create", () => {
+    it('should create', () => {
         expect(component).toBeTruthy();
     });
 });

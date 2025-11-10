@@ -30,22 +30,19 @@ import { loadTranslation } from './utilsAPI';
 import { activateTccGui, createPrimeWindow, quitCurrentTccSession } from './browserWindowsAPI';
 import { getBrightnessMode, setBrightnessMode } from './brightnessAPI';
 import type { BrightnessModeString } from './brightnessAPI';
-import { tccDBus } from "./dbusAPI";
+import { tccDBus } from './dbusAPI';
 import type { IProfileTextMappings } from 'src/common/models/DefaultProfiles';
 
 export const tray: TccTray = new TccTray(path.join(__dirname, '../../../data/dist-data/tuxedo-control-center_256.png'));
 const trayOnlyOption: boolean = process.argv.includes('--tray');
 const noTccdVersionCheck: boolean = process.argv.includes('--no-tccd-version-check');
 export const watchOption: boolean = process.argv.includes('--watch');
-const availableLanguages: string[] = [
-    'en',
-    'de'
-];
+const availableLanguages: string[] = ['en', 'de'];
 let powersaveBlockerId: number = undefined;
 let startTCCAccelerator: string;
 startTCCAccelerator = app.commandLine.getSwitchValue('start-tcc-accelerator');
 if (startTCCAccelerator === '') {
-    startTCCAccelerator = 'Super+Alt+F6'
+    startTCCAccelerator = 'Super+Alt+F6';
 }
 const tccConfigDir: string = path.join(os.homedir(), '.tcc');
 const tccStandardConfigFile: string = path.join(tccConfigDir, 'user.conf');
@@ -70,13 +67,12 @@ if (!userConfigDirExists()) {
     createUserConfigDir();
 }
 
-
 app.whenReady().then(async (): Promise<void> => {
     try {
         exitIfProcessExists();
-        
+
         const systemLanguageId: string = app.getLocale().substring(0, 2);
-        if (await userConfig.get('langId') === undefined) {
+        if ((await userConfig.get('langId')) === undefined) {
             if (availableLanguages.includes(systemLanguageId)) {
                 await userConfig.set('langId', systemLanguageId);
             } else {
@@ -93,7 +89,9 @@ app.whenReady().then(async (): Promise<void> => {
         const success: boolean = globalShortcut.register(startTCCAccelerator, (): void => {
             activateTccGui();
         });
-        if (!success) { console.log('initMain: Failed to register global shortcut'); }
+        if (!success) {
+            console.log('initMain: Failed to register global shortcut');
+        }
     }
 
     // Initialize brightness mode from user config
@@ -109,51 +107,44 @@ app.whenReady().then(async (): Promise<void> => {
 function exitIfProcessExists(): void {
     if (applicationLock) {
         let singletonLock: string = undefined;
-        
+
         try {
-            const userDataDir: string = app.commandLine.getSwitchValue('user-data-dir')
-            let singletonLockPath: string = undefined
-            
+            const userDataDir: string = app.commandLine.getSwitchValue('user-data-dir');
+            let singletonLockPath: string = undefined;
+
             if (userDataDir) {
-                singletonLockPath = path.join(userDataDir, "SingletonLock")
+                singletonLockPath = path.join(userDataDir, 'SingletonLock');
             } else {
-                singletonLockPath = "~/.config/tuxedo-control-center/SingletonLock"
+                singletonLockPath = '~/.config/tuxedo-control-center/SingletonLock';
             }
-            
-            singletonLock = child_process
-                .execSync(`readlink ${singletonLockPath}`)
-                .toString()
-                .trim();
-        } catch(err: unknown) {
-            console.log(`initMain: exitIfProcessExists failed => ${err}`)
+
+            singletonLock = child_process.execSync(`readlink ${singletonLockPath}`).toString().trim();
+        } catch (err: unknown) {
+            console.log(`initMain: exitIfProcessExists failed => ${err}`);
         }
-        
+
         if (singletonLock) {
-            const singletonLockId: number = Number.parseInt(
-                singletonLock.match(/(?<=-)(?!.*-).*/)[0]
-            );
+            const singletonLockId: number = Number.parseInt(singletonLock.match(/(?<=-)(?!.*-).*/)[0]);
 
             if (singletonLockId !== process.pid) {
-                console.log(
-                    `initMain: SingletonLock check failed ("${singletonLockId}" !== "${process.pid}")`
-                );
+                console.log(`initMain: SingletonLock check failed ("${singletonLockId}" !== "${process.pid}")`);
                 app.exit(0);
             }
         } else {
-            console.log("initMain: SingletonLock check failed");
+            console.log('initMain: SingletonLock check failed');
             app.exit(0);
         }
     } else {
-        console.log("initMain: TUXEDO Control Center is already running");
+        console.log('initMain: TUXEDO Control Center is already running');
         app.exit(0);
     }
 }
 
 async function startDbusAndInit(): Promise<void> {
     const dbusInitialized: boolean = await tccDBus.init();
-    if(!dbusInitialized) {
+    if (!dbusInitialized) {
         setTimeout((): void => {
-            startDbusAndInit()
+            startDbusAndInit();
         }, 3000);
         return;
     }
@@ -172,7 +163,7 @@ async function initTray(): Promise<void> {
     [tray.state.isPrimeSupported, tray.state.primeQuery] = await getPrimeAvailable();
     [tray.state.iGpuAvailable, tray.state.dGpuAvailable] = await getGpuAvailable();
     tray.state.isX11 = await getX11Available();
-    
+
     await updateTrayProfiles();
     tray.events.startTCCClick = (): Promise<void> => activateTccGui();
     tray.events.startAquarisControl = (): Promise<void> => activateTccGui('/main-gui/aquaris-control');
@@ -188,26 +179,29 @@ async function initTray(): Promise<void> {
     };
 
     tray.events.fnLockClick = (status: boolean): void => {
-        tray.state.fnLockStatus = !status
+        tray.state.fnLockStatus = !status;
         tccDBus.setFnLockStatus(tray.state.fnLockStatus);
     };
 
     tray.events.selectNvidiaClick = async (): Promise<void> => {
-        const langId: string = await userConfig.get("langId");
-        createPrimeWindow(langId, "dGPU");
+        const langId: string = await userConfig.get('langId');
+        createPrimeWindow(langId, 'dGPU');
     };
     tray.events.selectOnDemandClick = async (): Promise<void> => {
-        const langId: string = await userConfig.get("langId");
-        createPrimeWindow(langId, "on-demand");
+        const langId: string = await userConfig.get('langId');
+        createPrimeWindow(langId, 'on-demand');
     };
     tray.events.selectBuiltInClick = async (): Promise<void> => {
-        const langId: string = await userConfig.get("langId");
-        createPrimeWindow(langId, "iGPU");
+        const langId: string = await userConfig.get('langId');
+        createPrimeWindow(langId, 'iGPU');
     };
-    tray.events.profileClick = (profileId: string): void => { setTempProfileById(profileId); };
+    tray.events.profileClick = (profileId: string): void => {
+        setTempProfileById(profileId);
+    };
     tray.create();
 
-    tray.state.powersaveBlockerActive = powersaveBlockerId !== undefined && powerSaveBlocker.isStarted(powersaveBlockerId);
+    tray.state.powersaveBlockerActive =
+        powersaveBlockerId !== undefined && powerSaveBlocker.isStarted(powersaveBlockerId);
     tray.events.powersaveBlockerClick = (): void => {
         if (powersaveBlockerId !== undefined && powerSaveBlocker.isStarted(powersaveBlockerId)) {
             powerSaveBlocker.stop(powersaveBlockerId);
@@ -216,11 +210,10 @@ async function initTray(): Promise<void> {
         }
         tray.state.powersaveBlockerActive = powerSaveBlocker.isStarted(powersaveBlockerId);
         tray.create();
-    }
+    };
 }
 
 async function initMain(): Promise<void> {
-
     if (!trayOnlyOption) {
         await activateTccGui();
     }
@@ -230,21 +223,17 @@ async function initMain(): Promise<void> {
         const tccdVersionCheckInterval = 5000;
         // todo: refactor, too many indents
         setInterval(async (): Promise<void> => {
-            const dbusAvailable: boolean = await tccDBus.dbusAvailable()
+            const dbusAvailable: boolean = await tccDBus.dbusAvailable();
             if (dbusAvailable) {
                 const tccdVersion: string = await tccDBus.tccdVersion();
                 if (tccdVersion?.length > 0 && tccdVersion !== app.getVersion()) {
                     console.log('initMain: Other tccd version detected, restarting..');
                     process.on('exit', function (): void {
-                        child_process.spawn(
-                            process.argv[0],
-                            process.argv.slice(1).concat(['--tray']),
-                            {
-                                cwd: process.cwd(),
-                                detached : true,
-                                stdio: "inherit"
-                            }
-                        );
+                        child_process.spawn(process.argv[0], process.argv.slice(1).concat(['--tray']), {
+                            cwd: process.cwd(),
+                            detached: true,
+                            stdio: 'inherit',
+                        });
                     });
                     process.exit();
                 }
@@ -253,19 +242,21 @@ async function initMain(): Promise<void> {
     }
     tccDBus.consumeModeReapplyPending().then((result: boolean): void => {
         if (result) {
-            child_process.exec("xset dpms force off && xset dpms force on");
+            child_process.exec('xset dpms force off && xset dpms force on');
         }
     });
     tccDBus.onModeReapplyPendingChanged((): void => {
         tccDBus.consumeModeReapplyPending().then((result: boolean): void => {
             if (result) {
-                child_process.exec("xset dpms force off && xset dpms force on");
+                child_process.exec('xset dpms force off && xset dpms force on');
             }
         });
     });
 
     const profilesCheckInterval = 4000;
-    setInterval(async (): Promise<void> => { updateTrayProfiles(); }, profilesCheckInterval);
+    setInterval(async (): Promise<void> => {
+        updateTrayProfiles();
+    }, profilesCheckInterval);
 }
 
 function installAutostartTray(): boolean {
@@ -273,11 +264,11 @@ function installAutostartTray(): boolean {
         fs.mkdirSync(autostartLocation, { recursive: true });
         fs.copyFileSync(
             path.join(appPath, '../../data/dist-data', autostartDesktopFilename),
-            path.join(autostartLocation, autostartDesktopFilename)
+            path.join(autostartLocation, autostartDesktopFilename),
         );
         return true;
     } catch (err: unknown) {
-        console.error(`initMain: installAutostartTray failed => ${err}`)
+        console.error(`initMain: installAutostartTray failed => ${err}`);
         return false;
     }
 }
@@ -289,7 +280,7 @@ function removeAutostartTray(): boolean {
         }
         return true;
     } catch (err: unknown) {
-        console.error(`initMain: removeAutostartTray failed => ${err}`)
+        console.error(`initMain: removeAutostartTray failed => ${err}`);
         return false;
     }
 }
@@ -298,7 +289,7 @@ function isAutostartTrayInstalled(): boolean {
     try {
         return fs.existsSync(path.join(autostartLocation, autostartDesktopFilename));
     } catch (err: unknown) {
-        console.error(`initMain: isAutostartTrayInstalled failed => ${err}`)
+        console.error(`initMain: isAutostartTrayInstalled failed => ${err}`);
         return false;
     }
 }
@@ -311,7 +302,7 @@ function userConfigDirExists(): boolean {
     try {
         return fs.existsSync(tccConfigDir);
     } catch (err: unknown) {
-        console.error(`initMain: userConfigDirExists failed => ${err}`)
+        console.error(`initMain: userConfigDirExists failed => ${err}`);
         return false;
     }
 }
@@ -321,7 +312,7 @@ function createUserConfigDir(): boolean {
         fs.mkdirSync(tccConfigDir);
         return true;
     } catch (err: unknown) {
-        console.error(`initMain: createUserConfigDir failed => ${err}`)
+        console.error(`initMain: createUserConfigDir failed => ${err}`);
         return false;
     }
 }
@@ -329,16 +320,16 @@ function createUserConfigDir(): boolean {
 async function getPrimeAvailable(): Promise<[boolean, string]> {
     try {
         let primeStatus: string = await tccDBus.getPrimeState();
-        
+
         if (primeStatus) {
             primeStatus = JSON.parse(primeStatus);
-            const primeAvailable: boolean = primeStatus !== undefined && primeStatus !== "off" && primeStatus !== "-1";
+            const primeAvailable: boolean = primeStatus !== undefined && primeStatus !== 'off' && primeStatus !== '-1';
             return [primeAvailable, primeStatus];
         }
-        return [false, "-1"];
+        return [false, '-1'];
     } catch (err: unknown) {
-        console.error(`initMain: getPrimeAvailable failed => ${err}`)
-        return [false, "-1"];
+        console.error(`initMain: getPrimeAvailable failed => ${err}`);
+        return [false, '-1'];
     }
 }
 
@@ -346,14 +337,14 @@ async function getGpuAvailable(): Promise<[boolean, boolean]> {
     for (let i: number = 0; i < 5; i++) {
         const iGpuAvailable: number = await tccDBus.getIGpuAvailable();
         const dGpuAvailable: number = await tccDBus.getDGpuAvailable();
-        
+
         if (iGpuAvailable !== -1 && dGpuAvailable !== -1) {
             return [iGpuAvailable === 1, dGpuAvailable === 1];
         }
-        console.log("initMain: getGpuAvailable: gpu status not available, retrying")
+        console.log('initMain: getGpuAvailable: gpu status not available, retrying');
         await new Promise<void>((resolve: () => void): NodeJS.Timeout => setTimeout(resolve, 1000));
     }
-    console.log("initMain: getGpuAvailable: Failed to get gpu status")
+    console.log('initMain: getGpuAvailable: Failed to get gpu status');
     return [false, false];
 }
 
@@ -364,10 +355,10 @@ async function getX11Available(): Promise<boolean> {
         if (x11Available !== -1) {
             return x11Available === 1;
         }
-        console.log("initMain: getX11Available: x11 status not available, retrying")
+        console.log('initMain: getX11Available: x11 status not available, retrying');
         await new Promise<void>((resolve: () => void): NodeJS.Timeout => setTimeout(resolve, 1000));
     }
-    console.log("initMain: getX11Available: Failed to get x11 status")
+    console.log('initMain: getX11Available: Failed to get x11 status');
     return false;
 }
 
@@ -386,7 +377,7 @@ export async function updateTrayProfiles(): Promise<void> {
 
         // Replace default profile names/descriptions with translations
         for (const profile of updatedProfiles) {
-            const profileId: string = profile?.id
+            const profileId: string = profile?.id;
             if (profileId) {
                 const profileTranslationId: IProfileTextMappings = profileIdToI18nId.get(profile?.id);
                 if (profileTranslationId !== undefined) {
@@ -395,11 +386,12 @@ export async function updateTrayProfiles(): Promise<void> {
                 }
             }
             if (!profileId) {
-                console.log(`initMain: updateTrayProfiles: profile value not defined, found "${profileId}" instead`)
+                console.log(`initMain: updateTrayProfiles: profile value not defined, found "${profileId}" instead`);
             }
         }
 
-        if (JSON.stringify({ activeProfile: tray.state.activeProfile, profiles: tray.state.profiles }) !==
+        if (
+            JSON.stringify({ activeProfile: tray.state.activeProfile, profiles: tray.state.profiles }) !==
             JSON.stringify({ activeProfile: updatedActiveProfile, profiles: updatedProfiles })
         ) {
             tray.state.activeProfile = updatedActiveProfile;
@@ -407,7 +399,7 @@ export async function updateTrayProfiles(): Promise<void> {
             await tray.create();
         }
     } catch (err: unknown) {
-        console.error(`initMain: updateTrayProfiles failed => ${err}`)
+        console.error(`initMain: updateTrayProfiles failed => ${err}`);
     }
 }
 
@@ -421,35 +413,35 @@ export async function getIsUnsupportedConfigurableTGPDevice(): Promise<boolean> 
 
 async function getProfiles(): Promise<TccProfile[]> {
     let result: TccProfile[] = [];
-    if (!await tccDBus.dbusAvailable()) return [];
+    if (!(await tccDBus.dbusAvailable())) return [];
     try {
         const profilesJSON: string = await tccDBus.getProfilesJSON();
-        
+
         if (profilesJSON !== undefined) {
             result = JSON.parse(profilesJSON);
         }
     } catch (err: unknown) {
-        console.error(`initMain: getProfiles failed => ${err}`)
+        console.error(`initMain: getProfiles failed => ${err}`);
     }
     return result;
 }
 
 async function setTempProfileById(profileId: string): Promise<boolean> {
-    const result: boolean = await tccDBus.dbusAvailable() && await tccDBus.setTempProfileById(profileId);
+    const result: boolean = (await tccDBus.dbusAvailable()) && (await tccDBus.setTempProfileById(profileId));
     return result;
 }
 
 async function getActiveProfile(): Promise<TccProfile> {
     let result: TccProfile = undefined;
-    if (!await tccDBus.dbusAvailable()) return undefined;
+    if (!(await tccDBus.dbusAvailable())) return undefined;
     try {
         const activeProfileJSON: string = await tccDBus.getActiveProfileJSON();
-        
+
         if (activeProfileJSON !== undefined) {
             result = JSON.parse(activeProfileJSON);
         }
-    } catch(err: unknown) {
-        console.error(`initMain: getActiveProfile failed => ${err}`)
+    } catch (err: unknown) {
+        console.error(`initMain: getActiveProfile failed => ${err}`);
     }
     return result;
 }

@@ -66,12 +66,10 @@ async function buildDeb(filenameAddition: string): Promise<void> {
         appId: 'tuxedocontrolcenter',
         artifactName: `\${productName}_\${version}${filenameAddition}.\${ext}`,
         directories: {
-            output: './dist/packages'
+            output: './dist/packages',
         },
-        compression: "maximum",
-        files: [
-            `${distSrc}/**/*`
-        ],
+        compression: 'maximum',
+        files: [`${distSrc}/**/*`],
         extraResources: [
             `${distSrc}/data/service/tccd`,
             `${distSrc}/data/service/TuxedoIOAPI.node`,
@@ -86,42 +84,41 @@ async function buildDeb(filenameAddition: string): Promise<void> {
             `${distSrc}/data/camera/cameractrls.py`,
             `${distSrc}/data/dist-data/99-webcam.rules`,
             `${distSrc}/data/dist-data/com.tuxedocomputers.tomte.policy`,
-            `${distSrc}/data/camera/v4l2_kernel_names.json`
+            `${distSrc}/data/camera/v4l2_kernel_names.json`,
         ],
         linux: {
-            target: [
-                'deb'
-            ],
+            target: ['deb'],
             category: 'System',
             icon: `${distSrc}/data/dist-data/tuxedo-control-center_256.svg`,
         },
         deb: {
-            compression: "xz",
+            compression: 'xz',
             depends: ['tuxedo-drivers (>= 4.0.0) | tuxedo-keyboard (>= 3.1.2)', 'libayatana-appindicator3-1'],
             category: 'System',
-            afterInstall: "./build-src/after_install.sh",
-            afterRemove: "./build-src/after_remove.sh",
+            afterInstall: './build-src/after_install.sh',
+            afterRemove: './build-src/after_remove.sh',
             fpm: [
                 '--conflicts=tuxedofancontrol',
                 '--replaces=tuxedofancontrol',
-                '--inputs=build-src/package-files.txt'
-            ]
-        }
+                '--inputs=build-src/package-files.txt',
+            ],
+        },
     };
     console.log('\x1b[36m%s\x1b[0m', 'Create Deb Package');
     console.log('config', config);
-    await builder.build({
-        targets: builder.Platform.LINUX.createTarget(),
-        config
-    })
-    .then((result) => {
-        console.log('BUILD SUCCESS');
-        console.log(result);
-    })
-    .catch((error: unknown): void => {
-        console.error('ERROR at BUILD');
-        console.error(error);
-    });
+    await builder
+        .build({
+            targets: builder.Platform.LINUX.createTarget(),
+            config,
+        })
+        .then((result) => {
+            console.log('BUILD SUCCESS');
+            console.log(result);
+        })
+        .catch((error: unknown): void => {
+            console.error('ERROR at BUILD');
+            console.error(error);
+        });
 }
 
 /**
@@ -132,12 +129,10 @@ async function buildRpm(filenameAddition: string): Promise<void> {
         appId: 'tuxedocontrolcenter',
         artifactName: `\${productName}_\${version}${filenameAddition}.\${ext}`,
         directories: {
-            output: './dist/packages'
+            output: './dist/packages',
         },
-        compression: "maximum",
-        files: [
-            `${distSrc}/**/*`
-        ],
+        compression: 'maximum',
+        files: [`${distSrc}/**/*`],
         extraResources: [
             `${distSrc}/data/service/tccd`,
             `${distSrc}/data/service/TuxedoIOAPI.node`,
@@ -150,43 +145,45 @@ async function buildRpm(filenameAddition: string): Promise<void> {
             `${distSrc}/data/dist-data/com.tuxedocomputers.tccd.conf`,
             `${distSrc}/data/camera/cameractrls.py`,
             `${distSrc}/data/camera/v4l2_kernel_names.json`,
-            `${distSrc}/data/dist-data/99-webcam.rules`
+            `${distSrc}/data/dist-data/99-webcam.rules`,
         ],
         linux: {
-            target: [
-                'rpm'
-            ],
+            target: ['rpm'],
             category: 'System',
             icon: `${distSrc}/data/dist-data/tuxedo-control-center_256.svg`,
         },
         rpm: {
-            compression: "xz",
-            depends: ['(tuxedo-drivers >= 4.0.0 or tuxedo-keyboard >= 3.1.2)', '(libayatana-appindicator3-1 or libappindicator or libappindicator3-1)'],
+            compression: 'xz',
+            depends: [
+                '(tuxedo-drivers >= 4.0.0 or tuxedo-keyboard >= 3.1.2)',
+                '(libayatana-appindicator3-1 or libappindicator or libappindicator3-1)',
+            ],
             afterInstall: './build-src/dummy.sh',
             afterRemove: './build-src/after_remove.sh',
             fpm: [
                 '--replaces=tuxedofancontrol <= 0.1.9',
                 '--rpm-posttrans=./build-src/after_install.sh',
                 '--inputs=build-src/package-files.txt',
-                '--rpm-tag=%define _build_id_links none'
-            ]
-        }
+                '--rpm-tag=%define _build_id_links none',
+            ],
+        },
     };
 
     console.log('\x1b[36m%s\x1b[0m', 'Create Suse RPM Package');
     console.log('config', config);
-    await builder.build({
-        targets: builder.Platform.LINUX.createTarget(),
-        config
-    })
-    .then((result) => {
-        console.log('BUILD SUCCESS');
-        console.log(result);
-    })
-    .catch((error: unknown): void => {
-        console.error('ERROR at BUILD');
-        console.error(error);
-    });
+    await builder
+        .build({
+            targets: builder.Platform.LINUX.createTarget(),
+            config,
+        })
+        .then((result) => {
+            console.log('BUILD SUCCESS');
+            console.log(result);
+        })
+        .catch((error: unknown): void => {
+            console.error('ERROR at BUILD');
+            console.error(error);
+        });
 }
 
 /**

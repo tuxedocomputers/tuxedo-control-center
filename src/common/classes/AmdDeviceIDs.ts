@@ -19,46 +19,46 @@
 
 const amdIGpuDeviceIds: string[] = [
     // 3500U (Picasso / Raven 2)
-    "15D8",
+    '15D8',
 
     // 4700U / 4800H (Renoir)
-    "1636",
+    '1636',
 
     // 5300U / 5500U / 5700U (Lucienne)
-    "164C",
+    '164C',
 
     // 5800H (Cezanne)
-    "1638",
+    '1638',
 
     // 6800H / 6900HX (Rembrandt)
-    "1681",
+    '1681',
 
     // 7840HS (Phoenix)
-    "15BF",
+    '15BF',
 
     // 8845HS (Phoenix3)
-    "1900",
-    
+    '1900',
+
     // 9955HX (Granite Ridge)
-    "13C0",
+    '13C0',
 
     // Ryzen AI 7 350
-    "1114",
-    
+    '1114',
+
     // Ryzen AI 9 365 / Ryzen AI 9 HX 370
-    "150E",
+    '150E',
 ];
 
-const amdVendorId = "1002";
+const amdVendorId = '1002';
 export const amdIGpuDeviceIdString: string = amdIGpuDeviceIds
     .map((id: string): string => `${amdVendorId}:${id}`)
-    .join("|");
+    .join('|');
 
 const amdDGpuDeviceIds: string[] = [
     // 7600M XT
-    "7480",
+    '7480',
 ];
 
 export const amdDGpuDeviceIdString: string = amdDGpuDeviceIds
     .map((id: string): string => `${amdVendorId}:${id}`)
-    .join("|");
+    .join('|');

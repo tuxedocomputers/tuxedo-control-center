@@ -17,42 +17,39 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type { PumpVoltage, RGBState } from "../../e-app/LCT21001";
+import type { PumpVoltage, RGBState } from '../../e-app/LCT21001';
 
 export interface AquarisState {
-    deviceUUID: string,
-    red: number,
-    green: number,
-    blue: number,
-    ledMode: RGBState | number,
-    fanDutyCycle: number,
-    pumpDutyCycle: number,
-    pumpVoltage: PumpVoltage | number,
-    ledOn: boolean,
-    fanOn: boolean,
-    pumpOn: boolean
+    deviceUUID: string;
+    red: number;
+    green: number;
+    blue: number;
+    ledMode: RGBState | number;
+    fanDutyCycle: number;
+    pumpDutyCycle: number;
+    pumpVoltage: PumpVoltage | number;
+    ledOn: boolean;
+    fanOn: boolean;
+    pumpOn: boolean;
 }
 
 export const aquarisAPIHandle = 'aquarisAPIHandle';
 
 export enum AquarisAPIFunctions {
-
-    connect = "connect",
-    disconnect = "disconnect",
-    isConnected = "isConnected",
-    hasBluetooth = "hasBluetooth",
-    startDiscover = "startDiscover",
-    stopDiscover = "stopDiscover",
-    getDevices = "getDevices",
-    getState = "getState",
-    readFwVersion = "readFwVersion",
-    updateLED = "updateLED",
-    writeRGBOff = "writeRGBOff",
-    writeFanMode = "writeFanMode",
-    writeFanOff = "writeFanOff",
-    writePumpMode = "writePumpMode",
-    writePumpOff = "writePumpOff",
-    saveState = "saveState",
+    connect = 'connect',
+    disconnect = 'disconnect',
+    isConnected = 'isConnected',
+    hasBluetooth = 'hasBluetooth',
+    startDiscover = 'startDiscover',
+    stopDiscover = 'stopDiscover',
+    getDevices = 'getDevices',
+    getState = 'getState',
+    readFwVersion = 'readFwVersion',
+    updateLED = 'updateLED',
+    writeRGBOff = 'writeRGBOff',
+    writeFanMode = 'writeFanMode',
+    writeFanOff = 'writeFanOff',
+    writePumpMode = 'writePumpMode',
+    writePumpOff = 'writePumpOff',
+    saveState = 'saveState',
 }
-
-

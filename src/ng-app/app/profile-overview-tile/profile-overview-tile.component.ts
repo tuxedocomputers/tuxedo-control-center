@@ -27,7 +27,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { CompatibilityService } from '../compatibility.service';
 import { SysFsService } from '../sys-fs.service';
-import type { IGeneralCPUInfo } from 'src/common/models/ICpuInfos'
+import type { IGeneralCPUInfo } from 'src/common/models/ICpuInfos';
 import { Subscription } from 'rxjs';
 import { TccDBusClientService } from '../tcc-dbus-client.service';
 import type { TDPInfo } from '../../../native-lib/TuxedoIOAPI';
@@ -36,10 +36,9 @@ import type { TDPInfo } from '../../../native-lib/TuxedoIOAPI';
     selector: 'app-profile-overview-tile',
     templateUrl: './profile-overview-tile.component.html',
     styleUrls: ['./profile-overview-tile.component.scss'],
-    standalone: false
+    standalone: false,
 })
 export class ProfileOverviewTileComponent implements OnInit {
-
     @Input() public profile: ITccProfile;
     @Input() public hoverEffect: boolean = false;
     @Input() public isSelected: boolean = false;
@@ -71,7 +70,9 @@ export class ProfileOverviewTileComponent implements OnInit {
     public odmPowerLimitInfos: TDPInfo[];
     public selectedCPUTabIndex: number;
 
-    public get hasMaxFreqWorkaround(): boolean { return this.compat.hasMissingMaxFreqBoostWorkaround; }
+    public get hasMaxFreqWorkaround(): boolean {
+        return this.compat.hasMissingMaxFreqBoostWorkaround;
+    }
 
     constructor(
         private utils: UtilsService,
@@ -81,11 +82,15 @@ export class ProfileOverviewTileComponent implements OnInit {
         private route: ActivatedRoute,
         public compat: CompatibilityService,
         private sysfs: SysFsService,
-        private tccDBus: TccDBusClientService
-    ) { }
+        private tccDBus: TccDBusClientService,
+    ) {}
 
     public ngOnInit(): void {
-        this.subscriptions.add(this.sysfs.generalCpuInfo.subscribe((cpuInfo: IGeneralCPUInfo): void => { this.cpuInfo = cpuInfo; }));
+        this.subscriptions.add(
+            this.sysfs.generalCpuInfo.subscribe((cpuInfo: IGeneralCPUInfo): void => {
+                this.cpuInfo = cpuInfo;
+            }),
+        );
 
         if (!this.addProfileTile) {
             if (this.selectStateControl === undefined) {
@@ -100,18 +105,22 @@ export class ProfileOverviewTileComponent implements OnInit {
             this.isCustomProfile = this.config.getCustomProfileById(this.profile.id) !== undefined;
         }
 
-        this.subscriptions.add(this.tccDBus.odmProfilesAvailable.subscribe((nextAvailableODMProfiles: string[]): void => {
-            this.utils.setODMProfileNames(nextAvailableODMProfiles, this.compat.uwLEDOnlyMode)
-        }));
+        this.subscriptions.add(
+            this.tccDBus.odmProfilesAvailable.subscribe((nextAvailableODMProfiles: string[]): void => {
+                this.utils.setODMProfileNames(nextAvailableODMProfiles, this.compat.uwLEDOnlyMode);
+            }),
+        );
 
-        this.subscriptions.add(this.tccDBus.odmPowerLimits.subscribe((nextODMPowerLimits: TDPInfo[]): void => {
-            if (JSON.stringify(nextODMPowerLimits) !== JSON.stringify(this.odmPowerLimitInfos)) {
-                this.odmPowerLimitInfos = nextODMPowerLimits;
-                if (this.profile) {
-                    this.selectedCPUTabIndex = this.selectCPUCtlShown();
+        this.subscriptions.add(
+            this.tccDBus.odmPowerLimits.subscribe((nextODMPowerLimits: TDPInfo[]): void => {
+                if (JSON.stringify(nextODMPowerLimits) !== JSON.stringify(this.odmPowerLimitInfos)) {
+                    this.odmPowerLimitInfos = nextODMPowerLimits;
+                    if (this.profile) {
+                        this.selectedCPUTabIndex = this.selectCPUCtlShown();
+                    }
                 }
-            }
-        }));
+            }),
+        );
 
         if (this.profile) {
             this.selectedCPUTabIndex = this.selectCPUCtlShown();
@@ -152,12 +161,14 @@ export class ProfileOverviewTileComponent implements OnInit {
     public saveStateSelection(): void {
         this.utils.pageDisabled = true;
         const profileStateAssignments: string[] = this.selectStateControl.value;
-        this.config.writeProfile(this.profile.id, this.profile, profileStateAssignments).then((success: boolean): void => {
-            if (success) {
-                this.selectStateControl.markAsPristine();
-            }
-            this.utils.pageDisabled = false;
-        });
+        this.config
+            .writeProfile(this.profile.id, this.profile, profileStateAssignments)
+            .then((success: boolean): void => {
+                if (success) {
+                    this.selectStateControl.markAsPristine();
+                }
+                this.utils.pageDisabled = false;
+            });
     }
 
     public getProfileIcon(profile: ITccProfile): string {
@@ -174,7 +185,8 @@ export class ProfileOverviewTileComponent implements OnInit {
 
     public selectCPUCtlShown(): number {
         const defaultProfile: ITccProfile = this.config.getDefaultProfiles()[0];
-        const powerNotDefault: boolean = JSON.stringify(this.profile.odmPowerLimits) !== JSON.stringify(defaultProfile.odmPowerLimits);
+        const powerNotDefault: boolean =
+            JSON.stringify(this.profile.odmPowerLimits) !== JSON.stringify(defaultProfile.odmPowerLimits);
         const cpufreqNotDefault: boolean = JSON.stringify(this.profile.cpu) !== JSON.stringify(defaultProfile.cpu);
         const cpuFreqOnly: boolean = !this.compat.hasODMPowerLimitControl;
 

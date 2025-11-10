@@ -28,20 +28,19 @@ export enum TomteAPIFunctions {
     unBlockModue = 'unBlockModule',
     blockModule = 'blockModule',
     setMode = 'setMode',
-
 }
 
 export interface ITomteModule {
-    moduleName: string,
-    version: string,
-    installed: boolean,
-    blocked: boolean,
-    prerequisite: string
+    moduleName: string;
+    version: string;
+    installed: boolean;
+    blocked: boolean;
+    prerequisite: string;
 }
 
 export interface ITomteInformation {
-    tomteMode: string,
-    modules: ITomteModule[],
-    jsonError: boolean,
-    rebootRequired: boolean,
+    tomteMode: string;
+    modules: ITomteModule[];
+    jsonError: boolean;
+    rebootRequired: boolean;
 }

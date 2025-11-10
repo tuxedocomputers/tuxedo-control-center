@@ -25,19 +25,18 @@ import { CompatibilityService } from '../compatibility.service';
     selector: 'app-tools',
     templateUrl: './tools.component.html',
     styleUrls: ['./tools.component.scss'],
-    standalone: false
+    standalone: false,
 })
 export class ToolsComponent implements OnInit {
     constructor(
         public compat: CompatibilityService,
         private router: Router,
-        private route: ActivatedRoute) {}
+        private route: ActivatedRoute,
+    ) {}
 
-    public ngOnInit(): void {
-
-    }
+    public ngOnInit(): void {}
 
     public gotoComponent(component: string): void {
-        this.router.navigate([ component ], { relativeTo: this.route.parent });
+        this.router.navigate([component], { relativeTo: this.route.parent });
     }
 }

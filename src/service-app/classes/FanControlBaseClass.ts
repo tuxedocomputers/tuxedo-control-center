@@ -17,16 +17,13 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as path from "node:path";
-import type { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
-import { FanControlLogic } from "./FanControlLogic";
-import type { FAN_LOGIC } from "./FanControlLogic";
-import type { ITccFanProfile } from "../../common/models/TccFanTable";
-import type { ITccProfile } from "../../common/models/TccProfile";
-import {
-    SysFsPropertyInteger,
-    SysFsPropertyString,
-} from "../../common/classes/SysFsProperties";
+import * as path from 'node:path';
+import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
+import { FanControlLogic } from './FanControlLogic';
+import type { FAN_LOGIC } from './FanControlLogic';
+import type { ITccFanProfile } from '../../common/models/TccFanTable';
+import type { ITccProfile } from '../../common/models/TccProfile';
+import { SysFsPropertyInteger, SysFsPropertyString } from '../../common/classes/SysFsProperties';
 
 export abstract class FanControlBaseClass {
     constructor(public tccd: TuxedoControlCenterDaemon) {}
@@ -34,33 +31,19 @@ export abstract class FanControlBaseClass {
     public fans: Map<number, FanControlLogic>;
 
     public async setFan(index: number, logic: FAN_LOGIC): Promise<void> {
-        const fanLogic = new FanControlLogic(
-            this.tccd?.getCurrentFanProfile(),
-            logic,
-            this.tccd
-        );
+        const fanLogic = new FanControlLogic(this.tccd?.getCurrentFanProfile(), logic, this.tccd);
         this.fans.set(index, fanLogic);
     }
 
-    public async setFanProfileValues(
-        activeProfile: ITccProfile,
-        currentFanProfile: ITccFanProfile
-    ): Promise<void> {
-        const isCustomProfile: boolean =
-            activeProfile.fan.fanProfile === "Custom";
+    public async setFanProfileValues(activeProfile: ITccProfile, currentFanProfile: ITccFanProfile): Promise<void> {
+        const isCustomProfile: boolean = activeProfile.fan.fanProfile === 'Custom';
 
         for (const fanNumber of this.fans.keys()) {
             const fan: FanControlLogic = this.fans.get(fanNumber);
 
-            fan.minimumFanspeed = isCustomProfile
-                ? 0
-                : activeProfile.fan.minimumFanspeed;
-            fan.maximumFanspeed = isCustomProfile
-                ? 100
-                : activeProfile.fan.maximumFanspeed;
-            fan.offsetFanspeed = isCustomProfile
-                ? 0
-                : activeProfile.fan.offsetFanspeed;
+            fan.minimumFanspeed = isCustomProfile ? 0 : activeProfile.fan.minimumFanspeed;
+            fan.maximumFanspeed = isCustomProfile ? 100 : activeProfile.fan.maximumFanspeed;
+            fan.offsetFanspeed = isCustomProfile ? 0 : activeProfile.fan.offsetFanspeed;
 
             await fan.setFanProfile(currentFanProfile);
         }
@@ -73,28 +56,18 @@ export abstract class FanControlBaseClass {
     public async getPropertyInteger(
         hwmonPath: string,
         fileName: string,
-        suffix: string
+        suffix: string,
     ): Promise<SysFsPropertyInteger> {
-        return new SysFsPropertyInteger(
-            path.join(hwmonPath, fileName + suffix)
-        );
+        return new SysFsPropertyInteger(path.join(hwmonPath, fileName + suffix));
     }
 
-    public async getPropertyString(
-        hwmonPath: string,
-        fileName: string,
-        suffix: string
-    ): Promise<SysFsPropertyString> {
+    public async getPropertyString(hwmonPath: string, fileName: string, suffix: string): Promise<SysFsPropertyString> {
         return new SysFsPropertyString(path.join(hwmonPath, fileName + suffix));
     }
 
-    public abstract initFanControl(
-        fanWriteAvailable: boolean,
-        fanControlEnabled: boolean,
-    ): Promise<void>;
+    public abstract initFanControl(fanWriteAvailable: boolean, fanControlEnabled: boolean): Promise<void>;
     public abstract mapLogicToFans(numberInterfaces: number, reset: boolean): Promise<boolean>;
     public abstract getNumberFansAvailable(): Promise<number>;
-
 
     public abstract getFanSpeedPercent(fanIndex: number): Promise<number>;
 
@@ -108,10 +81,7 @@ export abstract class FanControlBaseClass {
 
     public abstract getFanTemperature(fanIndex: number): Promise<number>;
 
-    public abstract writeFanSpeed(
-        fanIndex: number,
-        calculatedSpeed: number
-    ): Promise<void>;
+    public abstract writeFanSpeed(fanIndex: number, calculatedSpeed: number): Promise<void>;
 
     public abstract exit(): Promise<void>;
 }

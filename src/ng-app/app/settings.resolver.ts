@@ -17,30 +17,28 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Injectable } from "@angular/core";
-import type { Resolve } from "@angular/router";
-import type { Observable } from "rxjs";
-import { TccDBusClientService } from "./tcc-dbus-client.service";
-import { filter, first } from "rxjs/operators";
+import { Injectable } from '@angular/core';
+import type { Resolve } from '@angular/router';
+import type { Observable } from 'rxjs';
+import { TccDBusClientService } from './tcc-dbus-client.service';
+import { filter, first } from 'rxjs/operators';
 
 @Injectable({
-    providedIn: "root",
+    providedIn: 'root',
 })
 export class ForceYUV420OutputSwitchResolver implements Resolve<boolean> {
     constructor(private tccdbus: TccDBusClientService) {}
 
     resolve(): Observable<boolean> {
-        return this.tccdbus.forceYUV420OutputSwitchAvailable
-            .asObservable()
-            .pipe(
-                filter((value: boolean): boolean => value !== undefined),
-                first()
-            );
+        return this.tccdbus.forceYUV420OutputSwitchAvailable.asObservable().pipe(
+            filter((value: boolean): boolean => value !== undefined),
+            first(),
+        );
     }
 }
 
 @Injectable({
-    providedIn: "root",
+    providedIn: 'root',
 })
 export class ChargingProfilesAvailableResolver implements Resolve<string[]> {
     constructor(private tccdbus: TccDBusClientService) {}
@@ -48,13 +46,13 @@ export class ChargingProfilesAvailableResolver implements Resolve<string[]> {
     resolve(): Observable<string[]> {
         return this.tccdbus.chargingProfilesAvailable.asObservable().pipe(
             filter((value: string[]): boolean => value !== undefined),
-            first()
+            first(),
         );
     }
 }
 
 @Injectable({
-    providedIn: "root",
+    providedIn: 'root',
 })
 export class PrimeSelectAvailableResolver implements Resolve<string> {
     constructor(private tccdbus: TccDBusClientService) {}
@@ -62,7 +60,7 @@ export class PrimeSelectAvailableResolver implements Resolve<string> {
     resolve(): Observable<string> {
         return this.tccdbus.primeState.asObservable().pipe(
             filter((value: string): boolean => value !== undefined),
-            first()
+            first(),
         );
     }
 }

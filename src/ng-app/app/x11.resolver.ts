@@ -17,14 +17,14 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Injectable } from "@angular/core";
-import type { Resolve } from "@angular/router";
-import { type Observable, from } from "rxjs";
-import { filter, first } from "rxjs/operators";
-import { TccDBusClientService } from "./tcc-dbus-client.service";
+import { Injectable } from '@angular/core';
+import type { Resolve } from '@angular/router';
+import { type Observable, from } from 'rxjs';
+import { filter, first } from 'rxjs/operators';
+import { TccDBusClientService } from './tcc-dbus-client.service';
 
 @Injectable({
-    providedIn: "root",
+    providedIn: 'root',
 })
 export class X11StatusResolver implements Resolve<number> {
     constructor(private tccdbus: TccDBusClientService) {}
@@ -32,7 +32,7 @@ export class X11StatusResolver implements Resolve<number> {
     resolve(): Observable<number> {
         return from(this.tccdbus.isX11.asObservable()).pipe(
             filter((value: number): boolean => value !== undefined && value !== -1),
-            first()
+            first(),
         );
     }
 }

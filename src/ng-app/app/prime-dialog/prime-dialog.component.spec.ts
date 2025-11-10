@@ -17,11 +17,11 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { type ComponentFixture, TestBed } from "@angular/core/testing";
+import { type ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PrimeDialogComponent } from "./prime-dialog.component";
+import { PrimeDialogComponent } from './prime-dialog.component';
 
-describe("PrimeDialogComponent", () => {
+describe('PrimeDialogComponent', () => {
     let component: PrimeDialogComponent;
     let fixture: ComponentFixture<PrimeDialogComponent>;
 
@@ -37,7 +37,7 @@ describe("PrimeDialogComponent", () => {
         fixture.detectChanges();
     });
 
-    it("should create", () => {
+    it('should create', () => {
         expect(component).toBeTruthy();
     });
 });

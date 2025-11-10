@@ -52,20 +52,18 @@ export class DisplayBacklightController extends SysFsController {
         super();
 
         // Workaround
-        if (driver.includes("amdgpu_bl")) {
+        if (driver.includes('amdgpu_bl')) {
             this.brightness = new SysFsPropertyAmdgpuBrightness(
-                path.join(basePath, driver, "actual_brightness"),
-                path.join(basePath, driver, "brightness"),
+                path.join(basePath, driver, 'actual_brightness'),
+                path.join(basePath, driver, 'brightness'),
             );
         }
 
         this.brightness = new SysFsPropertyInteger(
-            path.join(basePath, driver, "actual_brightness"),
-            path.join(basePath, driver, "brightness"),
+            path.join(basePath, driver, 'actual_brightness'),
+            path.join(basePath, driver, 'brightness'),
         );
-        this.maxBrightness = new SysFsPropertyInteger(
-            path.join(basePath, driver, "max_brightness"),
-        );
+        this.maxBrightness = new SysFsPropertyInteger(path.join(basePath, driver, 'max_brightness'));
     }
 
     public readonly brightness: SysFsPropertyInteger;

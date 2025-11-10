@@ -23,14 +23,13 @@ import type { ProfileStates } from '../../common/models/TccSettings';
 import { determineState } from '../../common/classes/StateUtils';
 
 export class StateSwitcherWorker extends DaemonWorker {
-
     private currentState: ProfileStates;
     private currentStateProfileId: string;
 
     private refreshProfile: boolean = false;
 
     constructor(tccd: TuxedoControlCenterDaemon) {
-        super(2000, "StateSwitcherWorker", tccd);
+        super(2000, 'StateSwitcherWorker', tccd);
     }
 
     /** Reset state */
@@ -91,14 +90,26 @@ export class StateSwitcherWorker extends DaemonWorker {
             }
         } else {
             // If state didn't change, a manual temporary profile can still be set
-            if (this.tccd.dbusData.tempProfileName !== undefined && this.tccd.dbusData.tempProfileName !== "" && this.tccd.dbusData.tempProfileName !== oldActiveProfileName) {
+            if (
+                this.tccd.dbusData.tempProfileName !== undefined &&
+                this.tccd.dbusData.tempProfileName !== '' &&
+                this.tccd.dbusData.tempProfileName !== oldActiveProfileName
+            ) {
                 if (this.tccd.setCurrentProfileByName(this.tccd.dbusData.tempProfileName)) {
-                    this.tccd.logLine(`StateSwitcherWorker: Temp profile '${this.tccd.getCurrentProfile().name}' (${this.tccd.getCurrentProfile().id}) selected`);
+                    this.tccd.logLine(
+                        `StateSwitcherWorker: Temp profile '${this.tccd.getCurrentProfile().name}' (${this.tccd.getCurrentProfile().id}) selected`,
+                    );
                 }
             }
-            if (this.tccd.dbusData.tempProfileId !== undefined && this.tccd.dbusData.tempProfileId !== "" && this.tccd.dbusData.tempProfileId !== oldActiveProfileId) {
+            if (
+                this.tccd.dbusData.tempProfileId !== undefined &&
+                this.tccd.dbusData.tempProfileId !== '' &&
+                this.tccd.dbusData.tempProfileId !== oldActiveProfileId
+            ) {
                 if (this.tccd.setCurrentProfileById(this.tccd.dbusData.tempProfileId)) {
-                    this.tccd.logLine(`StateSwitcherWorker: Temp profile '${this.tccd.getCurrentProfile().name}' (${this.tccd.getCurrentProfile().id}) selected`);
+                    this.tccd.logLine(
+                        `StateSwitcherWorker: Temp profile '${this.tccd.getCurrentProfile().name}' (${this.tccd.getCurrentProfile().id}) selected`,
+                    );
                     this.tccd.dbusData.tempProfileName = undefined;
                 }
             }
@@ -116,5 +127,4 @@ export class StateSwitcherWorker extends DaemonWorker {
     public async onExit(): Promise<void> {
         // Do nothing
     }
-
 }

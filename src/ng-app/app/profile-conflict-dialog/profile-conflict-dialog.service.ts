@@ -20,55 +20,54 @@
 import { Injectable } from '@angular/core';
 import type { Observable } from 'rxjs';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { ProfileConflictComponent, type IProfileConflictDialogResult } from "./profile-conflict-dialog.component";
+import { ProfileConflictComponent, type IProfileConflictDialogResult } from './profile-conflict-dialog.component';
 import { map, take } from 'rxjs/operators';
 import type { ITccProfile } from 'src/common/models/TccProfile';
 
 @Injectable()
-export class ProfileConflictDialogService {  
-  
-    constructor(private dialog: MatDialog) { }  
+export class ProfileConflictDialogService {
+    constructor(private dialog: MatDialog) {}
     dialogRef: MatDialogRef<ProfileConflictComponent>;
-  
-  private open(oldProfile: ITccProfile, newProfile: ITccProfile): void 
-  {
-    this.dialogRef = this.dialog.open(ProfileConflictComponent, {    
-        data: {
-          oldProfile: oldProfile,
-          newProfile: newProfile
-        },
-        minWidth: 800,
-        maxWidth: 800,
-   }); 
-  }    
 
-
-
-  private closed(): Observable<IProfileConflictDialogResult> 
-  {
-    return this.dialogRef.afterClosed().pipe(take(1), map((res: IProfileConflictDialogResult): IProfileConflictDialogResult => {
-        return res;
-      }
-    ));
-  }
-
-  public async openConflictModal(oldProfile: ITccProfile, importedProfile: ITccProfile,): Promise<IProfileConflictDialogResult>
-    {
-        return new Promise<IProfileConflictDialogResult>((resolve: (value: IProfileConflictDialogResult | PromiseLike<IProfileConflictDialogResult>) => void, reject: (reason?: unknown) => void): void  => {
-            this.open(oldProfile,importedProfile);
-
-            this.closed().subscribe((confirmed: IProfileConflictDialogResult): void => {
-                if (confirmed) {
-                  resolve(confirmed);
-                }
-                else
-                {
-                    reject({"action":"canceled","newName":""});
-                }
-             });
-
+    private open(oldProfile: ITccProfile, newProfile: ITccProfile): void {
+        this.dialogRef = this.dialog.open(ProfileConflictComponent, {
+            data: {
+                oldProfile: oldProfile,
+                newProfile: newProfile,
+            },
+            minWidth: 800,
+            maxWidth: 800,
         });
     }
 
+    private closed(): Observable<IProfileConflictDialogResult> {
+        return this.dialogRef.afterClosed().pipe(
+            take(1),
+            map((res: IProfileConflictDialogResult): IProfileConflictDialogResult => {
+                return res;
+            }),
+        );
+    }
 
+    public async openConflictModal(
+        oldProfile: ITccProfile,
+        importedProfile: ITccProfile,
+    ): Promise<IProfileConflictDialogResult> {
+        return new Promise<IProfileConflictDialogResult>(
+            (
+                resolve: (value: IProfileConflictDialogResult | PromiseLike<IProfileConflictDialogResult>) => void,
+                reject: (reason?: unknown) => void,
+            ): void => {
+                this.open(oldProfile, importedProfile);
+
+                this.closed().subscribe((confirmed: IProfileConflictDialogResult): void => {
+                    if (confirmed) {
+                        resolve(confirmed);
+                    } else {
+                        reject({ action: 'canceled', newName: '' });
+                    }
+                });
+            },
+        );
+    }
 }

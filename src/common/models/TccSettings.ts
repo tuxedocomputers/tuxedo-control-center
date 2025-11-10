@@ -17,16 +17,16 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { TUXEDODevice, defaultCustomProfile, defaultMobileCustomProfileID } from "./DefaultProfiles";
+import { TUXEDODevice, defaultCustomProfile, defaultMobileCustomProfileID } from './DefaultProfiles';
 
 export enum ProfileStates {
     AC = 'power_ac',
-    BAT = 'power_bat'
+    BAT = 'power_bat',
 }
 
 export enum KeyboardBacklightColorModes {
     static,
-    breathing
+    breathing,
 }
 
 export interface KeyboardBacklightCapabilitiesInterface {
@@ -49,9 +49,9 @@ export interface KeyboardBacklightStateInterface {
 export interface ITccSettings {
     fahrenheit: boolean;
     stateMap: {
-        power_ac: string,
-        power_bat: string
-    },
+        power_ac: string;
+        power_bat: string;
+    };
     shutdownTime: string | null;
     cpuSettingsEnabled: boolean;
     fanControlEnabled: boolean;
@@ -66,7 +66,7 @@ export const defaultSettings: ITccSettings = {
     fahrenheit: false,
     stateMap: {
         power_ac: '__default_custom_profile__',
-        power_bat: '__default_custom_profile__'
+        power_bat: '__default_custom_profile__',
     },
     shutdownTime: null,
     cpuSettingsEnabled: true,
@@ -75,14 +75,14 @@ export const defaultSettings: ITccSettings = {
     ycbcr420Workaround: [],
     chargingProfile: null,
     chargingPriority: null,
-    keyboardBacklightStates: []
+    keyboardBacklightStates: [],
 };
 
 export const defaultSettingsXP1508UHD: ITccSettings = {
     fahrenheit: false,
     stateMap: {
         power_ac: 'Default',
-        power_bat: 'Custom XP1508 UHD'
+        power_bat: 'Custom XP1508 UHD',
     },
     shutdownTime: null,
     cpuSettingsEnabled: true,
@@ -91,14 +91,14 @@ export const defaultSettingsXP1508UHD: ITccSettings = {
     ycbcr420Workaround: [],
     chargingProfile: null,
     chargingPriority: null,
-    keyboardBacklightStates: []
+    keyboardBacklightStates: [],
 };
 
 const defaultSettingsMobile: ITccSettings = {
     fahrenheit: false,
     stateMap: {
         power_ac: defaultCustomProfile.id,
-        power_bat: defaultMobileCustomProfileID
+        power_bat: defaultMobileCustomProfileID,
     },
     shutdownTime: null,
     cpuSettingsEnabled: true,
@@ -107,7 +107,7 @@ const defaultSettingsMobile: ITccSettings = {
     ycbcr420Workaround: [],
     chargingProfile: null,
     chargingPriority: null,
-    keyboardBacklightStates: []
+    keyboardBacklightStates: [],
 };
 
 export const deviceCustomSettings: Map<TUXEDODevice, ITccSettings> = new Map();

@@ -17,16 +17,14 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-export interface IDisplayFreqRes 
-{
+export interface IDisplayFreqRes {
     displayName: string;
     activeMode: IDisplayMode;
     // active Mode is also included in displayModes
     displayModes: IDisplayMode[];
 }
 
-export interface IDisplayMode
-{
+export interface IDisplayMode {
     refreshRates: number[];
     xResolution: number;
     yResolution: number;

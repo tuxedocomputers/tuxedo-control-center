@@ -21,8 +21,7 @@ import * as fs from 'node:fs';
 import * as process from 'node:process';
 
 export class SingleProcess {
-
-    constructor(private pidPath: string) { }
+    constructor(private pidPath: string) {}
 
     /**
      * Start process
@@ -42,12 +41,13 @@ export class SingleProcess {
     protected async stop(): Promise<boolean> {
         const pid: number = this.readPid();
 
-        if (!Number.isNaN(pid)) { // If there is a PID in file
+        if (!Number.isNaN(pid)) {
+            // If there is a PID in file
             if (this.isRunning()) {
                 try {
                     process.kill(pid, 'SIGINT');
                 } catch (err: unknown) {
-                    console.error(`SingleProcess: stop failed => ${err}`)
+                    console.error(`SingleProcess: stop failed => ${err}`);
                     return false;
                 }
             }
@@ -57,7 +57,10 @@ export class SingleProcess {
         const nrRetries: number = 50;
         const retryDelay: number = 100;
         let count: number = 0;
-        while (this.isRunning() && count < nrRetries) { await new Promise(done => setTimeout(done, retryDelay)); count += 1; }
+        while (this.isRunning() && count < nrRetries) {
+            await new Promise((done) => setTimeout(done, retryDelay));
+            count += 1;
+        }
         if (count >= nrRetries) {
             return false;
         } else {
@@ -77,7 +80,7 @@ export class SingleProcess {
             fs.writeFileSync(this.pidPath, pid.toString());
             return true;
         } catch (err: unknown) {
-            console.error(`SingleProcess: writePid failed => ${err}`)
+            console.error(`SingleProcess: writePid failed => ${err}`);
             return false;
         }
     }
@@ -89,7 +92,7 @@ export class SingleProcess {
      */
     protected readPid(): number {
         try {
-            const available: boolean = fs.existsSync(this.pidPath)
+            const available: boolean = fs.existsSync(this.pidPath);
             if (available) {
                 const strPid: Buffer = fs.readFileSync(this.pidPath);
                 const intPid: number = Number.parseInt(strPid.toString(), 10);
@@ -97,7 +100,7 @@ export class SingleProcess {
             }
             return Number.NaN;
         } catch (err: unknown) {
-            console.error(`SingleProcess: readPid failed => ${err}`)
+            console.error(`SingleProcess: readPid failed => ${err}`);
             return Number.NaN;
         }
     }
@@ -132,9 +135,9 @@ export class SingleProcess {
             isRunning = false;
         } else {
             try {
-                return fs.existsSync(`/proc/${intPid}`)
+                return fs.existsSync(`/proc/${intPid}`);
             } catch (err: unknown) {
-                console.error(`SingleProcess: isRunning failed => ${err}`)
+                console.error(`SingleProcess: isRunning failed => ${err}`);
                 isRunning = false;
             }
         }

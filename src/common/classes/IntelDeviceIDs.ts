@@ -22,552 +22,552 @@ const intelIGpuDeviceIds: string[] = [
     // GPUs with supported drivers
 
     // Xe2 Lunar Lake (Intel Graphics)
-    "6420",
-    "64B0",
+    '6420',
+    '64B0',
 
     // Xe-LPG Arrow Lake-H (Intel Graphics)
-    "7D51",
+    '7D51',
 
     // Xe-LPG Arrow Lake-S (Intel Graphics)
-    "7D67",
+    '7D67',
 
     // Xe-LPG Arrow Lake-U (Intel Graphics)
-    "7D41",
+    '7D41',
 
     // Xe-LPG Meteor Lake (Intel Graphics)
-    "7DD5",
-    "7D45",
-    "7D40",
+    '7DD5',
+    '7D45',
+    '7D40',
 
     // Xe Raptor Lake-S (Intel UHD Graphics 770)
-    "A780",
+    'A780',
 
     // Xe Raptor Lake-S (Intel UHD Graphics)
-    "A781",
-    "A788",
-    "A789",
-    "A78A",
+    'A781',
+    'A788',
+    'A789',
+    'A78A',
 
     // Xe Raptor Lake-S (Intel UHD Graphics 730)
-    "A782",
+    'A782',
 
     // Xe Raptor Lake-S (Intel UHD Graphics)
-    "A78B",
-    
+    'A78B',
+
     // Xe Raptor Lake-S (Intel UHD Graphics 710)
-    "A783",
+    'A783',
 
     // Xe Raptor Lake-P (Intel Iris Xe Graphics)
-    "A7A0",
-    "A7A1",
+    'A7A0',
+    'A7A1',
 
     // Xe Raptor Lake-P (Intel UHD Graphics)
-    "A7A8",
+    'A7A8',
 
     // Xe Raptor Lake-P (Intel Graphics)
-    "A7AA",
-    "A7AB",
+    'A7AA',
+    'A7AB',
 
     // Xe Raptor Lake-U (Intel Graphics)
-    "A7AC",
-    "A7AD",
+    'A7AC',
+    'A7AD',
 
     // Xe Raptor Lake-P (Intel UHD Graphics)
-    "A7A9",
-    "A721",
+    'A7A9',
+    'A721',
 
     // Xe Alder Lake-S (Intel UHD Graphics 770)
-    "4680",
-    "4690",
-    "4688",
-    "468A",
-    "468B",
+    '4680',
+    '4690',
+    '4688',
+    '468A',
+    '468B',
 
     // Xe Alder Lake-S (Intel UHD Graphics 730)
-    "4682",
-    "4692",
+    '4682',
+    '4692',
 
     // Xe Alder Lake-S (Intel UHD Graphics 710)
-    "4693",
+    '4693',
 
     // Xe Alder Lake-N (Intel Graphics)
-    "46D3",
-    "46D4",
+    '46D3',
+    '46D4',
 
     // Xe Alder Lake-N (Intel UHD Graphics)
-    "46D0",
-    "46D1",
-    "46D2",
+    '46D0',
+    '46D1',
+    '46D2',
 
     // Xe Alder Lake-P (Intel UHD Graphics)
-    "4626",
-    "4628",
-    "462A",
-    "46A2",
-    "46B3",
-    "46C2",
-    "46A3",
-    "46B2",
-    "46C3",
+    '4626',
+    '4628',
+    '462A',
+    '46A2',
+    '46B3',
+    '46C2',
+    '46A3',
+    '46B2',
+    '46C3',
 
     // Xe Alder Lake-P (Intel Iris Xe Graphics)
-    "46A0",
-    "46B0",
-    "46C0",
-    "46A6",
-    "46AA",
-    "46A8",
-    "46A1",
-    "46B1",
-    "46C1",
+    '46A0',
+    '46B0',
+    '46C0',
+    '46A6',
+    '46AA',
+    '46A8',
+    '46A1',
+    '46B1',
+    '46C1',
 
     // Xe Rocket Lake (Intel UHD Graphics 750)
-    "4C8A",
+    '4C8A',
 
     // Xe Rocket Lake (Intel UHD Graphics 730)
-    "4C8B",
+    '4C8B',
 
     // Xe Rocket Lake (Intel UHD Graphics P750)
-    "4C90",
-    "4C9A",
+    '4C90',
+    '4C9A',
 
     // Xe Jasper Lake (Intel UHD Graphics)
-    "4E71",
-    "4E61",
-    "4E57",
-    "4E55",
-    "4E51",
+    '4E71',
+    '4E61',
+    '4E57',
+    '4E55',
+    '4E51',
 
     // Xe Elkhart Lake (Intel UHD Graphics)
-    "4557",
-    "4555",
-    "4571",
-    "4551",
-    "4541",
+    '4557',
+    '4555',
+    '4571',
+    '4551',
+    '4541',
 
     // Xe Tiger Lake (Intel UHD Graphics)
-    "9A59",
-    "9A78",
-    "9A60",
-    "9A70",
-    "9A68",
+    '9A59',
+    '9A78',
+    '9A60',
+    '9A70',
+    '9A68',
 
     // Xe Tiger Lake (Intel Iris Xe Graphics)
-    "9A40",
-    "9A49",
+    '9A40',
+    '9A49',
 
     // GPUs with unsupported drivers
 
     // Gen11 Ice Lake (Intel HD Graphics)
-    "8A70",
-    "8A71",
+    '8A70',
+    '8A71',
 
     // Gen11 Ice Lake (Intel UHD Graphics)
-    "8A56",
-    "8A58",
+    '8A56',
+    '8A58',
 
     // Gen11 Ice Lake (Intel HD Graphics)
-    "8A5B",
-    "8A5D",
+    '8A5B',
+    '8A5D',
 
     // Gen11 Ice Lake (Intel Iris Plus Graphics)
-    "8A54",
-    "8A5A",
-    "8A5C",
+    '8A54',
+    '8A5A',
+    '8A5C',
 
     // Gen11 Ice Lake (Intel HD Graphics)
-    "8A57",
-    "8A59",
+    '8A57',
+    '8A59',
 
     // Gen11 Ice Lake (Intel HD Graphics)
-    "8A50",
+    '8A50',
 
     // Gen11 Ice Lake (Intel Iris Plus Graphics)
-    "8A51",
-    "8A52",
-    "8A53",
+    '8A51',
+    '8A52',
+    '8A53',
 
     // Gen9 Coffee Lake (Intel Iris Plus Graphics 655)
-    "3EA5",
-    "3EA8",
+    '3EA5',
+    '3EA8',
 
     // Gen9 Coffee Lake (Intel Iris Plus Graphics 645)
-    "3EA6",
+    '3EA6',
 
     // Gen9 Coffee Lake (Intel HD Graphics)
-    "3EA7",
+    '3EA7',
 
     // Gen9 Coffee Lake (Intel UHD Graphics)
-    "3EA2",
+    '3EA2',
 
     // Gen9 Coffee Lake (Intel UHD Graphics 610)
-    "3E90",
-    "3E93",
-    "3E99",
-    "3E9C",
-    "3EA1",
-    "9BA5",
-    "9BA8",
+    '3E90',
+    '3E93',
+    '3E99',
+    '3E9C',
+    '3EA1',
+    '9BA5',
+    '9BA8',
 
     // Gen9 Coffee Lake (Intel UHD Graphics)
-    "3EA4",
-    "9B21",
-    "9BA0",
-    "9BA2",
-    "9BA4",
-    "9BAA",
-    "9BAB",
-    "9BAC",
+    '3EA4',
+    '9B21',
+    '9BA0',
+    '9BA2',
+    '9BA4',
+    '9BAA',
+    '9BAB',
+    '9BAC',
 
     // Gen9 Coffee Lake (Intel UHD Graphics)
-    "87CA",
-    "3EA3",
-    "9B41",
-    "9BC0",
-    "9BC2",
-    "9BC4",
-    "9BCA",
-    "9BCB",
-    "9BCC",
+    '87CA',
+    '3EA3',
+    '9B41',
+    '9BC0',
+    '9BC2',
+    '9BC4',
+    '9BCA',
+    '9BCB',
+    '9BCC',
 
     // Gen9 Coffee Lake (Intel UHD Graphics 630)
-    "3E91",
-    "3E92",
-    "3E98",
-    "3E9B",
-    "9BC5",
-    "9BC8",
+    '3E91',
+    '3E92',
+    '3E98',
+    '3E9B',
+    '9BC5',
+    '9BC8',
 
     // Gen9 Coffee Lake (Intel UHD Graphics P630)
-    "3E96",
-    "3E9A",
-    "3E94",
-    "9BC6",
-    "9BE6",
-    "9BF6",
+    '3E96',
+    '3E9A',
+    '3E94',
+    '9BC6',
+    '9BE6',
+    '9BF6',
 
     // Gen9 Coffee Lake (Intel UHD Graphics 620)
-    "3EA9",
-    "3EA0",
+    '3EA9',
+    '3EA0',
 
     // Gen9 Kaby Lake (Intel HD Graphics)
-    "593B",
+    '593B',
 
     // Gen9 Kaby Lake (Intel HD Graphics 635)
-    "5923",
+    '5923',
 
     // Gen9 Kaby Lake (Intel Iris Plus Graphics 640)
-    "5926",
+    '5926',
 
     // Gen9 Kaby Lake (Intel Iris Plus Graphics 650)
-    "5927",
+    '5927',
 
     // Gen9 Kaby Lake (Intel UHD Graphics 620)
-    "5917",
+    '5917',
 
     // Gen9 Kaby Lake (Intel HD Graphics 630)
-    "5912",
-    "591B",
+    '5912',
+    '591B',
 
     // Gen9 Kaby Lake (Intel HD Graphics 620)
-    "5916",
-    "5921",
+    '5916',
+    '5921',
 
     // Gen9 Kaby Lake (Intel HD Graphics P630)
-    "591A",
-    "591D",
+    '591A',
+    '591D',
 
     // Gen9 Kaby Lake (Intel HD Graphics 615)
-    "591E",
+    '591E',
 
     // Gen9 Kaby Lake (Intel UHD Graphics 615)
-    "591C",
+    '591C',
 
     // Gen9 Kaby Lake (Intel UHD Graphics 617)
-    "87C0",
+    '87C0',
 
     // Gen9 Kaby Lake (Intel HD Graphics)
-    "5913",
-    "5915",
+    '5913',
+    '5915',
 
     // Gen9 Kaby Lake (Intel HD Graphics 610)
-    "5902",
-    "5906",
-    "590B",
+    '5902',
+    '5906',
+    '590B',
 
     // Gen9 Kaby Lake (Intel HD Graphics)
-    "590A",
-    "5908",
-    "590E",
+    '590A',
+    '5908',
+    '590E',
 
     // Gen9 Gemini Lake (Intel UHD Graphics 600)
-    "3185",
+    '3185',
 
     // Gen9 Gemini Lake (Intel UHD Graphics 605)
-    "3184",
+    '3184',
 
     // Gen9 Apollo Lake (Intel HD Graphics)
-    "1A85",
+    '1A85',
 
     // Gen9 Apollo Lake (Intel HD Graphics 500)
-    "5A85",
+    '5A85',
 
     // Gen9 Apollo Lake (Intel HD Graphics)
-    "0A84",
-    "1A84",
+    '0A84',
+    '1A84',
 
     // Gen9 Apollo Lake (Intel HD Graphics 505)
-    "5A84",
+    '5A84',
 
     // Gen9 Skylake (Intel HD Graphics)
-    "192A",
+    '192A',
 
     // Gen9 Skylake (Intel Iris Pro Graphics 580)
-    "1932",
-    "193B",
+    '1932',
+    '193B',
 
     // Gen9 Skylake (Intel Iris Pro Graphics P580)
-    "193A",
-    "193D",
+    '193A',
+    '193D',
 
     // Gen9 Skylake (Intel HD Graphics 535)
-    "1923",
+    '1923',
 
     // Gen9 Skylake (Intel Iris Graphics 540)
-    "1926",
+    '1926',
 
     // Gen9 Skylake (Intel Iris Graphics 550)
-    "1927",
+    '1927',
 
     // Gen9 Skylake (Intel Iris Graphics 555)
-    "192B",
+    '192B',
 
     // Gen9 Skylake (Intel Iris Graphics P555)
-    "192D",
+    '192D',
 
     // Gen9 Skylake (Intel HD Graphics 530)
-    "1912",
-    "191B",
+    '1912',
+    '191B',
 
     // Gen9 Skylake (Intel HD Graphics)
-    "1913",
-    "1915",
-    "1917",
-    "191A",
+    '1913',
+    '1915',
+    '1917',
+    '191A',
 
     // Gen9 Skylake (Intel HD Graphics 520)
-    "1916",
-    "1921",
+    '1916',
+    '1921',
 
     // Gen9 Skylake (Intel HD Graphics P530)
-    "191D",
+    '191D',
 
     // Gen9 Skylake (Intel HD Graphics 515)
-    "191E",
+    '191E',
 
     // Gen9 Skylake (Intel HD Graphics 510)
-    "1902",
-    "1906",
-    "190B",
+    '1902',
+    '1906',
+    '190B',
 
     // Gen9 Skylake (Intel HD Graphics)
-    "190A",
-    "190E",
+    '190A',
+    '190E',
 
     // Legacy GPUs
 
     // Gen8 Broadwell (Intel HD Graphics)
-    "163D",
-    "163A",
-    "1632",
-    "163E",
-    "163B",
-    "1636",
+    '163D',
+    '163A',
+    '1632',
+    '163E',
+    '163B',
+    '1636',
 
     // Gen8 Broadwell (Intel Iris Pro Graphics 6200)
-    "1622",
+    '1622',
 
     // Gen8 Broadwell (Intel HD Graphics 6000)
-    "1626",
+    '1626',
 
     // Gen8 Broadwell (Intel Iris Pro Graphics P6300)
-    "162A",
+    '162A',
 
     // Gen8 Broadwell (Intel Iris Graphics 6100)
-    "162B",
+    '162B',
 
     // Gen8 Broadwell (Intel HD Graphics)
-    "162D",
-    "162E",
+    '162D',
+    '162E',
 
     // Gen8 Broadwell (Intel HD Graphics 5600)
-    "1612",
+    '1612',
 
     // Gen8 Broadwell (Intel HD Graphics 5500)
-    "1616",
+    '1616',
 
     // Gen8 Broadwell (Intel HD Graphics P5700)
-    "161A",
+    '161A',
 
     // Gen8 Broadwell (Intel HD Graphics)
-    "161B",
-    "161D",
+    '161B',
+    '161D',
 
     // Gen8 Broadwell (Intel HD Graphics 5300)
-    "161E",
+    '161E',
 
     // Gen8 Broadwell (Intel HD Graphics)
-    "1602",
-    "1606",
-    "160A",
-    "160B",
-    "160D",
-    "160E",
+    '1602',
+    '1606',
+    '160A',
+    '160B',
+    '160D',
+    '160E',
 
     // Gen8 Cherryview (Intel HD Graphics)
-    "22B0",
-    "22B2",
-    "22B3",
+    '22B0',
+    '22B2',
+    '22B3',
 
     // Gen8 Cherryview (Intel HD Graphics XXX)
-    "22B1",
+    '22B1',
 
     // Gen7 Bay Trail (Intel HD Graphics)
-    "0F30",
-    "0F31",
-    "0F32",
-    "0F33",
-    "0157",
-    "0155",
+    '0F30',
+    '0F31',
+    '0F32',
+    '0F33',
+    '0157',
+    '0155',
 
     // Gen7 Haswell (Intel HD Graphics)
-    "0422",
-    "0426",
-    "042A",
-    "042B",
-    "042E",
-    "0C22",
-    "0C26",
-    "0C2A",
-    "0C2B",
-    "0C2E",
-    "0A22",
-    "0A2A",
-    "0A2B",
-    "0D2A",
-    "0D2B",
-    "0D2E",
+    '0422',
+    '0426',
+    '042A',
+    '042B',
+    '042E',
+    '0C22',
+    '0C26',
+    '0C2A',
+    '0C2B',
+    '0C2E',
+    '0A22',
+    '0A2A',
+    '0A2B',
+    '0D2A',
+    '0D2B',
+    '0D2E',
 
     // Gen7 Haswell (Intel HD Graphics 5000)
-    "0A26",
+    '0A26',
 
     // Gen7 Haswell (Intel Iris Graphics 5100)
-    "0A2E",
+    '0A2E',
 
     // Gen7 Haswell (Intel Iris Pro Graphics 5200)
-    "0D22",
+    '0D22',
 
     // Gen7 Haswell (Intel Iris Pro Graphics P5200)
-    "0D26",
+    '0D26',
 
     // Gen7 Haswell (Intel HD Graphics 4600)
-    "0412",
-    "0416",
-    "0D12",
+    '0412',
+    '0416',
+    '0D12',
 
     // Gen7 Haswell (Intel HD Graphics P4600/P4700)
-    "041A",
+    '041A',
 
     // Gen7 Haswell (Intel HD Graphics)
-    "041B",
-    "0C12",
-    "0C16",
-    "0C1A",
-    "0C1B",
-    "0C1E",
-    "0A12",
-    "0A1A",
-    "0A1B",
-    "0D16",
-    "0D1A",
-    "0D1B",
-    "0D1E",
+    '041B',
+    '0C12',
+    '0C16',
+    '0C1A',
+    '0C1B',
+    '0C1E',
+    '0A12',
+    '0A1A',
+    '0A1B',
+    '0D16',
+    '0D1A',
+    '0D1B',
+    '0D1E',
 
     // Gen7 Haswell (Intel HD Graphics 4400)
-    "041E",
-    "0A16",
+    '041E',
+    '0A16',
 
     // Gen7 Haswell (Intel HD Graphics 4200)
-    "0A1E",
+    '0A1E',
 
     // Gen7 Haswell (Intel HD Graphics)
-    "0402",
-    "0406",
-    "040A",
-    "040B",
-    "040E",
-    "0C02",
-    "0C06",
-    "0C0A",
-    "0C0B",
-    "0C0E",
-    "0A02",
-    "0A06",
-    "0A0A",
-    "0A0B",
-    "0A0E",
-    "0D02",
-    "0D06",
-    "0D0A",
-    "0D0B",
-    "0D0E",
+    '0402',
+    '0406',
+    '040A',
+    '040B',
+    '040E',
+    '0C02',
+    '0C06',
+    '0C0A',
+    '0C0B',
+    '0C0E',
+    '0A02',
+    '0A06',
+    '0A0A',
+    '0A0B',
+    '0A0E',
+    '0D02',
+    '0D06',
+    '0D0A',
+    '0D0B',
+    '0D0E',
 
     // Gen7 Ivy Bridge (Intel HD Graphics 4000)
-    "0162",
-    "0166",
+    '0162',
+    '0166',
 
     // Gen7 Ivy Bridge (Intel HD Graphics P4000)
-    "016A",
+    '016A',
 
     // Gen7 Ivy Bridge (Intel HD Graphics 2500)
-    "0152",
-    "0156",
+    '0152',
+    '0156',
 
     // Gen7 Ivy Bridge (Intel HD Graphics)
-    "015A",
+    '015A',
 
     // Gen6 Sandy Bridge (Intel HD Graphics 3000)
-    "0112",
-    "0122",
-    "0116",
-    "0126",
+    '0112',
+    '0122',
+    '0116',
+    '0126',
 
     // Gen6 Sandy Bridge (Intel HD Graphics 2000)
-    "0102",
-    "0106",
-    "010A",
+    '0102',
+    '0106',
+    '010A',
 
     // Gen5 Iron Lake (Intel HD Graphics)
-    "0042",
-    "0046",
-    
+    '0042',
+    '0046',
+
     // GPUs that were removed from the official hardware table
-    
+
     // Xe Raptor Lake-P (Intel Iris Xe Graphics)
-    "A720",
+    'A720',
 
     // Xe Rocket Lake (Intel UHD Graphics)
-    "4C8C",
-    "4C80", 
+    '4C8C',
+    '4C80',
 
     // Xe Tiger Lake (Intel UHD Graphics)
-    "9AC0", 
-    "9AC9",
-    "9AD9",
-    "9AF8",
+    '9AC0',
+    '9AC9',
+    '9AD9',
+    '9AF8',
 ];
 
-const intelVendorId: string = "8086";
+const intelVendorId: string = '8086';
 export const intelIGpuDeviceIdString: string = intelIGpuDeviceIds
     .map((id: string): string => `${intelVendorId}:${id}`)
-    .join("|");
+    .join('|');

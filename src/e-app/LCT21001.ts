@@ -28,14 +28,14 @@ export enum RGBState {
     Static = 0x00,
     Breathe = 0x01,
     Colorful = 0x02,
-    BreatheColor = 0x03
+    BreatheColor = 0x03,
 }
 
 export enum PumpVoltage {
     V11 = 0x00,
     V12 = 0x01,
     V7 = 0x02,
-    V8 = 0x03
+    V8 = 0x03,
 }
 
 enum LCTDeviceModel {
@@ -53,7 +53,6 @@ export class DeviceInfo {
  * Encapsulates communication with the Bluetooth LE device.
  */
 export class LCT21001 {
-
     private static readonly NORDIC_UART_SERVICE_UUID: string = '6e400001-b5a3-f393-e0a9-e50e24dcca9e';
     private static readonly NORDIC_UART_CHAR_TX: string = '6e400002-b5a3-f393-e0a9-e50e24dcca9e';
     private static readonly NORDIC_UART_CHAR_RX: string = '6e400003-b5a3-f393-e0a9-e50e24dcca9e';
@@ -94,7 +93,11 @@ export class LCT21001 {
         this.device = await this.adapter.getDevice(deviceUUID);
 
         let rssi, deviceName: string;
-        try { rssi = await this.device.getRSSI(); } catch (err: unknown) {console.error(`LCT21001: connect getRSSI failed => ${err}`)}
+        try {
+            rssi = await this.device.getRSSI();
+        } catch (err: unknown) {
+            console.error(`LCT21001: connect getRSSI failed => ${err}`);
+        }
         if (rssi === undefined) {
             throw Error('connect(): device appears offline/unavailable');
         }
@@ -127,14 +130,18 @@ export class LCT21001 {
      * Disconnect from device and clean-up bluetooth initializations
      */
     async disconnect(): Promise<void> {
-        if (this.device !== undefined && await this.device.isConnected()) {
+        if (this.device !== undefined && (await this.device.isConnected())) {
             // Data written on disconnect by original control, seems to reset
             // or turn off configured parameters
-            try { await this.writeReset(); } catch(err: unknown) {
-                console.error(`LCT21001: disconnect writeReset failed => ${err}`)
+            try {
+                await this.writeReset();
+            } catch (err: unknown) {
+                console.error(`LCT21001: disconnect writeReset failed => ${err}`);
             }
-            try { await this.device.disconnect(); } catch (err: unknown) {
-                console.error(`LCT21001: disconnect failed => ${err}`)
+            try {
+                await this.device.disconnect();
+            } catch (err: unknown) {
+                console.error(`LCT21001: disconnect failed => ${err}`);
             }
             this.device = undefined;
             this.connectedModel = undefined;
@@ -148,21 +155,23 @@ export class LCT21001 {
 
             this.adapter = await bluetooth.defaultAdapter();
 
-            if (! await this.adapter.isDiscovering()) {
+            if (!(await this.adapter.isDiscovering())) {
                 await this.adapter.startDiscovery();
             }
 
             return true;
         } catch (err: unknown) {
-            console.error(`LCT21001: startDiscover failed => ${err}`)
+            console.error(`LCT21001: startDiscover failed => ${err}`);
             return false;
         }
     }
 
     async stopDiscover(): Promise<void> {
         // Clean-up other initialized stuff
-        if (this.adapter !== undefined && await this.adapter.isDiscovering()) {
-            await this.adapter.stopDiscovery().catch((err: unknown): void => console.error(`LCT21001: stopDiscover failed => ${err}`))
+        if (this.adapter !== undefined && (await this.adapter.isDiscovering())) {
+            await this.adapter
+                .stopDiscovery()
+                .catch((err: unknown): void => console.error(`LCT21001: stopDiscover failed => ${err}`));
         }
 
         if (this.destroy !== undefined) {
@@ -174,7 +183,7 @@ export class LCT21001 {
         try {
             return await this.adapter?.isDiscovering();
         } catch (err: unknown) {
-            console.error(`LCT21001: isDiscovering failed => ${err}`)
+            console.error(`LCT21001: isDiscovering failed => ${err}`);
             return false;
         }
     }
@@ -213,7 +222,7 @@ export class LCT21001 {
             if (model !== undefined) {
                 deviceInfo.push(info);
             }
-        };
+        }
 
         return deviceInfo;
     }
@@ -223,9 +232,9 @@ export class LCT21001 {
 
         try {
             // todo: testing
-            result = !!await this.device?.isConnected();
+            result = !!(await this.device?.isConnected());
         } catch (err: unknown) {
-            console.error(`LCT21001: isConnected failed => ${err}`)
+            console.error(`LCT21001: isConnected failed => ${err}`);
             result = false;
         }
 
@@ -244,7 +253,7 @@ export class LCT21001 {
      * Note: Throws error if not connected
      */
     async writeBuffer(buffer: Buffer): Promise<void> {
-        if (this.uartTx !== undefined && await this.isConnected()) {
+        if (this.uartTx !== undefined && (await this.isConnected())) {
             await this.uartTx.writeValue(buffer, { type: 'request' });
         } else {
             throw Error('writeBuffer(): not connected');
@@ -259,7 +268,7 @@ export class LCT21001 {
      * Note: Throws error if not connected
      */
     async readBuffer(): Promise<Buffer> {
-        if (this.uartRx !== undefined && await this.isConnected()) {
+        if (this.uartRx !== undefined && (await this.isConnected())) {
             return await this.uartRx.readValue();
         } else {
             throw Error('readBuffer(): not connected');
@@ -276,25 +285,30 @@ export class LCT21001 {
      * Note: Throws error if not connected
      */
     async writeReceive(inputBuffer: Buffer): Promise<Buffer> {
-        return new Promise<Buffer>(async (resolve: (value: Buffer | PromiseLike<Buffer>) => void, reject: (reason?: unknown) => void): Promise<void> => {
-            if (this.uartRx !== undefined && await this.isConnected()) {
-                if (await this.uartRx.isNotifying()) {
-                    reject('rx already awaiting notify');
+        return new Promise<Buffer>(
+            async (
+                resolve: (value: Buffer | PromiseLike<Buffer>) => void,
+                reject: (reason?: unknown) => void,
+            ): Promise<void> => {
+                if (this.uartRx !== undefined && (await this.isConnected())) {
+                    if (await this.uartRx.isNotifying()) {
+                        reject('rx already awaiting notify');
+                    }
+                    await this.uartRx.startNotifications();
+                    this.uartRx.once('valuechanged', async (outputBuffer: any): Promise<void> => {
+                        await this.uartRx?.stopNotifications();
+                        resolve(outputBuffer);
+                    });
+                    this.writeBuffer(inputBuffer).catch(async (): Promise<void> => {
+                        await this.uartRx?.stopNotifications();
+                        this.uartRx?.removeAllListeners();
+                        reject();
+                    });
+                } else {
+                    throw Error('writeReceive(): not connected');
                 }
-                await this.uartRx.startNotifications();
-                this.uartRx.once('valuechanged', async (outputBuffer: any): Promise<void> => {
-                    await this.uartRx?.stopNotifications();
-                    resolve(outputBuffer);
-                });
-                this.writeBuffer(inputBuffer).catch(async (): Promise<void> => {
-                    await this.uartRx?.stopNotifications();
-                    this.uartRx?.removeAllListeners();
-                    reject()
-                });
-            } else {
-                throw Error('writeReceive(): not connected');
-            }
-        });
+            },
+        );
     }
 
     /**
@@ -352,7 +366,16 @@ export class LCT21001 {
         }
         if (pumpVoltage < 0 || pumpVoltage > 0x03) throw Error('writePumpMode(): param out of range');
 
-        const data: Buffer = Buffer.from([0xfe, LCT21001.CMD_PUMP, 0x01, pumpDutyCyclePercent, pumpVoltage, 0x00, 0x00, 0xef]);
+        const data: Buffer = Buffer.from([
+            0xfe,
+            LCT21001.CMD_PUMP,
+            0x01,
+            pumpDutyCyclePercent,
+            pumpVoltage,
+            0x00,
+            0x00,
+            0xef,
+        ]);
         await this.writeBuffer(data);
     }
 

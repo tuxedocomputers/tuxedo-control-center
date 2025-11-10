@@ -29,7 +29,7 @@
     flex-direction: column;
     padding-top: 16px;
     align-items: flex-start;
-    
+
     .header-text {
         font-size: 16px;
         font-weight: bold;
@@ -41,15 +41,14 @@
     .radio-text {
         padding-top: 16px;
         padding-bottom: 16px;
-        
+
         .radio-title {
             font-size: 16px;
-            font-weight: bold
+            font-weight: bold;
         }
-    
+
         .radio-description {
             font-size: 16px;
-    
         }
     }
 }
@@ -77,14 +76,14 @@
     mat-grid-tile {
         overflow: visible;
     }
-    
+
     .description {
         font-size: 16px;
         text-align: left;
         padding-top: 0px;
         font-style: oblique;
     }
-    
+
     .input {
         width: 100%;
 
@@ -92,14 +91,14 @@
             width: 100%;
         }
     }
-    
+
     .header {
         width: 100%;
         text-align: left;
         font-size: 16px;
         font-weight: bold;
     }
-    
+
     .value {
         width: 100%;
         text-align: left;

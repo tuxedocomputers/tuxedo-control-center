@@ -72,12 +72,12 @@ import { OverlayModule } from '@angular/cdk/overlay';
 import { GaugeModule } from 'angular-gauge';
 import { GlobalSettingsComponent } from './global-settings/global-settings.component';
 import { ShutdownTimerComponent } from './shutdown-timer/shutdown-timer.component';
-import { ToolsComponent } from "./tools/tool.component";
-import { KeyboardBacklightComponent } from "./keyboard-backlight/keyboard-backlight.component";
+import { ToolsComponent } from './tools/tool.component';
+import { KeyboardBacklightComponent } from './keyboard-backlight/keyboard-backlight.component';
 import { ChangeCryptPasswordComponent } from './change-crypt-password/change-crypt-password.component';
 import { FanChartComponent } from './fan-chart/fan-chart.component';
 
-import { BaseChartDirective, ThemeService } from "ng2-charts";
+import { BaseChartDirective, ThemeService } from 'ng2-charts';
 import { ColorPickerModule } from 'ngx-color-picker';
 import { MainGuiComponent } from './main-gui/main-gui.component';
 import { AquarisControlComponent } from './aquaris-control/aquaris-control.component';
@@ -87,8 +87,8 @@ import { TomteGuiComponent } from './tomte-gui/tomte-gui.component';
 import { ProfileConflictDialogService } from './profile-conflict-dialog/profile-conflict-dialog.service';
 import { ProfileConflictComponent } from './profile-conflict-dialog/profile-conflict-dialog.component';
 import { ChargingSettingsComponent } from './charging-settings/charging-settings.component';
-import { WebcamSettingsComponent } from "./webcam-settings/webcam-settings.component";
-import { WebcamPreviewComponent } from "./webcam-preview/webcam-preview.component";
+import { WebcamSettingsComponent } from './webcam-settings/webcam-settings.component';
+import { WebcamPreviewComponent } from './webcam-preview/webcam-preview.component';
 import { DialogChoiceComponent } from './dialog-choice/dialog-choice.component';
 import { KeyboardVisualComponent } from './keyboard-visual/keyboard-visual.component';
 import { DialogWaitingComponent } from './dialog-waiting/dialog-waiting.component';
@@ -98,90 +98,86 @@ import { FanCustomChartComponent } from './fan-custom-chart/fan-custom-chart.com
 import { TgpChartComponent } from './tgp-chart/tgp-chart.component';
 import { Chart, registerables } from 'chart.js';
 
-import ChartDataLabels from "chartjs-plugin-datalabels";
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 
 registerLocaleData(localeDe, 'de', localeDeExtra);
 
 declare const require;
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    ProfileManagerComponent,
-    SupportComponent,
-    ProfileOverviewTileComponent,
-    ProfileDetailsEditComponent,
-    InfoComponent,
-    DashboardComponent,
-    GlobalSettingsComponent,
-    ShutdownTimerComponent,
-    ToolsComponent,
-    KeyboardBacklightComponent,
-    ChangeCryptPasswordComponent,
-    FanChartComponent,
-    TgpChartComponent,
-    MainGuiComponent,
-    AquarisControlComponent,
-    DialogInputTextComponent,
-    DialogConfirmComponent,
-    DialogChoiceComponent,
-    ChargingSettingsComponent,
-    WebcamSettingsComponent,
-    WebcamPreviewComponent,
-    TomteGuiComponent,
-    ProfileConflictComponent,
-    KeyboardVisualComponent,
-    DialogWaitingComponent,
-    PrimeSelectComponent,
-    PrimeDialogComponent,
-    FanCustomChartComponent,
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule,
-    BrowserAnimationsModule,
-    FormsModule,
-    HttpClientModule,
-    ReactiveFormsModule,
-    MatSidenavModule,
-    MatToolbarModule,
-    MatListModule,
-    MatIconModule,
-    MatTableModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatButtonModule,
-    MatCardModule,
-    MatChipsModule,
-    MatExpansionModule,
-    MatInputModule,
-    MatTooltipModule,
-    MatCheckboxModule,
-    MatRadioModule,
-    MatDividerModule,
-    MatSliderModule,
-    MatGridListModule,
-    MatStepperModule,
-    MatButtonToggleModule,
-    MatProgressBarModule,
-    MatProgressSpinnerModule,
-    MatSlideToggleModule,
-    MatTabsModule,
-    MatDialogModule,
-    MarkdownModule.forRoot(),
-    OverlayModule,
-    GaugeModule.forRoot(),
-    ColorPickerModule,
-    MatMenuModule,
-    MatRadioModule,
-    BaseChartDirective
-  ],
-  providers: [
-    DecimalPipe,
-    ThemeService,
-    ProfileConflictDialogService
-  ],
-  bootstrap: [AppComponent]
+    declarations: [
+        AppComponent,
+        ProfileManagerComponent,
+        SupportComponent,
+        ProfileOverviewTileComponent,
+        ProfileDetailsEditComponent,
+        InfoComponent,
+        DashboardComponent,
+        GlobalSettingsComponent,
+        ShutdownTimerComponent,
+        ToolsComponent,
+        KeyboardBacklightComponent,
+        ChangeCryptPasswordComponent,
+        FanChartComponent,
+        TgpChartComponent,
+        MainGuiComponent,
+        AquarisControlComponent,
+        DialogInputTextComponent,
+        DialogConfirmComponent,
+        DialogChoiceComponent,
+        ChargingSettingsComponent,
+        WebcamSettingsComponent,
+        WebcamPreviewComponent,
+        TomteGuiComponent,
+        ProfileConflictComponent,
+        KeyboardVisualComponent,
+        DialogWaitingComponent,
+        PrimeSelectComponent,
+        PrimeDialogComponent,
+        FanCustomChartComponent,
+    ],
+    imports: [
+        BrowserModule,
+        AppRoutingModule,
+        BrowserAnimationsModule,
+        FormsModule,
+        HttpClientModule,
+        ReactiveFormsModule,
+        MatSidenavModule,
+        MatToolbarModule,
+        MatListModule,
+        MatIconModule,
+        MatTableModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatButtonModule,
+        MatCardModule,
+        MatChipsModule,
+        MatExpansionModule,
+        MatInputModule,
+        MatTooltipModule,
+        MatCheckboxModule,
+        MatRadioModule,
+        MatDividerModule,
+        MatSliderModule,
+        MatGridListModule,
+        MatStepperModule,
+        MatButtonToggleModule,
+        MatProgressBarModule,
+        MatProgressSpinnerModule,
+        MatSlideToggleModule,
+        MatTabsModule,
+        MatDialogModule,
+        MarkdownModule.forRoot(),
+        OverlayModule,
+        GaugeModule.forRoot(),
+        ColorPickerModule,
+        MatMenuModule,
+        MatRadioModule,
+        BaseChartDirective,
+    ],
+    providers: [DecimalPipe, ThemeService, ProfileConflictDialogService],
+    bootstrap: [AppComponent],
 })
 export class AppModule {
     constructor() {

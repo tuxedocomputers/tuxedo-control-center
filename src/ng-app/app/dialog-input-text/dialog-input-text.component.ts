@@ -21,25 +21,25 @@ import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 export interface InputDialogData {
-    title: string,
-    heading?: string,
-    description: string,
-    prefill: string,
-    buttonAbortLabel: string,
-    buttonConfirmLabel: string
+    title: string;
+    heading?: string;
+    description: string;
+    prefill: string;
+    buttonAbortLabel: string;
+    buttonConfirmLabel: string;
 }
 
 @Component({
     selector: 'app-dialog-input-text',
     templateUrl: './dialog-input-text.component.html',
     styleUrls: ['./dialog-input-text.component.scss'],
-    standalone: false
+    standalone: false,
 })
 export class DialogInputTextComponent {
-
     constructor(
         public dialogRef: MatDialogRef<DialogInputTextComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: InputDialogData) {}
+        @Inject(MAT_DIALOG_DATA) public data: InputDialogData,
+    ) {}
 
     public closeDialog(result?: string): void {
         this.dialogRef.close(result);

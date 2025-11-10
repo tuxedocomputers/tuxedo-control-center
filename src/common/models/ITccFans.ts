@@ -17,10 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type {
-    SysFsPropertyInteger,
-    SysFsPropertyString,
-} from "../classes/SysFsProperties";
+import type { SysFsPropertyInteger, SysFsPropertyString } from '../classes/SysFsProperties';
 
 export interface IFanDataInputs {
     speedInput?: SysFsPropertyInteger;

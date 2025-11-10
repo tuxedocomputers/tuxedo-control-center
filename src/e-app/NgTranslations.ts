@@ -20,7 +20,11 @@
 import * as path from 'node:path';
 import * as fs from 'node:fs';
 import * as xliff from 'xliff';
-import { DefaultProfileIDs, type IProfileTextMappings, LegacyDefaultProfileIDs } from '../common/models/DefaultProfiles';
+import {
+    DefaultProfileIDs,
+    type IProfileTextMappings,
+    LegacyDefaultProfileIDs,
+} from '../common/models/DefaultProfiles';
 
 /**
  * Loading of angular generated translation files. Workaround
@@ -77,26 +81,41 @@ export class NgTranslations {
     }
 
     private loadFile(fileName: string, target?: string): Promise<Map<string, string>> {
-        return new Promise<Map<string, string>>(async (resolve: (value: Map<string, string> | PromiseLike<Map<string, string>>) => void, reject: (reason?: unknown) => void): Promise<void> => {
-            const xlfPath: string = path.join(__dirname, '..', '..', 'ng-app', 'browser', 'en-US', 'assets', 'locale', fileName);
-            fs.readFile(xlfPath, (err: unknown, xmlBuffer: Buffer): void => {
-                if (err) {
-                    reject(`NgTranslations: loadFile readFile failed => ${err}`);
-                } else {
-                    xliff.xliff12ToJs(xmlBuffer.toString(), (err: unknown, jsXlf: any): void => {
-                        if (err) {
-                            reject(`NgTranslations: loadFile xliff12ToJs failed => ${err}`);
-                        } else {
-                            try {
-                                resolve(this.parseJS(jsXlf, target));
-                            } catch (err: unknown) {
-                                reject(`NgTranslations: loadFile parseJS failed => ${err}`);
+        return new Promise<Map<string, string>>(
+            async (
+                resolve: (value: Map<string, string> | PromiseLike<Map<string, string>>) => void,
+                reject: (reason?: unknown) => void,
+            ): Promise<void> => {
+                const xlfPath: string = path.join(
+                    __dirname,
+                    '..',
+                    '..',
+                    'ng-app',
+                    'browser',
+                    'en-US',
+                    'assets',
+                    'locale',
+                    fileName,
+                );
+                fs.readFile(xlfPath, (err: unknown, xmlBuffer: Buffer): void => {
+                    if (err) {
+                        reject(`NgTranslations: loadFile readFile failed => ${err}`);
+                    } else {
+                        xliff.xliff12ToJs(xmlBuffer.toString(), (err: unknown, jsXlf: any): void => {
+                            if (err) {
+                                reject(`NgTranslations: loadFile xliff12ToJs failed => ${err}`);
+                            } else {
+                                try {
+                                    resolve(this.parseJS(jsXlf, target));
+                                } catch (err: unknown) {
+                                    reject(`NgTranslations: loadFile parseJS failed => ${err}`);
+                                }
                             }
-                        }
-                    });
-                }
-            });
-        });
+                        });
+                    }
+                });
+            },
+        );
     }
 
     private parseJS(jsXlfObj: any, property?: string): Map<string, string> {
@@ -113,11 +132,22 @@ export class NgTranslations {
 }
 
 export const profileIdToI18nId: Map<string, IProfileTextMappings> = new Map<string, IProfileTextMappings>()
-    .set(DefaultProfileIDs.MaxEnergySave, { name: 'profileNamePowersaveExtreme', description: 'profileDescPowersaveExtreme' })
+    .set(DefaultProfileIDs.MaxEnergySave, {
+        name: 'profileNamePowersaveExtreme',
+        description: 'profileDescPowersaveExtreme',
+    })
     .set(DefaultProfileIDs.Quiet, { name: 'profileNameQuiet', description: 'profileDescQuiet' })
     .set(DefaultProfileIDs.Office, { name: 'profileNameOffice', description: 'profileDescOffice' })
-    .set(DefaultProfileIDs.HighPerformance, { name: 'profileNameHighPerformance', description: 'profileDescHighPerformance' })
+    .set(DefaultProfileIDs.HighPerformance, {
+        name: 'profileNameHighPerformance',
+        description: 'profileDescHighPerformance',
+    })
     .set(LegacyDefaultProfileIDs.Default, { name: 'profileNameLegacyDefault', description: 'profileDescLegacyDefault' })
-    .set(LegacyDefaultProfileIDs.CoolAndBreezy, { name: 'profileNameLegacyCoolAndBreezy', description: 'profileDescLegacyCoolAndBreezy' })
-    .set(LegacyDefaultProfileIDs.PowersaveExtreme, { name: 'profileNameLegacyPowersaveExtreme', description: 'profileDescLegacyPowersaveExtreme' });
-;
+    .set(LegacyDefaultProfileIDs.CoolAndBreezy, {
+        name: 'profileNameLegacyCoolAndBreezy',
+        description: 'profileDescLegacyCoolAndBreezy',
+    })
+    .set(LegacyDefaultProfileIDs.PowersaveExtreme, {
+        name: 'profileNameLegacyPowersaveExtreme',
+        description: 'profileDescLegacyPowersaveExtreme',
+    });

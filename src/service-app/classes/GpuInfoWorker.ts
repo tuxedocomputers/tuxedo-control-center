@@ -17,23 +17,17 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { DaemonWorker } from "./DaemonWorker";
-import type { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
-import type { IdGpuInfo, IiGpuInfo } from "src/common/models/TccGpuValues";
-import {
-    SysFsPropertyInteger,
-    SysFsPropertyString,
-} from "../../common/classes/SysFsProperties";
-import * as path from "node:path";
-import { IntelRAPLController } from "../../common/classes/IntelRAPLController";
-import { PowerController } from "../../common/classes/PowerController";
-import {
-    amdDGpuDeviceIdString,
-    amdIGpuDeviceIdString
-} from "../../common/classes/AmdDeviceIDs";
-import { intelIGpuDeviceIdString } from "../../common/classes/IntelDeviceIDs";
-import { execCommandAsync, countLines } from "../../common/classes/Utils";
-import type { AvailabilityService } from "../../common/classes/availability.service";
+import { DaemonWorker } from './DaemonWorker';
+import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
+import type { IdGpuInfo, IiGpuInfo } from 'src/common/models/TccGpuValues';
+import { SysFsPropertyInteger, SysFsPropertyString } from '../../common/classes/SysFsProperties';
+import * as path from 'node:path';
+import { IntelRAPLController } from '../../common/classes/IntelRAPLController';
+import { PowerController } from '../../common/classes/PowerController';
+import { amdDGpuDeviceIdString, amdIGpuDeviceIdString } from '../../common/classes/AmdDeviceIDs';
+import { intelIGpuDeviceIdString } from '../../common/classes/IntelDeviceIDs';
+import { execCommandAsync, countLines } from '../../common/classes/Utils';
+import type { AvailabilityService } from '../../common/classes/availability.service';
 
 export class GpuInfoWorker extends DaemonWorker {
     private isNvidiaSmiInstalled: boolean = false;
@@ -43,7 +37,7 @@ export class GpuInfoWorker extends DaemonWorker {
 
     private intelIGpuDrmPath: string;
     private intelRAPLGpu: IntelRAPLController = new IntelRAPLController(
-        "/sys/devices/virtual/powercap/intel-rapl/intel-rapl:0/intel-rapl:0:1/"
+        '/sys/devices/virtual/powercap/intel-rapl/intel-rapl:0/intel-rapl:0:1/',
     );
     private intelPowerWorker: PowerController;
 
@@ -52,9 +46,9 @@ export class GpuInfoWorker extends DaemonWorker {
 
     constructor(
         public tccd: TuxedoControlCenterDaemon,
-        private availability: AvailabilityService
+        private availability: AvailabilityService,
     ) {
-        super(2000, "GpuInfoWorker", tccd);
+        super(2000, 'GpuInfoWorker', tccd);
     }
 
     public async onStart(): Promise<void> {
@@ -70,7 +64,7 @@ export class GpuInfoWorker extends DaemonWorker {
         } else if (this.availability.getAmdDGpuCount() === 1) {
             this.amdDGpuHwmonPath = await this.getAmdDGpuHwmonPath();
         }
-        
+
         this.tccd.dbusData.iGpuAvailable = this.availability.isIGpuAvailable() ? 1 : 0;
         this.tccd.dbusData.dGpuAvailable = this.availability.isDGpuAvailable() ? 1 : 0;
 
@@ -81,12 +75,8 @@ export class GpuInfoWorker extends DaemonWorker {
         if (this.tccd.dbusData.sensorDataCollectionStatus) {
             await Promise.all([this.getIGPUValues(), this.getDGPUValues()]);
         } else {
-            this.tccd.dbusData.iGpuInfoValuesJSON = JSON.stringify(
-                this.getDefaultValuesIGpu()
-            );
-            this.tccd.dbusData.dGpuInfoValuesJSON = JSON.stringify(
-                this.getDefaultValuesDGpu()
-            );
+            this.tccd.dbusData.iGpuInfoValuesJSON = JSON.stringify(this.getDefaultValuesIGpu());
+            this.tccd.dbusData.dGpuInfoValuesJSON = JSON.stringify(this.getDefaultValuesDGpu());
         }
     }
 
@@ -94,7 +84,7 @@ export class GpuInfoWorker extends DaemonWorker {
 
     private async getIntelIGpuDrmPath(): Promise<string | undefined> {
         const intelIGpuDevices: string = await execCommandAsync(
-            `grep -lP '${intelIGpuDeviceIdString}' /sys/bus/pci/devices/*/drm/card*/device/uevent | sed 's|/device/uevent$||'`
+            `grep -lP '${intelIGpuDeviceIdString}' /sys/bus/pci/devices/*/drm/card*/device/uevent | sed 's|/device/uevent$||'`,
         );
         const amountIntelIGpuDevices: number = countLines(intelIGpuDevices);
 
@@ -122,21 +112,13 @@ export class GpuInfoWorker extends DaemonWorker {
         }
 
         const intelProperties = {
-            cur_freq: new SysFsPropertyInteger(
-                path.join(this.intelIGpuDrmPath, "gt_act_freq_mhz")
-            ),
-            max_freq: new SysFsPropertyInteger(
-                path.join(this.intelIGpuDrmPath, "gt_RP0_freq_mhz")
-            ),
+            cur_freq: new SysFsPropertyInteger(path.join(this.intelIGpuDrmPath, 'gt_act_freq_mhz')),
+            max_freq: new SysFsPropertyInteger(path.join(this.intelIGpuDrmPath, 'gt_RP0_freq_mhz')),
         };
 
-        if (
-            intelProperties.cur_freq.isAvailable() &&
-            intelProperties.max_freq.isAvailable()
-        ) {
+        if (intelProperties.cur_freq.isAvailable() && intelProperties.max_freq.isAvailable()) {
             iGpuValues.coreFrequency = intelProperties.cur_freq.readValueNT();
-            iGpuValues.maxCoreFrequency =
-                intelProperties.max_freq.readValueNT();
+            iGpuValues.maxCoreFrequency = intelProperties.max_freq.readValueNT();
         }
 
         iGpuValues.powerDraw = this.getCurrentPower();
@@ -150,10 +132,7 @@ export class GpuInfoWorker extends DaemonWorker {
 
     public async getAmdIGpuValues(iGpuValues: IiGpuInfo): Promise<IiGpuInfo> {
         if (this.amdIGpuHwmonPath) {
-            return await this.readAmdIGpuValues(
-                iGpuValues,
-                this.amdIGpuHwmonPath
-            );
+            return await this.readAmdIGpuValues(iGpuValues, this.amdIGpuHwmonPath);
         }
 
         if (this.hwmonIGpuRetryCount > 0) {
@@ -161,40 +140,25 @@ export class GpuInfoWorker extends DaemonWorker {
             const amdIGpuHwmonPath: string = await this.getAmdIGpuHwmonPath();
             if (amdIGpuHwmonPath) {
                 this.amdIGpuHwmonPath = amdIGpuHwmonPath;
-                return await this.readAmdIGpuValues(
-                    iGpuValues,
-                    amdIGpuHwmonPath
-                );
+                return await this.readAmdIGpuValues(iGpuValues, amdIGpuHwmonPath);
             }
         }
 
         return iGpuValues;
     }
 
-    public async readAmdIGpuValues(
-        iGpuValues: IiGpuInfo,
-        amdIGpuHwmonPath: string
-    ): Promise<IiGpuInfo> {
+    public async readAmdIGpuValues(iGpuValues: IiGpuInfo, amdIGpuHwmonPath: string): Promise<IiGpuInfo> {
         const amdProperties = {
-            temp: new SysFsPropertyInteger(
-                path.join(amdIGpuHwmonPath, "temp1_input")
-            ),
-            cur_freq: new SysFsPropertyInteger(
-                path.join(amdIGpuHwmonPath, "freq1_input")
-            ),
-            max_freq: new SysFsPropertyString(
-                path.join(amdIGpuHwmonPath, "device/pp_dpm_sclk")
-            ),
+            temp: new SysFsPropertyInteger(path.join(amdIGpuHwmonPath, 'temp1_input')),
+            cur_freq: new SysFsPropertyInteger(path.join(amdIGpuHwmonPath, 'freq1_input')),
+            max_freq: new SysFsPropertyString(path.join(amdIGpuHwmonPath, 'device/pp_dpm_sclk')),
         };
 
         if (amdProperties.temp.isAvailable()) {
             iGpuValues.temp = amdProperties.temp.readValueNT() / 1000;
         }
 
-        if (
-            amdProperties.cur_freq.isAvailable() &&
-            amdProperties.max_freq.isAvailable()
-        ) {
+        if (amdProperties.cur_freq.isAvailable() && amdProperties.max_freq.isAvailable()) {
             const curFreqValue: number = amdProperties.cur_freq.readValueNT();
             const maxFreqValue: string = amdProperties.max_freq.readValueNT();
 
@@ -212,7 +176,7 @@ export class GpuInfoWorker extends DaemonWorker {
 
     private async getAmdIGpuHwmonPath(): Promise<string | undefined> {
         const amdIGpuDevices: string = await execCommandAsync(
-            `grep -lP '${amdIGpuDeviceIdString}' /sys/class/hwmon/*/device/uevent | sed 's|/device/uevent$||'`
+            `grep -lP '${amdIGpuDeviceIdString}' /sys/class/hwmon/*/device/uevent | sed 's|/device/uevent$||'`,
         );
         const amountAmdIGpuDevices: number = countLines(amdIGpuDevices);
 
@@ -249,7 +213,7 @@ export class GpuInfoWorker extends DaemonWorker {
 
     private async checkNvidiaSmiInstalled(): Promise<boolean> {
         try {
-            const stdout: string = await execCommandAsync("which nvidia-smi");
+            const stdout: string = await execCommandAsync('which nvidia-smi');
             return stdout.trim()?.length > 0;
         } catch (err: unknown) {
             console.error(`GpuInfoWorker: checkNvidiaSmiInstalled: ${err}`);
@@ -259,7 +223,7 @@ export class GpuInfoWorker extends DaemonWorker {
 
     private async getNvidiaDGpuPowerValues(): Promise<IdGpuInfo> {
         const command =
-            "nvidia-smi --query-gpu=power.draw,power.max_limit,enforced.power.limit,clocks.gr,clocks.max.gr --format=csv,noheader";
+            'nvidia-smi --query-gpu=power.draw,power.max_limit,enforced.power.limit,clocks.gr,clocks.max.gr --format=csv,noheader';
 
         try {
             const stdout: string = await execCommandAsync(command);
@@ -272,14 +236,8 @@ export class GpuInfoWorker extends DaemonWorker {
     }
 
     private parseOutput(output: string): IdGpuInfo {
-        const [
-            powerDraw,
-            maxPowerLimit,
-            enforcedPowerLimit,
-            coreFrequency,
-            maxCoreFrequency,
-        ] = output
-            .split(",")
+        const [powerDraw, maxPowerLimit, enforcedPowerLimit, coreFrequency, maxCoreFrequency] = output
+            .split(',')
             .map((value: string): number => this.parseNumberWithMetric(value.trim()));
 
         return {
@@ -305,17 +263,12 @@ export class GpuInfoWorker extends DaemonWorker {
 
         // not using power1_cap_max as maximum due to unreliable numbers
         const amdProperties = {
-            coreFrequency: new SysFsPropertyInteger(
-                path.join(amdDGpuHwmonPath, "freq1_input")
-            ),
-            powerDraw: new SysFsPropertyInteger(
-                path.join(amdDGpuHwmonPath, "power1_average")
-            ),
+            coreFrequency: new SysFsPropertyInteger(path.join(amdDGpuHwmonPath, 'freq1_input')),
+            powerDraw: new SysFsPropertyInteger(path.join(amdDGpuHwmonPath, 'power1_average')),
         };
 
         if (amdProperties.coreFrequency.isAvailable()) {
-            dGpuValues.coreFrequency =
-                amdProperties.coreFrequency.readValueNT() / 1000000;
+            dGpuValues.coreFrequency = amdProperties.coreFrequency.readValueNT() / 1000000;
         }
 
         if (amdProperties.powerDraw.isAvailable()) {
@@ -332,8 +285,7 @@ export class GpuInfoWorker extends DaemonWorker {
 
         if (!amdDGpuHwmonPath && this.hwmonDGpuRetryCount > 0) {
             this.hwmonDGpuRetryCount -= 1;
-            amdDGpuHwmonPath = this.amdDGpuHwmonPath =
-                await this.getAmdDGpuHwmonPath();
+            amdDGpuHwmonPath = this.amdDGpuHwmonPath = await this.getAmdDGpuHwmonPath();
         }
 
         return amdDGpuHwmonPath;
@@ -341,7 +293,7 @@ export class GpuInfoWorker extends DaemonWorker {
 
     private async getAmdDGpuHwmonPath(): Promise<string | undefined> {
         const amdDGpuDevices: string = await execCommandAsync(
-            `grep -lP '${amdDGpuDeviceIdString}' /sys/class/hwmon/*/device/uevent | sed 's|/device/uevent$||'`
+            `grep -lP '${amdDGpuDeviceIdString}' /sys/class/hwmon/*/device/uevent | sed 's|/device/uevent$||'`,
         );
         const amountAmdDGpuDevices: number = countLines(amdDGpuDevices);
 
@@ -360,7 +312,7 @@ export class GpuInfoWorker extends DaemonWorker {
 
     private getDefaultValuesIGpu(): IiGpuInfo {
         return {
-            vendor: "unknown",
+            vendor: 'unknown',
             temp: -1,
             coreFrequency: -1,
             maxCoreFrequency: -1,

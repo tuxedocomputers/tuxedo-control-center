@@ -17,13 +17,13 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ipcMain } from "electron";
-import type { IpcMainInvokeEvent } from "electron";
+import { ipcMain } from 'electron';
+import type { IpcMainInvokeEvent } from 'electron';
 import { AquarisAPIFunctions } from '../../common/models/IAquarisAPI';
 import type { AquarisState } from '../../common/models/IAquarisAPI';
 import { LCT21001, PumpVoltage, RGBState } from '../LCT21001';
 import type { DeviceInfo } from '../LCT21001';
-import { userConfig, hasAquaris } from "./initMain";
+import { userConfig, hasAquaris } from './initMain';
 
 let aquarisStateExpected: AquarisState;
 let aquarisStateCurrent: AquarisState;
@@ -41,7 +41,12 @@ let interestTries: number = 0;
 const interestMaxTries = 8;
 let isSearching: boolean = false;
 
-async function updateDeviceState(dev: LCT21001, current: AquarisState, next: AquarisState, overrideCheck = false): Promise<void> {
+async function updateDeviceState(
+    dev: LCT21001,
+    current: AquarisState,
+    next: AquarisState,
+    overrideCheck = false,
+): Promise<void> {
     if (!aquarisIoProgress) {
         try {
             aquarisIoProgress = true;
@@ -51,9 +56,13 @@ async function updateDeviceState(dev: LCT21001, current: AquarisState, next: Aqu
                 let updateFan: boolean = false;
                 let updatePump: boolean = false;
 
-                updateLed = overrideCheck ||
-                            current.red !== next.red || current.green !== next.green || current.blue !== next.blue ||
-                            current.ledMode !== next.ledMode || current.ledOn !== next.ledOn;
+                updateLed =
+                    overrideCheck ||
+                    current.red !== next.red ||
+                    current.green !== next.green ||
+                    current.blue !== next.blue ||
+                    current.ledMode !== next.ledMode ||
+                    current.ledOn !== next.ledOn;
                 if (updateLed) {
                     current.red = next.red;
                     current.green = next.green;
@@ -69,8 +78,7 @@ async function updateDeviceState(dev: LCT21001, current: AquarisState, next: Aqu
                     }
                 }
 
-                updateFan = overrideCheck ||
-                            current.fanDutyCycle !== next.fanDutyCycle || current.fanOn !== next.fanOn;
+                updateFan = overrideCheck || current.fanDutyCycle !== next.fanDutyCycle || current.fanOn !== next.fanOn;
                 if (updateFan) {
                     current.fanDutyCycle = next.fanDutyCycle;
                     current.fanOn = next.fanOn;
@@ -83,8 +91,11 @@ async function updateDeviceState(dev: LCT21001, current: AquarisState, next: Aqu
                     }
                 }
 
-                updatePump = overrideCheck ||
-                            current.pumpDutyCycle !== next.pumpDutyCycle || current.pumpVoltage !== next.pumpVoltage || current.pumpOn !== next.pumpOn;
+                updatePump =
+                    overrideCheck ||
+                    current.pumpDutyCycle !== next.pumpDutyCycle ||
+                    current.pumpVoltage !== next.pumpVoltage ||
+                    current.pumpOn !== next.pumpOn;
                 if (updatePump) {
                     current.pumpDutyCycle = next.pumpDutyCycle;
                     current.pumpVoltage = next.pumpVoltage;
@@ -113,7 +124,7 @@ async function doSearch(): Promise<void> {
     try {
         isSearching = true;
         // Start discover if not started or restart if reached discover max tries
-        if (!await aquaris.isDiscovering()  || discoverTries >= discoverMaxTries) {
+        if (!(await aquaris.isDiscovering()) || discoverTries >= discoverMaxTries) {
             discoverTries = 0;
             await aquaris.stopDiscover();
             aquarisHasBluetooth = await aquaris.startDiscover();
@@ -152,7 +163,8 @@ async function startSearch(): Promise<void> {
 }
 
 async function stopSearch(): Promise<void> {
-    while (aquarisSearchProgress) await new Promise<void>((resolve: () => void): NodeJS.Timeout => setTimeout(resolve, 100));
+    while (aquarisSearchProgress)
+        await new Promise<void>((resolve: () => void): NodeJS.Timeout => setTimeout(resolve, 100));
     devicesList = [];
     isSearching = false;
     clearTimeout(searchingTimeout);
@@ -198,7 +210,7 @@ export const aquarisHandlers: Map<string, (...args: any[]) => any> = new Map<str
                 pumpVoltage: PumpVoltage.V8,
                 ledOn: true,
                 fanOn: true,
-                pumpOn: true
+                pumpOn: true,
             };
             const aquarisSavedSerialized: string = await userConfig.get('aquarisSaveState');
             if (aquarisSavedSerialized !== undefined) {
@@ -238,16 +250,12 @@ export const aquarisHandlers: Map<string, (...args: any[]) => any> = new Map<str
     })
 
     .set(AquarisAPIFunctions.hasBluetooth, async (): Promise<boolean> => {
-        return aquarisHasBluetooth || await aquarisConnectedDemo();
+        return aquarisHasBluetooth || (await aquarisConnectedDemo());
     })
 
-    .set(AquarisAPIFunctions.startDiscover, async (): Promise<void> => {
+    .set(AquarisAPIFunctions.startDiscover, async (): Promise<void> => {})
 
-    })
-
-    .set(AquarisAPIFunctions.stopDiscover, async (): Promise<void> => {
-
-    })
+    .set(AquarisAPIFunctions.stopDiscover, async (): Promise<void> => {})
 
     .set(AquarisAPIFunctions.getDevices, async (): Promise<DeviceInfo[]> => {
         await startSearch();
@@ -262,14 +270,17 @@ export const aquarisHandlers: Map<string, (...args: any[]) => any> = new Map<str
         return (await aquaris.readFwVersion()).toString();
     })
 
-    .set(AquarisAPIFunctions.updateLED, async (red: number, green: number, blue: number, state: RGBState | number): Promise<void> => {
-        aquarisStateExpected.red = red;
-        aquarisStateExpected.green = green;
-        aquarisStateExpected.blue = blue;
-        aquarisStateExpected.ledMode = state;
-        aquarisStateExpected.ledOn = true;
-        await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected);
-    })
+    .set(
+        AquarisAPIFunctions.updateLED,
+        async (red: number, green: number, blue: number, state: RGBState | number): Promise<void> => {
+            aquarisStateExpected.red = red;
+            aquarisStateExpected.green = green;
+            aquarisStateExpected.blue = blue;
+            aquarisStateExpected.ledMode = state;
+            aquarisStateExpected.ledOn = true;
+            await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected);
+        },
+    )
 
     .set(AquarisAPIFunctions.writeRGBOff, async (): Promise<void> => {
         aquarisStateExpected.ledOn = false;
@@ -287,12 +298,15 @@ export const aquarisHandlers: Map<string, (...args: any[]) => any> = new Map<str
         await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected);
     })
 
-    .set(AquarisAPIFunctions.writePumpMode, async (dutyCyclePercent: number, voltage: PumpVoltage | number): Promise<void> => {
-        aquarisStateExpected.pumpDutyCycle = dutyCyclePercent;
-        aquarisStateExpected.pumpVoltage = voltage;
-        aquarisStateExpected.pumpOn = true;
-        await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected);
-    })
+    .set(
+        AquarisAPIFunctions.writePumpMode,
+        async (dutyCyclePercent: number, voltage: PumpVoltage | number): Promise<void> => {
+            aquarisStateExpected.pumpDutyCycle = dutyCyclePercent;
+            aquarisStateExpected.pumpVoltage = voltage;
+            aquarisStateExpected.pumpOn = true;
+            await updateDeviceState(aquaris, aquarisStateCurrent, aquarisStateExpected);
+        },
+    )
 
     .set(AquarisAPIFunctions.writePumpOff, async (): Promise<void> => {
         aquarisStateExpected.pumpOn = false;
@@ -305,13 +319,14 @@ export const aquarisHandlers: Map<string, (...args: any[]) => any> = new Map<str
     });
 
 ipcMain.handle('comp-get-has-aquaris', (event: IpcMainInvokeEvent): Promise<boolean> => {
-        return new Promise<boolean>((resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+    return new Promise<boolean>(
+        (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
             try {
-              resolve(hasAquaris());
+                resolve(hasAquaris());
             } catch (err: unknown) {
-              console.error(`aquarisAPI: comp-get-has-aquaris failed => ${err}`)
-              reject(err);
+                console.error(`aquarisAPI: comp-get-has-aquaris failed => ${err}`);
+                reject(err);
             }
-          });
-
+        },
+    );
 });

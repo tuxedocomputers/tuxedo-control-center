@@ -26,15 +26,14 @@ import { fileOK } from '../../common/classes/Utils';
 export class YCbCr420WorkaroundWorker extends DaemonWorker {
     constructor(tccd: TuxedoControlCenterDaemon) {
         // todo: only run worker once, no timeout should be required
-        super(100000, "YCbCr420WorkaroundWorker", tccd);
+        super(100000, 'YCbCr420WorkaroundWorker', tccd);
 
         if (this.tccd.settings.ycbcr420Workaround?.length > 0) {
             const card: number = 0;
             const port: string = Object.keys(this.tccd.settings.ycbcr420Workaround[card])[0];
             const path: string = `/sys/kernel/debug/dri/${card}/${port}/force_yuv420_output`;
             this.tccd.dbusData.forceYUV420OutputSwitchAvailable = fileOK(path);
-        }
-        else {
+        } else {
             this.tccd.dbusData.forceYUV420OutputSwitchAvailable = false;
         }
     }
@@ -44,12 +43,12 @@ export class YCbCr420WorkaroundWorker extends DaemonWorker {
 
         for (let card: number = 0; card < this.tccd.settings.ycbcr420Workaround?.length; card++) {
             for (const port in this.tccd.settings.ycbcr420Workaround[card]) {
-                const path: string = `/sys/kernel/debug/dri/${card}/${port}/force_yuv420_output`
+                const path: string = `/sys/kernel/debug/dri/${card}/${port}/force_yuv420_output`;
                 if (fileOK(path)) {
-                    const oldValue: boolean = (fs.readFileSync(path).toString(undefined, undefined, 1) === "1");
+                    const oldValue: boolean = fs.readFileSync(path).toString(undefined, undefined, 1) === '1';
                     if (oldValue != this.tccd.settings.ycbcr420Workaround[card][port]) {
                         settings_changed = true;
-                        fs.appendFileSync(path, this.tccd.settings.ycbcr420Workaround[card][port]? "1" : "0");
+                        fs.appendFileSync(path, this.tccd.settings.ycbcr420Workaround[card][port] ? '1' : '0');
                     }
                 }
             }

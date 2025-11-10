@@ -17,9 +17,9 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, Inject } from "@angular/core";
-import { FormControl } from "@angular/forms";
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { Component, Inject } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 export interface ChoiceDialogData {
     title: string;
@@ -48,20 +48,20 @@ export interface ConfirmChoiceResult {
 }
 
 @Component({
-    selector: "app-dialog-choice",
-    templateUrl: "./dialog-choice.component.html",
-    styleUrls: ["./dialog-choice.component.scss"],
-    standalone: false
+    selector: 'app-dialog-choice',
+    templateUrl: './dialog-choice.component.html',
+    styleUrls: ['./dialog-choice.component.scss'],
+    standalone: false,
 })
 export class DialogChoiceComponent {
     public ctrlCheckboxNoBother: FormControl;
 
     constructor(
         public dialogRef: MatDialogRef<DialogChoiceComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: ChoiceDialogData
+        @Inject(MAT_DIALOG_DATA) public data: ChoiceDialogData,
     ) {
         if (data.checkboxNoBotherLabel === undefined) {
-            data.checkboxNoBotherLabel = "";
+            data.checkboxNoBotherLabel = '';
         }
         if (data.showCheckboxNoBother === undefined) {
             data.showCheckboxNoBother = false;

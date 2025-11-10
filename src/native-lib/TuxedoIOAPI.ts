@@ -90,7 +90,7 @@ interface ITuxedoIOAPI {
      * Get names of output ports
      * @returns Array of output port names
      */
-     getOutputPorts(): Array<Array<string>>;
+    getOutputPorts(): Array<Array<string>>;
     /**
      *  Get list of available ODM performance profiles
      *  @returns True if call succeeded, false otherwise
@@ -118,7 +118,6 @@ interface ITuxedoIOAPI {
      */
     setTDPValues(tdpValues: Number[]): boolean;
 }
-
 
 export class ModuleInfo {
     version = '';

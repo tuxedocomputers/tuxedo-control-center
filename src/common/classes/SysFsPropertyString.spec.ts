@@ -18,19 +18,18 @@
  */
 
 import 'jasmine';
-const mock: typeof import("mock-fs") = require('mock-fs');
+const mock: typeof import('mock-fs') = require('mock-fs');
 import * as fs from 'node:fs';
 
 import { SysFsPropertyString } from './SysFsProperties';
 
 describe('SysDevPropertyString', (): void => {
-
     const dev = new SysFsPropertyString('/sys/class/backlight/intel_backlight/type');
 
     // Mock file structure in memory
     beforeEach((): void => {
         mock({
-            '/sys/class': {}
+            '/sys/class': {},
         });
     });
 
@@ -39,11 +38,15 @@ describe('SysDevPropertyString', (): void => {
     });
 
     it('when read should throw error if file does not exist', (): void => {
-        expect((): void => { dev.readValue(); }).toThrow();
+        expect((): void => {
+            dev.readValue();
+        }).toThrow();
     });
 
     it('when written should throw error if file does not exist', (): void => {
-        expect((): void => { dev.writeValue('something'); }).toThrow();
+        expect((): void => {
+            dev.writeValue('something');
+        }).toThrow();
     });
 
     it('should throw error if writing to file while not the owner', (): void => {
@@ -52,20 +55,24 @@ describe('SysDevPropertyString', (): void => {
                 content: '',
                 uid: 0,
                 gid: 0,
-                mode: 0o644
-            })
+                mode: 0o644,
+            }),
         });
-        expect((): void => { dev.writeValue('something'); }).toThrow();
+        expect((): void => {
+            dev.writeValue('something');
+        }).toThrow();
     });
 
     it('should not throw error if writing to file while the owner', (): void => {
         mock({
             '/sys/class/backlight/intel_backlight/type': mock.file({
                 content: 'something',
-                mode: 0o644
-            })
+                mode: 0o644,
+            }),
         });
-        expect((): void => { dev.writeValue('something else'); }).not.toThrow();
+        expect((): void => {
+            dev.writeValue('something else');
+        }).not.toThrow();
         expect(fs.readFileSync('/sys/class/backlight/intel_backlight/type').toString()).toBe('something else');
     });
 });

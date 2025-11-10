@@ -24,7 +24,7 @@ import type { WebcamDevice, WebcamDeviceInformation } from 'src/common/models/Tc
 // using a service to store values because DOM does not always update otherwise
 // https://stackoverflow.com/questions/69749023/angular-variable-value-change-doesnt-reflect-in-dom
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root',
 })
 export class WebcamService {
     public mediaStream: MediaStream = undefined;
@@ -33,49 +33,49 @@ export class WebcamService {
     public selectedWebcam: WebcamDevice = undefined;
     public webcamFormGroup: FormGroup<{}> = new FormGroup({});
     public presetSettings: WebcamDeviceInformation[] = undefined;
-    
+
     public setMediaStream(mediaStream: MediaStream): void {
-      this.mediaStream = mediaStream;
+        this.mediaStream = mediaStream;
     }
     public getMediaStream(): MediaStream {
-      return this.mediaStream;
+        return this.mediaStream;
     }
-    
+
     public setDetachedWebcamWindowActive(status: boolean): void {
-      this.detachedWebcamWindowActiveStatus = status;
+        this.detachedWebcamWindowActiveStatus = status;
     }
     public getDetachedWebcamWindowActive(): boolean {
-       return this.detachedWebcamWindowActiveStatus;
+        return this.detachedWebcamWindowActiveStatus;
     }
-    
+
     public setSpinnerStatus(status: boolean): void {
-      this.spinnerStatus = status;
+        this.spinnerStatus = status;
     }
-    
+
     public getSpinnerStatus(): boolean {
-      return this.spinnerStatus;
+        return this.spinnerStatus;
     }
-    
+
     public setSelectedWebcam(selectedWebcam: WebcamDevice): void {
         this.selectedWebcam = selectedWebcam;
     }
-    
+
     public getSelectedWebcam(): WebcamDevice {
         return this.selectedWebcam;
     }
-    
+
     public setWebcamFormGroup(webcamFormGroup: FormGroup<{}>): void {
         this.webcamFormGroup = webcamFormGroup;
     }
-    
+
     public getWebcamFormGroup(): FormGroup<{}> {
         return this.webcamFormGroup;
     }
-    
+
     public setPresetSettings(presetSettings: WebcamDeviceInformation[]): void {
         this.presetSettings = presetSettings;
     }
-    
+
     public getPresetSettings(): WebcamDeviceInformation[] {
         return this.presetSettings;
     }

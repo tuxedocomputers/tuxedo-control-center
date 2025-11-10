@@ -17,10 +17,10 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const fs: typeof import("fs") = require("fs");
-const fsp: typeof import("fs").promises = require("fs").promises;
+const fs: typeof import('fs') = require('fs');
+const fsp: typeof import('fs').promises = require('fs').promises;
 import type { ISysFsProperty } from '../models/IDeviceProperty';
-import type { FSWatcher } from "node:fs";
+import type { FSWatcher } from 'node:fs';
 
 /**
  * Base (abstract) IO class for communicating with devices in /sys
@@ -37,8 +37,10 @@ import type { FSWatcher } from "node:fs";
  * a class controlling/reading a device.
  */
 export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
-
-    constructor(readonly readPath: string, readonly writePath: string = readPath) {}
+    constructor(
+        readonly readPath: string,
+        readonly writePath: string = readPath,
+    ) {}
 
     protected abstract convertStringToType(value: string): T;
     protected abstract convertTypeToString(value: T): string;
@@ -149,7 +151,7 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
     public isWritable(): boolean {
         try {
             // file access implementation requires an error to be thrown if check resulted in flag mismatch
-            fs.accessSync(this.writePath, fs.constants.W_OK)
+            fs.accessSync(this.writePath, fs.constants.W_OK);
             return true;
         } catch (dummy: unknown) {
             return false;
@@ -172,11 +174,12 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
     /**
      * Set a callback on changes to value
      */
-    public setFSWatchListener(listener: (event: "rename" | "change", filename: string) => Array<FSWatcher>): Array<FSWatcher> {
+    public setFSWatchListener(
+        listener: (event: 'rename' | 'change', filename: string) => Array<FSWatcher>,
+    ): Array<FSWatcher> {
         if (this.readPath === this.writePath) {
             return [fs.watch(this.readPath, listener)];
-        }
-        else {
+        } else {
             return [fs.watch(this.readPath, listener), fs.watch(this.readPath, listener)];
         }
     }

@@ -17,22 +17,16 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {ProfileConflictComponent} from "./profile-conflict-dialog.component";
-import { ProfileConflictDialogService } from "./profile-conflict-dialog.service";
+import { ProfileConflictComponent } from './profile-conflict-dialog.component';
+import { ProfileConflictDialogService } from './profile-conflict-dialog.service';
 import { CommonModule } from '@angular/common';
-import { NgModule} from '@angular/core';
+import { NgModule } from '@angular/core';
 import { MatDialogModule } from '@angular/material/dialog';
 @NgModule({
-    imports: [
-        CommonModule,
-        MatDialogModule
-    ],
-    declarations: [
-        ProfileConflictComponent
-    ],
+    imports: [CommonModule, MatDialogModule],
+    declarations: [ProfileConflictComponent],
     exports: [ProfileConflictComponent],
     entryComponents: [ProfileConflictComponent],
-    providers: [ProfileConflictDialogService]
-  })
-  class ProfileConflictModule {
-  }
+    providers: [ProfileConflictDialogService],
+})
+class ProfileConflictModule {}

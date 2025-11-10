@@ -25,6 +25,6 @@ export class FormErrorStateMatcher implements ErrorStateMatcher {
         const invalidCtrl: boolean = !!(control && control.invalid && control.parent.dirty);
         const invalidParent: boolean = !!(control && control.parent && control.parent.invalid && control.parent.dirty);
 
-        return (invalidCtrl || invalidParent);
+        return invalidCtrl || invalidParent;
     }
 }

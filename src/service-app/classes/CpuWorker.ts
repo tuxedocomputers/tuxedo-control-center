@@ -29,8 +29,8 @@ export class CpuWorker extends DaemonWorker {
     private readonly basePath: string = '/sys/devices/system/cpu';
     private readonly cpuCtrl: CpuController;
 
-    private readonly preferredAcpiFreqGovernors: string[] = [ 'ondemand', 'schedutil', 'conservative' ];
-    private readonly preferredPerformanceAcpiFreqGovernors: string[] = [ 'performance' ];
+    private readonly preferredAcpiFreqGovernors: string[] = ['ondemand', 'schedutil', 'conservative'];
+    private readonly preferredPerformanceAcpiFreqGovernors: string[] = ['performance'];
 
     /**
      * Skip writing energy performance preference if flag is set
@@ -38,7 +38,7 @@ export class CpuWorker extends DaemonWorker {
     private noEPPWriteQuirk: boolean;
 
     constructor(tccd: TuxedoControlCenterDaemon) {
-        super(10000, "CpuWorker", tccd);
+        super(10000, 'CpuWorker', tccd);
         this.cpuCtrl = new CpuController(this.basePath);
 
         const dev: TUXEDODevice = this.tccd.identifyDevice();
@@ -65,7 +65,7 @@ export class CpuWorker extends DaemonWorker {
                 this.applyCpuProfile(this.activeProfile);
             }
         } catch (err: unknown) {
-            console.error(`CpuWorker: onWork failed => ${err}`)
+            console.error(`CpuWorker: onWork failed => ${err}`);
         }
     }
 
@@ -86,9 +86,9 @@ export class CpuWorker extends DaemonWorker {
                 scalingDriver = this.cpuCtrl.cores[0].scalingDriver.readValueNT();
             }
 
-            const fixedPowersaveDrivers: string[] = [
-                ScalingDriver.intel_pstate,
-                ScalingDriver.amd_pstate_epp].map((d: ScalingDriver): string => d.toString());
+            const fixedPowersaveDrivers: string[] = [ScalingDriver.intel_pstate, ScalingDriver.amd_pstate_epp].map(
+                (d: ScalingDriver): string => d.toString(),
+            );
 
             if (fixedPowersaveDrivers.includes(scalingDriver)) {
                 // Fixed 'powersave' governor for intel_pstate and amd-pstate-epp
@@ -107,7 +107,7 @@ export class CpuWorker extends DaemonWorker {
                 return chosenName;
             }
         } catch (err: unknown) {
-            console.error(`CpuWorker: findDefaultGovernor failed => ${err}`)
+            console.error(`CpuWorker: findDefaultGovernor failed => ${err}`);
             return chosenName;
         }
     }
@@ -125,9 +125,9 @@ export class CpuWorker extends DaemonWorker {
                 scalingDriver = this.cpuCtrl.cores[0].scalingDriver.readValueNT();
             }
 
-            const fixedPerformanceDrivers: string[] = [
-                ScalingDriver.intel_pstate,
-                ScalingDriver.amd_pstate_epp].map((d: ScalingDriver): string => d.toString());
+            const fixedPerformanceDrivers: string[] = [ScalingDriver.intel_pstate, ScalingDriver.amd_pstate_epp].map(
+                (d: ScalingDriver): string => d.toString(),
+            );
 
             if (fixedPerformanceDrivers.includes(scalingDriver)) {
                 // Fixed 'performance' governor for intel_pstate and amd-pstate-epp
@@ -146,7 +146,7 @@ export class CpuWorker extends DaemonWorker {
                 return chosenName;
             }
         } catch (err: unknown) {
-            console.error(`CpuWorker: findPerformanceGovernor failed => ${err}`)
+            console.error(`CpuWorker: findPerformanceGovernor failed => ${err}`);
             return chosenName;
         }
     }
@@ -174,13 +174,12 @@ export class CpuWorker extends DaemonWorker {
 
                 this.cpuCtrl.setGovernorScalingMinFrequency(profile.cpu.scalingMinFrequency);
                 this.cpuCtrl.setGovernorScalingMaxFrequency(profile.cpu.scalingMaxFrequency);
-            }
-            else {
+            } else {
                 profile.cpu.governor = this.findPerformanceGovernor();
 
                 this.cpuCtrl.setGovernor(profile.cpu.governor);
                 if (!this.noEPPWriteQuirk) {
-                    this.cpuCtrl.setEnergyPerformancePreference("performance");
+                    this.cpuCtrl.setEnergyPerformancePreference('performance');
                 }
 
                 this.cpuCtrl.setGovernorScalingMinFrequency(-2);
@@ -196,7 +195,7 @@ export class CpuWorker extends DaemonWorker {
                 }
             }
         } catch (err: unknown) {
-            console.error(`CpuWorker: applyCpuProfile failed => ${err}`)
+            console.error(`CpuWorker: applyCpuProfile failed => ${err}`);
         }
     }
 
@@ -213,7 +212,7 @@ export class CpuWorker extends DaemonWorker {
                 this.cpuCtrl.intelPstate.noTurbo.writeValue(false);
             }
         } catch (err: unknown) {
-            console.error(`CpuWorker: setCpuDefaultConfig failed => ${err}`)
+            console.error(`CpuWorker: setCpuDefaultConfig failed => ${err}`);
         }
     }
 
@@ -224,8 +223,7 @@ export class CpuWorker extends DaemonWorker {
         if (!profile.cpu.useMaxPerfGov) {
             // Note: Hard set governor to default (not included in profiles atm)
             profile.cpu.governor = this.findDefaultGovernor();
-        }
-        else {
+        } else {
             profile.cpu.governor = this.findPerformanceGovernor();
         }
 
@@ -236,10 +234,14 @@ export class CpuWorker extends DaemonWorker {
         if (this.cpuCtrl.online.isAvailable() && this.cpuCtrl.cores?.length !== 0) {
             const currentOnlineCores: number[] = this.cpuCtrl.online.readValue();
             let onlineCoresProfile: number = profile.cpu.onlineCores;
-            if (onlineCoresProfile === undefined) { onlineCoresProfile = this.cpuCtrl.cores?.length; }
+            if (onlineCoresProfile === undefined) {
+                onlineCoresProfile = this.cpuCtrl.cores?.length;
+            }
             if (currentOnlineCores?.length !== onlineCoresProfile) {
                 cpuFreqValidConfig = false;
-                console.error(`CpuWorker: onlineCores not as expected ${currentOnlineCores?.length} instead of ${onlineCoresProfile}`)
+                console.error(
+                    `CpuWorker: onlineCores not as expected ${currentOnlineCores?.length} instead of ${onlineCoresProfile}`,
+                );
             }
         }
 
@@ -253,14 +255,21 @@ export class CpuWorker extends DaemonWorker {
 
             // Also Skip min/max freq validation on intel_pstate meanwhile bugged
             // ie scaling_max_freq readout does not stay at cpuinfo_max_freq
-            if (profile.cpu.noTurbo !== true && this.cpuCtrl.cores[0].scalingDriver.isAvailable() && this.cpuCtrl.cores[0].scalingDriver.readValueNT() !== 'intel_pstate') {
+            if (
+                profile.cpu.noTurbo !== true &&
+                this.cpuCtrl.cores[0].scalingDriver.isAvailable() &&
+                this.cpuCtrl.cores[0].scalingDriver.readValueNT() !== 'intel_pstate'
+            ) {
                 scalingDriver = core.scalingDriver.readValueNT();
-                let coreAvailableFrequencies
+                let coreAvailableFrequencies;
                 if (core.scalingAvailableFrequencies.isAvailable()) {
                     coreAvailableFrequencies = core.scalingAvailableFrequencies.readValueNT();
                 }
                 const coreMinFreq: number = core.cpuinfoMinFreq.readValue();
-                const coreMaxFreq: number = coreAvailableFrequencies !== undefined ? coreAvailableFrequencies[0] : core.cpuinfoMaxFreq.readValue();
+                const coreMaxFreq: number =
+                    coreAvailableFrequencies !== undefined
+                        ? coreAvailableFrequencies[0]
+                        : core.cpuinfoMaxFreq.readValue();
                 if (core.scalingMinFreq.isAvailable() && core.cpuinfoMinFreq.isAvailable()) {
                     const minFreq: number = core.scalingMinFreq.readValue();
                     let minFreqProfile: number = profile.cpu.scalingMinFrequency;
@@ -271,7 +280,9 @@ export class CpuWorker extends DaemonWorker {
                     }
                     if (minFreq !== minFreqProfile) {
                         cpuFreqValidConfig = false;
-                        console.error(`CpuWorker: Unexpected value core ${core.coreIndex} minimum scaling frequency ${minFreq} instead of ${minFreqProfile}`)
+                        console.error(
+                            `CpuWorker: Unexpected value core ${core.coreIndex} minimum scaling frequency ${minFreq} instead of ${minFreqProfile}`,
+                        );
                     }
                 }
 
@@ -284,14 +295,20 @@ export class CpuWorker extends DaemonWorker {
                         } else {
                             maxFreqProfile = core.getReducedAvailableFreq();
                         }
-                    } else if (maxFreqProfile === undefined || maxFreqProfile > coreMaxFreq || profile.cpu.useMaxPerfGov) {
+                    } else if (
+                        maxFreqProfile === undefined ||
+                        maxFreqProfile > coreMaxFreq ||
+                        profile.cpu.useMaxPerfGov
+                    ) {
                         maxFreqProfile = coreMaxFreq;
                     } else if (maxFreqProfile < coreMinFreq) {
                         maxFreqProfile = coreMinFreq;
                     }
                     if (maxFreq !== maxFreqProfile) {
                         cpuFreqValidConfig = false;
-                        this.tccd.logLine(`CpuWorker: Unexpected value core${core.coreIndex} maximum scaling frequency => ${maxFreq} instead of ${maxFreqProfile}`);
+                        this.tccd.logLine(
+                            `CpuWorker: Unexpected value core${core.coreIndex} maximum scaling frequency => ${maxFreq} instead of ${maxFreqProfile}`,
+                        );
                     }
                 }
             }
@@ -303,12 +320,17 @@ export class CpuWorker extends DaemonWorker {
                 if (governorProfile !== undefined) {
                     if (currentGovernor !== governorProfile) {
                         cpuFreqValidConfig = false;
-                        this.tccd.logLine(`CpuWorker: Unexpected value core${core.coreIndex} scaling governor => '${currentGovernor}' instead of '${governorProfile}'`);
+                        this.tccd.logLine(
+                            `CpuWorker: Unexpected value core${core.coreIndex} scaling governor => '${currentGovernor}' instead of '${governorProfile}'`,
+                        );
                     }
                 }
             }
 
-            if (core.energyPerformancePreference.isAvailable() && core.energyPerformanceAvailablePreferences.isAvailable()) {
+            if (
+                core.energyPerformancePreference.isAvailable() &&
+                core.energyPerformanceAvailablePreferences.isAvailable()
+            ) {
                 if (this.noEPPWriteQuirk) {
                     continue;
                 }
@@ -316,23 +338,25 @@ export class CpuWorker extends DaemonWorker {
                 const currentPerformancePreference: string = core.energyPerformancePreference.readValue();
                 let performancePreferenceProfile: string;
                 if (!profile.cpu.useMaxPerfGov) {
-                    performancePreferenceProfile = profile.cpu.energyPerformancePreference
+                    performancePreferenceProfile = profile.cpu.energyPerformancePreference;
                 } else {
-                    performancePreferenceProfile = "performance"
+                    performancePreferenceProfile = 'performance';
                 }
                 // Skip check if not set in profile or is 'default'
                 // note: writing 'default' tends to set another string which is considered the default
                 if (performancePreferenceProfile !== undefined && performancePreferenceProfile !== 'default') {
                     if (currentPerformancePreference !== performancePreferenceProfile) {
                         cpuFreqValidConfig = false;
-                        this.tccd.logLine(`CpuWorker: Unexpected value core${core.coreIndex} energy performance preference => '${currentPerformancePreference}' instead of '${performancePreferenceProfile}'`);
+                        this.tccd.logLine(
+                            `CpuWorker: Unexpected value core${core.coreIndex} energy performance preference => '${currentPerformancePreference}' instead of '${performancePreferenceProfile}'`,
+                        );
                     }
                 }
             }
         }
 
         if (this.cpuCtrl.boost.isAvailable() && scalingDriver === ScalingDriver.acpi_cpufreq) {
-            const currentBoost: boolean = this.cpuCtrl.boost.readValue()
+            const currentBoost: boolean = this.cpuCtrl.boost.readValue();
             //const coreMaxFreq: number = this.cpuCtrl.cores[0].cpuinfoMaxFreq.readValue();
             const availableFreqs: number[] = this.cpuCtrl.cores[0].scalingAvailableFrequencies.readValueNT();
             let maxSelectableFreq: number;
@@ -346,13 +370,19 @@ export class CpuWorker extends DaemonWorker {
                     cpuFreqValidConfig = false;
                     this.tccd.logLine('CpuWorker: Unexpected value boost => false instead of true');
                 }
-            }
-            else {
-                if ((maxFreqProfile === undefined || (maxSelectableFreq !== undefined && maxFreqProfile > maxSelectableFreq)) && !currentBoost) {
+            } else {
+                if (
+                    (maxFreqProfile === undefined ||
+                        (maxSelectableFreq !== undefined && maxFreqProfile > maxSelectableFreq)) &&
+                    !currentBoost
+                ) {
                     cpuFreqValidConfig = false;
                     this.tccd.logLine('CpuWorker: Unexpected value boost => false instead of true');
-                }
-                else if ((maxFreqProfile === -1 || (maxSelectableFreq !== undefined && maxFreqProfile <= maxSelectableFreq)) && currentBoost) {
+                } else if (
+                    (maxFreqProfile === -1 ||
+                        (maxSelectableFreq !== undefined && maxFreqProfile <= maxSelectableFreq)) &&
+                    currentBoost
+                ) {
                     cpuFreqValidConfig = false;
                     this.tccd.logLine('CpuWorker: Unexpected value boost => true instead of false');
                 }
@@ -366,7 +396,9 @@ export class CpuWorker extends DaemonWorker {
             if (profileNoTurbo !== undefined) {
                 if (currentNoTurbo !== profileNoTurbo) {
                     cpuFreqValidConfig = false;
-                    this.tccd.logLine(`CpuWorker: Unexpected value noTurbo => '${currentNoTurbo}' instead of '${profileNoTurbo}'`);
+                    this.tccd.logLine(
+                        `CpuWorker: Unexpected value noTurbo => '${currentNoTurbo}' instead of '${profileNoTurbo}'`,
+                    );
                 }
             }
         }

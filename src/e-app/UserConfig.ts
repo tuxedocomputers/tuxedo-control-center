@@ -24,13 +24,16 @@ export class UserConfig {
     private inProgress: boolean = false;
 
     constructor(private configFile: string) {
-        if (configFile === undefined) { throw Error('No config path defined'); }
+        if (configFile === undefined) {
+            throw Error('No config path defined');
+        }
 
         this.validateValues();
     }
 
     private async setInProgress(): Promise<void> {
-        while (this.inProgress) await new Promise<void>((resolve: () => void): NodeJS.Timeout => setTimeout(resolve, 10));
+        while (this.inProgress)
+            await new Promise<void>((resolve: () => void): NodeJS.Timeout => setTimeout(resolve, 10));
         this.inProgress = true;
     }
 
@@ -43,10 +46,10 @@ export class UserConfig {
         try {
             await this.readConfig();
         } catch (err: unknown) {
-            console.error(`UserConfig: set failed => ${err}`)
+            console.error(`UserConfig: set failed => ${err}`);
 
             // todo: error handling
-            if ((err as NodeJS.ErrnoException)?.code === "ENOENT") {
+            if ((err as NodeJS.ErrnoException)?.code === 'ENOENT') {
                 console.log(`Config file (${this.configFile}) does not exist and will be created.`);
             } else {
                 await this.setProgressDone();
@@ -63,7 +66,7 @@ export class UserConfig {
         try {
             await this.readConfig();
         } catch (err: unknown) {
-            console.error(`UserConfig: get failed => ${err}`)
+            console.error(`UserConfig: get failed => ${err}`);
 
             // todo: error handling
             if ((err as NodeJS.ErrnoException)?.code !== 'ENOENT') {
@@ -76,34 +79,38 @@ export class UserConfig {
     }
 
     private async writeConfig(): Promise<void> {
-        return new Promise<void>( (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): void => {
-            fs.writeFile(this.configFile, JSON.stringify(this.data), (err: unknown): void => {
-                if (err) {
-                    reject(err)
-                } else {
-                    resolve();
-                }
-            });
-        });
+        return new Promise<void>(
+            (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): void => {
+                fs.writeFile(this.configFile, JSON.stringify(this.data), (err: unknown): void => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
+                });
+            },
+        );
     }
 
     private async readConfig(): Promise<void> {
-        return new Promise<void>( (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): void => {
-            fs.readFile(this.configFile, (err: unknown, data: Buffer): void => {
-                if (err) {
-                    reject(err);
-                }
+        return new Promise<void>(
+            (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): void => {
+                fs.readFile(this.configFile, (err: unknown, data: Buffer): void => {
+                    if (err) {
+                        reject(err);
+                    }
 
-                try {
-                    this.data = JSON.parse(data.toString());
-                    this.validateValues();
-                    resolve();
-                } catch (err: unknown) {
-                    console.error(`UserConfig: readConfig failed => ${err}`)
-                    this.data = {};
-                }
-            });
-        });
+                    try {
+                        this.data = JSON.parse(data.toString());
+                        this.validateValues();
+                        resolve();
+                    } catch (err: unknown) {
+                        console.error(`UserConfig: readConfig failed => ${err}`);
+                        this.data = {};
+                    }
+                });
+            },
+        );
     }
 
     private validateValues(): void {

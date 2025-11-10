@@ -17,8 +17,11 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-.tcc-color-picker+color-picker>.color-picker {
-    box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
+.tcc-color-picker + color-picker > .color-picker {
+    box-shadow:
+        0px 2px 1px -1px rgb(0 0 0 / 20%),
+        0px 1px 1px 0px rgb(0 0 0 / 14%),
+        0px 1px 3px 0px rgb(0 0 0 / 12%);
 
     background-color: var(--foreground-color);
 

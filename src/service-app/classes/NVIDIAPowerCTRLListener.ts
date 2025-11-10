@@ -17,13 +17,13 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { DaemonListener } from "./DaemonListener";
+import { DaemonListener } from './DaemonListener';
 import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
-import { SysFsPropertyInteger } from "../../common/classes/SysFsProperties";
-import { execCommandAsync } from "../../common/classes/Utils";
+import { SysFsPropertyInteger } from '../../common/classes/SysFsProperties';
+import { execCommandAsync } from '../../common/classes/Utils';
 
 export class NVIDIAPowerCTRLListener extends DaemonListener {
-    private ctgpOffsetPath: string = "/sys/devices/platform/tuxedo_nvidia_power_ctrl/ctgp_offset";
+    private ctgpOffsetPath: string = '/sys/devices/platform/tuxedo_nvidia_power_ctrl/ctgp_offset';
     private ctgpOffsetSysfsProp: SysFsPropertyInteger = new SysFsPropertyInteger(this.ctgpOffsetPath);
     private available: boolean = this.ctgpOffsetSysfsProp.isAvailable();
 
@@ -45,26 +45,35 @@ export class NVIDIAPowerCTRLListener extends DaemonListener {
             return;
         }
 
-        this.ctgpOffsetSysfsProp.setFSWatchListener((async function(event: "rename" | "change", filename: string): Promise<void> {
-            const ctgpOffset: number =
-                this.tccd.activeProfile.nvidiaPowerCTRLProfile !== undefined &&
-                this.tccd.activeProfile.nvidiaPowerCTRLProfile.cTGPOffset !== undefined?
-                    this.tccd.activeProfile.nvidiaPowerCTRLProfile.cTGPOffset : 0;
-            if (event == "change" && this.ctgpOffsetSysfsProp.readValueNT() != ctgpOffset) {
-                this.ctgpOffsetSysfsProp.writeValue(ctgpOffset);
-            }
-        }).bind(this));
+        this.ctgpOffsetSysfsProp.setFSWatchListener(
+            async function (event: 'rename' | 'change', filename: string): Promise<void> {
+                const ctgpOffset: number =
+                    this.tccd.activeProfile.nvidiaPowerCTRLProfile !== undefined &&
+                    this.tccd.activeProfile.nvidiaPowerCTRLProfile.cTGPOffset !== undefined
+                        ? this.tccd.activeProfile.nvidiaPowerCTRLProfile.cTGPOffset
+                        : 0;
+                if (event == 'change' && this.ctgpOffsetSysfsProp.readValueNT() != ctgpOffset) {
+                    this.ctgpOffsetSysfsProp.writeValue(ctgpOffset);
+                }
+            }.bind(this),
+        );
 
         this.applyActiveProfile();
 
-        const defaultPowerLimit: string = await execCommandAsync("nvidia-smi --format=csv,noheader,nounits --query-gpu=power.default_limit", false)
-        const maxPowerLimit: string = await execCommandAsync("nvidia-smi --format=csv,noheader,nounits --query-gpu=power.max_limit", false)
+        const defaultPowerLimit: string = await execCommandAsync(
+            'nvidia-smi --format=csv,noheader,nounits --query-gpu=power.default_limit',
+            false,
+        );
+        const maxPowerLimit: string = await execCommandAsync(
+            'nvidia-smi --format=csv,noheader,nounits --query-gpu=power.max_limit',
+            false,
+        );
         if (defaultPowerLimit && maxPowerLimit) {
             this.tccd.dbusData.nvidiaPowerCTRLDefaultPowerLimit = Number(defaultPowerLimit);
             this.tccd.dbusData.nvidiaPowerCTRLMaxPowerLimit = Number(maxPowerLimit);
             this.tccd.dbusData.nvidiaPowerCTRLAvailable = true;
         } else {
-            console.error("NVIDIAPowerCTRLListener: Power limit is not available")
+            console.error('NVIDIAPowerCTRLListener: Power limit is not available');
             this.tccd.dbusData.nvidiaPowerCTRLDefaultPowerLimit = -1;
             this.tccd.dbusData.nvidiaPowerCTRLMaxPowerLimit = -1;
             this.tccd.dbusData.nvidiaPowerCTRLAvailable = false;
@@ -78,8 +87,9 @@ export class NVIDIAPowerCTRLListener extends DaemonListener {
     private applyActiveProfile(): void {
         const ctgpOffset: number =
             this.tccd.activeProfile.nvidiaPowerCTRLProfile !== undefined &&
-            this.tccd.activeProfile.nvidiaPowerCTRLProfile.cTGPOffset !== undefined?
-                this.tccd.activeProfile.nvidiaPowerCTRLProfile.cTGPOffset : 0;
+            this.tccd.activeProfile.nvidiaPowerCTRLProfile.cTGPOffset !== undefined
+                ? this.tccd.activeProfile.nvidiaPowerCTRLProfile.cTGPOffset
+                : 0;
         this.ctgpOffsetSysfsProp.writeValue(ctgpOffset);
     }
 }

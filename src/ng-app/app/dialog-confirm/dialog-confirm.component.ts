@@ -22,15 +22,15 @@ import { FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 export interface ConfirmDialogData {
-    title: string,
-    heading?: string,
-    description: string,
-    linkLabel?: string,
-    linkHref?: string,
-    buttonAbortLabel?: string,
-    buttonConfirmLabel: string,
-    showCheckboxNoBother?: boolean,
-    checkboxNoBotherLabel?: string
+    title: string;
+    heading?: string;
+    description: string;
+    linkLabel?: string;
+    linkHref?: string;
+    buttonAbortLabel?: string;
+    buttonConfirmLabel: string;
+    showCheckboxNoBother?: boolean;
+    checkboxNoBotherLabel?: string;
 }
 
 export interface ConfirmDialogResult {
@@ -42,24 +42,23 @@ export interface ConfirmDialogResult {
     selector: 'app-dialog-confirm',
     templateUrl: './dialog-confirm.component.html',
     styleUrls: ['./dialog-confirm.component.scss'],
-    standalone: false
+    standalone: false,
 })
 export class DialogConfirmComponent {
-
     public ctrlCheckboxNoBother: FormControl;
 
     constructor(
         public dialogRef: MatDialogRef<DialogConfirmComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: ConfirmDialogData) {
-
-            if (data.checkboxNoBotherLabel === undefined) {
-                data.checkboxNoBotherLabel = '';
-            }
-            if (data.showCheckboxNoBother === undefined) {
-                data.showCheckboxNoBother = false;
-            }
-            this.ctrlCheckboxNoBother = new FormControl(false);
+        @Inject(MAT_DIALOG_DATA) public data: ConfirmDialogData,
+    ) {
+        if (data.checkboxNoBotherLabel === undefined) {
+            data.checkboxNoBotherLabel = '';
         }
+        if (data.showCheckboxNoBother === undefined) {
+            data.showCheckboxNoBother = false;
+        }
+        this.ctrlCheckboxNoBother = new FormControl(false);
+    }
 
     public closeDialog(result?: boolean): void {
         let dialogResult: ConfirmDialogResult;
@@ -67,12 +66,12 @@ export class DialogConfirmComponent {
         if (result === true) {
             dialogResult = {
                 confirm: true,
-                noBother: noBotherValue
+                noBother: noBotherValue,
             };
         } else {
             dialogResult = {
                 confirm: false,
-                noBother: noBotherValue
+                noBother: noBotherValue,
             };
         }
         this.dialogRef.close(dialogResult);

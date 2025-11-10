@@ -20,7 +20,7 @@
 import { aquarisCleanUp } from './aquarisAPI';
 import * as path from 'node:path';
 import { tccDBus } from './dbusAPI';
-import { app, BrowserWindow, globalShortcut, ipcMain, screen } from 'electron'
+import { app, BrowserWindow, globalShortcut, ipcMain, screen } from 'electron';
 import { tray, userConfig } from './initMain';
 import { displayBrightnessGnomeCleanup } from './brightnessAPI';
 import { unregisterAPI } from './apiManagement';
@@ -53,7 +53,7 @@ app.on('will-quit', async (event: Event): Promise<void> => {
         unregisterAPI(ipcMain, aquarisAPIHandle);
         if (tccDBus !== undefined) {
             tccDBus.disconnect();
-            unregisterAPI(ipcMain, dbusAPIHandle)
+            unregisterAPI(ipcMain, dbusAPIHandle);
         }
         await new Promise<void>((resolve: () => void): NodeJS.Timeout => setTimeout(resolve, 1000));
 
@@ -68,15 +68,15 @@ app.on('window-all-closed', (): void => {
     }
 });
 
-
-
 let tccWindowLoading: boolean = false;
 
 export async function activateTccGui(module?: string): Promise<void> {
     if (tccWindow) {
-        if (tccWindow.isMinimized()) { tccWindow.restore(); }
+        if (tccWindow.isMinimized()) {
+            tccWindow.restore();
+        }
         tccWindow.focus();
-        const baseURL: string = tccWindow.webContents.getURL().split("#")[0];
+        const baseURL: string = tccWindow.webContents.getURL().split('#')[0];
         if (module !== undefined) {
             tccWindow.loadURL(`${baseURL}#${module}`);
         }
@@ -107,55 +107,43 @@ export async function createPrimeWindow(langId: string, primeSelectMode: string)
     const windowHeight: number = 230;
 
     primeWindow = new BrowserWindow({
-        title: "Prime Select Configuration",
+        title: 'Prime Select Configuration',
         width: windowWidth,
         height: windowHeight,
         frame: true,
         resizable: false,
         minWidth: windowWidth,
         minHeight: windowHeight,
-        icon: path.join(
-            __dirname,
-            "../../../data/dist-data/tuxedo-control-center_256.png"
-        ),
+        icon: path.join(__dirname, '../../../data/dist-data/tuxedo-control-center_256.png'),
         webPreferences: {
             sandbox: false,
             nodeIntegration: false,
             contextIsolation: true,
-            preload: path.join(__dirname, '../preload.js')
+            preload: path.join(__dirname, '../preload.js'),
         },
         show: false,
     });
 
     // Workaround to set window title
-    primeWindow.on("page-title-updated", function (e: Event): void {
+    primeWindow.on('page-title-updated', function (e: Event): void {
         e.preventDefault();
     });
 
     primeWindow.setMenuBarVisibility(false);
 
     // Workaround to menu bar appearing after full screen state
-    primeWindow.on("leave-full-screen", (): void => {
+    primeWindow.on('leave-full-screen', (): void => {
         primeWindow.setMenuBarVisibility(false);
     });
 
-    const indexPath: string = path.join(
-        __dirname,
-        "..",
-        "..",
-        "..",
-        "ng-app",
-        "browser",
-        langId,
-        "index.html"
-    );
-    primeWindow.loadFile(indexPath, { hash: "/prime-dialog" });
+    const indexPath: string = path.join(__dirname, '..', '..', '..', 'ng-app', 'browser', langId, 'index.html');
+    primeWindow.loadFile(indexPath, { hash: '/prime-dialog' });
 
-    primeWindow.webContents.once("dom-ready", (): void => {
-        primeWindow.webContents.send("set-prime-select-mode", primeSelectMode);
+    primeWindow.webContents.once('dom-ready', (): void => {
+        primeWindow.webContents.send('set-prime-select-mode', primeSelectMode);
     });
 
-    primeWindow.on("close", async function (): Promise<void> {
+    primeWindow.on('close', async function (): Promise<void> {
         primeWindow = null;
     });
 }
@@ -183,33 +171,35 @@ async function createTccWindow(langId: string, module?: string): Promise<void> {
             sandbox: false,
             nodeIntegration: false,
             contextIsolation: true,
-            preload: path.join(__dirname, '../preload.js')
+            preload: path.join(__dirname, '../preload.js'),
         },
-        show: false
+        show: false,
     });
     // Hide menu bar
     tccWindow.setMenuBarVisibility(false);
     // Workaround to menu bar appearing after full screen state
-    tccWindow.on('leave-full-screen', (): void => { tccWindow.setMenuBarVisibility(false); });
+    tccWindow.on('leave-full-screen', (): void => {
+        tccWindow.setMenuBarVisibility(false);
+    });
 
     tccWindow.on('closed', (): void => {
         tccWindow = null;
     });
 
     tccWindow.on('close', async function (e: Event): Promise<void> {
-        await tccDBus.setSensorDataCollectionStatus(false)
+        await tccDBus.setSensorDataCollectionStatus(false);
 
-        let collectionStatus: boolean = undefined
-        let retryCount: number = 0
-        const maxRetries = 5
+        let collectionStatus: boolean = undefined;
+        let retryCount: number = 0;
+        const maxRetries = 5;
 
         while (collectionStatus !== false && retryCount < maxRetries) {
-            collectionStatus = await tccDBus.getSensorDataCollectionStatus()
-            retryCount++
+            collectionStatus = await tccDBus.getSensorDataCollectionStatus();
+            retryCount++;
         }
 
         if (collectionStatus !== false) {
-            console.error('Failed to set sensor data collection status after multiple attempts')
+            console.error('Failed to set sensor data collection status after multiple attempts');
         }
     });
     const indexPath: string = path.join(__dirname, '..', '..', '..', 'ng-app', 'browser', langId, 'index.html');
@@ -219,8 +209,7 @@ async function createTccWindow(langId: string, module?: string): Promise<void> {
         await tccWindow.loadFile(indexPath);
     }
 }
-export function clearWebcamWindow(): void
-{
+export function clearWebcamWindow(): void {
     webcamWindow: Electron.BrowserWindow = null;
 }
 
@@ -229,83 +218,71 @@ export async function createWebcamPreview(langId: string, arg: WebcamConstraints
     const windowHeight: number = 480;
 
     webcamWindow = new BrowserWindow({
-        title: "Webcam",
+        title: 'Webcam',
         width: windowWidth,
         height: windowHeight,
         frame: true,
         resizable: false,
         minWidth: windowWidth,
         minHeight: windowHeight,
-        icon: path.join(
-            __dirname,
-            "../../../data/dist-data/tuxedo-control-center_256.png"
-        ),
+        icon: path.join(__dirname, '../../../data/dist-data/tuxedo-control-center_256.png'),
         webPreferences: {
             sandbox: false,
             nodeIntegration: false,
             contextIsolation: true,
-            preload: path.join(__dirname, '../preload.js')
+            preload: path.join(__dirname, '../preload.js'),
         },
-        show: false
+        show: false,
     });
 
     // Workaround to set window title
-    webcamWindow.on("page-title-updated", function (e: Event): void {
+    webcamWindow.on('page-title-updated', function (e: Event): void {
         e.preventDefault();
     });
 
     // Hide menu bar
     webcamWindow.setMenuBarVisibility(false);
     // Workaround to menu bar appearing after full screen state
-    webcamWindow.on("leave-full-screen", (): void => {
+    webcamWindow.on('leave-full-screen', (): void => {
         webcamWindow.setMenuBarVisibility(false);
     });
-    const indexPath: string = path.join(
-        __dirname,
-        "..",
-        "..",
-        "..",
-        "ng-app",
-        "browser",
-        langId,
-        "index.html"
-    );
-    webcamWindow.loadFile(indexPath, { hash: "/webcam-preview" });
+    const indexPath: string = path.join(__dirname, '..', '..', '..', 'ng-app', 'browser', langId, 'index.html');
+    webcamWindow.loadFile(indexPath, { hash: '/webcam-preview' });
 
-    webcamWindow.webContents.once("dom-ready", (): void => {
-        webcamWindow.webContents.send("setting-webcam-with-loading", arg);
+    webcamWindow.webContents.once('dom-ready', (): void => {
+        webcamWindow.webContents.send('setting-webcam-with-loading', arg);
     });
 
-    webcamWindow.on("close", function (): void {
-        tccWindow.webContents.send("external-webcam-preview-closed");
+    webcamWindow.on('close', function (): void {
+        tccWindow.webContents.send('external-webcam-preview-closed');
         webcamWindow = null;
     });
 
     webcamWindow.once('ready-to-show', (): void => {
-        webcamWindow.webContents.send("setting-webcam-with-loading", arg);
-        webcamWindow.show()
-    })
+        webcamWindow.webContents.send('setting-webcam-with-loading', arg);
+        webcamWindow.show();
+    });
 }
 
 ipcMain.on('close-app', (): void => {
     app.exit();
-})
+});
 
 ipcMain.on('close-window', (): void => {
     tccWindow.close();
-})
+});
 
 ipcMain.on('minimize-window', (): void => {
     tccWindow.minimize();
-})
+});
 
-ipcMain.on("prime-window-close", (): void => {
+ipcMain.on('prime-window-close', (): void => {
     if (primeWindow) {
         primeWindow.close();
     }
 });
 
-ipcMain.on("prime-window-show", (): void => {
+ipcMain.on('prime-window-show', (): void => {
     if (primeWindow) {
         primeWindow.show();
     }

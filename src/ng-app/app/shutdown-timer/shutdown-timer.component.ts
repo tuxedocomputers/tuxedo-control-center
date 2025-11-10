@@ -24,7 +24,7 @@ import { UtilsService } from '../utils.service';
     selector: 'app-shutdown-timer',
     templateUrl: './shutdown-timer.component.html',
     styleUrls: ['./shutdown-timer.component.scss'],
-    standalone: false
+    standalone: false,
 })
 export class ShutdownTimerComponent implements OnInit {
     public hours: Array<number> = [...Array(24).keys()];
@@ -33,11 +33,9 @@ export class ShutdownTimerComponent implements OnInit {
     public selectedHour: number = 0;
     public selectedMinute: number = 0;
 
-    public appliedTime: string = "";
+    public appliedTime: string = '';
 
-    constructor(
-        private utils: UtilsService
-    ) { }
+    constructor(private utils: UtilsService) {}
 
     public ngOnInit(): void {
         this.updateTime();
@@ -45,36 +43,34 @@ export class ShutdownTimerComponent implements OnInit {
 
     public async saveTime(): Promise<void> {
         this.utils.pageDisabled = true;
-        await window.ipc.setShutdownTime(this.selectedHour,this.selectedMinute);
+        await window.ipc.setShutdownTime(this.selectedHour, this.selectedMinute);
         await this.updateTime();
         this.utils.pageDisabled = false;
     }
 
     public async deleteTime(): Promise<void> {
         this.utils.pageDisabled = true;
-        window.ipc.cancelShutdown().then
-        (
-            (): void => {
+        window.ipc.cancelShutdown().then((): void => {
             this.updateTime();
             this.utils.pageDisabled = false;
-            }
-        );
+        });
     }
 
     public async updateTime(): Promise<void> {
         const result: string = await window.ipc.getScheduledShutdown();
         try {
             if (result) {
-                const resultJSON: string = (`{"${result.toString().replace(/\s+/g, '","').replace(/=/g, '":"')}"}`).replace(/.""}/g, '}');
+                const resultJSON: string =
+                    `{"${result.toString().replace(/\s+/g, '","').replace(/=/g, '":"')}"}`.replace(/.""}/g, '}');
                 const resultDate: Date = new Date(Number.parseInt(JSON.parse(resultJSON).USEC) / 1000);
-                this.appliedTime = `${resultDate.getHours().toString().padStart(2, "0")}:${resultDate.getMinutes().toString().padStart(2, "0")}`;
+                this.appliedTime = `${resultDate.getHours().toString().padStart(2, '0')}:${resultDate.getMinutes().toString().padStart(2, '0')}`;
             }
             if (!result) {
-                console.log("shutdown-timer: updateTime: getScheduledShutdown() did not return data")
+                console.log('shutdown-timer: updateTime: getScheduledShutdown() did not return data');
             }
-        }catch(err: unknown) {
-            console.error(`shutdown-timer: updateTime failed => ${err}`)
-            this.appliedTime = "";
+        } catch (err: unknown) {
+            console.error(`shutdown-timer: updateTime failed => ${err}`);
+            this.appliedTime = '';
         }
     }
 }

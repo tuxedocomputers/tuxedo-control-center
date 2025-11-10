@@ -17,11 +17,11 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { type ComponentFixture, TestBed } from "@angular/core/testing";
+import { type ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DialogWaitingComponent } from "./dialog-waiting.component";
+import { DialogWaitingComponent } from './dialog-waiting.component';
 
-describe("DialogWaitingComponent", () => {
+describe('DialogWaitingComponent', () => {
     let component: DialogWaitingComponent;
     let fixture: ComponentFixture<DialogWaitingComponent>;
 
@@ -37,7 +37,7 @@ describe("DialogWaitingComponent", () => {
         fixture.detectChanges();
     });
 
-    it("should create", () => {
+    it('should create', () => {
         expect(component).toBeTruthy();
     });
 });

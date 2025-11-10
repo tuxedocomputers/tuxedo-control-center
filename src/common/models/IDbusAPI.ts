@@ -49,8 +49,8 @@ export enum DbusAPIFunctions {
     setChargingPriority = 'setChargingPriority',
     getIGpuInfoValuesJSON = 'getIGpuInfoValuesJSON',
     getDGpuInfoValuesJSON = 'getDGpuInfoValuesJSON',
-    getIGpuAvailable = "getIGpuAvailable",
-    getDGpuAvailable = "getDGpuAvailable",
+    getIGpuAvailable = 'getIGpuAvailable',
+    getDGpuAvailable = 'getDGpuAvailable',
     getSensorDataCollectionStatus = 'getSensorDataCollectionStatus',
     getPrimeState = 'getPrimeState',
     getCpuPowerValuesJSON = 'getCpuPowerValuesJSON',
@@ -72,6 +72,5 @@ export enum DbusAPIFunctions {
     getNVIDIAPowerCTRLDefaultPowerLimit = 'getNVIDIAPowerCTRLDefaultPowerLimit',
     getNVIDIAPowerCTRLMaxPowerLimit = 'getNVIDIAPowerCTRLMaxPowerLimit',
     getNVIDIAPowerCTRLAvailable = 'getNVIDIAPowerCTRLAvailable',
-    getIsUnsupportedConfigurableTGPDevice = 'getIsUnsupportedConfigurableTGPDevice'
-
+    getIsUnsupportedConfigurableTGPDevice = 'getIsUnsupportedConfigurableTGPDevice',
 }

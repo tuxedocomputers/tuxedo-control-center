@@ -17,18 +17,18 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ipcMain, nativeTheme } from "electron";
-import type { IpcMainEvent, IpcMainInvokeEvent } from "electron";
-import { Subject } from "rxjs";
-import { DBusDisplayBrightnessGnome } from "../../common/classes/DBusDisplayBrightnessGnome";
-import { userConfig } from "./initMain";
-import type { MessageBus } from "dbus-next";
-'../../common/classes/DBusDisplayBrightnessGnome';
+import { ipcMain, nativeTheme } from 'electron';
+import type { IpcMainEvent, IpcMainInvokeEvent } from 'electron';
+import { Subject } from 'rxjs';
+import { DBusDisplayBrightnessGnome } from '../../common/classes/DBusDisplayBrightnessGnome';
+import { userConfig } from './initMain';
+import type { MessageBus } from 'dbus-next';
+('../../common/classes/DBusDisplayBrightnessGnome');
 
 export type BrightnessModeString = 'light' | 'dark' | 'system';
 
 let sessionBus: MessageBus;
-const dbus: typeof import("dbus-next") = require('dbus-next');
+const dbus: typeof import('dbus-next') = require('dbus-next');
 
 const displayBrightnessSubject: Subject<number> = new Subject<number>();
 let currentDisplayBrightness: number;
@@ -41,15 +41,14 @@ let dbusDriverNames: string[] = [];
 try {
     sessionBus = dbus.sessionBus();
 } catch (err: unknown) {
-    console.error(`brightnessAPI: dbus.sessionBus failed => ${err}`)
+    console.error(`brightnessAPI: dbus.sessionBus failed => ${err}`);
     sessionBus = undefined;
 }
-
 
 initDbusDisplayBrightness().then((): void => {
     const driversList: string[] = [];
     if (displayBrightnessNotSupported === false) {
-    driversList.push(displayBrightnessGnome.getDescriptiveString());
+        driversList.push(displayBrightnessGnome.getDescriptiveString());
     }
     dbusDriverNames = driversList;
 });
@@ -60,51 +59,57 @@ export async function displayBrightnessGnomeCleanup(): Promise<void> {
 
 async function initDbusDisplayBrightness(): Promise<void> {
     if (sessionBus === undefined) {
-    displayBrightnessNotSupported = true;
+        displayBrightnessNotSupported = true;
     } else {
-    displayBrightnessGnome = new DBusDisplayBrightnessGnome(sessionBus);
-    if (!await displayBrightnessGnome.isAvailable()) {
-        displayBrightnessNotSupported = true;
-        return;
-    }
-
-    try {
-        const result: number = await displayBrightnessGnome.getBrightness();
-        currentDisplayBrightness = result;
-        displayBrightnessSubject.next(currentDisplayBrightness);
-    } catch (err: unknown) {
-        console.error(`brightnessAPI: initDbusDisplayBrightness failed => ${err}`)
-        displayBrightnessNotSupported = true;
-        return;
-    }
-
-    displayBrightnessGnome.setOnPropertiesChanged(
-        (value: number): void => {
-        currentDisplayBrightness = value;
-        displayBrightnessSubject.next(currentDisplayBrightness);
+        displayBrightnessGnome = new DBusDisplayBrightnessGnome(sessionBus);
+        if (!(await displayBrightnessGnome.isAvailable())) {
+            displayBrightnessNotSupported = true;
+            return;
         }
-    );
+
+        try {
+            const result: number = await displayBrightnessGnome.getBrightness();
+            currentDisplayBrightness = result;
+            displayBrightnessSubject.next(currentDisplayBrightness);
+        } catch (err: unknown) {
+            console.error(`brightnessAPI: initDbusDisplayBrightness failed => ${err}`);
+            displayBrightnessNotSupported = true;
+            return;
+        }
+
+        displayBrightnessGnome.setOnPropertiesChanged((value: number): void => {
+            currentDisplayBrightness = value;
+            displayBrightnessSubject.next(currentDisplayBrightness);
+        });
     }
 }
 
 async function setDisplayBrightness(valuePercent: number): Promise<void> {
-return displayBrightnessGnome.setBrightness(valuePercent).catch((err: unknown): void => {console.error(`brightnessAPI: setDisplayBrightness failed => ${err}`)});
+    return displayBrightnessGnome.setBrightness(valuePercent).catch((err: unknown): void => {
+        console.error(`brightnessAPI: setDisplayBrightness failed => ${err}`);
+    });
 }
 
 ipcMain.handle('set-display-brightness-gnome', (event: IpcMainInvokeEvent, valuePercent: number): Promise<void> => {
-    return new Promise<void>((resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): void => {
-        resolve(setDisplayBrightness(valuePercent));
-    });
+    return new Promise<void>(
+        (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): void => {
+            resolve(setDisplayBrightness(valuePercent));
+        },
+    );
 });
-
 
 ipcMain.on('get-display-brightness-not-supported-sync', (event: IpcMainEvent): void => {
     event.returnValue = displayBrightnessNotSupported;
 });
 
-ipcMain.handle('set-brightness-mode', (event: IpcMainInvokeEvent, mode: BrightnessModeString): Promise<void> => setBrightnessMode(mode));
+ipcMain.handle(
+    'set-brightness-mode',
+    (event: IpcMainInvokeEvent, mode: BrightnessModeString): Promise<void> => setBrightnessMode(mode),
+);
 ipcMain.handle('get-brightness-mode', (): Promise<BrightnessModeString> => getBrightnessMode());
-ipcMain.handle('get-should-use-dark-colors', (): boolean => { return nativeTheme.shouldUseDarkColors; });
+ipcMain.handle('get-should-use-dark-colors', (): boolean => {
+    return nativeTheme.shouldUseDarkColors;
+});
 
 export async function setBrightnessMode(mode: BrightnessModeString): Promise<void> {
     // Save wish to user config
@@ -113,7 +118,7 @@ export async function setBrightnessMode(mode: BrightnessModeString): Promise<voi
     nativeTheme.themeSource = mode;
 }
 export async function getBrightnessMode(): Promise<BrightnessModeString> {
-    let mode: BrightnessModeString = await userConfig.get('brightnessMode') as BrightnessModeString | undefined;
+    let mode: BrightnessModeString = (await userConfig.get('brightnessMode')) as BrightnessModeString | undefined;
     switch (mode) {
         case 'light':
         case 'dark':

@@ -25,20 +25,18 @@ import { UtilsService } from './utils.service';
     selector: 'app-root',
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss'],
-    standalone: false
+    standalone: false,
 })
 export class AppComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
 
-    constructor(
-        private utils: UtilsService,
-    ) {}
+    constructor(private utils: UtilsService) {}
 
     ngOnInit(): void {
         // Register light/dark update from main process
         window.ipc.onUpdateBrightnessMode(async (): Promise<void> => {
             this.utils.updateBrightnessMode();
-          });
+        });
         // Trigger manual update for initial state
         this.utils.updateBrightnessMode();
     }

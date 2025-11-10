@@ -45,17 +45,16 @@ import { TUXEDODevice, defaultCustomProfile } from '../../common/models/DefaultP
 import { ScalingDriver } from '../../common/classes/LogicalCpuController';
 import { ChargingWorker } from './ChargingWorker';
 import type { WebcamPreset } from 'src/common/models/TccWebcamSettings';
-import { GpuInfoWorker } from "./GpuInfoWorker";
+import { GpuInfoWorker } from './GpuInfoWorker';
 import { CpuPowerWorker } from './CpuPowerWorker';
 import { PrimeWorker } from './PrimeWorker';
 import { KeyboardBacklightListener } from './KeyboardBacklightListener';
 import { NVIDIAPowerCTRLListener } from './NVIDIAPowerCTRLListener';
-import { AvailabilityService } from "../../common/classes/availability.service";
+import { AvailabilityService } from '../../common/classes/availability.service';
 
 const tccPackage: any = require('../../package.json');
 
 export class TuxedoControlCenterDaemon extends SingleProcess {
-
     static readonly CMD_RESTART_SERVICE: string = 'systemctl restart tccd.service';
     static readonly CMD_START_SERVICE: string = 'systemctl start tccd.service';
     static readonly CMD_STOP_SERVICE: string = 'systemctl stop tccd.service';
@@ -87,12 +86,11 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             TccPaths.WEBCAM_FILE,
             TccPaths.V4L2_NAMES_FILE,
             TccPaths.AUTOSAVE_FILE,
-            TccPaths.FANTABLES_FILE
+            TccPaths.FANTABLES_FILE,
         );
     }
 
     async main(): Promise<void> {
-
         if (process.argv.includes('--version')) {
             this.logLine(`TUXEDO Control Center v${tccPackage.version} node: ${process.version} arch:${os.arch()}`);
             process.exit();
@@ -105,7 +103,9 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
         // Check arguments, start, stop, restart config files etc..
         // todo: do error handling inside catchError
-        await this.handleArgumentProgramFlow().catch(async (err: unknown): Promise<void> => await this.catchError(err as Error));
+        await this.handleArgumentProgramFlow().catch(
+            async (err: unknown): Promise<void> => await this.catchError(err as Error),
+        );
 
         this.displayWorker = new DisplayRefreshRateWorker(this);
         this.loadConfigsAndProfiles();
@@ -143,11 +143,10 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
                 try {
                     await worker.work();
                 } catch (err: unknown) {
-                    console.error(`TuxedoControlCenterDaemon: Failed executing onWork() of ${worker.name} => ${err}`)
+                    console.error(`TuxedoControlCenterDaemon: Failed executing onWork() of ${worker.name} => ${err}`);
                 }
             }, worker.timeout);
         }
-
     }
 
     public async startWorkers(): Promise<void> {
@@ -156,7 +155,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
                 worker.updateProfile(this.getCurrentProfile());
                 await worker.start();
             } catch (err: unknown) {
-                console.error(`TuxedoControlCenterDaemon: Failed executing onStart => ${err}`)
+                console.error(`TuxedoControlCenterDaemon: Failed executing onStart => ${err}`);
             }
         }
     }
@@ -199,9 +198,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             try {
                 await worker.exit();
             } catch (err: unknown) {
-                console.error(
-                    `TuxedoControlCenterDaemon: Failed executing onExit() => ${err}`
-                );
+                console.error(`TuxedoControlCenterDaemon: Failed executing onExit() => ${err}`);
             }
         }
 
@@ -212,8 +209,8 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     private async handleArgumentProgramFlow(): Promise<void> {
         if (process.argv.includes('--start')) {
             // Start daemon as this process
-            if (!await this.start()) {
-                throw Error('Couldn\'t start daemon. It is probably already running');
+            if (!(await this.start())) {
+                throw Error("Couldn't start daemon. It is probably already running");
             } else {
                 this.logLine(`Starting daemon v${tccPackage.version} (node: ${process.version} arch: ${os.arch()})`);
                 const modInfo = new ModuleInfo();
@@ -231,17 +228,35 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             } else {
                 throw Error('Failed to stop daemon');
             }
-        } else if (process.argv.includes('--new_settings') || process.argv.includes('--new_profiles') || process.argv.includes('--new_webcam')) {
+        } else if (
+            process.argv.includes('--new_settings') ||
+            process.argv.includes('--new_profiles') ||
+            process.argv.includes('--new_webcam')
+        ) {
             // If new config is specified, replace standard config with new config
-            const settingsSaved: boolean = this.saveNewConfig<ITccSettings>('--new_settings', this.config.pathSettings, this.config.settingsFileMod);
-            const profilesSaved: boolean = this.saveNewConfig<ITccProfile[]>('--new_profiles', this.config.pathProfiles, this.config.profileFileMod);
-            const webcamSaved: boolean = this.saveNewConfig<WebcamPreset[]>('--new_webcam', this.config.pathWebcam, this.config.webcamFileMod);
+            const settingsSaved: boolean = this.saveNewConfig<ITccSettings>(
+                '--new_settings',
+                this.config.pathSettings,
+                this.config.settingsFileMod,
+            );
+            const profilesSaved: boolean = this.saveNewConfig<ITccProfile[]>(
+                '--new_profiles',
+                this.config.pathProfiles,
+                this.config.profileFileMod,
+            );
+            const webcamSaved: boolean = this.saveNewConfig<WebcamPreset[]>(
+                '--new_webcam',
+                this.config.pathWebcam,
+                this.config.webcamFileMod,
+            );
 
             // If something changed, reload configs
             if (settingsSaved || profilesSaved || webcamSaved) {
                 const pidNumber: number = this.readPid();
                 if (Number.isNaN(pidNumber)) {
-                    console.log("TuxedoControlCenterDaemon: Failed to locate running tccd process. Cannot reload config.");
+                    console.log(
+                        'TuxedoControlCenterDaemon: Failed to locate running tccd process. Cannot reload config.',
+                    );
                     process.exit(1);
                 } else {
                     process.kill(pidNumber, 'SIGHUP');
@@ -262,37 +277,54 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.readOrCreateConfigurationFiles(dev);
 
         // Fill exported profile lists (for GUI)
-        const defaultProfilesFilled: ITccProfile[] = this.config.getDefaultProfiles(dev).map(this.fillDeviceSpecificDefaults,this)
-        let customProfilesFilled: ITccProfile[] = this.customProfiles.map(this.fillDeviceSpecificDefaults,this);
+        const defaultProfilesFilled: ITccProfile[] = this.config
+            .getDefaultProfiles(dev)
+            .map(this.fillDeviceSpecificDefaults, this);
+        let customProfilesFilled: ITccProfile[] = this.customProfiles.map(this.fillDeviceSpecificDefaults, this);
 
-        const defaultValuesProfileFilled: ITccProfile = this.fillDeviceSpecificDefaults(JSON.parse(JSON.stringify(defaultCustomProfile)));
+        const defaultValuesProfileFilled: ITccProfile = this.fillDeviceSpecificDefaults(
+            JSON.parse(JSON.stringify(defaultCustomProfile)),
+        );
 
         // Make sure assigned states and assigned profiles exist, otherwise fill with defaults
         let settingsChanged: boolean = false;
         let needsTuxedoDefault: boolean = false;
         for (const stateId of Object.keys(ProfileStates)) {
             const stateDescriptor: ProfileStates = ProfileStates[stateId];
-            if (!this.settings.stateMap.hasOwnProperty(stateDescriptor) ||
-                 defaultProfilesFilled.concat(customProfilesFilled).find((p: ITccProfile): boolean => p.id === this.settings.stateMap[stateDescriptor]) === undefined) {
-                    // Attempt to find by name
-                    const profileByName: ITccProfile = defaultProfilesFilled.concat(customProfilesFilled).find((p: ITccProfile): boolean => p.name === this.settings.stateMap[stateDescriptor]);
-                    if (profileByName !== undefined) {
-                        console.log(`TuxedoControlCenterDaemon: Missing state id assignment for '${stateId}' but found profile by name '${profileByName.name}'`);
-                        this.settings.stateMap[stateDescriptor] = profileByName.id;
-                    } else {
-                        // Otherwise default to default values profile
-                        console.log(`TuxedoControlCenterDaemon: Missing state id assignment for '${stateId}' default to '${defaultValuesProfileFilled.id}'`);
-                        this.settings.stateMap[stateDescriptor] = defaultValuesProfileFilled.id;
-                        needsTuxedoDefault = true;
-                    }
-                    settingsChanged = true;
+            if (
+                !this.settings.stateMap.hasOwnProperty(stateDescriptor) ||
+                defaultProfilesFilled
+                    .concat(customProfilesFilled)
+                    .find((p: ITccProfile): boolean => p.id === this.settings.stateMap[stateDescriptor]) === undefined
+            ) {
+                // Attempt to find by name
+                const profileByName: ITccProfile = defaultProfilesFilled
+                    .concat(customProfilesFilled)
+                    .find((p: ITccProfile): boolean => p.name === this.settings.stateMap[stateDescriptor]);
+                if (profileByName !== undefined) {
+                    console.log(
+                        `TuxedoControlCenterDaemon: Missing state id assignment for '${stateId}' but found profile by name '${profileByName.name}'`,
+                    );
+                    this.settings.stateMap[stateDescriptor] = profileByName.id;
+                } else {
+                    // Otherwise default to default values profile
+                    console.log(
+                        `TuxedoControlCenterDaemon: Missing state id assignment for '${stateId}' default to '${defaultValuesProfileFilled.id}'`,
+                    );
+                    this.settings.stateMap[stateDescriptor] = defaultValuesProfileFilled.id;
+                    needsTuxedoDefault = true;
+                }
+                settingsChanged = true;
             }
         }
         if (settingsChanged) {
             // Add default values profile if not existing
             if (needsTuxedoDefault) {
-                if (customProfilesFilled.find((p: ITccProfile): boolean => p.id === defaultValuesProfileFilled.id) === undefined) {
-                    customProfilesFilled = [ defaultValuesProfileFilled ].concat(customProfilesFilled);
+                if (
+                    customProfilesFilled.find((p: ITccProfile): boolean => p.id === defaultValuesProfileFilled.id) ===
+                    undefined
+                ) {
+                    customProfilesFilled = [defaultValuesProfileFilled].concat(customProfilesFilled);
                     this.customProfiles = customProfilesFilled;
                     this.config.writeProfiles(this.customProfiles);
                     console.log(`TuxedoControlCenterDaemon: Added '${defaultValuesProfileFilled.name}' to profiles`);
@@ -320,11 +352,15 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             const activeProfileName: string = this.activeProfile.name;
             let foundSameProfile: boolean = this.setCurrentProfileById(activeProfileId);
             if (!foundSameProfile) {
-                console.log(`TuxedoControlCenterDaemon: loadConfigsAndProfiles: profile by id not found: ${activeProfileId}`)
+                console.log(
+                    `TuxedoControlCenterDaemon: loadConfigsAndProfiles: profile by id not found: ${activeProfileId}`,
+                );
                 foundSameProfile = this.setCurrentProfileByName(activeProfileName);
             }
             if (!foundSameProfile) {
-                console.log(`TuxedoControlCenterDaemon: loadConfigsAndProfiles: profile by name not found: ${activeProfileName}`);
+                console.log(
+                    `TuxedoControlCenterDaemon: loadConfigsAndProfiles: profile by name not found: ${activeProfileName}`,
+                );
                 // Fallback
                 this.activeProfile = this.getDefaultProfile();
             }
@@ -338,7 +374,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         // Delete additional cards from settings
         if (this.settings.ycbcr420Workaround?.length > outputPorts?.length) {
             this.logLine('TuxedoControlCenterDaemon: Additional ycbcr420Workaround card in settings');
-            this.settings.ycbcr420Workaround = this.settings.ycbcr420Workaround.slice(0, outputPorts?.length)
+            this.settings.ycbcr420Workaround = this.settings.ycbcr420Workaround.slice(0, outputPorts?.length);
             missingSetting = true;
         }
         for (let card: number = 0; card < outputPorts?.length; card++) {
@@ -403,7 +439,8 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             }
             if (this.settings.keyboardBacklightControlEnabled === undefined) {
                 this.logLine('TuxedoControlCenterDaemon: Missing keyboardBacklightControlEnabled setting');
-                this.settings.keyboardBacklightControlEnabled = this.config.getDefaultSettings(device).keyboardBacklightControlEnabled;
+                this.settings.keyboardBacklightControlEnabled =
+                    this.config.getDefaultSettings(device).keyboardBacklightControlEnabled;
                 missingSetting = true;
             }
             if (this.settings.ycbcr420Workaround === undefined) {
@@ -439,9 +476,13 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
                     this.syncOutputPortsSetting();
                 }
                 this.config.writeSettings(this.settings);
-                this.logLine(`TuxedoControlCenterDaemon: Filled missing settings with default: "${this.config.pathSettings}"`);
+                this.logLine(
+                    `TuxedoControlCenterDaemon: Filled missing settings with default: "${this.config.pathSettings}"`,
+                );
             } catch (err: unknown) {
-                console.error(`TuxedoControlCenterDaemon: Failed to fill missing settings with default: ${this.config.pathSettings} => ${err}`)
+                console.error(
+                    `TuxedoControlCenterDaemon: Failed to fill missing settings with default: ${this.config.pathSettings} => ${err}`,
+                );
             }
         }
 
@@ -453,14 +494,16 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
                 this.config.writeProfiles(this.customProfiles);
                 this.logLine(`TuxedoControlCenterDaemon: Wrote default profiles: ${this.config.pathProfiles}`);
             } catch (err: unknown) {
-                console.error(`TuxedoControlCenterDaemon: Failed to write default profiles: ${this.config.pathProfiles} => ${err}`)
+                console.error(
+                    `TuxedoControlCenterDaemon: Failed to write default profiles: ${this.config.pathProfiles} => ${err}`,
+                );
             }
         }
 
         try {
             this.autosave = this.config.readAutosave();
         } catch (err: unknown) {
-            console.error(`TuxedoControlCenterDaemon: Failed to read autosave ${this.config.pathAutosave} => ${err}`)
+            console.error(`TuxedoControlCenterDaemon: Failed to read autosave ${this.config.pathAutosave} => ${err}`);
             // It probably doesn't exist yet so create a structure for saving
             this.autosave = this.config.getDefaultAutosave();
         }
@@ -492,17 +535,17 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     private getIsUnsupportedConfigurableTGPDevice(): boolean {
         // Configurable TGP (cTGP) settings are not available for the IBP series
         // nvidia-smi tells otherwise, but they don't offically support it and using it results in undefined behaviour
-        const dmi = new DMIController("/sys/class/dmi/id");
+        const dmi = new DMIController('/sys/class/dmi/id');
         const deviceName: string = dmi.productSKU.readValueNT();
 
         const unsupportedDevices: string[] = [
-            "IBP14I06",
-            "IBP1XI07MK1",
-            "IBP1XI07MK2",
-            "IBP1XI08MK1",
-            "IBP14I08MK2",
-            "IBP16I08MK2",
-            "IBP14A09MK1 / IBP15A09MK1",
+            'IBP14I06',
+            'IBP1XI07MK1',
+            'IBP1XI07MK2',
+            'IBP1XI08MK1',
+            'IBP14I08MK2',
+            'IBP16I08MK2',
+            'IBP14A09MK1 / IBP15A09MK1',
         ]; // todo: check devices
 
         return unsupportedDevices.includes(deviceName);
@@ -515,17 +558,20 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         const chassisVendor: string = dmi.chassisVendor.readValueNT();
         const sysVendor: string = dmi.sysVendor.readValueNT();
         let showAquarisMenu;
-        const isTuxedo: boolean = (boardVendor !== undefined && boardVendor.toLowerCase().includes('tuxedo')) ||
-                         (chassisVendor !== undefined && chassisVendor.toLowerCase().includes('tuxedo')) ||
-                         (sysVendor !== undefined && sysVendor.toLowerCase().includes('tuxedo'));
+        const isTuxedo: boolean =
+            (boardVendor !== undefined && boardVendor.toLowerCase().includes('tuxedo')) ||
+            (chassisVendor !== undefined && chassisVendor.toLowerCase().includes('tuxedo')) ||
+            (sysVendor !== undefined && sysVendor.toLowerCase().includes('tuxedo'));
 
         if (isTuxedo) {
-            if (deviceName !== undefined &&
+            if (
+                deviceName !== undefined &&
                 (deviceName === 'STELLARIS1XI04' ||
-                deviceName === 'STEPOL1XA04' ||
-                deviceName === 'STELLARIS1XI05' ||
-                deviceName === 'STELLARIS16I06' ||
-                deviceName === 'STELLARIS17I06')) {
+                    deviceName === 'STEPOL1XA04' ||
+                    deviceName === 'STELLARIS1XI05' ||
+                    deviceName === 'STELLARIS16I06' ||
+                    deviceName === 'STELLARIS17I06')
+            ) {
                 showAquarisMenu = true;
             } else {
                 showAquarisMenu = false;
@@ -537,7 +583,6 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     }
 
     public identifyDevice(): TUXEDODevice {
-
         const dmi = new DMIController('/sys/class/dmi/id');
         const productSKU: string = dmi.productSKU.readValueNT();
         const boardName: string = dmi.boardName.readValueNT();
@@ -614,7 +659,9 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     }
 
     public setCurrentProfileByName(profileName: string): boolean {
-        this.activeProfile = this.getAllProfiles().find((profile: ITccProfile): boolean => profile.name === profileName);
+        this.activeProfile = this.getAllProfiles().find(
+            (profile: ITccProfile): boolean => profile.name === profileName,
+        );
         let result: boolean = true;
         if (this.activeProfile === undefined) {
             this.activeProfile = this.getDefaultProfile();
@@ -622,7 +669,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         }
         this.listeners.forEach((listener: KeyboardBacklightListener | NVIDIAPowerCTRLListener): void => {
             listener.onActiveProfileChanged();
-        })
+        });
         return result;
     }
 
@@ -635,7 +682,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         }
         this.listeners.forEach((listener: KeyboardBacklightListener | NVIDIAPowerCTRLListener): void => {
             listener.onActiveProfileChanged();
-        })
+        });
         return result;
     }
 
@@ -649,7 +696,8 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         }
 
         // Attempt to find fan profile from tcc profile
-        let chosenFanProfile: ITccFanProfile = this.config.getDefaultFanProfiles()
+        let chosenFanProfile: ITccFanProfile = this.config
+            .getDefaultFanProfiles()
             .find((fanProfile: ITccFanProfile): boolean => fanProfile.name === chosenProfile.fan.fanProfile);
 
         if (chosenFanProfile === undefined) {
@@ -661,7 +709,9 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
     private getFallbackFanProfile(): ITccFanProfile {
         // Fallback to 'Balanced'
-        let chosenFanProfile: ITccFanProfile = this.config.getDefaultFanProfiles().find((fanProfile: ITccProfile): boolean => fanProfile.name === 'Balanced');
+        let chosenFanProfile: ITccFanProfile = this.config
+            .getDefaultFanProfiles()
+            .find((fanProfile: ITccProfile): boolean => fanProfile.name === 'Balanced');
         // Fallback to first in list
         if (chosenFanProfile === undefined) {
             chosenFanProfile = this.config.getDefaultFanProfiles()[0];
@@ -680,7 +730,9 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
         if (profile.id === undefined) {
             profile.id = generateProfileId();
-            console.log(`TuxedoControlCenterDaemon: fillDeviceSpecificDefaults: Generated id (${profile.id}) for ${profile.name}`);
+            console.log(
+                `TuxedoControlCenterDaemon: fillDeviceSpecificDefaults: Generated id (${profile.id}) for ${profile.name}`,
+            );
         }
 
         if (profile.description === 'undefined') {
@@ -701,27 +753,28 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             profile.cpu.scalingMinFrequency = minFreq;
         }
 
-        const scalingAvailable: boolean = cpu.cores[0].scalingAvailableFrequencies.isAvailable()
-        let scalingAvailableFrequencies: number[]
+        const scalingAvailable: boolean = cpu.cores[0].scalingAvailableFrequencies.isAvailable();
+        let scalingAvailableFrequencies: number[];
         if (scalingAvailable) {
             scalingAvailableFrequencies = cpu.cores[0].scalingAvailableFrequencies.readValueNT();
         }
 
-        const scalingDriverAvailable: boolean = cpu.cores[0].scalingDriver.isAvailable()
-        let scalingdriver: string
+        const scalingDriverAvailable: boolean = cpu.cores[0].scalingDriver.isAvailable();
+        let scalingdriver: string;
         if (scalingDriverAvailable) {
-            scalingdriver = cpu.cores[0].scalingDriver.readValueNT()
+            scalingdriver = cpu.cores[0].scalingDriver.readValueNT();
         }
 
-        const cpuinfoMaxFreqAvailable: boolean = cpu.cores[0].cpuinfoMaxFreq.isAvailable()
-        let cpuinfoMaxFreq: number
+        const cpuinfoMaxFreqAvailable: boolean = cpu.cores[0].cpuinfoMaxFreq.isAvailable();
+        let cpuinfoMaxFreq: number;
         if (cpuinfoMaxFreqAvailable) {
-            cpuinfoMaxFreq = cpu.cores[0].cpuinfoMaxFreq.readValueNT()
+            cpuinfoMaxFreq = cpu.cores[0].cpuinfoMaxFreq.readValueNT();
         }
-        let maxFreq: number = scalingAvailableFrequencies !== undefined ? scalingAvailableFrequencies[0] : cpuinfoMaxFreq;
+        let maxFreq: number =
+            scalingAvailableFrequencies !== undefined ? scalingAvailableFrequencies[0] : cpuinfoMaxFreq;
 
-        const boostAvailable: boolean = cpu.boost.isAvailable()
-        let boost: boolean
+        const boostAvailable: boolean = cpu.boost.isAvailable();
+        let boost: boolean;
         if (boostAvailable) {
             boost = cpu.boost.readValueNT();
         }
@@ -729,9 +782,8 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             maxFreq += 1000000;
         }
 
-        const reducedAvailableFreq: number = boost === undefined ?
-                                         cpu.cores[0].getReducedAvailableFreqNT() :
-                                         cpuinfoMaxFreq;
+        const reducedAvailableFreq: number =
+            boost === undefined ? cpu.cores[0].getReducedAvailableFreqNT() : cpuinfoMaxFreq;
         // Handle defaults
         if (profile.cpu.scalingMaxFrequency === undefined) {
             profile.cpu.scalingMaxFrequency = maxFreq;
@@ -757,12 +809,10 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             profile.cpu.noTurbo = defaultCustomProfile.cpu.noTurbo;
         }
 
-        if(profile.display.useRefRate === undefined)
-        {
+        if (profile.display.useRefRate === undefined) {
             profile.display.useRefRate = false;
         }
-        if(profile.display.useResolution === undefined)
-        {
+        if (profile.display.useResolution === undefined) {
             profile.display.useResolution = false;
         }
 
@@ -779,7 +829,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         if (profile.webcam === undefined) {
             profile.webcam = {
                 useStatus: false,
-                status: true
+                status: true,
             };
         }
 
@@ -820,7 +870,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         const availableODMProfiles: string[] = ODMProfileWorker.getAvailableODMPerformanceProfiles(dev);
         if (profile.odmProfile === undefined || !availableODMProfiles.includes(profile.odmProfile.name)) {
             profile.odmProfile = {
-                name: defaultODMProfileName
+                name: defaultODMProfileName,
             };
         }
 
@@ -830,14 +880,15 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
         const tdpInfo: TDPInfo[] = [];
         TuxedoIOAPI.getTDPInfo(tdpInfo);
-        if (profile.odmPowerLimits === undefined
-            || profile.odmPowerLimits.tdpValues === undefined) {
+        if (profile.odmPowerLimits === undefined || profile.odmPowerLimits.tdpValues === undefined) {
             profile.odmPowerLimits = { tdpValues: [] };
         }
 
         const nrMissingValues: number = tdpInfo?.length - profile.odmPowerLimits.tdpValues?.length;
         if (nrMissingValues > 0) {
-            profile.odmPowerLimits.tdpValues = profile.odmPowerLimits.tdpValues.concat(tdpInfo.slice(-nrMissingValues).map((e: TDPInfo): number => e.max));
+            profile.odmPowerLimits.tdpValues = profile.odmPowerLimits.tdpValues.concat(
+                tdpInfo.slice(-nrMissingValues).map((e: TDPInfo): number => e.max),
+            );
         }
 
         if (profile.nvidiaPowerCTRLProfile === undefined) {
@@ -866,15 +917,16 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             try {
                 const newConfig: T = this.config.readConfig<T>(newConfigPath);
 
-
                 try {
                     this.config.writeConfig<T>(newConfig, targetConfigPath, { mode: writeFileMode });
                 } catch (err: unknown) {
-                    console.error(`TuxedoControlCenterDaemon: Error on write option ${optionString} => ${err}`)
+                    console.error(`TuxedoControlCenterDaemon: Error on write option ${optionString} => ${err}`);
                     return false;
                 }
             } catch (err: unknown) {
-                console.error(`TuxedoControlCenterDaemon: Error on read option ${optionString}: with path ${newConfigPath} => ${err}`)
+                console.error(
+                    `TuxedoControlCenterDaemon: Error on read option ${optionString}: with path ${newConfigPath} => ${err}`,
+                );
                 return false;
             }
             return true;
@@ -896,11 +948,11 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
      */
     private getPathArgument(optionString: string): string {
         const newConfigIndex: number = process.argv.indexOf(optionString);
-        const lastIndex: number = (process.argv?.length - 1);
+        const lastIndex: number = process.argv?.length - 1;
         // If option is set and there is an argument after the option
-        if (newConfigIndex !== -1 && ((newConfigIndex + 1) <= lastIndex)) {
+        if (newConfigIndex !== -1 && newConfigIndex + 1 <= lastIndex) {
             const newConfigPath: string = process.argv[newConfigIndex + 1];
-            newConfigPath.replace('\'', '');
+            newConfigPath.replace("'", '');
             return newConfigPath.trim();
         } else {
             return '';

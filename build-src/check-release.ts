@@ -1,4 +1,3 @@
-
 import * as fsp from 'node:fs/promises';
 import * as util from 'util';
 import * as child_process from 'node:child_process';
@@ -28,7 +27,6 @@ async function checkRelease(versionToCheck?: string): Promise<boolean> {
 
         printResult('Version in package.json', releaseVersion === mainPackageJSON.version);
         printResult('Version in src/package.json', releaseVersion === startPackageJSON.version);
-
     } catch (err) {
         console.log('Failed to process package.json => ' + err);
         return false;
@@ -61,7 +59,6 @@ async function checkRelease(versionToCheck?: string): Promise<boolean> {
             if (tagMessage !== `Version ${releaseVersion}`) {
                 tagCheck = false;
             }
-
         } else {
             tagCheck = false;
         }
@@ -76,7 +73,7 @@ async function checkRelease(versionToCheck?: string): Promise<boolean> {
     return true;
 }
 
-checkRelease().then(success => {
+checkRelease().then((success) => {
     if (success) {
         process.exit(0);
     } else {

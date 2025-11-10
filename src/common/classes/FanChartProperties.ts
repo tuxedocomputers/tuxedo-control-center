@@ -26,12 +26,12 @@ import type {
     Point,
     ScaleOptionsByType,
     Tick,
-} from "chart.js";
-import { formatTemp } from "./FanUtils";
-import type {_DeepPartialObject } from "chart.js/dist/types/utils";
+} from 'chart.js';
+import { formatTemp } from './FanUtils';
+import type { _DeepPartialObject } from 'chart.js/dist/types/utils';
 
 export const chartInteraction: _DeepPartialObject<CoreInteractionOptions> = {
-    mode: "index",
+    mode: 'index',
     intersect: false,
 };
 
@@ -46,11 +46,8 @@ export function createLineChartDataset(
     primaryLabel: string,
     primaryData: { x: number; y: number }[],
     secondaryLabel?: string,
-    secondaryData?: { x: number; y: number }[]
-): ChartDataset<
-    keyof ChartTypeRegistry,
-    (number | [number, number] | Point | BubbleDataPoint)[]
->[] {
+    secondaryData?: { x: number; y: number }[],
+): ChartDataset<keyof ChartTypeRegistry, (number | [number, number] | Point | BubbleDataPoint)[]>[] {
     const baseDataset = {
         spanGaps: true,
         showLine: true,
@@ -61,8 +58,8 @@ export function createLineChartDataset(
     const primaryDataset = {
         label: primaryLabel,
         data: primaryData,
-        borderColor: "rgba(227, 0, 22, 0.3)",
-        backgroundColor: "rgba(227, 0, 22, 0.3)",
+        borderColor: 'rgba(227, 0, 22, 0.3)',
+        backgroundColor: 'rgba(227, 0, 22, 0.3)',
         ...baseDataset,
     };
 
@@ -70,8 +67,8 @@ export function createLineChartDataset(
         const secondaryDataset = {
             label: secondaryLabel,
             data: secondaryData,
-            borderColor: "rgba(120, 120, 120, 0.4)",
-            backgroundColor: "rgba(10, 10, 10, 0.4)",
+            borderColor: 'rgba(120, 120, 120, 0.4)',
+            backgroundColor: 'rgba(10, 10, 10, 0.4)',
             ...baseDataset,
         };
 
@@ -85,20 +82,17 @@ export function createBarChartDataset(
     primaryLabel: string,
     primaryData: number[],
     secondaryLabel: string,
-    secondaryData: number[]
-): ChartDataset<
-    keyof ChartTypeRegistry,
-    (number | [number, number] | Point | BubbleDataPoint)[]
->[] {
+    secondaryData: number[],
+): ChartDataset<keyof ChartTypeRegistry, (number | [number, number] | Point | BubbleDataPoint)[]>[] {
     return [
         {
             label: primaryLabel,
-            backgroundColor: "rgba(227, 0, 22, 0.3)",
+            backgroundColor: 'rgba(227, 0, 22, 0.3)',
             data: primaryData,
         },
         {
             label: secondaryLabel,
-            backgroundColor: "rgba(10, 10, 10, 0.4)",
+            backgroundColor: 'rgba(10, 10, 10, 0.4)',
             data: secondaryData,
         },
     ];
@@ -107,25 +101,19 @@ export function createBarChartDataset(
 export function createLineChartScales(
     fahrenheit: boolean,
     textColor: string,
-    max?: number
+    max?: number,
 ): _DeepPartialObject<{
-    [key: string]: ScaleOptionsByType<
-        "radialLinear" | keyof CartesianScaleTypeRegistry
-    >;
+    [key: string]: ScaleOptionsByType<'radialLinear' | keyof CartesianScaleTypeRegistry>;
 }> {
     return {
         x: {
-            type: "linear",
+            type: 'linear',
             min: 0,
             max: max ? max : 100,
             ticks: {
                 color: textColor,
 
-                callback: (
-                    value: number,
-                    index: number,
-                    ticks: Tick[]
-                ): string => {
+                callback: (value: number, index: number, ticks: Tick[]): string => {
                     return formatTemp(value, fahrenheit);
                 },
             },
@@ -136,11 +124,7 @@ export function createLineChartScales(
             ticks: {
                 color: textColor,
 
-                callback: (
-                    value: number,
-                    index: number,
-                    ticks: Tick[]
-                ): string => {
+                callback: (value: number, index: number, ticks: Tick[]): string => {
                     return `${value} %`;
                 },
             },

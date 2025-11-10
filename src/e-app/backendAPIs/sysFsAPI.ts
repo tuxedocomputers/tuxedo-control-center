@@ -17,33 +17,34 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ipcMain } from "electron";
-import type { IpcMainEvent } from "electron";
-import { DisplayBacklightController } from "../../common/classes/DisplayBacklightController";
-import type { IDisplayBrightnessInfo } from "../../common/models/ICpuInfos";
+import { ipcMain } from 'electron';
+import type { IpcMainEvent } from 'electron';
+import { DisplayBacklightController } from '../../common/classes/DisplayBacklightController';
+import type { IDisplayBrightnessInfo } from '../../common/models/ICpuInfos';
 
-  let displayBacklightControllers: DisplayBacklightController[];
-  const displayBacklightControllerBasepath = '/sys/class/backlight';
-  const displayBacklightControllerNames: string[] = DisplayBacklightController.getDeviceList(displayBacklightControllerBasepath);
-  displayBacklightControllers = [];
-  for (const driverName of displayBacklightControllerNames) {
+let displayBacklightControllers: DisplayBacklightController[];
+const displayBacklightControllerBasepath = '/sys/class/backlight';
+const displayBacklightControllerNames: string[] = DisplayBacklightController.getDeviceList(
+    displayBacklightControllerBasepath,
+);
+displayBacklightControllers = [];
+for (const driverName of displayBacklightControllerNames) {
     displayBacklightControllers.push(new DisplayBacklightController(displayBacklightControllerBasepath, driverName));
-  }
+}
 
-
-  ipcMain.on('get-display-brightness-info-sync', (event: IpcMainEvent): void => {
+ipcMain.on('get-display-brightness-info-sync', (event: IpcMainEvent): void => {
     const infoArray: IDisplayBrightnessInfo[] = [];
     for (const controller of displayBacklightControllers) {
-      try {
-        const info: IDisplayBrightnessInfo = {
-          driver: controller.driver,
-          brightness: controller.brightness.readValue(),
-          maxBrightness: controller.maxBrightness.readValue()
-        };
-        infoArray.push(info);
-      } catch (err: unknown) {
-        console.error(`sysFsAPI: get-display-brightness-info-sync failed => ${err}`)
-      }
+        try {
+            const info: IDisplayBrightnessInfo = {
+                driver: controller.driver,
+                brightness: controller.brightness.readValue(),
+                maxBrightness: controller.maxBrightness.readValue(),
+            };
+            infoArray.push(info);
+        } catch (err: unknown) {
+            console.error(`sysFsAPI: get-display-brightness-info-sync failed => ${err}`);
+        }
     }
     event.returnValue = infoArray;
-  });
+});

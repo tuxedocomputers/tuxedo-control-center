@@ -27,27 +27,26 @@
     margin: 0px;
     padding: 0px;
     overflow-y: scroll;
-    
+
     .inner-global-settings {
         margin: 0 10px 10px 10px;
-        
-        
+
         .title {
             font-size: 24px;
         }
-        
+
         .panel-title {
             font-size: 18px;
         }
-        
+
         .description {
             font-size: 16px;
-            
+
             padding-top: 16px;
             padding-bottom: 16px;
             text-align: center;
         }
-        
+
         .content {
             .description {
                 font-size: 16px;
@@ -55,18 +54,18 @@
                 padding-top: 0px;
                 font-style: oblique;
             }
-            
+
             .input {
                 flex: 1;
             }
-            
+
             .header {
                 width: 100%;
                 text-align: left;
                 font-size: 16px;
                 font-weight: bold;
             }
-            
+
             .value {
                 width: 100%;
                 text-align: left;

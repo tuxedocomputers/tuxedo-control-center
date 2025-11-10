@@ -17,22 +17,20 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Injectable } from "@angular/core";
-import type { FormGroup } from "@angular/forms";
-import type { CanDeactivate } from "@angular/router";
-import { UtilsService } from "./utils.service";
-import type { ConfirmDialogData, ConfirmDialogResult } from "./dialog-confirm/dialog-confirm.component";
+import { Injectable } from '@angular/core';
+import type { FormGroup } from '@angular/forms';
+import type { CanDeactivate } from '@angular/router';
+import { UtilsService } from './utils.service';
+import type { ConfirmDialogData, ConfirmDialogResult } from './dialog-confirm/dialog-confirm.component';
 
 export interface CanComponentDeactivate {
     webcamFormGroup: FormGroup;
 }
 
 @Injectable({
-    providedIn: "root",
+    providedIn: 'root',
 })
-export class WebcamSettingsGuard
-    implements CanDeactivate<CanComponentDeactivate>
-{
+export class WebcamSettingsGuard implements CanDeactivate<CanComponentDeactivate> {
     constructor(private utils: UtilsService) {}
     private loading: boolean = false;
 
@@ -54,7 +52,7 @@ export class WebcamSettingsGuard
         if (component.webcamFormGroup.dirty) {
             let canRoute: boolean;
             await this.askUnsavedPreset().then((x: ConfirmDialogResult): void => {
-                canRoute = x["confirm"];
+                canRoute = x['confirm'];
             });
             return canRoute;
         }

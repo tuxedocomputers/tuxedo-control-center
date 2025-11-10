@@ -26,7 +26,7 @@ export class TccPaths {
     static readonly SETTINGS_FILE: string = '/etc/tcc/settings';
     static readonly PROFILES_FILE: string = '/etc/tcc/profiles';
     static readonly WEBCAM_FILE: string = '/etc/tcc/webcam';
-    static readonly V4L2_NAMES_FILE: string = 
+    static readonly V4L2_NAMES_FILE: string =
         '/opt/tuxedo-control-center/resources/dist/tuxedo-control-center/data/camera/v4l2_kernel_names.json';
     static readonly AUTOSAVE_FILE: string = '/etc/tcc/autosave';
     static readonly FANTABLES_FILE: string = '/etc/tcc/fantables';

@@ -17,21 +17,21 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { getHwmonPathWithName } from "../../common/classes/FanUtils";
-import { FanControlHwmon } from "./FanControlHwmon";
-import type { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
+import { getHwmonPathWithName } from '../../common/classes/FanUtils';
+import { FanControlHwmon } from './FanControlHwmon';
+import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
 export class FanControlPwm extends FanControlHwmon {
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(tccd);
-        this.fanControlName = "pwm";
+        this.fanControlName = 'pwm';
     }
-    
+
     public async getHwmonPath(): Promise<string | undefined> {
-       return await getHwmonPathWithName("tuxedo");
+        return await getHwmonPathWithName('tuxedo');
     }
-    
+
     public async checkAvailable(): Promise<[boolean, boolean]> {
         return super.checkAvailable();
-     }
+    }
 }

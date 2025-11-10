@@ -24,7 +24,12 @@ import { generateProfileId, type ITccProfile } from '../models/TccProfile';
 import { defaultProfiles } from '../models/profiles/LegacyProfiles';
 import { type ITccAutosave, defaultAutosave } from '../models/TccAutosave';
 import { type ITccFanProfile, defaultFanProfiles } from '../models/TccFanTable';
-import { defaultCustomProfile, deviceCustomProfiles, deviceProfiles, type TUXEDODevice } from '../models/DefaultProfiles';
+import {
+    defaultCustomProfile,
+    deviceCustomProfiles,
+    deviceProfiles,
+    type TUXEDODevice,
+} from '../models/DefaultProfiles';
 import type { WebcamPreset } from '../models/TccWebcamSettings';
 
 export class ConfigHandler {
@@ -35,9 +40,15 @@ export class ConfigHandler {
     public autosaveFileMod: number;
     public fantablesFileMod: number;
 
-
     // tslint:disable-next-line: variable-name
-    constructor(private _pathSettings: string, private _pathProfiles: string, private _pathWebcam: string, private _pathV4l2Names: string, private _pathAutosave: string, private _pathFantables: string) {
+    constructor(
+        private _pathSettings: string,
+        private _pathProfiles: string,
+        private _pathWebcam: string,
+        private _pathV4l2Names: string,
+        private _pathAutosave: string,
+        private _pathFantables: string,
+    ) {
         this.settingsFileMod = 0o644;
         this.profileFileMod = 0o644;
         this.webcamFileMod = 0o644;
@@ -46,18 +57,42 @@ export class ConfigHandler {
         this.fantablesFileMod = 0o644;
     }
 
-    public get pathSettings(): string { return this._pathSettings; }
-    public set pathSettings(filename: string) { this._pathSettings = filename; }
-    public get pathProfiles(): string { return this._pathProfiles; }
-    public set pathProfiles(filename: string) { this._pathProfiles = filename; }
-    public get pathWebcam(): string { return this._pathWebcam; }
-    public set pathWebcam(filename: string) { this._pathWebcam = filename; }
-    public get pathV4l2Names(): string { return this._pathV4l2Names; }
-    public set pathV4l2Names(filename: string) { this._pathV4l2Names = filename; }
-    public get pathAutosave(): string { return this._pathAutosave; }
-    public set pathAutosave(filename: string) { this._pathAutosave = filename; }
-    public get pathFanTables(): string { return this._pathFantables; }
-    public set pathFanTables(filename: string) { this._pathFantables = filename; }
+    public get pathSettings(): string {
+        return this._pathSettings;
+    }
+    public set pathSettings(filename: string) {
+        this._pathSettings = filename;
+    }
+    public get pathProfiles(): string {
+        return this._pathProfiles;
+    }
+    public set pathProfiles(filename: string) {
+        this._pathProfiles = filename;
+    }
+    public get pathWebcam(): string {
+        return this._pathWebcam;
+    }
+    public set pathWebcam(filename: string) {
+        this._pathWebcam = filename;
+    }
+    public get pathV4l2Names(): string {
+        return this._pathV4l2Names;
+    }
+    public set pathV4l2Names(filename: string) {
+        this._pathV4l2Names = filename;
+    }
+    public get pathAutosave(): string {
+        return this._pathAutosave;
+    }
+    public set pathAutosave(filename: string) {
+        this._pathAutosave = filename;
+    }
+    public get pathFanTables(): string {
+        return this._pathFantables;
+    }
+    public set pathFanTables(filename: string) {
+        this._pathFantables = filename;
+    }
 
     public readSettings(filePath: string = this.pathSettings): ITccSettings {
         return this.readConfig<ITccSettings>(filePath);
@@ -108,14 +143,16 @@ export class ConfigHandler {
     }
     public readProfiles(device: TUXEDODevice, filePath: string = this.pathProfiles): ITccProfile[] {
         let idUpdated: boolean = false;
-        const profiles: ITccProfile[] = this.readConfig<ITccProfile[]>(filePath).map((profile: ITccProfile): ITccProfile => {
-            if (profile.id === undefined) {
-                profile.id = generateProfileId();
-                console.log(`(readProfiles) Generated id (${profile.id}) for ${profile.name}`);
-                idUpdated = true;
-            }
-            return profile;
-        });
+        const profiles: ITccProfile[] = this.readConfig<ITccProfile[]>(filePath).map(
+            (profile: ITccProfile): ITccProfile => {
+                if (profile.id === undefined) {
+                    profile.id = generateProfileId();
+                    console.log(`(readProfiles) Generated id (${profile.id}) for ${profile.name}`);
+                    idUpdated = true;
+                }
+                return profile;
+            },
+        );
 
         let valueFilledFromDefault: boolean = false;
         const defaultCustomProfiles: ITccProfile[] = this.getDefaultCustomProfiles(device);
@@ -171,7 +208,7 @@ export class ConfigHandler {
             // FIXME for some reason this actually doesn't enforce the type
             config = JSON.parse(fileData.toString());
         } catch (err: unknown) {
-            console.error(`ConfigHandler: readConfig failed to read ${filename} => ${err}`)
+            console.error(`ConfigHandler: readConfig failed to read ${filename} => ${err}`);
             throw err;
         }
         return config;
@@ -183,7 +220,7 @@ export class ConfigHandler {
             const fileData: Buffer = await fs.promises.readFile(filename);
             config = JSON.parse(fileData.toString());
         } catch (err: unknown) {
-            console.error(`ConfigHandler: readConfigAsync failed to read ${filename} => ${err}`)
+            console.error(`ConfigHandler: readConfigAsync failed to read ${filename} => ${err}`);
             throw err;
         }
         return config;
@@ -198,12 +235,16 @@ export class ConfigHandler {
             }
             fs.writeFileSync(filePath, fileData, writeFileOptions);
         } catch (err: unknown) {
-            console.error(`ConfigHandler: writeConfig failed => ${err}`)
+            console.error(`ConfigHandler: writeConfig failed => ${err}`);
             throw err;
         }
     }
 
-    public async writeConfigAsync<T>(config: T, filePath: string, writeFileOptions: fs.WriteFileOptions): Promise<void> {
+    public async writeConfigAsync<T>(
+        config: T,
+        filePath: string,
+        writeFileOptions: fs.WriteFileOptions,
+    ): Promise<void> {
         const fileData: string = JSON.stringify(config);
         try {
             const dirStat: fs.Stats = await fs.promises.stat(path.dirname(filePath));
@@ -212,7 +253,7 @@ export class ConfigHandler {
             }
             await fs.promises.writeFile(filePath, fileData, writeFileOptions);
         } catch (err: unknown) {
-            console.error(`ConfigHandler: writeConfigAsync failed => ${err}`)
+            console.error(`ConfigHandler: writeConfigAsync failed => ${err}`);
             throw err;
         }
     }
@@ -234,10 +275,9 @@ export class ConfigHandler {
     }
 
     public getDefaultCustomProfiles(device: TUXEDODevice): ITccProfile[] {
-
         let defaultCustomProfiles: ITccProfile[] = deviceCustomProfiles.get(device);
         if (defaultCustomProfiles === undefined) {
-            defaultCustomProfiles = [ this.getDefaultCustomProfile() ];
+            defaultCustomProfiles = [this.getDefaultCustomProfile()];
         }
         return this.copyConfig<ITccProfile[]>(defaultCustomProfiles);
     }
@@ -258,7 +298,7 @@ export class ConfigHandler {
         try {
             return this.readProfiles(device);
         } catch (err: unknown) {
-            console.error(`ConfigHandler: getCustomProfilesNoThrow failed => ${err}`)
+            console.error(`ConfigHandler: getCustomProfilesNoThrow failed => ${err}`);
             return this.getDefaultCustomProfiles(device);
         }
     }
@@ -271,7 +311,7 @@ export class ConfigHandler {
         try {
             return this.readSettings();
         } catch (err: unknown) {
-            console.error(`ConfigHandler: getSettingsNoThrow failed => ${err}`)
+            console.error(`ConfigHandler: getSettingsNoThrow failed => ${err}`);
             return this.getDefaultSettings(device);
         }
     }

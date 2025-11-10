@@ -18,5 +18,5 @@
  */
 
 (window as any).process = {
-    env: {}
+    env: {},
 };

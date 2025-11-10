@@ -17,13 +17,12 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { execCommandSync } from "./Utils";
+import { execCommandSync } from './Utils';
 import * as dbus from 'dbus-next';
 
 type OnChangedFunction = (value: number) => void;
 
 export class DBusDisplayBrightnessGnome {
-
     private interface: dbus.ClientInterface;
 
     private destination: string = 'org.gnome.SettingsDaemon.Power';
@@ -38,19 +37,27 @@ export class DBusDisplayBrightnessGnome {
 
     constructor(private bus: dbus.MessageBus) {
         if (this.isGnome()) {
-            this.getInterface().then((iface: dbus.ClientInterface): void => {
-                if (iface === undefined) { return; }
-                this.eventEmitter = iface.on('PropertiesChanged', (interfaceString: string, changed: any, invalidated: any): void => {
-                    const changedValueExists: boolean = changed.hasOwnProperty('Brightness') && changed.Brightness.hasOwnProperty('value');
-                    const interfaceMatch: boolean = interfaceString === this.propertyInterface;
-                    const callbackDefined: boolean = this.customOnPropertiesChanged !== undefined;
-                    if (interfaceMatch && changedValueExists && callbackDefined) {
-                        this.customOnPropertiesChanged(changed.Brightness.value);
+            this.getInterface()
+                .then((iface: dbus.ClientInterface): void => {
+                    if (iface === undefined) {
+                        return;
                     }
+                    this.eventEmitter = iface.on(
+                        'PropertiesChanged',
+                        (interfaceString: string, changed: any, invalidated: any): void => {
+                            const changedValueExists: boolean =
+                                changed.hasOwnProperty('Brightness') && changed.Brightness.hasOwnProperty('value');
+                            const interfaceMatch: boolean = interfaceString === this.propertyInterface;
+                            const callbackDefined: boolean = this.customOnPropertiesChanged !== undefined;
+                            if (interfaceMatch && changedValueExists && callbackDefined) {
+                                this.customOnPropertiesChanged(changed.Brightness.value);
+                            }
+                        },
+                    );
+                })
+                .catch((err: unknown): void => {
+                    console.error(`DBusDisplayBrightnessGnome: constructor failed => ${err}`);
                 });
-            }).catch((err: unknown): void => {
-                console.error(`DBusDisplayBrightnessGnome: constructor failed => ${err}`)
-            });
         }
     }
 
@@ -60,16 +67,16 @@ export class DBusDisplayBrightnessGnome {
     }
 
     private isGnome(): boolean {
-        const xdgDesktop: string = execCommandSync("echo $XDG_CURRENT_DESKTOP")
-        if (xdgDesktop.includes("GNOME")) {
-            return true
+        const xdgDesktop: string = execCommandSync('echo $XDG_CURRENT_DESKTOP');
+        if (xdgDesktop.includes('GNOME')) {
+            return true;
         }
-        return false
+        return false;
     }
 
     public async isAvailable(): Promise<boolean> {
         try {
-            const isGnome: boolean = this.isGnome()
+            const isGnome: boolean = this.isGnome();
 
             if (isGnome) {
                 const iface: dbus.ClientInterface = await this.getInterface();
@@ -81,7 +88,7 @@ export class DBusDisplayBrightnessGnome {
             }
             return false;
         } catch (err: unknown) {
-            console.error(`DBusDisplayBrightnessGnome: isAvailable failed => ${err}`)
+            console.error(`DBusDisplayBrightnessGnome: isAvailable failed => ${err}`);
             return false;
         }
     }
@@ -98,18 +105,22 @@ export class DBusDisplayBrightnessGnome {
 
     public async getInterface(): Promise<dbus.ClientInterface> {
         return new Promise<dbus.ClientInterface>((resolve: (value: dbus.ClientInterface) => void): void => {
-            if (this.interface !== undefined) { resolve(this.interface); return; }
+            if (this.interface !== undefined) {
+                resolve(this.interface);
+                return;
+            }
             // Initialize interface
-            this.bus.getProxyObject(this.destination, this.path).then(
-                (proxyObject: dbus.ProxyObject): void => {
+            this.bus
+                .getProxyObject(this.destination, this.path)
+                .then((proxyObject: dbus.ProxyObject): void => {
                     this.interface = proxyObject.getInterface('org.freedesktop.DBus.Properties');
                     resolve(this.interface);
-                }
-            ).catch((err: unknown): void => {
-                console.error(`DBusDisplayBrightnessGnome: getInterface failed => ${err}`)
-                this.interface = undefined;
-                resolve(this.interface);
-            });
+                })
+                .catch((err: unknown): void => {
+                    console.error(`DBusDisplayBrightnessGnome: getInterface failed => ${err}`);
+                    this.interface = undefined;
+                    resolve(this.interface);
+                });
         });
     }
 
@@ -120,11 +131,11 @@ export class DBusDisplayBrightnessGnome {
                 const result: dbus.Variant = await iface.Get(this.propertyInterface, this.methodName);
                 return result.value;
             } else {
-                throw(new Error('Interface not available'));
+                throw new Error('Interface not available');
             }
         } catch (err: unknown) {
-            console.error(`DBusDisplayBrightnessGnome: getBrightness failed => ${err}`)
-            throw(err);
+            console.error(`DBusDisplayBrightnessGnome: getBrightness failed => ${err}`);
+            throw err;
         }
     }
 
@@ -132,14 +143,18 @@ export class DBusDisplayBrightnessGnome {
         try {
             const iface: dbus.ClientInterface = await this.getInterface();
             if (iface !== undefined) {
-                await iface.Set(this.propertyInterface, this.methodName, new dbus.Variant(this.methodReturnType, valuePercent));
+                await iface.Set(
+                    this.propertyInterface,
+                    this.methodName,
+                    new dbus.Variant(this.methodReturnType, valuePercent),
+                );
                 return;
             } else {
-                throw(new Error('Interface not available'));
+                throw new Error('Interface not available');
             }
         } catch (err: unknown) {
-            console.error(`DBusDisplayBrightnessGnome: setBrightness failed => ${err}`)
-            throw(err);
+            console.error(`DBusDisplayBrightnessGnome: setBrightness failed => ${err}`);
+            throw err;
         }
     }
 }

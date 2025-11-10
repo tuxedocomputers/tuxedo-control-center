@@ -18,13 +18,12 @@
  */
 
 import 'jasmine';
-const mock: typeof import("mock-fs") = require('mock-fs');
+const mock: typeof import('mock-fs') = require('mock-fs');
 import * as fs from 'node:fs';
 
 import { UsbController } from './UsbController';
 
 describe('UsbController', (): void => {
-
     let dev: UsbController;
 
     // Mock file structure in memory
@@ -41,26 +40,26 @@ describe('UsbController', (): void => {
                     idProduct: 'b59e',
                     idVendor: '04f2',
                     product: 'Chicony USB2.0 Camera',
-                    manufacturer: 'Chicony Electronics Co.,Ltd.'
+                    manufacturer: 'Chicony Electronics Co.,Ltd.',
                 },
                 '1-2:1.0': {},
                 '1-2:1.1': {},
             },
             '/sys/bus/usb/devices': {
-                '1-11': mock.symlink({path: '/realpath/1-11'}),
-                '1-11.1': mock.symlink({path: '/realpath/1-11.1'}),
-                '1-11.2': mock.symlink({path: '/realpath/1-11.2'}),
-                '1-11.3': mock.symlink({path: '/realpath/1-11.3'}),
-                '1-11.2:1.0': mock.symlink({path: '/realpath/1-11.2:1.0'}),
-                '1-11.2:1.1': mock.symlink({path: '/realpath/1-11.2:1.1'}),
-                '1-2': mock.symlink({path: '/realpath/1-2'}),
-                '1-2:1.0': mock.symlink({path: '/realpath/1-2:1.0'}),
-                '1-2:1.1': mock.symlink({path: '/realpath/1-2:1.1'}),
+                '1-11': mock.symlink({ path: '/realpath/1-11' }),
+                '1-11.1': mock.symlink({ path: '/realpath/1-11.1' }),
+                '1-11.2': mock.symlink({ path: '/realpath/1-11.2' }),
+                '1-11.3': mock.symlink({ path: '/realpath/1-11.3' }),
+                '1-11.2:1.0': mock.symlink({ path: '/realpath/1-11.2:1.0' }),
+                '1-11.2:1.1': mock.symlink({ path: '/realpath/1-11.2:1.1' }),
+                '1-2': mock.symlink({ path: '/realpath/1-2' }),
+                '1-2:1.0': mock.symlink({ path: '/realpath/1-2:1.0' }),
+                '1-2:1.1': mock.symlink({ path: '/realpath/1-2:1.1' }),
             },
             '/sys/bus/usb/drivers/usb': {
                 bind: '',
-                unbind: ''
-            }
+                unbind: '',
+            },
         });
 
         dev = new UsbController('/sys/bus/usb/devices/1-2');
@@ -86,13 +85,21 @@ describe('UsbController', (): void => {
     });
 
     it('should read device properties', (): void => {
-        expect((): void => { dev.idProduct.readValue(); }).not.toThrow();
+        expect((): void => {
+            dev.idProduct.readValue();
+        }).not.toThrow();
         expect(dev.idProduct.readValue()).toBe(46494);
-        expect((): void => { dev.idVendor.readValue(); }).not.toThrow();
+        expect((): void => {
+            dev.idVendor.readValue();
+        }).not.toThrow();
         expect(dev.idVendor.readValue()).toBe(1266);
-        expect((): void => { dev.product.readValue(); }).not.toThrow();
+        expect((): void => {
+            dev.product.readValue();
+        }).not.toThrow();
         expect(dev.product.readValue()).toBe('Chicony USB2.0 Camera');
-        expect((): void => { dev.manufacturer.readValue(); }).not.toThrow();
+        expect((): void => {
+            dev.manufacturer.readValue();
+        }).not.toThrow();
         expect(dev.manufacturer.readValue()).toBe('Chicony Electronics Co.,Ltd.');
     });
 

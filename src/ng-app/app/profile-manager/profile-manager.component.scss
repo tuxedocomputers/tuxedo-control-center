@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
- .title {
+.title {
     div {
         height: 100%;
         display: flex;
@@ -44,11 +44,11 @@
     left: 0px;
     padding: 0px;
     overflow-y: scroll;
-    
+
     .inner-profile-manager-content {
         margin: 0 10px 10px 10px;
     }
-    
+
     &.offset {
         top: 100px;
     }
@@ -63,18 +63,19 @@
 mat-toolbar {
     background: none;
     padding-top: 10px;
-    
+
     .profile-options {
         justify-content: space-between;
         padding-right: 0px;
     }
-    
+
     .menu-button {
-        padding-left: 30px; padding-right: 20px
+        padding-left: 30px;
+        padding-right: 20px;
     }
-    
+
     .info-options {
-        padding-right: 30px
+        padding-right: 30px;
     }
 }
 

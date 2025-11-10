@@ -17,54 +17,47 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {
-    ChangeDetectorRef,
-    Component,
-    type ElementRef,
-    type OnInit,
-    ViewChild,
-} from "@angular/core";
-import type { IpcRendererEvent } from "electron";
-import type { WebcamConstraints } from "src/common/models/TccWebcamSettings";
+import { ChangeDetectorRef, Component, type ElementRef, type OnInit, ViewChild } from '@angular/core';
+import type { IpcRendererEvent } from 'electron';
+import type { WebcamConstraints } from 'src/common/models/TccWebcamSettings';
 
 @Component({
-    selector: "app-webcam-preview",
-    templateUrl: "./webcam-preview.component.html",
-    styleUrls: ["./webcam-preview.component.scss"],
-    standalone: false
+    selector: 'app-webcam-preview',
+    templateUrl: './webcam-preview.component.html',
+    styleUrls: ['./webcam-preview.component.scss'],
+    standalone: false,
 })
 export class WebcamPreviewComponent implements OnInit {
-    @ViewChild("video", { static: true })
+    @ViewChild('video', { static: true })
     public video: ElementRef;
     private mediaStream: MediaStream;
     public spinnerActive: boolean = undefined;
-    
-    constructor(
-        public cdRef: ChangeDetectorRef
-    ) {}
-    
+
+    constructor(public cdRef: ChangeDetectorRef) {}
+
     public async ngOnInit(): Promise<void> {
-        window.webcam.onSettingWebcamWithLoading(async (event: IpcRendererEvent, config: WebcamConstraints): Promise<void> => {
-            this.spinnerActive = true;
-            this.cdRef.detectChanges();
-            document.getElementById("video").style.visibility = "hidden";
-            this.stopWebcam();
-            await this.setWebcamWithConfig(config);
-            window.webcamAPI.applyControls();
-            await new Promise<void>((resolve: () => void): NodeJS.Timeout => setTimeout(async (): Promise<void> => {
-                document.getElementById("video").style.visibility =
-                    "visible";
-                this.spinnerActive = false
+        window.webcam.onSettingWebcamWithLoading(
+            async (event: IpcRendererEvent, config: WebcamConstraints): Promise<void> => {
+                this.spinnerActive = true;
                 this.cdRef.detectChanges();
-                resolve()
-            }, 500));
-            }
+                document.getElementById('video').style.visibility = 'hidden';
+                this.stopWebcam();
+                await this.setWebcamWithConfig(config);
+                window.webcamAPI.applyControls();
+                await new Promise<void>(
+                    (resolve: () => void): NodeJS.Timeout =>
+                        setTimeout(async (): Promise<void> => {
+                            document.getElementById('video').style.visibility = 'visible';
+                            this.spinnerActive = false;
+                            this.cdRef.detectChanges();
+                            resolve();
+                        }, 500),
+                );
+            },
         );
     }
 
-    private async setWebcamWithConfig(
-        config: WebcamConstraints
-    ): Promise<void> {
+    private async setWebcamWithConfig(config: WebcamConstraints): Promise<void> {
         await navigator.mediaDevices
             .getUserMedia({
                 video: config,

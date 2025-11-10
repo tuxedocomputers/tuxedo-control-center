@@ -22,7 +22,7 @@
 }
 
 .title-row {
-    height:40px;
+    height: 40px;
     -webkit-app-region: drag;
     display: flex;
     justify-content: space-between;
@@ -30,19 +30,19 @@
     align-items: center;
 
     background-color: var(--foreground-color);
-    
+
     #title-left {
         display: flex;
         justify-content: space-between;
         align-items: center;
 
         #title-logo {
-            height:26px;
+            height: 26px;
         }
 
         #title-text {
             font-size: 16px;
-            margin-left:16px;
+            margin-left: 16px;
             color: var(--text-color);
         }
     }
@@ -50,8 +50,8 @@
     #title-right {
         -webkit-app-region: no-drag;
         svg {
-            width:14px;
-            margin-left:16px;
+            width: 14px;
+            margin-left: 16px;
             cursor: pointer;
         }
     }
@@ -74,7 +74,7 @@
     --sidenav-width: 240px;
     width: var(--sidenav-width);
     // height: 100%;
-    margin-top:10px;
+    margin-top: 10px;
 
     .sidenav-top {
         mat-list-item {

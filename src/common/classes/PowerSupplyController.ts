@@ -17,9 +17,14 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-const path: typeof import("path") = require("path");
+const path: typeof import('path') = require('path');
 import { SysFsController } from './SysFsController';
-import { SysFsPropertyBoolean, SysFsPropertyInteger, SysFsPropertyNumListExplicit, SysFsPropertyString } from './SysFsProperties';
+import {
+    SysFsPropertyBoolean,
+    SysFsPropertyInteger,
+    SysFsPropertyNumListExplicit,
+    SysFsPropertyString,
+} from './SysFsProperties';
 
 /**
  * Definitions as of 2023-08-11 from
@@ -41,28 +46,19 @@ export enum ChargeType {
 export class PowerSupplyController extends SysFsController {
     constructor(public readonly basePath: string) {
         super();
-        this.online = new SysFsPropertyBoolean(path.join(basePath, "online"));
-        this.type = new SysFsPropertyString(path.join(basePath, "type"));
+        this.online = new SysFsPropertyBoolean(path.join(basePath, 'online'));
+        this.type = new SysFsPropertyString(path.join(basePath, 'type'));
         this.chargeControlStartThreshold = new SysFsPropertyInteger(
-            path.join(basePath, "charge_control_start_threshold"),
+            path.join(basePath, 'charge_control_start_threshold'),
         );
-        this.chargeControlEndThreshold = new SysFsPropertyInteger(
-            path.join(basePath, "charge_control_end_threshold"),
+        this.chargeControlEndThreshold = new SysFsPropertyInteger(path.join(basePath, 'charge_control_end_threshold'));
+        this.chargeType = new SysFsPropertyString(path.join(basePath, 'charge_type'));
+        this.chargeControlStartAvailableThresholds = new SysFsPropertyNumListExplicit(
+            path.join(basePath, 'charge_control_start_available_thresholds'),
         );
-        this.chargeType = new SysFsPropertyString(
-            path.join(basePath, "charge_type"),
+        this.chargeControlEndAvailableThresholds = new SysFsPropertyNumListExplicit(
+            path.join(basePath, 'charge_control_end_available_thresholds'),
         );
-        this.chargeControlStartAvailableThresholds =
-            new SysFsPropertyNumListExplicit(
-                path.join(
-                    basePath,
-                    "charge_control_start_available_thresholds",
-                ),
-            );
-        this.chargeControlEndAvailableThresholds =
-            new SysFsPropertyNumListExplicit(
-                path.join(basePath, "charge_control_end_available_thresholds"),
-            );
     }
 
     public readonly online: SysFsPropertyBoolean;
@@ -87,7 +83,7 @@ export class PowerSupplyController extends SysFsController {
                     ctrlBatteries.push(ps);
                 }
             } catch (err: unknown) {
-                console.error(`PowerSupplyController: getPowerSupplyBatteries failed => ${err}`)
+                console.error(`PowerSupplyController: getPowerSupplyBatteries failed => ${err}`);
             }
         }
         return ctrlBatteries;

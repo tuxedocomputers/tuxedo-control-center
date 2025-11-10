@@ -25,39 +25,32 @@ import {
     type OnDestroy,
     type OnInit,
     ViewChild,
-} from "@angular/core";
-import { Chart, type ChartTypeRegistry, type ChartConfiguration, type TooltipItem } from "chart.js";
+} from '@angular/core';
+import { Chart, type ChartTypeRegistry, type ChartConfiguration, type TooltipItem } from 'chart.js';
 import {
     chartAnimation,
     chartMaintainAspectRatio,
     chartResponsive,
     createLineChartDataset,
     createLineChartScales,
-} from "src/common/classes/FanChartProperties";
-import {
-    formatTemp,
-    manageCriticalTemperature,
-} from "src/common/classes/FanUtils";
-import {
-    type ITccFanProfile,
-    type ITccFanTableEntry,
-    defaultFanProfiles,
-} from "src/common/models/TccFanTable";
-import { ConfigService } from "../config.service";
-import { UtilsService } from "../utils.service";
+} from 'src/common/classes/FanChartProperties';
+import { formatTemp, manageCriticalTemperature } from 'src/common/classes/FanUtils';
+import { type ITccFanProfile, type ITccFanTableEntry, defaultFanProfiles } from 'src/common/models/TccFanTable';
+import { ConfigService } from '../config.service';
+import { UtilsService } from '../utils.service';
 
 @Component({
-    selector: "app-fan-chart",
-    templateUrl: "./fan-chart.component.html",
-    styleUrls: ["./fan-chart.component.scss"],
+    selector: 'app-fan-chart',
+    templateUrl: './fan-chart.component.html',
+    styleUrls: ['./fan-chart.component.scss'],
     standalone: false,
 })
 export class FanChartComponent implements OnInit, OnDestroy, AfterViewInit {
     public tempsLabels: string[];
-    public graphType: string = "line";
+    public graphType: string = 'line';
     private dataCollectionTimeout: NodeJS.Timeout = null;
 
-    @ViewChild("chartCanvas") chartCanvas!: ElementRef;
+    @ViewChild('chartCanvas') chartCanvas!: ElementRef;
     private chart: Chart;
 
     private cpuData: { x: number; y: number }[] = [];
@@ -70,22 +63,24 @@ export class FanChartComponent implements OnInit, OnDestroy, AfterViewInit {
 
     public customFanCurve: ITccFanProfile = undefined;
     public tempCustomFanCurve: ITccFanProfile = undefined;
-    
-    private textColor: string = "";
+
+    private textColor: string = '';
     private fahrenheit: boolean = false;
 
-
-    constructor(private config: ConfigService, private utils: UtilsService) {
+    constructor(
+        private config: ConfigService,
+        private utils: UtilsService,
+    ) {
         this.textColor = this.utils.getTextColor();
         this.fahrenheit = this.config?.getSettings()?.fahrenheit;
     }
 
     public ngOnInit(): void {}
-    
+
     // this.chart.config._config.options.plugins.tooltip.animation is sometimes set to false
     public ngDoCheck(): void {
         if (this.chart) {
-            this.chart.options.plugins.tooltip.animation = chartAnimation
+            this.chart.options.plugins.tooltip.animation = chartAnimation;
         }
     }
 
@@ -107,18 +102,14 @@ export class FanChartComponent implements OnInit, OnDestroy, AfterViewInit {
             gpuData.push(this.applyParameters(tableEntry));
         }
 
-        this.cpuData = cpuData.map(
-            (value: number, index: number): { x: number; y: number } => ({
-                x: index,
-                y: value,
-            })
-        );
-        this.gpuData = gpuData.map(
-            (value: number, index: number): { x: number; y: number } => ({
-                x: index,
-                y: value,
-            })
-        );
+        this.cpuData = cpuData.map((value: number, index: number): { x: number; y: number } => ({
+            x: index,
+            y: value,
+        }));
+        this.gpuData = gpuData.map((value: number, index: number): { x: number; y: number } => ({
+            x: index,
+            y: value,
+        }));
     }
 
     @Input() public set offsetFanspeed(value: number) {
@@ -132,7 +123,7 @@ export class FanChartComponent implements OnInit, OnDestroy, AfterViewInit {
 
     @Input() public set fanProfile(nextProfile: string) {
         const nextProfileIndex: number = defaultFanProfiles.findIndex(
-            (profile: ITccFanProfile): boolean => profile.name === nextProfile
+            (profile: ITccFanProfile): boolean => profile.name === nextProfile,
         );
         if (nextProfileIndex !== -1) {
             this._fanProfile = defaultFanProfiles[nextProfileIndex];
@@ -171,7 +162,7 @@ export class FanChartComponent implements OnInit, OnDestroy, AfterViewInit {
 
     private initChart(): void {
         const chartConfiguration: ChartConfiguration = {
-            type: "line",
+            type: 'line',
             options: {
                 normalized: true,
                 parsing: false,
@@ -191,28 +182,21 @@ export class FanChartComponent implements OnInit, OnDestroy, AfterViewInit {
 
                     tooltip: {
                         callbacks: {
-                            label:(
-                                tooltipItem: TooltipItem<keyof ChartTypeRegistry>,
-                            ): string => {
+                            label: (tooltipItem: TooltipItem<keyof ChartTypeRegistry>): string => {
                                 return `${tooltipItem.dataset.label}: ${tooltipItem.formattedValue} %`;
                             },
-                            title: (
-                                tooltipItems: TooltipItem<keyof ChartTypeRegistry>[]
-                            ): string => {
-                                if (!tooltipItems.length) return "";
+                            title: (tooltipItems: TooltipItem<keyof ChartTypeRegistry>[]): string => {
+                                if (!tooltipItems.length) return '';
 
                                 const dataIndex = tooltipItems[0].dataIndex;
                                 return formatTemp(dataIndex, this.fahrenheit);
-                            }
+                            },
                         },
                     },
                 },
-                scales: createLineChartScales(
-                    this.fahrenheit,
-                    this.textColor
-                ),
+                scales: createLineChartScales(this.fahrenheit, this.textColor),
                 interaction: {
-                    mode: "index",
+                    mode: 'index',
                     intersect: false,
                 },
                 animation: chartAnimation,
@@ -225,14 +209,12 @@ export class FanChartComponent implements OnInit, OnDestroy, AfterViewInit {
                     $localize`:@@cpuFan:CPU Fan`,
                     this.cpuData,
                     $localize`:@@gpuFan:GPU Fan`,
-                    this.gpuData
+                    this.gpuData,
                 ),
             },
         };
-        
-        const ctx = this.chartCanvas.nativeElement.getContext(
-            "2d"
-        ) as CanvasRenderingContext2D;
+
+        const ctx = this.chartCanvas.nativeElement.getContext('2d') as CanvasRenderingContext2D;
 
         this.chart = new Chart(ctx, chartConfiguration);
     }

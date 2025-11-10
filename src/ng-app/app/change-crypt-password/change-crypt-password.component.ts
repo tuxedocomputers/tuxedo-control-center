@@ -21,13 +21,13 @@ import { Component, type OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { FormErrorStateMatcher } from 'src/ng-app/common/formErrorStateMatcher';
 import { UtilsService } from '../utils.service';
-import type { IDrive } from "../../../common/models/IDrive";
+import type { IDrive } from '../../../common/models/IDrive';
 
 @Component({
     selector: 'app-change-crypt-password',
     templateUrl: './change-crypt-password.component.html',
     styleUrls: ['./change-crypt-password.component.scss'],
-    standalone: false
+    standalone: false,
 })
 export class ChangeCryptPasswordComponent implements OnInit {
     matcher: FormErrorStateMatcher = new FormErrorStateMatcher();
@@ -41,31 +41,43 @@ export class ChangeCryptPasswordComponent implements OnInit {
 
     passwordFormGroup: FormGroup;
 
-    constructor(
-        private utils: UtilsService
-    ) { }
+    constructor(private utils: UtilsService) {}
 
     async ngOnInit(): Promise<void> {
-        this.passwordFormGroup = new FormGroup({
-            cryptPassword: new FormControl('', [Validators.required, Validators.minLength(this.minLength), Validators.maxLength(this.maxLength)]),
-            newPassword: new FormControl('', [Validators.required, Validators.minLength(this.minLength), Validators.maxLength(this.maxLength)]),
-            confirmPassword: new FormControl('', [Validators.required, Validators.minLength(this.minLength), Validators.maxLength(this.maxLength)])
-        }, { validators: [this.confirmValidation] })
+        this.passwordFormGroup = new FormGroup(
+            {
+                cryptPassword: new FormControl('', [
+                    Validators.required,
+                    Validators.minLength(this.minLength),
+                    Validators.maxLength(this.maxLength),
+                ]),
+                newPassword: new FormControl('', [
+                    Validators.required,
+                    Validators.minLength(this.minLength),
+                    Validators.maxLength(this.maxLength),
+                ]),
+                confirmPassword: new FormControl('', [
+                    Validators.required,
+                    Validators.minLength(this.minLength),
+                    Validators.maxLength(this.maxLength),
+                ]),
+            },
+            { validators: [this.confirmValidation] },
+        );
 
         this.crypt_drives = (await window.driveController.getDrives()).filter((x: IDrive): boolean => x.crypt);
 
-        this.buttonType = "password";
-        this.show_password_button_text = $localize `:@@cryptButtonShowPassword:Show Passwords`;
+        this.buttonType = 'password';
+        this.show_password_button_text = $localize`:@@cryptButtonShowPassword:Show Passwords`;
     }
 
     showPassword(): void {
-        if (this.buttonType === "password") {
-            this.buttonType = "text";
-            this.show_password_button_text = $localize `:@@cryptButtonHidePassword:Hide Passwords`;
-        }
-        else {
-            this.buttonType = "password";
-            this.show_password_button_text = $localize `:@@cryptButtonShowPassword:Show Passwords`;
+        if (this.buttonType === 'password') {
+            this.buttonType = 'text';
+            this.show_password_button_text = $localize`:@@cryptButtonHidePassword:Hide Passwords`;
+        } else {
+            this.buttonType = 'password';
+            this.show_password_button_text = $localize`:@@cryptButtonShowPassword:Show Passwords`;
         }
     }
 
@@ -74,15 +86,15 @@ export class ChangeCryptPasswordComponent implements OnInit {
         this.changeCryptPassword().then((execStatus: boolean): void => {
             if (execStatus) {
                 this.passwordFormGroup.setValue({
-                    cryptPassword: "",
-                    newPassword: "",
-                    confirmPassword: ""
+                    cryptPassword: '',
+                    newPassword: '',
+                    confirmPassword: '',
                 });
 
                 // clearing error status, otherwise input fields are marked as errors after success
-                this.passwordFormGroup.get("cryptPassword").setErrors(null);
-                this.passwordFormGroup.get("newPassword").setErrors(null);
-                this.passwordFormGroup.get("confirmPassword").setErrors(null);
+                this.passwordFormGroup.get('cryptPassword').setErrors(null);
+                this.passwordFormGroup.get('newPassword').setErrors(null);
+                this.passwordFormGroup.get('confirmPassword').setErrors(null);
             }
 
             this.utils.pageDisabled = false;
@@ -90,31 +102,31 @@ export class ChangeCryptPasswordComponent implements OnInit {
     }
 
     private async changeCryptPassword(): Promise<boolean> {
-        const newPassword: string = this.passwordFormGroup.get("newPassword").value;
-        const oldPassword: string = this.passwordFormGroup.get("cryptPassword").value;
-        const confirmPassword: string = this.passwordFormGroup.get("confirmPassword").value;
+        const newPassword: string = this.passwordFormGroup.get('newPassword').value;
+        const oldPassword: string = this.passwordFormGroup.get('cryptPassword').value;
+        const confirmPassword: string = this.passwordFormGroup.get('confirmPassword').value;
 
-        if (newPassword === "" || newPassword !== confirmPassword || oldPassword === "") {
+        if (newPassword === '' || newPassword !== confirmPassword || oldPassword === '') {
             return false;
         }
-        
+
         try {
             await window.ipc.changeCryptPassword(newPassword, oldPassword, confirmPassword);
-            this.successtext_cryptsetup = $localize `:@@cryptfinishprocess:Crypt password changed successfully`;
+            this.successtext_cryptsetup = $localize`:@@cryptfinishprocess:Crypt password changed successfully`;
             this.errortext_cryptsetup = '';
             return true;
         } catch (err: unknown) {
-            console.error(`change-crypt-password: changeCryptPassword failed => ${err}`)
+            console.error(`change-crypt-password: changeCryptPassword failed => ${err}`);
             this.successtext_cryptsetup = '';
-            this.errortext_cryptsetup = $localize `:@@errornewpassword:Error: Could not change crypt password (wrong old crypt password?)`;
+            this.errortext_cryptsetup = $localize`:@@errornewpassword:Error: Could not change crypt password (wrong old crypt password?)`;
             return false;
         }
     }
 
     confirmValidation(group: FormGroup): { notSame: boolean } {
-        const pass: string = group.get("newPassword").value;
-        const confirmPass: string = group.get("confirmPassword").value;
+        const pass: string = group.get('newPassword').value;
+        const confirmPass: string = group.get('confirmPassword').value;
 
-        return pass === confirmPass ? null : { notSame: true }
+        return pass === confirmPass ? null : { notSame: true };
     }
 }

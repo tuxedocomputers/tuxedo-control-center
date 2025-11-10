@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-@use "@angular/material" as mat;
+@use '@angular/material' as mat;
 
 * {
     -webkit-user-drag: none;
@@ -29,7 +29,7 @@
 
 .content-container {
     max-width: 900px;
-    margin:auto;
+    margin: auto;
 
     &.centered {
         text-align: center;
@@ -40,7 +40,7 @@
     height: 55px;
 
     &.row {
-        margin-right:10px;
+        margin-right: 10px;
     }
 }
 
@@ -65,29 +65,29 @@
     hr {
         width: 100%;
     }
-    
+
     hr:first-of-type {
         opacity: 0.3;
         margin-bottom: 20px;
     }
-    
+
     hr:not(:first-of-type) {
         opacity: 0.2;
     }
-    
+
     div hr {
         opacity: 0.2 !important;
         margin-bottom: 8px !important;
     }
-    
+
     .card-title {
         font-size: 24px;
     }
-    
+
     .card-header {
         font-size: 18px;
     }
-    
+
     .card-content {
         font-size: 16px;
     }
@@ -119,7 +119,7 @@
         justify-content: stretch;
         align-items: center;
         margin-bottom: 20px;
-        
+
         hr {
             opacity: 0.3;
             width: 100%;
@@ -161,7 +161,7 @@
     }
 }
 
-.mdc-tooltip--multiline .mat-mdc-tooltip-surface{
+.mdc-tooltip--multiline .mat-mdc-tooltip-surface {
     text-align: center !important;
 }
 
@@ -173,7 +173,7 @@ mat-radio-button.hide-radio-circle {
 
 mat-tab-group.active-always-focused {
     .mat-tab-label-active {
-        opacity: 1.0;
+        opacity: 1;
     }
 }
 
@@ -184,8 +184,8 @@ mat-tab-group.active-always-focused {
 
     // todo: font with typography does not apply everywhere, changing globally
     // font should be changed with typography
-    font-family: "Titillium Web";
- }
+    font-family: 'Titillium Web';
+}
 
 @include mat.list-overrides(
     (
@@ -216,7 +216,7 @@ mat-tab-group.active-always-focused {
         container-divider-color: var(--container-divider-color),
     )
 );
- 
+
 @include mat.divider-overrides(
     (
         color: var(--divider-color),

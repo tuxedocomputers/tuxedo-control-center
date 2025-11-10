@@ -19,16 +19,13 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
 <div class="global-settings">
     <div class="inner-global-settings">
-
         <mat-card class="tcc-card card-global-settings">
             <mat-card-title>
                 <div i18n="@@cGlobalSettingsTitle" class="title">Settings</div>
             </mat-card-title>
             <hr />
-            
-            <div i18n="@@cGlobalSettingsDescription" class="description">
-                The settings area contains GUI settings and settings that affects all profiles.
-            </div>
+
+            <div i18n="@@cGlobalSettingsDescription" class="description">The settings area contains GUI settings and settings that affects all profiles.</div>
         </mat-card>
 
         <mat-accordion class="tcc-accordion">
@@ -40,40 +37,36 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 <use href="./assets/images/icon_settings.svg#Icon"></use>
                             </svg>
                         </mat-icon>
-                        <div i18n="@@cGlobalSettingsGlobalProfileSettingsTitle" class="panel-title">Global profile
-                            settings</div>
+                        <div i18n="@@cGlobalSettingsGlobalProfileSettingsTitle" class="panel-title">Global profile settings</div>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
 
                 <div class="content">
-
                     <mat-grid-list [cols]="gridParams.cols" rowHeight="4em">
                         <mat-grid-tile [colspan]="gridParams.header">
                             <div i18n="@@cGlobalSettingsTemperatureDisplayHeader" class="header">Temperature Display</div>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.value">
                             <content class="value">
-                                <span [hidden]="temperatureDisplayFahrenheit"
-                                    i18n="@@cGlobalSettingsTemperatureDisplayActivated">Celsius</span>
-                                <span [hidden]="!temperatureDisplayFahrenheit"
-                                    i18n="@@cGlobalSettingsTemperatureDisplayDeactivated">Fahrenheit</span>
+                                <span [hidden]="temperatureDisplayFahrenheit" i18n="@@cGlobalSettingsTemperatureDisplayActivated">Celsius</span>
+                                <span [hidden]="!temperatureDisplayFahrenheit" i18n="@@cGlobalSettingsTemperatureDisplayDeactivated">Fahrenheit</span>
                             </content>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.input">
                             <content class="input">
-                                <mat-button-toggle #inputTemperatureDisplaySettings color="primary"
-                                    (change)="onTemperatureDisplayChanged(!temperatureDisplayFahrenheit)" [value]="!temperatureDisplayFahrenheit">
-                                    <span [hidden]="!temperatureDisplayFahrenheit"
-                                    i18n="@@cGlobalSettingsTemperatureDisplayActivated">Celsius</span>
-                                <span [hidden]="temperatureDisplayFahrenheit"
-                                    i18n="@@cGlobalSettingsTemperatureDisplayDeactivated">Fahrenheit</span>
+                                <mat-button-toggle
+                                    #inputTemperatureDisplaySettings
+                                    color="primary"
+                                    (change)="onTemperatureDisplayChanged(!temperatureDisplayFahrenheit)"
+                                    [value]="!temperatureDisplayFahrenheit">
+                                    <span [hidden]="!temperatureDisplayFahrenheit" i18n="@@cGlobalSettingsTemperatureDisplayActivated">Celsius</span>
+                                    <span [hidden]="temperatureDisplayFahrenheit" i18n="@@cGlobalSettingsTemperatureDisplayDeactivated">Fahrenheit</span>
                                 </mat-button-toggle>
                             </content>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.undo"></mat-grid-tile>
                     </mat-grid-list>
-                    <div class=margin-bottom i18n="@@cGlobalSettingsTemperatureDisplayDescription" class="description">Switch between Celsius and Fahrenheit
-                    </div>
+                    <div class="margin-bottom" i18n="@@cGlobalSettingsTemperatureDisplayDescription" class="description">Switch between Celsius and Fahrenheit</div>
 
                     <mat-grid-list [cols]="gridParams.cols" rowHeight="4em">
                         <mat-grid-tile [colspan]="gridParams.header">
@@ -81,26 +74,19 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.value">
                             <content class="value">
-                                <span [hidden]="!inputCPUSettings.checked"
-                                    i18n="@@cGlobalSettingsCpuFrequencyActivated">activated</span>
-                                <span [hidden]="inputCPUSettings.checked"
-                                    i18n="@@cGlobalSettingsCpuFrequencyDeactivated">deactivated</span>
+                                <span [hidden]="!inputCPUSettings.checked" i18n="@@cGlobalSettingsCpuFrequencyActivated">activated</span>
+                                <span [hidden]="inputCPUSettings.checked" i18n="@@cGlobalSettingsCpuFrequencyDeactivated">deactivated</span>
                             </content>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.input">
                             <content class="input">
-                                <mat-checkbox #inputCPUSettings color="primary" [(ngModel)]="cpuSettingsEnabled"
-                                    (change)="onCPUSettingsEnabledChanged($event)">
-                                </mat-checkbox>
+                                <mat-checkbox #inputCPUSettings color="primary" [(ngModel)]="cpuSettingsEnabled" (change)="onCPUSettingsEnabledChanged($event)"> </mat-checkbox>
                             </content>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.undo"></mat-grid-tile>
                     </mat-grid-list>
-                    <div class=margin-bottom i18n="@@cGlobalSettingsCpuFrequencyDescription" class="description">On deactivate, CPU
-                        frequency
-                        control is <strong>not</strong> reset to default. Default settings need to be restored by hand
-                        or a
-                        system reboot.
+                    <div class="margin-bottom" i18n="@@cGlobalSettingsCpuFrequencyDescription" class="description">
+                        On deactivate, CPU frequency control is <strong>not</strong> reset to default. Default settings need to be restored by hand or a system reboot.
                     </div>
 
                     <mat-grid-list [cols]="gridParams.cols" rowHeight="4em" class="global-settings-grid">
@@ -109,25 +95,18 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.value">
                             <content class="value">
-                                <span [hidden]="!inputFanControl.checked"
-                                    i18n="@@cGlobalSettingsFanControlActivated">activated</span>
-                                <span [hidden]="inputFanControl.checked"
-                                    i18n="@@cGlobalSettingsFanControlDeactivated">deactivated</span>
+                                <span [hidden]="!inputFanControl.checked" i18n="@@cGlobalSettingsFanControlActivated">activated</span>
+                                <span [hidden]="inputFanControl.checked" i18n="@@cGlobalSettingsFanControlDeactivated">deactivated</span>
                             </content>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.input">
                             <content class="input">
-                                <mat-checkbox #inputFanControl color="primary" [(ngModel)]="fanControlEnabled"
-                                    (change)="onFanControlEnabledChanged($event)">
-                                </mat-checkbox>
+                                <mat-checkbox #inputFanControl color="primary" [(ngModel)]="fanControlEnabled" (change)="onFanControlEnabledChanged($event)"> </mat-checkbox>
                             </content>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.undo"></mat-grid-tile>
                     </mat-grid-list>
-                    <div class=margin-bottom i18n="@@cGlobalSettingsFanControlDescription" class="description">On deactivate, the default
-                        automatic
-                        fan control is restored
-                        directly.</div>
+                    <div class="margin-bottom" i18n="@@cGlobalSettingsFanControlDescription" class="description">On deactivate, the default automatic fan control is restored directly.</div>
 
                     <mat-grid-list [cols]="gridParams.cols" rowHeight="4em" class="global-settings-grid">
                         <mat-grid-tile [colspan]="gridParams.header">
@@ -135,26 +114,20 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.value">
                             <content class="value">
-                                <span [hidden]="!inputKeyboardBacklightControl.checked"
-                                    i18n="@@cGlobalSettingsKeyboardBacklightActivated">activated</span>
-                                <span [hidden]="inputKeyboardBacklightControl.checked"
-                                    i18n="@@cGlobalSettingsKeyboardBacklightDeactivated">deactivated</span>
+                                <span [hidden]="!inputKeyboardBacklightControl.checked" i18n="@@cGlobalSettingsKeyboardBacklightActivated">activated</span>
+                                <span [hidden]="inputKeyboardBacklightControl.checked" i18n="@@cGlobalSettingsKeyboardBacklightDeactivated">deactivated</span>
                             </content>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.input">
                             <content class="input">
-                                <mat-checkbox #inputKeyboardBacklightControl color="primary"
-                                    [(ngModel)]="keyboardBacklightControlEnabled"
-                                    (change)="onKeyboardBacklightControlEnabledChanged($event)">
+                                <mat-checkbox #inputKeyboardBacklightControl color="primary" [(ngModel)]="keyboardBacklightControlEnabled" (change)="onKeyboardBacklightControlEnabledChanged($event)">
                                 </mat-checkbox>
                             </content>
                         </mat-grid-tile>
                         <mat-grid-tile [colspan]="gridParams.undo"></mat-grid-tile>
                     </mat-grid-list>
-                    <div i18n="@@cGlobalSettingsKeyboardBacklightDescription" class="description">On deactivate, keyboard backlight settings
-                        are <strong>not</strong> reset to default.
-                        Default
-                        settings need to be restored by hand or a system reboot.
+                    <div i18n="@@cGlobalSettingsKeyboardBacklightDescription" class="description">
+                        On deactivate, keyboard backlight settings are <strong>not</strong> reset to default. Default settings need to be restored by hand or a system reboot.
                     </div>
                 </div>
             </mat-expansion-panel>
@@ -171,53 +144,39 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                 <div class="content">
-                    <div [hidden]=!forceYUV420OutputSwitchAvailable>
-                        <div class=margin-top i18n="@@cGlobalSettingsChromaSubsamplingDescriptionHeader">Force Chroma
-                            Subsampling
-                            (Y'CbCr 4:2:0) if available:</div>
+                    <div [hidden]="!forceYUV420OutputSwitchAvailable">
+                        <div class="margin-top" i18n="@@cGlobalSettingsChromaSubsamplingDescriptionHeader">Force Chroma Subsampling (Y'CbCr 4:2:0) if available:</div>
                         <!--Long form of ngFor, because short form can't be used without adding a HTML element-->
                         <ng-template ngFor let-card [ngForOf]="ycbcr420Workaround" let-i="index">
-                            <mat-grid-list *ngFor="let port of Object.keys(card)" [cols]="gridParams.cols"
-                                rowHeight="4em" class="global-settings-grid">
-                                <mat-grid-tile class=margin-left [colspan]="gridParams.header">
-                                    <div i18n="@@cGlobalSettingsChromaSubsamplingYCbCr420WorkaroundLabel">Port
-                                        {{port}} of
-                                        Card {{i}}
-                                    </div>
+                            <mat-grid-list *ngFor="let port of Object.keys(card)" [cols]="gridParams.cols" rowHeight="4em" class="global-settings-grid">
+                                <mat-grid-tile class="margin-left" [colspan]="gridParams.header">
+                                    <div i18n="@@cGlobalSettingsChromaSubsamplingYCbCr420WorkaroundLabel">Port {{ port }} of Card {{ i }}</div>
                                 </mat-grid-tile>
                                 <mat-grid-tile [colspan]="gridParams.value">
                                     <content class="value">
-                                        <span [hidden]="!inputYCbCr420Workaround.checked"
-                                            i18n="@@cGlobalSettingsChromaSubsamplingYCbCr420WorkaroundActivated">activated</span>
-                                        <span [hidden]="inputYCbCr420Workaround.checked"
-                                            i18n="@@cGlobalSettingsChromaSubsamplingYCbCr420WorkaroundDeactivated">deactivated</span>
+                                        <span [hidden]="!inputYCbCr420Workaround.checked" i18n="@@cGlobalSettingsChromaSubsamplingYCbCr420WorkaroundActivated">activated</span>
+                                        <span [hidden]="inputYCbCr420Workaround.checked" i18n="@@cGlobalSettingsChromaSubsamplingYCbCr420WorkaroundDeactivated">deactivated</span>
                                     </content>
                                 </mat-grid-tile>
                                 <mat-grid-tile [colspan]="gridParams.input">
                                     <content class="input">
-                                        <mat-checkbox #inputYCbCr420Workaround color="primary"
-                                            [(ngModel)]="ycbcr420Workaround[i][port]"
-                                            (change)="onYCbCr420WorkaroundChanged($event, i, port)">
+                                        <mat-checkbox #inputYCbCr420Workaround color="primary" [(ngModel)]="ycbcr420Workaround[i][port]" (change)="onYCbCr420WorkaroundChanged($event, i, port)">
                                         </mat-checkbox>
                                     </content>
                                 </mat-grid-tile>
                                 <mat-grid-tile [colspan]="gridParams.undo"></mat-grid-tile>
                             </mat-grid-list>
                         </ng-template>
-                        <div i18n="@@cGlobalSettingsChromaSubsamplingDescription">This setting might fix flickering on
-                            4k&#64;60Hz
-                            with certain HDMI cables. It does so by using a lossy compression to reduce the datarate
-                            over the
-                            cable To ensure that the setting gets applied you need to unplug and replug the monitor or
-                            restart
-                            your computer. On some devices the HDMI ports are also named DisplayPort or DP internally
-                            and are
-                            therefore listed as such here.</div>
+                        <div i18n="@@cGlobalSettingsChromaSubsamplingDescription">
+                            This setting might fix flickering on 4k&#64;60Hz with certain HDMI cables. It does so by using a lossy compression to reduce the datarate over the cable To ensure that the
+                            setting gets applied you need to unplug and replug the monitor or restart your computer. On some devices the HDMI ports are also named DisplayPort or DP internally and are
+                            therefore listed as such here.
+                        </div>
                     </div>
                 </div>
             </mat-expansion-panel>
 
-            <mat-expansion-panel [ngClass]="{'hide': !hasChargingSettings}">
+            <mat-expansion-panel [ngClass]="{ hide: !hasChargingSettings }">
                 <mat-expansion-panel-header>
                     <mat-panel-title>
                         <mat-icon>
@@ -225,20 +184,18 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 <use href="./assets/images/icon_batterycharger.svg#Icon"></use>
                             </svg>
                         </mat-icon>
-                        <div i18n="@@cGlobalSettingsBatteryChargingTitle" class="panel-title">Battery charging
-                            options
-                        </div>
-                        <a matTooltip="Open info page..."
+                        <div i18n="@@cGlobalSettingsBatteryChargingTitle" class="panel-title">Battery charging options</div>
+                        <a
+                            matTooltip="Open info page..."
                             i18n-matTooltip="@@chargingProfilesOpenInfoTooltip"
                             matTooltipPosition="right"
                             (click)="$event.stopPropagation(); openExternalUrl(chargingProfilesUrlHref)"
                             class="info-icon"
                             style="display: flex; width: 40px">
-                             <svg viewBox="0 0 512 512" class="tcc-icons info-icon-link">
-                                <use href="./assets/images/icon_info.svg#Icon">
-                                </use>
+                            <svg viewBox="0 0 512 512" class="tcc-icons info-icon-link">
+                                <use href="./assets/images/icon_info.svg#Icon"></use>
                             </svg>
-                         </a>
+                        </a>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                 <div class="content">
@@ -259,11 +216,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </mat-expansion-panel-header>
                 <div class="theme-settings-content">
                     <mat-button-toggle-group [formControl]="ctrlBrightnessMode" (change)="onBrightnessModeCtrlChange()">
-                        <mat-button-toggle value="light"
-                            i18n="@@cGlobalSettingsThemeLightLabel">Light</mat-button-toggle>
+                        <mat-button-toggle value="light" i18n="@@cGlobalSettingsThemeLightLabel">Light</mat-button-toggle>
                         <mat-button-toggle value="dark" i18n="@@cGlobalSettingsThemeDarkLabel">Dark</mat-button-toggle>
-                        <mat-button-toggle value="system" i18n="@@cGlobalSettingsThemeSystemSettingLabel">System
-                            setting</mat-button-toggle>
+                        <mat-button-toggle value="system" i18n="@@cGlobalSettingsThemeSystemSettingLabel">System setting</mat-button-toggle>
                     </mat-button-toggle-group>
                 </div>
             </mat-expansion-panel>
@@ -279,22 +234,18 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <div i18n="@@cGlobalSettingsTomteTitle" class="panel-title">Tomte</div>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
-                <div class="content">
-                </div>
+                <div class="content"></div>
             </mat-expansion-panel>
 
-            <mat-expansion-panel [expanded]="expandPrimeSelect"
-                *ngIf="isIGpuAvailable() && isDGpuAvailable() && primeState != 'off' && primeState != '-1' && isX11 === 1">
-            <mat-expansion-panel-header>
+            <mat-expansion-panel [expanded]="expandPrimeSelect" *ngIf="isIGpuAvailable() && isDGpuAvailable() && primeState != 'off' && primeState != '-1' && isX11 === 1">
+                <mat-expansion-panel-header>
                     <mat-panel-title>
                         <mat-icon>
                             <svg viewBox="0 0 512 512">
                                 <use href="./assets/images/icon_gpu.svg#Icon"></use>
                             </svg>
                         </mat-icon>
-                        <div i18n="@@cGlobalSettingsPrimeSelectTitle" class="panel-title">Graphics switching (requires PC
-                            restart)
-                        </div>
+                        <div i18n="@@cGlobalSettingsPrimeSelectTitle" class="panel-title">Graphics switching (requires PC restart)</div>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                 <div class="content">
@@ -302,6 +253,5 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </div>
             </mat-expansion-panel>
         </mat-accordion>
-
     </div>
 </div>

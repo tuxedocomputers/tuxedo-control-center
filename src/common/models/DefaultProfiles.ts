@@ -18,7 +18,7 @@
  */
 
 import type { ITccProfile } from './TccProfile';
-import { customFanPreset } from "./TccFanTable";
+import { customFanPreset } from './TccFanTable';
 
 export enum LegacyDefaultProfileIDs {
     Default = '__legacy_default__',
@@ -52,7 +52,7 @@ const maxEnergySave: ITccProfile = {
         useRefRate: false,
         xResolution: 1920,
         yResolution: 1080,
-        useResolution: false
+        useResolution: false,
     },
     cpu: {
         onlineCores: undefined,
@@ -61,11 +61,11 @@ const maxEnergySave: ITccProfile = {
         scalingMaxFrequency: undefined,
         governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
         energyPerformancePreference: 'balance_performance',
-        noTurbo: false
+        noTurbo: false,
     },
     webcam: {
         status: true,
-        useStatus: true
+        useStatus: true,
     },
     fan: {
         useControl: true,
@@ -77,7 +77,7 @@ const maxEnergySave: ITccProfile = {
     },
     odmProfile: { name: 'power_save' },
     odmPowerLimits: { tdpValues: [5, 10, 15] },
-    nvidiaPowerCTRLProfile: { cTGPOffset: 0 }
+    nvidiaPowerCTRLProfile: { cTGPOffset: 0 },
 };
 
 const silent: ITccProfile = {
@@ -91,7 +91,7 @@ const silent: ITccProfile = {
         useRefRate: false,
         xResolution: -1,
         yResolution: -1,
-        useResolution: false
+        useResolution: false,
     },
     cpu: {
         onlineCores: undefined,
@@ -100,11 +100,11 @@ const silent: ITccProfile = {
         scalingMaxFrequency: undefined,
         governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
         energyPerformancePreference: 'balance_performance',
-        noTurbo: false
+        noTurbo: false,
     },
     webcam: {
         status: true,
-        useStatus: true
+        useStatus: true,
     },
     fan: {
         useControl: true,
@@ -116,7 +116,7 @@ const silent: ITccProfile = {
     },
     odmProfile: { name: 'power_save' },
     odmPowerLimits: { tdpValues: [10, 15, 25] },
-    nvidiaPowerCTRLProfile: { cTGPOffset: 0 }
+    nvidiaPowerCTRLProfile: { cTGPOffset: 0 },
 };
 
 const office: ITccProfile = {
@@ -130,7 +130,7 @@ const office: ITccProfile = {
         useRefRate: false,
         xResolution: -1,
         yResolution: -1,
-        useResolution: false
+        useResolution: false,
     },
     cpu: {
         onlineCores: undefined,
@@ -139,11 +139,11 @@ const office: ITccProfile = {
         scalingMaxFrequency: undefined,
         governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
         energyPerformancePreference: 'balance_performance',
-        noTurbo: false
+        noTurbo: false,
     },
     webcam: {
         status: true,
-        useStatus: true
+        useStatus: true,
     },
     fan: {
         useControl: true,
@@ -155,7 +155,7 @@ const office: ITccProfile = {
     },
     odmProfile: { name: 'enthusiast' },
     odmPowerLimits: { tdpValues: [25, 35, 35] },
-    nvidiaPowerCTRLProfile: { cTGPOffset: 0 }
+    nvidiaPowerCTRLProfile: { cTGPOffset: 0 },
 };
 
 const highPerformance: ITccProfile = {
@@ -169,7 +169,7 @@ const highPerformance: ITccProfile = {
         useRefRate: false,
         xResolution: -1,
         yResolution: -1,
-        useResolution: false
+        useResolution: false,
     },
     cpu: {
         onlineCores: undefined,
@@ -178,11 +178,11 @@ const highPerformance: ITccProfile = {
         scalingMaxFrequency: undefined,
         governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
         energyPerformancePreference: 'balance_performance',
-        noTurbo: false
+        noTurbo: false,
     },
     webcam: {
         status: true,
-        useStatus: true
+        useStatus: true,
     },
     fan: {
         useControl: true,
@@ -194,7 +194,7 @@ const highPerformance: ITccProfile = {
     },
     odmProfile: { name: 'overboost' },
     odmPowerLimits: { tdpValues: [60, 60, 70] },
-    nvidiaPowerCTRLProfile: { cTGPOffset: 0 }
+    nvidiaPowerCTRLProfile: { cTGPOffset: 0 },
 };
 
 export const defaultCustomProfile: ITccProfile = {
@@ -208,7 +208,7 @@ export const defaultCustomProfile: ITccProfile = {
         useRefRate: false,
         xResolution: -1,
         yResolution: -1,
-        useResolution: false
+        useResolution: false,
     },
     cpu: {
         onlineCores: undefined,
@@ -217,11 +217,11 @@ export const defaultCustomProfile: ITccProfile = {
         scalingMaxFrequency: undefined,
         governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
         energyPerformancePreference: 'balance_performance',
-        noTurbo: false
+        noTurbo: false,
     },
     webcam: {
         status: true,
-        useStatus: true
+        useStatus: true,
     },
     fan: {
         useControl: true,
@@ -233,7 +233,7 @@ export const defaultCustomProfile: ITccProfile = {
     },
     odmProfile: { name: undefined },
     odmPowerLimits: { tdpValues: [] },
-    nvidiaPowerCTRLProfile: { cTGPOffset: 0 }
+    nvidiaPowerCTRLProfile: { cTGPOffset: 0 },
 };
 
 export const defaultMobileCustomProfileTDP: ITccProfile = {
@@ -247,7 +247,7 @@ export const defaultMobileCustomProfileTDP: ITccProfile = {
         useRefRate: false,
         xResolution: -1,
         yResolution: -1,
-        useResolution: false
+        useResolution: false,
     },
     cpu: {
         onlineCores: undefined,
@@ -256,11 +256,11 @@ export const defaultMobileCustomProfileTDP: ITccProfile = {
         scalingMaxFrequency: 3500000,
         governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
         energyPerformancePreference: 'balance_performance',
-        noTurbo: false
+        noTurbo: false,
     },
     webcam: {
         status: true,
-        useStatus: true
+        useStatus: true,
     },
     fan: {
         useControl: true,
@@ -272,7 +272,7 @@ export const defaultMobileCustomProfileTDP: ITccProfile = {
     },
     odmProfile: { name: undefined },
     odmPowerLimits: { tdpValues: [15, 25, 50] },
-    nvidiaPowerCTRLProfile: { cTGPOffset: 0 }
+    nvidiaPowerCTRLProfile: { cTGPOffset: 0 },
 };
 
 export const defaultMobileCustomProfileCl: ITccProfile = {
@@ -286,7 +286,7 @@ export const defaultMobileCustomProfileCl: ITccProfile = {
         useRefRate: false,
         xResolution: -1,
         yResolution: -1,
-        useResolution: false
+        useResolution: false,
     },
     cpu: {
         onlineCores: undefined,
@@ -295,11 +295,11 @@ export const defaultMobileCustomProfileCl: ITccProfile = {
         scalingMaxFrequency: 3500000,
         governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
         energyPerformancePreference: 'balance_performance',
-        noTurbo: false
+        noTurbo: false,
     },
     webcam: {
         status: true,
-        useStatus: true
+        useStatus: true,
     },
     fan: {
         useControl: true,
@@ -308,11 +308,10 @@ export const defaultMobileCustomProfileCl: ITccProfile = {
         maximumFanspeed: 100,
         offsetFanspeed: 0,
         customFanCurve: customFanPreset,
-        
     },
     odmProfile: { name: undefined },
     odmPowerLimits: { tdpValues: [] },
-    nvidiaPowerCTRLProfile: { cTGPOffset: 0 }
+    nvidiaPowerCTRLProfile: { cTGPOffset: 0 },
 };
 
 const highPerformance25WcTGP: ITccProfile = {
@@ -326,7 +325,7 @@ const highPerformance25WcTGP: ITccProfile = {
         useRefRate: false,
         xResolution: -1,
         yResolution: -1,
-        useResolution: false
+        useResolution: false,
     },
     cpu: {
         onlineCores: undefined,
@@ -335,11 +334,11 @@ const highPerformance25WcTGP: ITccProfile = {
         scalingMaxFrequency: undefined,
         governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
         energyPerformancePreference: 'balance_performance',
-        noTurbo: false
+        noTurbo: false,
     },
     webcam: {
         status: true,
-        useStatus: true
+        useStatus: true,
     },
     fan: {
         useControl: true,
@@ -351,7 +350,7 @@ const highPerformance25WcTGP: ITccProfile = {
     },
     odmProfile: { name: 'overboost' },
     odmPowerLimits: { tdpValues: [60, 60, 70] },
-    nvidiaPowerCTRLProfile: { cTGPOffset: 25 }
+    nvidiaPowerCTRLProfile: { cTGPOffset: 25 },
 };
 
 const defaultCustomProfile25WcTGP: ITccProfile = {
@@ -365,7 +364,7 @@ const defaultCustomProfile25WcTGP: ITccProfile = {
         useRefRate: false,
         xResolution: -1,
         yResolution: -1,
-        useResolution: false
+        useResolution: false,
     },
     cpu: {
         onlineCores: undefined,
@@ -374,11 +373,11 @@ const defaultCustomProfile25WcTGP: ITccProfile = {
         scalingMaxFrequency: undefined,
         governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
         energyPerformancePreference: 'balance_performance',
-        noTurbo: false
+        noTurbo: false,
     },
     webcam: {
         status: true,
-        useStatus: true
+        useStatus: true,
     },
     fan: {
         useControl: true,
@@ -390,7 +389,7 @@ const defaultCustomProfile25WcTGP: ITccProfile = {
     },
     odmProfile: { name: undefined },
     odmPowerLimits: { tdpValues: [] },
-    nvidiaPowerCTRLProfile: { cTGPOffset: 25 }
+    nvidiaPowerCTRLProfile: { cTGPOffset: 25 },
 };
 
 export enum TUXEDODevice {
@@ -426,7 +425,7 @@ export enum TUXEDODevice {
     STELLARIS16I07,
     SIRIUS1601,
     SIRIUS1602,
-};
+}
 
 /*
  * Device specific default profiles
@@ -435,38 +434,38 @@ export const deviceProfiles: Map<TUXEDODevice, ITccProfile[]> = new Map();
 
 // TODO, since they all basically use the same profiles, isn't it possible to set them all somehow?
 
-deviceProfiles.set(TUXEDODevice.IBP14G6_TUX, [ maxEnergySave, silent, office ]);
-deviceProfiles.set(TUXEDODevice.IBP14G6_TRX, [ maxEnergySave, silent, office ]);
-deviceProfiles.set(TUXEDODevice.IBP14G6_TQF, [ maxEnergySave, silent, office ]);
-deviceProfiles.set(TUXEDODevice.IBP14G7_AQF_ARX, [ maxEnergySave, silent, office ]);
-deviceProfiles.set(TUXEDODevice.IBPG8, [ maxEnergySave, silent, office ]);
+deviceProfiles.set(TUXEDODevice.IBP14G6_TUX, [maxEnergySave, silent, office]);
+deviceProfiles.set(TUXEDODevice.IBP14G6_TRX, [maxEnergySave, silent, office]);
+deviceProfiles.set(TUXEDODevice.IBP14G6_TQF, [maxEnergySave, silent, office]);
+deviceProfiles.set(TUXEDODevice.IBP14G7_AQF_ARX, [maxEnergySave, silent, office]);
+deviceProfiles.set(TUXEDODevice.IBPG8, [maxEnergySave, silent, office]);
 
-deviceProfiles.set(TUXEDODevice.PULSE1502, [ maxEnergySave, silent, office ]);
+deviceProfiles.set(TUXEDODevice.PULSE1502, [maxEnergySave, silent, office]);
 
-deviceProfiles.set(TUXEDODevice.POLARIS1XI02, [ maxEnergySave, silent, office, highPerformance ]);
-deviceProfiles.set(TUXEDODevice.POLARIS1XI03, [ maxEnergySave, silent, office, highPerformance ]);
-deviceProfiles.set(TUXEDODevice.POLARIS1XA02, [ maxEnergySave, silent, office, highPerformance25WcTGP ]);
-deviceProfiles.set(TUXEDODevice.POLARIS1XA03, [ maxEnergySave, silent, office, highPerformance25WcTGP ]);
-deviceProfiles.set(TUXEDODevice.POLARIS1XA05, [ maxEnergySave, silent, office, highPerformance ]);
+deviceProfiles.set(TUXEDODevice.POLARIS1XI02, [maxEnergySave, silent, office, highPerformance]);
+deviceProfiles.set(TUXEDODevice.POLARIS1XI03, [maxEnergySave, silent, office, highPerformance]);
+deviceProfiles.set(TUXEDODevice.POLARIS1XA02, [maxEnergySave, silent, office, highPerformance25WcTGP]);
+deviceProfiles.set(TUXEDODevice.POLARIS1XA03, [maxEnergySave, silent, office, highPerformance25WcTGP]);
+deviceProfiles.set(TUXEDODevice.POLARIS1XA05, [maxEnergySave, silent, office, highPerformance]);
 
-deviceProfiles.set(TUXEDODevice.STELLARIS1XI03, [ maxEnergySave, silent, office, highPerformance ]);
-deviceProfiles.set(TUXEDODevice.STELLARIS1XI04, [ maxEnergySave, silent, office, highPerformance ]);
-deviceProfiles.set(TUXEDODevice.STELLARIS1XI05, [ maxEnergySave, silent, office, highPerformance ]);
+deviceProfiles.set(TUXEDODevice.STELLARIS1XI03, [maxEnergySave, silent, office, highPerformance]);
+deviceProfiles.set(TUXEDODevice.STELLARIS1XI04, [maxEnergySave, silent, office, highPerformance]);
+deviceProfiles.set(TUXEDODevice.STELLARIS1XI05, [maxEnergySave, silent, office, highPerformance]);
 
-deviceProfiles.set(TUXEDODevice.STELLARIS1XA03, [ maxEnergySave, silent, office, highPerformance ]);
-deviceProfiles.set(TUXEDODevice.STEPOL1XA04, [ maxEnergySave, silent, office, highPerformance ]);
-deviceProfiles.set(TUXEDODevice.STELLARIS1XA05, [ maxEnergySave, silent, office, highPerformance ]);
+deviceProfiles.set(TUXEDODevice.STELLARIS1XA03, [maxEnergySave, silent, office, highPerformance]);
+deviceProfiles.set(TUXEDODevice.STEPOL1XA04, [maxEnergySave, silent, office, highPerformance]);
+deviceProfiles.set(TUXEDODevice.STELLARIS1XA05, [maxEnergySave, silent, office, highPerformance]);
 
-deviceProfiles.set(TUXEDODevice.STELLARIS16I06, [ maxEnergySave, silent, office, highPerformance ]);
-deviceProfiles.set(TUXEDODevice.STELLARIS17I06, [ maxEnergySave, silent, office, highPerformance ]);
+deviceProfiles.set(TUXEDODevice.STELLARIS16I06, [maxEnergySave, silent, office, highPerformance]);
+deviceProfiles.set(TUXEDODevice.STELLARIS17I06, [maxEnergySave, silent, office, highPerformance]);
 
 export const deviceCustomProfiles: Map<TUXEDODevice, ITccProfile[]> = new Map();
 
 // Devices not listed here default to [ defaultCustomProfile ].
 // The first entry is used as the skeleton for new profiles created by the user.
-deviceCustomProfiles.set(TUXEDODevice.IBPG8, [ defaultCustomProfile, defaultMobileCustomProfileTDP ]);
-deviceCustomProfiles.set(TUXEDODevice.AURA14G3, [ defaultCustomProfile, defaultMobileCustomProfileCl ]);
-deviceCustomProfiles.set(TUXEDODevice.AURA15G3, [ defaultCustomProfile, defaultMobileCustomProfileCl ]);
-deviceCustomProfiles.set(TUXEDODevice.POLARIS1XA02, [ defaultCustomProfile25WcTGP ]);
-deviceCustomProfiles.set(TUXEDODevice.POLARIS1XA03, [ defaultCustomProfile25WcTGP ]);
-deviceCustomProfiles.set(TUXEDODevice.STELLARIS1XA03, [ defaultCustomProfile25WcTGP ]);
+deviceCustomProfiles.set(TUXEDODevice.IBPG8, [defaultCustomProfile, defaultMobileCustomProfileTDP]);
+deviceCustomProfiles.set(TUXEDODevice.AURA14G3, [defaultCustomProfile, defaultMobileCustomProfileCl]);
+deviceCustomProfiles.set(TUXEDODevice.AURA15G3, [defaultCustomProfile, defaultMobileCustomProfileCl]);
+deviceCustomProfiles.set(TUXEDODevice.POLARIS1XA02, [defaultCustomProfile25WcTGP]);
+deviceCustomProfiles.set(TUXEDODevice.POLARIS1XA03, [defaultCustomProfile25WcTGP]);
+deviceCustomProfiles.set(TUXEDODevice.STELLARIS1XA03, [defaultCustomProfile25WcTGP]);

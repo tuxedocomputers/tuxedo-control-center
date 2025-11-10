@@ -17,8 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { execCommandAsync } from "./Utils";
-
+import { execCommandAsync } from './Utils';
 
 export class VendorService {
     private cpuVendor: string | null = null;
@@ -41,24 +40,20 @@ export class VendorService {
     }
 
     private async checkCpuVendor(): Promise<string> {
-        const stdout: string = (
-            await execCommandAsync("cat /proc/cpuinfo | grep vendor_id")
-        ).toString();
+        const stdout: string = (await execCommandAsync('cat /proc/cpuinfo | grep vendor_id')).toString();
 
-        const outputLines: string[] = stdout.split("\n");
-        const vendorLine: string = outputLines.find((line: string): boolean =>
-            line.includes("vendor_id")
-        );
+        const outputLines: string[] = stdout.split('\n');
+        const vendorLine: string = outputLines.find((line: string): boolean => line.includes('vendor_id'));
 
         if (vendorLine) {
-            const vendor: string = vendorLine.split(":")[1].trim();
+            const vendor: string = vendorLine.split(':')[1].trim();
 
-            if (vendor === "GenuineIntel") {
-                return "intel";
-            } else if (vendor === "AuthenticAMD") {
-                return "amd";
+            if (vendor === 'GenuineIntel') {
+                return 'intel';
+            } else if (vendor === 'AuthenticAMD') {
+                return 'amd';
             }
         }
-        return "unknown";
+        return 'unknown';
     }
 }

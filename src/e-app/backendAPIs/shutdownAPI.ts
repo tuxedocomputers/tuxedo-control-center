@@ -17,44 +17,84 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ipcMain } from "electron";
-import type { IpcMainInvokeEvent } from "electron";
-import { execCmd } from "./utilsAPI";
+import { ipcMain } from 'electron';
+import type { IpcMainInvokeEvent } from 'electron';
+import { execCmd } from './utilsAPI';
 import * as fs from 'node:fs';
 
-ipcMain.handle('set-shutdown-time', async (event: IpcMainInvokeEvent, selectedHour: number, selectedMinute: number): Promise<string> => {
-    return new Promise<string>(async (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): Promise<void> => {
-        await execCmd(`pkexec shutdown -h ${selectedHour}:${selectedMinute}`)
-        .then((results: string) => {resolve(results)})
-        .catch((): void => {resolve("")});
-    });
-});
+ipcMain.handle(
+    'set-shutdown-time',
+    async (event: IpcMainInvokeEvent, selectedHour: number, selectedMinute: number): Promise<string> => {
+        return new Promise<string>(
+            async (
+                resolve: (value: string | PromiseLike<string>) => void,
+                reject: (reason?: unknown) => void,
+            ): Promise<void> => {
+                await execCmd(`pkexec shutdown -h ${selectedHour}:${selectedMinute}`)
+                    .then((results: string) => {
+                        resolve(results);
+                    })
+                    .catch((): void => {
+                        resolve('');
+                    });
+            },
+        );
+    },
+);
 
 ipcMain.handle('cancel-shutdown', async (event: IpcMainInvokeEvent): Promise<string> => {
-    return new Promise<string>(async (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): Promise<void> => {
-        await execCmd("pkexec shutdown -c")
-        .then((results: string): void => {resolve(results)})
-        .catch((): void => {resolve("")});
-    });
+    return new Promise<string>(
+        async (
+            resolve: (value: string | PromiseLike<string>) => void,
+            reject: (reason?: unknown) => void,
+        ): Promise<void> => {
+            await execCmd('pkexec shutdown -c')
+                .then((results: string): void => {
+                    resolve(results);
+                })
+                .catch((): void => {
+                    resolve('');
+                });
+        },
+    );
 });
 
 ipcMain.handle('get-scheduled-shutdown', async (event: IpcMainInvokeEvent): Promise<string> => {
-    return new Promise<string>(async (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): Promise<void> => {
-        const available: boolean = fs.existsSync("/run/systemd/shutdown/scheduled")
-        if (available) {
-            await execCmd("cat /run/systemd/shutdown/scheduled")
-            .then((results: string): void => {resolve(results)})
-            .catch((err: unknown): void => {console.error(`shutdownAPI: get-scheduled-shutdown failed => ${err}`); resolve("")});
-        } else {
-            resolve("")
-        }
-    });
+    return new Promise<string>(
+        async (
+            resolve: (value: string | PromiseLike<string>) => void,
+            reject: (reason?: unknown) => void,
+        ): Promise<void> => {
+            const available: boolean = fs.existsSync('/run/systemd/shutdown/scheduled');
+            if (available) {
+                await execCmd('cat /run/systemd/shutdown/scheduled')
+                    .then((results: string): void => {
+                        resolve(results);
+                    })
+                    .catch((err: unknown): void => {
+                        console.error(`shutdownAPI: get-scheduled-shutdown failed => ${err}`);
+                        resolve('');
+                    });
+            } else {
+                resolve('');
+            }
+        },
+    );
 });
 
 ipcMain.handle('issue-reboot', async (event: IpcMainInvokeEvent): Promise<string> => {
-    return new Promise<string>(async (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): Promise<void> => {
-        await execCmd("reboot")
-        .then((results: string): void => {resolve(results)})
-        .catch((): void => {resolve("")});
-    });
+    return new Promise<string>(
+        async (
+            resolve: (value: string | PromiseLike<string>) => void,
+            reject: (reason?: unknown) => void,
+        ): Promise<void> => {
+            await execCmd('reboot')
+                .then((results: string): void => {
+                    resolve(results);
+                })
+                .catch((): void => {
+                    resolve('');
+                });
+        },
+    );
 });

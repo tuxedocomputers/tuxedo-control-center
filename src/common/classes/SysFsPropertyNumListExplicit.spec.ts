@@ -18,20 +18,18 @@
  */
 
 import 'jasmine';
-const mock: typeof import("mock-fs") = require('mock-fs');
+const mock: typeof import('mock-fs') = require('mock-fs');
 import * as fs from 'node:fs';
 
 import { SysFsPropertyNumListExplicit } from './SysFsProperties';
 
 describe('SysDevPropertyNumListExplicit', (): void => {
-
     const dev = new SysFsPropertyNumListExplicit('/sys/something/numlist');
     const devSeparator = new SysFsPropertyNumListExplicit('/sys/something/numlist', '/sys/something/numlist', ',');
 
     // Mock file structure in memory
     beforeEach((): void => {
-        mock({
-        });
+        mock({});
     });
 
     afterEach((): void => {
@@ -39,26 +37,34 @@ describe('SysDevPropertyNumListExplicit', (): void => {
     });
 
     it('should read', (): void => {
-        mock({ '/sys/something/numlist' : '1 2 3 2 1' });
-        expect((): void => { dev.readValue(); }).not.toThrow();
+        mock({ '/sys/something/numlist': '1 2 3 2 1' });
+        expect((): void => {
+            dev.readValue();
+        }).not.toThrow();
         expect(dev.readValue()).toEqual([1, 2, 3, 2, 1]);
     });
 
     it('should write', (): void => {
-        mock({ '/sys/something/numlist' : 'something' });
-        expect((): void => { dev.writeValue([1, 2, 3, 2, 1]); }).not.toThrow();
+        mock({ '/sys/something/numlist': 'something' });
+        expect((): void => {
+            dev.writeValue([1, 2, 3, 2, 1]);
+        }).not.toThrow();
         expect(fs.readFileSync('/sys/something/numlist').toString()).toBe('1 2 3 2 1');
     });
 
     it('should read with configurable list separator', (): void => {
-        mock({ '/sys/something/numlist' : '1,2,3,2,1' });
-        expect((): void => { devSeparator.readValue(); }).not.toThrow();
+        mock({ '/sys/something/numlist': '1,2,3,2,1' });
+        expect((): void => {
+            devSeparator.readValue();
+        }).not.toThrow();
         expect(devSeparator.readValue()).toEqual([1, 2, 3, 2, 1]);
     });
 
     it('should write with configurable list separator', (): void => {
-        mock({ '/sys/something/numlist' : 'something' });
-        expect((): void => { devSeparator.writeValue([1, 2, 3, 2, 1]); }).not.toThrow();
+        mock({ '/sys/something/numlist': 'something' });
+        expect((): void => {
+            devSeparator.writeValue([1, 2, 3, 2, 1]);
+        }).not.toThrow();
         expect(fs.readFileSync('/sys/something/numlist').toString()).toBe('1,2,3,2,1');
     });
 });

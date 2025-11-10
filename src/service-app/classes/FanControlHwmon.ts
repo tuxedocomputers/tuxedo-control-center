@@ -17,19 +17,18 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as fs from "node:fs";
-import type { SysFsPropertyInteger } from "../../common/classes/SysFsProperties";
-import { FanControlBaseClass } from "./FanControlBaseClass";
-import type { IFanDataInputs, IFanTempData } from "../../common/models/ITccFans";
-import { FAN_LOGIC } from "./FanControlLogic";
-import type { FanControlLogic } from "./FanControlLogic";
+import * as fs from 'node:fs';
+import type { SysFsPropertyInteger } from '../../common/classes/SysFsProperties';
+import { FanControlBaseClass } from './FanControlBaseClass';
+import type { IFanDataInputs, IFanTempData } from '../../common/models/ITccFans';
+import { FAN_LOGIC } from './FanControlLogic';
+import type { FanControlLogic } from './FanControlLogic';
 
 export class FanControlHwmon extends FanControlBaseClass {
-    public fanControlName: string = "";
-    private hwmonPath: string = "";
+    public fanControlName: string = '';
+    private hwmonPath: string = '';
     private writeAvailable: boolean = false;
-    private fanControlPath: string =
-        "/sys/bus/platform/devices/tuxedo_fan_control/";
+    private fanControlPath: string = '/sys/bus/platform/devices/tuxedo_fan_control/';
 
     private fanSpeedInputMap: Map<number, SysFsPropertyInteger>;
     private fanMaxInputMap: Map<number, SysFsPropertyInteger>;
@@ -41,19 +40,12 @@ export class FanControlHwmon extends FanControlBaseClass {
     private fanTempMap: Map<number, IFanTempData> = new Map<number, IFanTempData>();
     private tempCache: Map<string, number> = new Map<string, number>();
 
-
-    private async getFilteredAndMappedFiles(
-        files: string[],
-        pattern: RegExp,
-    ): Promise<string[]> {
+    private async getFilteredAndMappedFiles(files: string[], pattern: RegExp): Promise<string[]> {
         return Array.from(
             new Set(
                 files
-                    .filter(
-                        (entry: string): RegExpMatchArray =>
-                            entry.match(pattern),
-                    )
-                    .map((entry: string): string => entry.split("_")[0]),
+                    .filter((entry: string): RegExpMatchArray => entry.match(pattern))
+                    .map((entry: string): string => entry.split('_')[0]),
             ),
         );
     }
@@ -69,27 +61,21 @@ export class FanControlHwmon extends FanControlBaseClass {
     // 1 = manual mode, 2 = automatic mode
     private async setHwmonPwmEnable(status: number): Promise<void> {
         if (this.writeAvailable) {
-            const pwmfiles: string[] = await fs.promises.readdir(
-                this.fanControlPath,
-            );
+            const pwmfiles: string[] = await fs.promises.readdir(this.fanControlPath);
             const fanFiles: string[] = await this.getFanFiles(pwmfiles);
 
             for (const fanFile of fanFiles) {
-                const fanPwm: SysFsPropertyInteger =
-                    await this.getPropertyInteger(
-                        this.fanControlPath,
-                        fanFile,
-                        "_pwm_enable",
-                    );
+                const fanPwm: SysFsPropertyInteger = await this.getPropertyInteger(
+                    this.fanControlPath,
+                    fanFile,
+                    '_pwm_enable',
+                );
                 await fanPwm.writeValueA(status);
             }
         }
     }
 
-    public async initFanControl(
-        fanWriteAvailable: boolean,
-        fanControlEnabled: boolean,
-    ): Promise<void> {
+    public async initFanControl(fanWriteAvailable: boolean, fanControlEnabled: boolean): Promise<void> {
         if (this.writeAvailable) {
             this.tccd.dbusData.fanHwmonAvailable = true;
         }
@@ -97,14 +83,14 @@ export class FanControlHwmon extends FanControlBaseClass {
         if (this.writeAvailable && fanWriteAvailable) {
             if (fanControlEnabled) {
                 await this.setHwmonPwmEnable(1);
-                console.log("FanControlHwmon: Enabling manual mode");
+                console.log('FanControlHwmon: Enabling manual mode');
             }
             if (!fanControlEnabled) {
                 await this.setHwmonPwmEnable(2);
-                console.log("FanControlHwmon: Enabling automatic mode");
+                console.log('FanControlHwmon: Enabling automatic mode');
             }
         } else {
-            console.log("FanControlHwmon: Fan write not available");
+            console.log('FanControlHwmon: Fan write not available');
         }
     }
 
@@ -129,34 +115,21 @@ export class FanControlHwmon extends FanControlBaseClass {
     }
 
     private async fetchFanData(): Promise<IFanDataInputs[]> {
-        const fanNumbers: number[] = await this.getFans().then(
-            (fans: Map<number, FanControlLogic>): number[] =>
-                Array.from(fans.keys()),
+        const fanNumbers: number[] = await this.getFans().then((fans: Map<number, FanControlLogic>): number[] =>
+            Array.from(fans.keys()),
         );
-        return Promise.all(
-            fanNumbers.map(
-                (fanIndex: number): Promise<IFanDataInputs> => this.getFanData(fanIndex),
-            ),
-        );
+        return Promise.all(fanNumbers.map((fanIndex: number): Promise<IFanDataInputs> => this.getFanData(fanIndex)));
     }
 
     private async fetchTempData(): Promise<IFanDataInputs[]> {
         const tempCount: number = await this.getNumberTemp();
-        const tempNumbers: number[] = Array.from(
-            { length: tempCount },
-            (_: number, i: number): number => i + 1,
-        );
+        const tempNumbers: number[] = Array.from({ length: tempCount }, (_: number, i: number): number => i + 1);
         return Promise.all(
-            tempNumbers.map(
-                (tempIndex: number): Promise<IFanDataInputs> =>
-                    this.getTempData(tempIndex),
-            ),
+            tempNumbers.map((tempIndex: number): Promise<IFanDataInputs> => this.getTempData(tempIndex)),
         );
     }
 
-    private async populateFanMaps(
-        fanDataResults: IFanDataInputs[],
-    ): Promise<void> {
+    private async populateFanMaps(fanDataResults: IFanDataInputs[]): Promise<void> {
         for (const [index, fanData] of fanDataResults.entries()) {
             const fanIndexNumber: number = index + 1;
             this.fanSpeedInputMap.set(fanIndexNumber, fanData.speedInput);
@@ -164,48 +137,36 @@ export class FanControlHwmon extends FanControlBaseClass {
             this.pwmInputMap.set(fanIndexNumber, fanData.pwmInput);
 
             if (fanData?.fanLabel) {
-                this.fanLabelMap.set(
-                    fanIndexNumber,
-                    await fanData.fanLabel.readValueNTA(),
-                );
+                this.fanLabelMap.set(fanIndexNumber, await fanData.fanLabel.readValueNTA());
             }
         }
     }
 
-    private async populateTempMaps(
-        tempDataResults: IFanDataInputs[],
-    ): Promise<void> {
+    private async populateTempMaps(tempDataResults: IFanDataInputs[]): Promise<void> {
         for (const [index, tempData] of tempDataResults.entries()) {
             const tempIndexNumber: number = index + 1;
             this.tempInputMap.set(tempIndexNumber, tempData.tempInput);
 
             if (tempData?.tempLabel) {
-                this.tempLabelMap.set(
-                    tempIndexNumber,
-                    await tempData.tempLabel.readValueNTA(),
-                );
+                this.tempLabelMap.set(tempIndexNumber, await tempData.tempLabel.readValueNTA());
             }
         }
     }
 
     public matchLabels(): void {
         this.fanTempMap = new Map();
-        
+
         for (const [fanIndex, fanLabel] of this.fanLabelMap) {
             let matchedTempLabel: string | undefined;
             let matchedTempInput: SysFsPropertyInteger | undefined;
-                        
+
             // multiple cpu fans can have one cpu temperature sensor
-            matchedTempLabel = [...this.tempLabelMap.values()].find(
-                (tempLabel: string): boolean =>
-                    tempLabel.startsWith(fanLabel.replace(/cpu\d+/i, "cpu")),
+            matchedTempLabel = [...this.tempLabelMap.values()].find((tempLabel: string): boolean =>
+                tempLabel.startsWith(fanLabel.replace(/cpu\d+/i, 'cpu')),
             );
 
-            const matchedTempLabelIndex: [number, string] | undefined = [
-                ...this.tempLabelMap.entries(),
-            ].find(
-                ([_, tempLabel]: [number, string]): boolean =>
-                    tempLabel === matchedTempLabel,
+            const matchedTempLabelIndex: [number, string] | undefined = [...this.tempLabelMap.entries()].find(
+                ([_, tempLabel]: [number, string]): boolean => tempLabel === matchedTempLabel,
             );
 
             if (matchedTempLabelIndex) {
@@ -219,12 +180,14 @@ export class FanControlHwmon extends FanControlBaseClass {
                     tempInput: matchedTempInput,
                 });
             } else {
-                console.log(`FanControlHwmon: matchLabels: Failed to set fan with index ${fanIndex} and label ${fanLabel}`)
-                console.log(`FanControlHwmon: matchLabels: fanLabelMap: ${this.fanLabelMap}`)
-                console.log(`FanControlHwmon: matchLabels: tempLabelMap: ${this.tempLabelMap}`)
-                console.log(`FanControlHwmon: matchLabels: tempInputMap: ${this.tempInputMap}`)
-                this.tccd.onExit()
-                process.exit(0)
+                console.log(
+                    `FanControlHwmon: matchLabels: Failed to set fan with index ${fanIndex} and label ${fanLabel}`,
+                );
+                console.log(`FanControlHwmon: matchLabels: fanLabelMap: ${this.fanLabelMap}`);
+                console.log(`FanControlHwmon: matchLabels: tempLabelMap: ${this.tempLabelMap}`);
+                console.log(`FanControlHwmon: matchLabels: tempInputMap: ${this.tempInputMap}`);
+                this.tccd.onExit();
+                process.exit(0);
             }
         }
     }
@@ -235,46 +198,22 @@ export class FanControlHwmon extends FanControlBaseClass {
                 ([key, value]: [number, IFanTempData]): string =>
                     `Fan Index: ${key}, Temperature Label: ${value?.tempLabel}`,
             )
-            .join(" | ");
+            .join(' | ');
         console.log(fanInfo);
     }
 
     private async getFanData(fanIndex: number): Promise<IFanDataInputs> {
         return {
-            speedInput: await this.getPropertyInteger(
-                this.hwmonPath,
-                `fan${fanIndex.toString()}`,
-                "_input",
-            ),
-            fanMaxInput: await this.getPropertyInteger(
-                this.hwmonPath,
-                `fan${fanIndex.toString()}`,
-                "_max",
-            ),
-            pwmInput: await this.getPropertyInteger(
-                this.fanControlPath,
-                `fan${fanIndex.toString()}`,
-                "_pwm",
-            ),
-            fanLabel: await this.getPropertyString(
-                this.hwmonPath,
-                `fan${fanIndex.toString()}`,
-                "_label",
-            ),
+            speedInput: await this.getPropertyInteger(this.hwmonPath, `fan${fanIndex.toString()}`, '_input'),
+            fanMaxInput: await this.getPropertyInteger(this.hwmonPath, `fan${fanIndex.toString()}`, '_max'),
+            pwmInput: await this.getPropertyInteger(this.fanControlPath, `fan${fanIndex.toString()}`, '_pwm'),
+            fanLabel: await this.getPropertyString(this.hwmonPath, `fan${fanIndex.toString()}`, '_label'),
         };
     }
     private async getTempData(fanIndex: number): Promise<IFanDataInputs> {
         return {
-            tempInput: await this.getPropertyInteger(
-                this.hwmonPath,
-                `temp${fanIndex.toString()}`,
-                "_input",
-            ),
-            tempLabel: await this.getPropertyString(
-                this.hwmonPath,
-                `temp${fanIndex.toString()}`,
-                "_label",
-            ),
+            tempInput: await this.getPropertyInteger(this.hwmonPath, `temp${fanIndex.toString()}`, '_input'),
+            tempLabel: await this.getPropertyString(this.hwmonPath, `temp${fanIndex.toString()}`, '_label'),
         };
     }
 
@@ -291,26 +230,20 @@ export class FanControlHwmon extends FanControlBaseClass {
                 const label: string = this.fanLabelMap.get(i);
 
                 if (label) {
-                    if (label.includes("cpu")) {
+                    if (label.includes('cpu')) {
                         this.setFan(i, FAN_LOGIC.CPU);
                         continue;
                     }
-                    if (label.includes("gpu")) {
+                    if (label.includes('gpu')) {
                         this.setFan(i, FAN_LOGIC.GPU);
                         continue;
                     }
-                    console.log(
-                        `FanControlHwmon: unknown label ${label}, setting fan as cpu fan`,
-                    );
+                    console.log(`FanControlHwmon: unknown label ${label}, setting fan as cpu fan`);
                     this.setFan(i, FAN_LOGIC.CPU);
                 }
 
                 if (!label) {
-                    console.log(
-                        `FanControlHwmon: label not found for index ${
-                            i - 1
-                        }, setting fan as cpu fan`,
-                    );
+                    console.log(`FanControlHwmon: label not found for index ${i - 1}, setting fan as cpu fan`);
                     this.setFan(i, FAN_LOGIC.CPU);
                 }
             }
@@ -318,27 +251,20 @@ export class FanControlHwmon extends FanControlBaseClass {
 
         return true;
     }
-    
+
     public async getNumberFansAvailable(): Promise<number> {
         return this.getNumberFans();
     }
 
     public async getFanSpeedPercent(fanIndex: number): Promise<number> {
-        const speedEntry: SysFsPropertyInteger = this.fanSpeedInputMap.get(
-            fanIndex + 1,
-        );
-        const maxEntry: SysFsPropertyInteger = this.fanMaxInputMap.get(
-            fanIndex + 1,
-        );
+        const speedEntry: SysFsPropertyInteger = this.fanSpeedInputMap.get(fanIndex + 1);
+        const maxEntry: SysFsPropertyInteger = this.fanMaxInputMap.get(fanIndex + 1);
 
         if (speedEntry === undefined || maxEntry === undefined) {
             return -1;
         }
 
-        const [input, fanMax] = await Promise.all([
-            speedEntry.readValueNTA(),
-            maxEntry.readValueNTA(),
-        ]);
+        const [input, fanMax] = await Promise.all([speedEntry.readValueNTA(), maxEntry.readValueNTA()]);
 
         if (input === undefined || fanMax === undefined) {
             return -1;
@@ -381,28 +307,21 @@ export class FanControlHwmon extends FanControlBaseClass {
         return -1;
     }
 
-    public async writeFanSpeed(
-        fanIndex: number,
-        calculatedSpeed: number,
-    ): Promise<void> {
+    public async writeFanSpeed(fanIndex: number, calculatedSpeed: number): Promise<void> {
         let pwmEntry: SysFsPropertyInteger;
         if (this.pwmInputMap !== undefined) {
             pwmEntry = this.pwmInputMap.get(fanIndex + 1);
         }
 
         if (pwmEntry !== undefined) {
-            await pwmEntry.writeValueA(
-                Math.round((calculatedSpeed / 100) * 255),
-            );
+            await pwmEntry.writeValueA(Math.round((calculatedSpeed / 100) * 255));
         }
     }
 
     public async getNumberFanInterfaces(): Promise<number> {
         try {
             if (this.hwmonPath) {
-                const hwmonfiles: string[] = await fs.promises.readdir(
-                    this.hwmonPath,
-                );
+                const hwmonfiles: string[] = await fs.promises.readdir(this.hwmonPath);
                 const fanFiles: string[] = await this.getFanFiles(hwmonfiles);
                 return fanFiles.length;
             }
@@ -411,7 +330,7 @@ export class FanControlHwmon extends FanControlBaseClass {
             return;
         }
     }
-    
+
     public async getNumberFans(): Promise<number> {
         return await this.getNumberFanInterfaces();
     }
@@ -419,9 +338,7 @@ export class FanControlHwmon extends FanControlBaseClass {
     public async getNumberTemp(): Promise<number> {
         try {
             if (this.hwmonPath) {
-                const hwmonfiles: string[] = await fs.promises.readdir(
-                    this.hwmonPath,
-                );
+                const hwmonfiles: string[] = await fs.promises.readdir(this.hwmonPath);
                 const fanFiles: string[] = await this.getTempFiles(hwmonfiles);
                 return fanFiles.length;
             }
@@ -432,7 +349,7 @@ export class FanControlHwmon extends FanControlBaseClass {
     }
 
     public async getHwmonPath(): Promise<string | undefined> {
-        throw new Error("FanControlHwmon: getHwmonPath() not implemented");
+        throw new Error('FanControlHwmon: getHwmonPath() not implemented');
     }
 
     public async checkAvailable(): Promise<[boolean, boolean]> {
@@ -450,16 +367,13 @@ export class FanControlHwmon extends FanControlBaseClass {
 
         return [readAvailable, writeAvailable];
     }
-    
+
     public async exit(): Promise<void> {
         await this.setHwmonPwmEnable(2);
-        console.log("FanControlHwmon: Enabling automatic mode");
+        console.log('FanControlHwmon: Enabling automatic mode');
     }
 
-    public testMatchLabels(): Map<
-        number,
-        IFanTempData
-    > {
+    public testMatchLabels(): Map<number, IFanTempData> {
         this.matchLabels();
         return this.fanTempMap;
     }
@@ -472,9 +386,7 @@ export class FanControlHwmon extends FanControlBaseClass {
         this.tempLabelMap = tempLabelMap;
     }
 
-    public setTempInputMap(
-        tempInputMap: Map<number, SysFsPropertyInteger>
-    ): void {
+    public setTempInputMap(tempInputMap: Map<number, SysFsPropertyInteger>): void {
         this.tempInputMap = tempInputMap;
     }
 

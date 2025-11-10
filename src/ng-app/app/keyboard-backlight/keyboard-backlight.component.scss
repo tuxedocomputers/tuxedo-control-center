@@ -56,7 +56,7 @@ content.value {
 
 .value-tile {
     overflow: visible;
-    
+
     .increment-decrement-buttons {
         display: flex;
         padding-right: 20px;
@@ -64,7 +64,7 @@ content.value {
 }
 
 .input-tile {
-    overflow: visible
+    overflow: visible;
 }
 
 .align-top-right-container {
@@ -78,11 +78,10 @@ content.value {
 .wider-tooltip {
     max-width: 275px !important;
 }
-    
+
 .keyboard-visual {
     margin-bottom: 16px;
 }
-    
 
 .align-slider-components {
     margin: 0;
@@ -112,7 +111,7 @@ input {
 .resize-text {
     display: flex;
     flex-wrap: wrap;
-    max-width: calc(14/18 * 100%);
+    max-width: calc(14 / 18 * 100%);
     margin: 0 auto;
     justify-content: center;
     align-items: center;

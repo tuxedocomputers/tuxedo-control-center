@@ -17,25 +17,25 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import "jasmine";
-const mock: typeof import("mock-fs") = require("mock-fs");
+import 'jasmine';
+const mock: typeof import('mock-fs') = require('mock-fs');
 
-import { FanControlPwm } from "./FanControlPwm";
-import { SysFsPropertyInteger } from "../../common/classes/SysFsProperties";
-import { IFanTempData } from "src/common/models/ITccFans";
+import { FanControlPwm } from './FanControlPwm';
+import { SysFsPropertyInteger } from '../../common/classes/SysFsProperties';
+import { IFanTempData } from 'src/common/models/ITccFans';
 
-describe("FanControlPwm", (): void => {
-    it("Pulse Gen 4: check pwm available", async (): Promise<void> => {
+describe('FanControlPwm', (): void => {
+    it('Pulse Gen 4: check pwm available', async (): Promise<void> => {
         mock({
-            "/sys/class/hwmon/hwmon0/name": "ADP1",
-            "/sys/class/hwmon/hwmon1/name": "acpitz",
-            "/sys/class/hwmon/hwmon2/name": "BAT0",
-            "/sys/class/hwmon/hwmon3/name": "nvme",
-            "/sys/class/hwmon/hwmon4/name": "k10temp",
-            "/sys/class/hwmon/hwmon5/name": "tuxedo",
-            "/sys/class/hwmon/hwmon6/name": "iwlwifi_1",
-            "/sys/class/hwmon/hwmon7/name": "amdgpu",
-            "/sys/bus/platform/devices/tuxedo_fan_control/": {},
+            '/sys/class/hwmon/hwmon0/name': 'ADP1',
+            '/sys/class/hwmon/hwmon1/name': 'acpitz',
+            '/sys/class/hwmon/hwmon2/name': 'BAT0',
+            '/sys/class/hwmon/hwmon3/name': 'nvme',
+            '/sys/class/hwmon/hwmon4/name': 'k10temp',
+            '/sys/class/hwmon/hwmon5/name': 'tuxedo',
+            '/sys/class/hwmon/hwmon6/name': 'iwlwifi_1',
+            '/sys/class/hwmon/hwmon7/name': 'amdgpu',
+            '/sys/bus/platform/devices/tuxedo_fan_control/': {},
         });
 
         const fanApi = new FanControlPwm(undefined);
@@ -43,16 +43,16 @@ describe("FanControlPwm", (): void => {
         expect(await fanApi.checkAvailable()).toEqual([true, true]);
     });
 
-    it("Pulse Gen 4: check pwm with only read available", async (): Promise<void> => {
+    it('Pulse Gen 4: check pwm with only read available', async (): Promise<void> => {
         mock({
-            "/sys/class/hwmon/hwmon0/name": "ADP1",
-            "/sys/class/hwmon/hwmon1/name": "acpitz",
-            "/sys/class/hwmon/hwmon2/name": "BAT0",
-            "/sys/class/hwmon/hwmon3/name": "nvme",
-            "/sys/class/hwmon/hwmon4/name": "k10temp",
-            "/sys/class/hwmon/hwmon5/name": "tuxedo",
-            "/sys/class/hwmon/hwmon6/name": "iwlwifi_1",
-            "/sys/class/hwmon/hwmon7/name": "amdgpu",
+            '/sys/class/hwmon/hwmon0/name': 'ADP1',
+            '/sys/class/hwmon/hwmon1/name': 'acpitz',
+            '/sys/class/hwmon/hwmon2/name': 'BAT0',
+            '/sys/class/hwmon/hwmon3/name': 'nvme',
+            '/sys/class/hwmon/hwmon4/name': 'k10temp',
+            '/sys/class/hwmon/hwmon5/name': 'tuxedo',
+            '/sys/class/hwmon/hwmon6/name': 'iwlwifi_1',
+            '/sys/class/hwmon/hwmon7/name': 'amdgpu',
         });
 
         const fanApi = new FanControlPwm(undefined);
@@ -60,16 +60,16 @@ describe("FanControlPwm", (): void => {
         expect(await fanApi.checkAvailable()).toEqual([true, false]);
     });
 
-    it("Pulse Gen 4: check pwm with only write available", async (): Promise<void> => {
+    it('Pulse Gen 4: check pwm with only write available', async (): Promise<void> => {
         mock({
-            "/sys/class/hwmon/hwmon0/name": "ADP1",
-            "/sys/class/hwmon/hwmon1/name": "acpitz",
-            "/sys/class/hwmon/hwmon2/name": "BAT0",
-            "/sys/class/hwmon/hwmon3/name": "nvme",
-            "/sys/class/hwmon/hwmon4/name": "k10temp",
-            "/sys/class/hwmon/hwmon6/name": "iwlwifi_1",
-            "/sys/class/hwmon/hwmon7/name": "amdgpu",
-            "/sys/bus/platform/devices/tuxedo_fan_control/": {},
+            '/sys/class/hwmon/hwmon0/name': 'ADP1',
+            '/sys/class/hwmon/hwmon1/name': 'acpitz',
+            '/sys/class/hwmon/hwmon2/name': 'BAT0',
+            '/sys/class/hwmon/hwmon3/name': 'nvme',
+            '/sys/class/hwmon/hwmon4/name': 'k10temp',
+            '/sys/class/hwmon/hwmon6/name': 'iwlwifi_1',
+            '/sys/class/hwmon/hwmon7/name': 'amdgpu',
+            '/sys/bus/platform/devices/tuxedo_fan_control/': {},
         });
 
         const fanApi = new FanControlPwm(undefined);
@@ -77,15 +77,15 @@ describe("FanControlPwm", (): void => {
         expect(await fanApi.checkAvailable()).toEqual([false, false]);
     });
 
-    it("Pulse Gen 4: check fan control not available", async (): Promise<void> => {
+    it('Pulse Gen 4: check fan control not available', async (): Promise<void> => {
         mock({
-            "/sys/class/hwmon/hwmon0/name": "ADP1",
-            "/sys/class/hwmon/hwmon1/name": "acpitz",
-            "/sys/class/hwmon/hwmon2/name": "BAT0",
-            "/sys/class/hwmon/hwmon3/name": "nvme",
-            "/sys/class/hwmon/hwmon4/name": "k10temp",
-            "/sys/class/hwmon/hwmon6/name": "iwlwifi_1",
-            "/sys/class/hwmon/hwmon7/name": "amdgpu",
+            '/sys/class/hwmon/hwmon0/name': 'ADP1',
+            '/sys/class/hwmon/hwmon1/name': 'acpitz',
+            '/sys/class/hwmon/hwmon2/name': 'BAT0',
+            '/sys/class/hwmon/hwmon3/name': 'nvme',
+            '/sys/class/hwmon/hwmon4/name': 'k10temp',
+            '/sys/class/hwmon/hwmon6/name': 'iwlwifi_1',
+            '/sys/class/hwmon/hwmon7/name': 'amdgpu',
         });
 
         const fanApi = new FanControlPwm(undefined);
@@ -93,49 +93,33 @@ describe("FanControlPwm", (): void => {
         expect(await fanApi.checkAvailable()).toEqual([false, false]);
     });
 
-    it("Pulse Gen 4: hwmon label match", async (): Promise<void> => {
+    it('Pulse Gen 4: hwmon label match', async (): Promise<void> => {
         mock({});
 
         const fanApi = new FanControlPwm(undefined);
 
         const fanLabelMap: Map<number, string> = new Map<number, string>();
-        fanLabelMap.set(1, "cpu0");
-        fanLabelMap.set(2, "cpu1");
+        fanLabelMap.set(1, 'cpu0');
+        fanLabelMap.set(2, 'cpu1');
 
         const tempLabelMap: Map<number, string> = new Map<number, string>();
-        tempLabelMap.set(1, "cpu0");
+        tempLabelMap.set(1, 'cpu0');
 
-        const tempInputMap: Map<number, SysFsPropertyInteger> = new Map<
-            number,
-            SysFsPropertyInteger
-        >();
-        tempInputMap.set(
-            1,
-            new SysFsPropertyInteger("/sys/class/hwmon/hwmon5/temp1_input")
-        );
+        const tempInputMap: Map<number, SysFsPropertyInteger> = new Map<number, SysFsPropertyInteger>();
+        tempInputMap.set(1, new SysFsPropertyInteger('/sys/class/hwmon/hwmon5/temp1_input'));
 
         fanApi.setFanLabelMap(fanLabelMap);
         fanApi.setTempLabelMap(tempLabelMap);
         fanApi.setTempInputMap(tempInputMap);
 
-        const fanTempMap: Map<
-            number,
-            IFanTempData
-        > = new Map<
-            number,
-            IFanTempData
-        >();
+        const fanTempMap: Map<number, IFanTempData> = new Map<number, IFanTempData>();
         fanTempMap.set(1, {
-            tempLabel: "cpu0",
-            tempInput: new SysFsPropertyInteger(
-                "/sys/class/hwmon/hwmon5/temp1_input"
-            ),
+            tempLabel: 'cpu0',
+            tempInput: new SysFsPropertyInteger('/sys/class/hwmon/hwmon5/temp1_input'),
         });
         fanTempMap.set(2, {
-            tempLabel: "cpu0",
-            tempInput: new SysFsPropertyInteger(
-                "/sys/class/hwmon/hwmon5/temp1_input"
-            ),
+            tempLabel: 'cpu0',
+            tempInput: new SysFsPropertyInteger('/sys/class/hwmon/hwmon5/temp1_input'),
         });
 
         expect(fanApi.testMatchLabels()).toEqual(fanTempMap);

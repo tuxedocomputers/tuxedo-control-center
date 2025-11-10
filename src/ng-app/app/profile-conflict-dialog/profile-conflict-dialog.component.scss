@@ -16,40 +16,40 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
- 
+
 .profile-compare-box {
     justify-content: space-between;
     overflow: hidden;
-    
+
     .profile {
         font-size: 24px;
         text-align: center;
     }
-    
+
     .profile-old {
         float: left;
         padding-left: 16px;
     }
-    
+
     .profile-new {
         float: right;
-        padding-right: 16px
+        padding-right: 16px;
     }
-    
+
     .profile-overview-tile {
         width: 325px;
         margin: 8px;
         padding: 10px;
         padding-top: 0px;
         padding-bottom: 15px;
-        
+
         header {
             display: flex;
             justify-content: space-between;
-    
+
             padding-top: 16px;
             padding-bottom: 16px;
-                    
+
             .profile-name {
                 font-size: 20px;
                 font-weight: bold;
@@ -59,49 +59,49 @@
                 margin: auto;
             }
         }
-    
+
         .content {
             display: flex;
             flex-flow: column nowrap;
             justify-content: space-between;
             text-align: center;
-    
+
             .description {
                 text-align: center;
                 text-overflow: ellipsis;
             }
         }
-    
+
         .status-flexbox {
             display: flex;
             flex-wrap: wrap;
             margin-top: 20px;
-    
+
             .status-component {
                 width: 50%;
-    
+
                 display: flex;
                 flex-flow: column;
                 align-items: center;
-    
+
                 .status-icon-container {
                     width: 48px;
-                    height: 48px;    
+                    height: 48px;
                     text-align: center;
                     svg {
                         width: inherit;
                         height: inherit;
                     }
-        
+
                     --icon-detail: var(--icon-main);
                 }
-    
+
                 .status-info {
                     text-align: center;
                     margin-top: 5px;
                     margin-bottom: 5px;
                 }
-    
+
                 &.inactive {
                     opacity: 0.3;
                 }

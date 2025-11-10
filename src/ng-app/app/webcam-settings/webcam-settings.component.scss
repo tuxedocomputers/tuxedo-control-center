@@ -17,15 +17,15 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
- .tcc-card {
+.tcc-card {
     z-index: 1;
 
     .center {
         text-align: center;
     }
- }
+}
 
- .webcam-settings-edit {
+.webcam-settings-edit {
     display: block;
     position: absolute;
     top: 10px;
@@ -38,22 +38,22 @@
 
     .inner-webcam-settings-edit {
         margin: 0 10px 10px 10px;
-        
+
         .panel-title {
             font-size: 18px;
         }
-        
+
         mat-card .content {
             padding: 16px 8px 0px !important;
         }
-        
+
         .webcam-title {
             position: fixed;
             top: 10px;
             right: 40px;
             z-index: 100;
             padding-top: 10px;
-                        
+
             .save-reset-buttons {
                 --icon-detail: var(--icon-main);
                 background-color: var(--foreground-color);
@@ -64,7 +64,7 @@
     .webcam {
         display: flex;
         justify-content: center;
-        align-items: center; 
+        align-items: center;
         width: 100%;
         margin-bottom: 20px;
     }
@@ -72,11 +72,9 @@
     .spinner {
         position: absolute;
         justify-content: center;
-        align-items: center; 
+        align-items: center;
         vertical-align: middle;
-    
     }
-
 
     .profile-details-edit-grid {
         .inactive {
@@ -108,19 +106,18 @@
             mat-slider {
                 width: 100%;
             }
-            
+
             mat-form-field {
                 width: 360px;
 
                 &.input-description {
-
                     textarea {
                         resize: none;
                     }
                 }
             }
         }
-        
+
         .increment-decrement-buttons {
             display: flex;
             padding-right: 20px;
@@ -129,10 +126,10 @@
 }
 
 .globalSpinner {
-    top: 50%; 
-    left: 50%; 
-    position: absolute; 
-    margin-left: -4em; 
+    top: 50%;
+    left: 50%;
+    position: absolute;
+    margin-left: -4em;
     margin-top: -4em;
 }
 

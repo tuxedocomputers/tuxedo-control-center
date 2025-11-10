@@ -27,10 +27,10 @@
     margin: 0px;
     padding: 0px;
     overflow-y: scroll;
-    
+
     .inner-info {
         padding: 0 10px 10px 10px;
-        
+
         mat-card {
             .title {
                 display: flex;
@@ -44,22 +44,22 @@
                 align-items: center;
                 padding-top: 16px;
                 padding-bottom: 16px;
-                
+
                 .logo {
                     width: 200px;
                 }
             }
-            
+
             .content-container {
                 max-width: 900px;
                 text-align: center;
             }
-            
+
             .table-div {
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                
+
                 .updates-table {
                     width: 300px;
                     text-align: left;
@@ -68,27 +68,25 @@
                 }
             }
         }
-        
+
         .accordion-info {
             p {
                 font-size: 20px;
             }
-            
+
             .changelog {
                 max-height: 400px;
                 overflow-y: scroll;
                 background-color: var(--mat-sys-surface);
-                
+
                 markdown {
                     margin: 25px;
                 }
             }
-            
+
             .panel-title {
                 font-size: 18px;
             }
         }
     }
 }
-
-

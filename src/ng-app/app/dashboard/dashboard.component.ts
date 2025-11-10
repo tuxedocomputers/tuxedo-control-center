@@ -17,33 +17,29 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, type OnInit, type OnDestroy } from "@angular/core";
-import type {
-    ILogicalCoreInfo,
-    IGeneralCPUInfo,
-    IPstateInfo,
-} from "src/common/models/ICpuInfos";
-import { SysFsService } from "../sys-fs.service";
-import { Subscription } from "rxjs";
-import { UtilsService } from "../utils.service";
-import { TccDBusClientService } from "../tcc-dbus-client.service";
-import type { IDBusFanData } from "src/common/models/IFanData";
-import type { ITccProfile } from "src/common/models/TccProfile";
-import { StateService } from "../state.service";
-import { ActivatedRoute, Router } from "@angular/router";
-import { ConfigService } from "../config.service";
-import { CompatibilityService } from "../compatibility.service";
-import type { ICpuPower } from "src/common/models/TccPowerSettings";
-import type { IdGpuInfo, IiGpuInfo } from "src/common/models/TccGpuValues";
-import { filter, first, tap } from "rxjs/operators";
-import type { TDPInfo } from "src/native-lib/TuxedoIOAPI";
-import { PowerStateService } from "../power-state.service";
+import { Component, type OnInit, type OnDestroy } from '@angular/core';
+import type { ILogicalCoreInfo, IGeneralCPUInfo, IPstateInfo } from 'src/common/models/ICpuInfos';
+import { SysFsService } from '../sys-fs.service';
+import { Subscription } from 'rxjs';
+import { UtilsService } from '../utils.service';
+import { TccDBusClientService } from '../tcc-dbus-client.service';
+import type { IDBusFanData } from 'src/common/models/IFanData';
+import type { ITccProfile } from 'src/common/models/TccProfile';
+import { StateService } from '../state.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ConfigService } from '../config.service';
+import { CompatibilityService } from '../compatibility.service';
+import type { ICpuPower } from 'src/common/models/TccPowerSettings';
+import type { IdGpuInfo, IiGpuInfo } from 'src/common/models/TccGpuValues';
+import { filter, first, tap } from 'rxjs/operators';
+import type { TDPInfo } from 'src/native-lib/TuxedoIOAPI';
+import { PowerStateService } from '../power-state.service';
 
 @Component({
     selector: 'app-dashboard',
     templateUrl: './dashboard.component.html',
     styleUrls: ['./dashboard.component.scss'],
-    standalone: false
+    standalone: false,
 })
 export class DashboardComponent implements OnInit, OnDestroy {
     public cpuCoreInfo: ILogicalCoreInfo[];
@@ -57,7 +53,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     public activeScalingGovernors: string[];
     public activeEnergyPerformancePreference: string[];
 
-    public cpuModelName: string = "";
+    public cpuModelName: string = '';
     public fanData: IDBusFanData;
 
     // CPU
@@ -81,7 +77,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     public gaugeIGpuFreq: number = 0;
     public iGpuTemp: number = 0;
     public iGpuFreq: number = 0;
-    public cpuVendor: string = "unknown";
+    public cpuVendor: string = 'unknown';
     public iGpuPower: number = 0;
 
     public activeProfile: ITccProfile;
@@ -93,7 +89,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private subscriptions: Subscription = new Subscription();
 
     public primeState: string;
-    public primeSelectValues: string[] = ["iGPU", "dGPU", "on-demand", "off"];
+    public primeSelectValues: string[] = ['iGPU', 'dGPU', 'on-demand', 'off'];
 
     private dashboardVisibility: boolean;
     public d0MetricsUsage: boolean;
@@ -113,7 +109,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         private route: ActivatedRoute,
         private config: ConfigService,
         public compat: CompatibilityService,
-        private power: PowerStateService
+        private power: PowerStateService,
     ) {}
 
     public async ngOnInit(): Promise<void> {
@@ -121,8 +117,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.initializeSubscriptions();
         this.initializeEventListeners();
         this.tccdbus.setSensorDataCollectionStatus(true);
-        this.dashboardVisibility = document.visibilityState === "visible";
-	    this.usingFahrenheit = this.config?.getSettings()?.fahrenheit ?? false;
+        this.dashboardVisibility = document.visibilityState === 'visible';
+        this.usingFahrenheit = this.config?.getSettings()?.fahrenheit ?? false;
         this.amdGpuCount = window.power.getAmdDGpuCount();
         this.dGpuAvailable = window.power.isDGpuAvailable();
         this.iGpuAvailable = window.power.isIGpuAvailable();
@@ -131,7 +127,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     public async ngAfterViewInit(): Promise<void> {
         window.ipc.showTccWindow();
     }
-    
+
     private setValuesFromRoute(): void {
         const data = this.route.snapshot.data;
         this.powerState = data.powerStateStatus;
@@ -144,18 +140,15 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
 
     private initializeEventListeners(): void {
-        document.addEventListener(
-            "visibilitychange",
-            this.visibilityChangeListener
-        );
+        document.addEventListener('visibilitychange', this.visibilityChangeListener);
     }
 
     private visibilityChangeListener: () => void = (): void => {
-        if (document.visibilityState === "hidden") {
+        if (document.visibilityState === 'hidden') {
             this.dashboardVisibility = false;
             this.tccdbus.setSensorDataCollectionStatus(false);
         }
-        if (document.visibilityState === "visible") {
+        if (document.visibilityState === 'visible') {
             this.dashboardVisibility = true;
             this.tccdbus.setSensorDataCollectionStatus(true);
             this.handleVisibilityChange();
@@ -169,10 +162,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private async updateDgpuPowerState(): Promise<void> {
         const powerState: string = await this.power.getDGpuPowerState();
 
-        if (powerState === "D0") {
+        if (powerState === 'D0') {
             this.tccdbus.setDGpuD0Metrics(true);
         }
-        if (powerState !== "D0") {
+        if (powerState !== 'D0') {
             this.tccdbus.setDGpuD0Metrics(false);
         }
     }
@@ -188,45 +181,41 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.subscribeODMInfo();
         this.subscribePrimeState();
     }
-    
+
     private subscribePrimeState(): void {
         this.subscriptions.add(
             this.tccdbus.primeState
                 .pipe(
                     filter((value: string): boolean => value !== undefined),
-                    first()
+                    first(),
                 )
                 .subscribe((state: string): void => {
                     this.primeState = state;
-                }
-            )
+                }),
         );
     }
-    
+
     private subscribeIsX11(): void {
         this.subscriptions.add(
             this.tccdbus.isX11
-                .pipe(
-                    filter((value: number): boolean => value !== undefined && value !== -1)
-                )
+                .pipe(filter((value: number): boolean => value !== undefined && value !== -1))
                 .subscribe((isX11: number): void => {
                     this.isX11 = isX11;
-                }
-            )
+                }),
         );
     }
-    
+
     private subscribeODMInfo(): void {
         this.subscriptions.add(
             this.tccdbus.odmPowerLimits.subscribe((tdpInfoArray: TDPInfo[]): void => {
                 const maxPowerLimit: number = tdpInfoArray.reduce((max: number, info: TDPInfo): number => {
-                    if (["pl1", "pl2", "pl4"].includes(info.descriptor)) {
+                    if (['pl1', 'pl2', 'pl4'].includes(info.descriptor)) {
                         return Math.max(max, info.max);
                     }
                     return max;
                 }, -1);
                 this.cpuPowerLimit = maxPowerLimit;
-            })
+            }),
         );
     }
 
@@ -234,23 +223,16 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.subscriptions.add(
             this.sysfs.pstateInfo.subscribe((pstateInfo: IPstateInfo): void => {
                 this.pstateInfo = pstateInfo;
-            })
+            }),
         );
     }
 
     private setDGpuValues(dGpuInfo?: IdGpuInfo): void {
-        const {
-            powerDraw = -1,
-            maxPowerLimit = -1,
-            coreFrequency = -1,
-            maxCoreFrequency = -1,
-        } = dGpuInfo ?? {};
+        const { powerDraw = -1, maxPowerLimit = -1, coreFrequency = -1, maxCoreFrequency = -1 } = dGpuInfo ?? {};
         this.dGpuPower = powerDraw > -1 ? powerDraw : 0;
-        this.gaugeDGPUPower =
-            maxPowerLimit > 0 ? (powerDraw / maxPowerLimit) * 100 : 0;
+        this.gaugeDGPUPower = maxPowerLimit > 0 ? (powerDraw / maxPowerLimit) * 100 : 0;
         this.dGpuFreq = coreFrequency > -1 ? coreFrequency : 0;
-        this.gaugeDGPUFreq =
-            maxCoreFrequency > 0 ? (coreFrequency / maxCoreFrequency) * 100 : 0;
+        this.gaugeDGPUFreq = maxCoreFrequency > 0 ? (coreFrequency / maxCoreFrequency) * 100 : 0;
     }
 
     private subscribeToDGpuInfo(): void {
@@ -262,12 +244,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 this.powerState = powerState;
                 this.d0MetricsUsage = dGpuInfo?.d0MetricsUsage;
 
-                if (powerState === "D0") {
+                if (powerState === 'D0') {
                     this.tccdbus.setDGpuD0Metrics(true);
                 }
 
                 this.setDGpuValues(dGpuInfo);
-            })
+            }),
         );
     }
 
@@ -275,10 +257,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.ensureSensorDataCollectionEnabled();
 
         const powerDraw: number = cpuPower?.powerDraw ?? -1;
-        const maxPowerLimit: number =
-            cpuPower?.maxPowerLimit ?? this.cpuPowerLimit ?? -1;
-        this.gaugeCPUPower =
-            maxPowerLimit > 0 ? (powerDraw / maxPowerLimit) * 100 : 0;
+        const maxPowerLimit: number = cpuPower?.maxPowerLimit ?? this.cpuPowerLimit ?? -1;
+        this.gaugeCPUPower = maxPowerLimit > 0 ? (powerDraw / maxPowerLimit) * 100 : 0;
         this.cpuPower = powerDraw;
     }
 
@@ -286,20 +266,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.subscriptions.add(
             this.tccdbus.cpuPower.subscribe((cpuPower?: ICpuPower): void => {
                 this.setCpuPowerValues(cpuPower);
-            })
+            }),
         );
         this.subscriptions.add(
             this.sysfs.generalCpuInfo.subscribe((cpuInfo: IGeneralCPUInfo): void => {
                 this.cpuInfo = cpuInfo;
-            })
+            }),
         );
         this.subscriptions.add(
-            this.sysfs.logicalCoreInfo.subscribe(
-                (coreInfo: ILogicalCoreInfo[]): void => {
-                    this.cpuCoreInfo = coreInfo;
-                    this.updateFrequencyData();
-                }
-            )
+            this.sysfs.logicalCoreInfo.subscribe((coreInfo: ILogicalCoreInfo[]): void => {
+                this.cpuCoreInfo = coreInfo;
+                this.updateFrequencyData();
+            }),
         );
     }
 
@@ -308,8 +286,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
         this.iGpuTemp = iGpuInfo?.temp ?? -1;
         const { coreFrequency = -1, maxCoreFrequency = 0 } = iGpuInfo ?? {};
-        this.gaugeIGpuFreq =
-            maxCoreFrequency > 0 ? (coreFrequency / maxCoreFrequency) * 100 : 0;
+        this.gaugeIGpuFreq = maxCoreFrequency > 0 ? (coreFrequency / maxCoreFrequency) * 100 : 0;
         this.iGpuFreq = coreFrequency;
         this.cpuVendor = await window.vendor.getCpuVendor();
         this.iGpuPower = iGpuInfo?.powerDraw ?? -1;
@@ -317,10 +294,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     // checks and sets status while dashboard is active since a wake-up will restart tccd and reset values
     private ensureSensorDataCollectionEnabled(): void {
-        if (
-            !this.tccdbus.sensorDataCollectionStatus?.value &&
-            this.dashboardVisibility
-        ) {
+        if (!this.tccdbus.sensorDataCollectionStatus?.value && this.dashboardVisibility) {
             this.tccdbus.setSensorDataCollectionStatus(true);
         }
     }
@@ -329,7 +303,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.subscriptions.add(
             this.tccdbus.iGpuInfo.subscribe((iGpuInfo?: IiGpuInfo): void => {
                 this.setIGpuValues(iGpuInfo);
-            })
+            }),
         );
     }
 
@@ -337,11 +311,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.subscriptions.add(
             this.tccdbus.fanData.subscribe((fanData: IDBusFanData): void => {
                 this.fanData = fanData;
-                
+
                 if (!fanData) {
                     return;
                 }
-                
+
                 const { gpu1, gpu2 } = fanData;
                 const gpu1Temp: number = gpu1?.temp?.data;
                 const gpu2Temp: number = gpu2?.temp?.data;
@@ -355,22 +329,22 @@ export class DashboardComponent implements OnInit, OnDestroy {
                     validGPUTemp1 && validGPUTemp2
                         ? Math.round((gpu1Temp + gpu2Temp) / 2)
                         : validGPUTemp1
-                        ? Math.round(gpu1Temp)
-                        : validGPUTemp2
-                        ? Math.round(gpu2Temp)
-                        : null;
+                          ? Math.round(gpu1Temp)
+                          : validGPUTemp2
+                            ? Math.round(gpu2Temp)
+                            : null;
 
                 this.gaugeDGPUFanSpeed =
                     validGPUTemp1 && validGPUTemp2
                         ? Math.round((gpu1Speed + gpu2Speed) / 2)
                         : validGPUTemp1
-                        ? Math.round(gpu1Speed)
-                        : validGPUTemp2
-                        ? Math.round(gpu2Speed)
-                        : null;
+                          ? Math.round(gpu1Speed)
+                          : validGPUTemp2
+                            ? Math.round(gpu2Speed)
+                            : null;
 
                 this.hasGPUTemp = this.gaugeDGPUTemp > 1;
-            })
+            }),
         );
     }
 
@@ -378,18 +352,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.subscriptions.add(
             this.state.activeProfile
                 .pipe(
-                    filter(
-                        (profile: ITccProfile): boolean => profile !== null && profile !== undefined
-                    ),
+                    filter((profile: ITccProfile): boolean => profile !== null && profile !== undefined),
                     tap((profile: ITccProfile): void => {
                         this.activeProfile = profile;
-                        this.isCustomProfile =
-                            this.config.getCustomProfileById(
-                                this.activeProfile.id
-                            ) !== undefined;
-                    })
+                        this.isCustomProfile = this.config.getCustomProfileById(this.activeProfile.id) !== undefined;
+                    }),
                 )
-                .subscribe()
+                .subscribe(),
         );
     }
 
@@ -410,11 +379,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         }
     }
 
-    public formatValue: (
-        value: number,
-        compatible: boolean,
-        formatter: (val: number) => string,
-    ) => string = (
+    public formatValue: (value: number, compatible: boolean, formatter: (val: number) => string) => string = (
         value: number,
         compatible: boolean,
         formatter: (val: number) => string,
@@ -428,14 +393,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     private createFormatter(
         compatibleFlag: (val: number) => boolean,
-        formatterFunc: (val: number) => string
+        formatterFunc: (val: number) => string,
     ): (value: number) => string {
         return (value: number): string => {
-            return this.formatValue(
-                value,
-                compatibleFlag(value),
-                formatterFunc
-            );
+            return this.formatValue(value, compatibleFlag(value), formatterFunc);
         };
     }
 
@@ -445,60 +406,57 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     public formatIGpuFrequency: (value: number) => string = this.createFormatter(
         (val: number): boolean => val >= 0,
-        (val: number): string => this.utils.formatGpuFrequency(val)
+        (val: number): string => this.utils.formatGpuFrequency(val),
     );
 
     public formatDGpuFrequency: (value: number) => string = this.createFormatter(
-        (val: number): boolean =>
-            val >= 0 && (this.powerState === "D3cold" || this.d0MetricsUsage),
-        (val: number): string => this.utils.formatGpuFrequency(val)
+        (val: number): boolean => val >= 0 && (this.powerState === 'D3cold' || this.d0MetricsUsage),
+        (val: number): string => this.utils.formatGpuFrequency(val),
     );
 
     public gaugeCpuFreqFormat: (value: number) => string = this.createFormatter(
         (): true => true,
-        (val: number): string => this.utils.formatCpuFrequency(val)
+        (val: number): string => this.utils.formatCpuFrequency(val),
     );
 
     public gaugeCpuTempFormat: (value: number) => string = this.createFormatter(
         (): boolean => this.compat.hasCpuTemp,
-        (val: number): string => this.formatTemperature(val).toString()
+        (val: number): string => this.formatTemperature(val).toString(),
     );
 
     public gaugeIGpuTempFormat: (value: number) => string = this.createFormatter(
         (): boolean => this.compat.hasIGpuTemp,
-        (val: number): string => this.formatTemperature(val).toString()
+        (val: number): string => this.formatTemperature(val).toString(),
     );
 
     public gaugeDGpuTempFormat: (value: number) => string = this.createFormatter(
         (): boolean => this.compat.hasDGpuTemp,
-        (val: number): string => this.formatTemperature(val).toString()
+        (val: number): string => this.formatTemperature(val).toString(),
     );
 
     public gaugeCpuFanSpeedFormat: (value: number) => string = this.createFormatter(
         (): boolean => this.compat.hasCpuFan,
-        (val: number): string => Math.round(val).toString()
+        (val: number): string => Math.round(val).toString(),
     );
 
     public gaugeDGpuFanSpeedFormat: (value: number) => string = this.createFormatter(
         (): boolean => this.compat.hasDGpuFan,
-        (val: number): string => Math.round(val).toString()
+        (val: number): string => Math.round(val).toString(),
     );
 
     public cpuPowerFormat: (value: number) => string = this.createFormatter(
         (): boolean => this.compat.hasCpuPower,
-        (val: number): string => this.roundWattage(val)
+        (val: number): string => this.roundWattage(val),
     );
 
     public dGpuPowerFormat: (value: number) => string = this.createFormatter(
-        (): boolean =>
-            this.powerState === "D3cold" ||
-            (this.compat.hasDGpuPowerDraw && this.d0MetricsUsage),
-        (val: number): string => (this.powerState === "D3cold" ? "0" : this.roundWattage(val))
+        (): boolean => this.powerState === 'D3cold' || (this.compat.hasDGpuPowerDraw && this.d0MetricsUsage),
+        (val: number): string => (this.powerState === 'D3cold' ? '0' : this.roundWattage(val)),
     );
 
     public iGpuPowerFormat: (value: number) => string = this.createFormatter(
         (): boolean => this.compat.hasIGpuPowerDraw,
-        (val: number): string => this.roundWattage(val)
+        (val: number): string => this.roundWattage(val),
     );
 
     private formatTemperature(val: number): number {
@@ -514,7 +472,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     public goToProfileEdit: (profile: ITccProfile) => void = (profile: ITccProfile): void => {
         if (profile) {
-            this.router.navigate(["profile-manager", profile.id], {
+            this.router.navigate(['profile-manager', profile.id], {
                 relativeTo: this.route.parent,
             });
         }
@@ -523,9 +481,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
     // Make numbers smaller than 1W not show 0, but <1W
     private roundWattage(val: number): string {
         const num: number = Math.round(val);
-        let ret: string = "";
+        let ret: string = '';
         if (num < 1) {
-            ret = "<1";
+            ret = '<1';
         } else {
             ret = num.toString();
         }
@@ -533,7 +491,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
 
     public gotoSettings(): void {
-        this.router.navigate(["global-settings", true], {
+        this.router.navigate(['global-settings', true], {
             relativeTo: this.route.parent,
         });
     }
@@ -555,20 +513,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
     }
 
     private removeEventListeners(): void {
-        document.removeEventListener(
-            "visibilitychange",
-            this.visibilityChangeListener
-        );
+        document.removeEventListener('visibilitychange', this.visibilityChangeListener);
     }
 
     public getPrimeStateLabel(primeState: string): string {
-        if (primeState === "iGPU") {
+        if (primeState === 'iGPU') {
             return $localize`:@@primeSelectIGpu:Power-saving CPU graphics processor (iGPU)`;
         }
-        if (primeState === "dGPU") {
+        if (primeState === 'dGPU') {
             return $localize`:@@primeSelectDGpu:High-performance graphics processor (dGPU)`;
         }
-        if (primeState === "on-demand") {
+        if (primeState === 'on-demand') {
             return $localize`:@@primeSelectOnDemand:Hybrid graphics mode (on-demand)`;
         }
     }

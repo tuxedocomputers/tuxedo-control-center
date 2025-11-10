@@ -19,15 +19,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
 <mat-radio-group class="prime-radio-group" [(ngModel)]="activeState">
     <mat-radio-button color="primary" [value]="'iGPU'" (click)="applyGpuProfile('iGPU')">
-        <div >
-            <div i18n="@@primeSelectIGpu" class="radio-title">Power-saving CPU graphics processor (iGPU)
-            </div>
+        <div>
+            <div i18n="@@primeSelectIGpu" class="radio-title">Power-saving CPU graphics processor (iGPU)</div>
             <div i18n="@@primeSelectIGpuDescription" class="radio-description">
-                Exclusively uses the graphics processor integrated in the main processor. Suitable for power saving and
-                low graphics performance requirements.
-                <br>
-                <b>Please note:</b> Monitors connected to the high-performance graphics processor do not work in this
-                mode.
+                Exclusively uses the graphics processor integrated in the main processor. Suitable for power saving and low graphics performance requirements.
+                <br />
+                <b>Please note:</b> Monitors connected to the high-performance graphics processor do not work in this mode.
             </div>
         </div>
     </mat-radio-button>
@@ -35,12 +32,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
 <mat-radio-group class="prime-radio-group" [(ngModel)]="activeState">
     <mat-radio-button color="primary" [value]="'dGPU'" (click)="applyGpuProfile('dGPU')">
-        <div >
-            <div i18n="@@primeSelectDGpu" class="radio-title">High performance graphics processor (dGPU)
-            </div>
+        <div>
+            <div i18n="@@primeSelectDGpu" class="radio-title">High performance graphics processor (dGPU)</div>
             <div i18n="@@primeSelectDGpuDescription" class="radio-description">
-                Uses high-performance graphics processor for graphics-intensive tasks, but with higher energy
-                consumption, even at low load and idle.
+                Uses high-performance graphics processor for graphics-intensive tasks, but with higher energy consumption, even at low load and idle.
             </div>
         </div>
     </mat-radio-button>
@@ -48,12 +43,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
 <mat-radio-group class="prime-radio-group" [(ngModel)]="activeState">
     <mat-radio-button color="primary" [value]="'on-demand'" (click)="applyGpuProfile('on-demand')">
-        <div >
-            <div i18n="@@primeSelectOnDemand" class="radio-title">Hybrid graphics mode (on-demand)
-            </div>
+        <div>
+            <div i18n="@@primeSelectOnDemand" class="radio-title">Hybrid graphics mode (on-demand)</div>
             <div i18n="@@primeSelectOnDemandDescription" class="radio-description">
-                The system prioritizes the energy-saving CPU graphics processor. The high-performance graphics processor
-                can be added by the user if required. Combination of high performance and power saving.
+                The system prioritizes the energy-saving CPU graphics processor. The high-performance graphics processor can be added by the user if required. Combination of high performance and power
+                saving.
             </div>
         </div>
     </mat-radio-button>

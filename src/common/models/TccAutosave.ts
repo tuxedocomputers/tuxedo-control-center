@@ -22,5 +22,5 @@ export interface ITccAutosave {
 }
 
 export const defaultAutosave: ITccAutosave = {
-    displayBrightness: 100
+    displayBrightness: 100,
 };

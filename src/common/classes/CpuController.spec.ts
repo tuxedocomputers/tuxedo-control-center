@@ -18,27 +18,26 @@
  */
 
 import 'jasmine';
-const mock: typeof import("mock-fs") = require('mock-fs');
+const mock: typeof import('mock-fs') = require('mock-fs');
 
 import { CpuController } from './CpuController';
 
 describe('CpuController', (): void => {
-
     // Mock file structure in memory
     beforeEach((): void => {
         mock({
             '/sys/devices/system/cpu': {
-                'possible': '0-1',
-                'present': '0-1',
-                'cpu0': {
-                    'online': '1',
-                    cpufreq: { 'scaling_cur_freq': '800000' }
+                possible: '0-1',
+                present: '0-1',
+                cpu0: {
+                    online: '1',
+                    cpufreq: { scaling_cur_freq: '800000' },
                 },
-                'cpu1': {
-                    'online': '1',
-                    cpufreq: { 'scaling_cur_freq': '800000' }
-                }
-            }
+                cpu1: {
+                    online: '1',
+                    cpufreq: { scaling_cur_freq: '800000' },
+                },
+            },
         });
     });
 

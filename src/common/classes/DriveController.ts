@@ -21,12 +21,11 @@ import * as path from 'node:path';
 import * as fs from 'node:fs';
 import * as child_process from 'node:child_process';
 
-import type { IDrive } from "../models/IDrive";
+import type { IDrive } from '../models/IDrive';
 import { SysFsPropertyInteger } from './SysFsProperties';
 
 export class DriveController {
-
-    private static _sysBlockDir: string = "/sys/block/";
+    private static _sysBlockDir: string = '/sys/block/';
 
     public static async getDrives(includeLoopDevices: boolean = false): Promise<IDrive[]> {
         const drives: IDrive[] = [];
@@ -36,7 +35,7 @@ export class DriveController {
             const dr: IDrive[] = await this.getChildDevices(path.join(this._sysBlockDir, d));
             if (dr !== undefined) {
                 for (const drive of dr) {
-                    if (!includeLoopDevices && !drive.name.startsWith("loop")) {
+                    if (!includeLoopDevices && !drive.name.startsWith('loop')) {
                         drives.push(drive);
                     }
                 }
@@ -48,17 +47,17 @@ export class DriveController {
 
     public static async getDeviceInfo(devicePath: string): Promise<IDrive> {
         const name: string = path.basename(devicePath);
-        const size: number = new SysFsPropertyInteger(path.join(devicePath, "size")).readValue();
+        const size: number = new SysFsPropertyInteger(path.join(devicePath, 'size')).readValue();
 
-        const isParent: boolean = !fs.existsSync(path.join(devicePath, "partition"));
-        let devPath: string = "";
+        const isParent: boolean = !fs.existsSync(path.join(devicePath, 'partition'));
+        let devPath: string = '';
 
-        if (fs.existsSync(path.join("/dev/", name))) {
-            devPath = path.join("/dev/", name);
+        if (fs.existsSync(path.join('/dev/', name))) {
+            devPath = path.join('/dev/', name);
         }
 
         const result: Buffer = child_process.execSync(`lsblk --noheadings --nodeps --output FSTYPE ${devPath}`);
-        const isCrpyt: boolean = result.toString().trim() === "crypto_LUKS";
+        const isCrpyt: boolean = result.toString().trim() === 'crypto_LUKS';
 
         return {
             name: name,
@@ -66,8 +65,8 @@ export class DriveController {
             devPath: devPath,
             crypt: isCrpyt,
             size: size,
-            isParent: isParent
-        }
+            isParent: isParent,
+        };
     }
 
     public static async getChildDevices(devicePath: string): Promise<IDrive[]> {

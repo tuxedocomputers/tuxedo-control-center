@@ -26,43 +26,29 @@ class TestValues {
 }
 
 describe('FanLogic ValueBuffer', (): void => {
-
     let buffer: ValueBuffer;
 
     const testData: TestValues[] = [];
     testData.push({
-        testValues: [
-            63, 39, 34, 92, 93, 85,
-            59,  2, 19, 97, 79, 54,
-            74
-        ],
-        result: 65
+        testValues: [63, 39, 34, 92, 93, 85, 59, 2, 19, 97, 79, 54, 74],
+        result: 65,
     });
 
     testData.push({
-        testValues: [
-            77, 22, 68, 41, 82, 92,
-            21, 61, 13, 22, 23, 26,
-            31
-        ],
-        result: 39
+        testValues: [77, 22, 68, 41, 82, 92, 21, 61, 13, 22, 23, 26, 31],
+        result: 39,
     });
 
     testData.push({
-        testValues: [
-            26, 62, 87, 61, 16, 97,
-            74,  2, 77, 91, 64, 80,
-            73
-        ],
-        result: 70
+        testValues: [26, 62, 87, 61, 16, 97, 74, 2, 77, 91, 64, 80, 73],
+        result: 70,
     });
 
     beforeEach((): void => {
         buffer = new ValueBuffer();
     });
 
-    afterEach((): void => {
-    });
+    afterEach((): void => {});
 
     it('should handle sample test data cases', (): void => {
         for (const data of testData) {
@@ -128,14 +114,11 @@ describe('FanLogic ValueBuffer', (): void => {
                 referenceBuffer.addValue(randomTemp);
             }
 
-            const bufferInfo: string = `for buffer:           ${JSON.stringify(buffer.getBufferCopy())}\n` +
-                             `    reference buffer: ${JSON.stringify(referenceBuffer.getBufferCopy())}\n\n`;
-            expect(buffer.getBufferCopy())
-                .withContext(bufferInfo)
-                .toEqual(referenceBuffer.getBufferCopy());
-            expect(buffer.getFilteredValue())
-                .withContext(bufferInfo)
-                .toEqual(referenceBuffer.getFilteredValue());
+            const bufferInfo: string =
+                `for buffer:           ${JSON.stringify(buffer.getBufferCopy())}\n` +
+                `    reference buffer: ${JSON.stringify(referenceBuffer.getBufferCopy())}\n\n`;
+            expect(buffer.getBufferCopy()).withContext(bufferInfo).toEqual(referenceBuffer.getBufferCopy());
+            expect(buffer.getFilteredValue()).withContext(bufferInfo).toEqual(referenceBuffer.getFilteredValue());
         }
     });
 });
@@ -169,7 +152,9 @@ class OriginalValueBuffer {
         }
 
         // Calculate average from rest of array
-        const averageValue: number = Math.round(copy.reduce((accVal: number, currentValue: number): number => accVal + currentValue) / copy.length);
+        const averageValue: number = Math.round(
+            copy.reduce((accVal: number, currentValue: number): number => accVal + currentValue) / copy.length,
+        );
         return averageValue;
     }
 

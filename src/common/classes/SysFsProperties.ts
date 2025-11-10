@@ -20,7 +20,6 @@
 import { SysFsPropertyIO } from './SysFsPropertyIO';
 
 export class SysFsPropertyString extends SysFsPropertyIO<string> {
-
     convertStringToType(value: string): string {
         return value.trim();
     }
@@ -31,7 +30,6 @@ export class SysFsPropertyString extends SysFsPropertyIO<string> {
 }
 
 export class SysFsPropertyStringList extends SysFsPropertyIO<string[]> {
-
     convertStringToType(value: string): string[] {
         if (value.trim() === '') {
             return [];
@@ -53,7 +51,6 @@ export class SysFsPropertyStringList extends SysFsPropertyIO<string[]> {
 }
 
 export class SysFsPropertyInteger extends SysFsPropertyIO<number> {
-
     convertStringToType(value: string): number {
         return Number.parseInt(value, 10);
     }
@@ -64,7 +61,6 @@ export class SysFsPropertyInteger extends SysFsPropertyIO<number> {
 }
 
 export class SysFsPropertyIntegerHex extends SysFsPropertyIO<number> {
-
     protected convertStringToType(value: string): number {
         return Number.parseInt(value, 16);
     }
@@ -75,7 +71,6 @@ export class SysFsPropertyIntegerHex extends SysFsPropertyIO<number> {
 }
 
 export class SysFsPropertyBoolean extends SysFsPropertyIO<boolean> {
-
     convertStringToType(value: string): boolean {
         return Number.parseInt(value, 10) === 1;
     }
@@ -93,29 +88,35 @@ export class SysFsPropertyBoolean extends SysFsPropertyIO<boolean> {
  * Parses a numeric list with ranges (of type "cpu lists")
  */
 export class SysFsPropertyNumList extends SysFsPropertyIO<number[]> {
-
     constructor(
         readonly readPath: string,
         readonly writePath: string = readPath,
-        readonly listSeparator = ',') {
-            super(readPath, writePath);
-        }
+        readonly listSeparator = ',',
+    ) {
+        super(readPath, writePath);
+    }
 
     convertStringToType(value: string): number[] {
         const resultArray: number[] = [];
 
-        if (value.trim() === '') { return []; }
+        if (value.trim() === '') {
+            return [];
+        }
         const arrayRanges: string[] = value.split(this.listSeparator);
         arrayRanges.forEach((strRange: string): void => {
             const rangeSplit: string[] = strRange.split('-');
             if (rangeSplit?.length === 1) {
                 const nr: number = Number.parseInt(rangeSplit[0], 10);
-                if (Number.isNaN(nr)) { return; }
+                if (Number.isNaN(nr)) {
+                    return;
+                }
                 resultArray.push(nr);
             } else if (rangeSplit?.length === 2) {
                 const startNr: number = Number.parseInt(rangeSplit[0], 10);
                 const endNr: number = Number.parseInt(rangeSplit[1], 10);
-                if (Number.isNaN(startNr) || Number.isNaN(endNr)) { return; }
+                if (Number.isNaN(startNr) || Number.isNaN(endNr)) {
+                    return;
+                }
                 for (let i: number = startNr; i <= endNr; ++i) {
                     resultArray.push(i);
                 }
@@ -125,15 +126,17 @@ export class SysFsPropertyNumList extends SysFsPropertyIO<number[]> {
     }
 
     convertTypeToString(value: number[]): string {
-        if (value?.length === 0) { return ''; }
+        if (value?.length === 0) {
+            return '';
+        }
 
         const resultArray: string[] = [];
-        value.sort((a: number, b: number): number => a - b );
+        value.sort((a: number, b: number): number => a - b);
 
         let currentStart: number = value[0];
 
         for (let i: number = 0; i < value?.length; ++i) {
-            if (i === value?.length - 1 || (value[i + 1] - value[i]) > 1) {
+            if (i === value?.length - 1 || value[i + 1] - value[i] > 1) {
                 if (value[i] === currentStart) {
                     resultArray.push(currentStart.toString());
                 } else {
@@ -152,19 +155,21 @@ export class SysFsPropertyNumList extends SysFsPropertyIO<number[]> {
  * Parses a numeric list without ranges
  */
 export class SysFsPropertyNumListExplicit extends SysFsPropertyIO<number[]> {
-
     constructor(
         readonly readPath: string,
         readonly writePath: string = readPath,
-        readonly listSeparator = ' ') {
-            super(readPath, writePath);
-        }
+        readonly listSeparator = ' ',
+    ) {
+        super(readPath, writePath);
+    }
 
     convertStringToType(value: string): number[] {
         if (value.trim() === '') {
             return [];
         } else {
-            const trimmedList: number[] = value.split(this.listSeparator).map((element: string): number => Number.parseInt(element.trim()));
+            const trimmedList: number[] = value
+                .split(this.listSeparator)
+                .map((element: string): number => Number.parseInt(element.trim()));
             // Finally filter all empty strings
             return trimmedList.filter((e: number): boolean => !Number.isNaN(e));
         }

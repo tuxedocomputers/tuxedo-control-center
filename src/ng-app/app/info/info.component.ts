@@ -22,52 +22,48 @@ import { UtilsService } from '../utils.service';
 import type { IProcessVersions } from '../renderer';
 
 @Component({
-  selector: 'app-info',
-  templateUrl: './info.component.html',
-  styleUrls: ['./info.component.scss'],
-  standalone: false
+    selector: 'app-info',
+    templateUrl: './info.component.html',
+    styleUrls: ['./info.component.scss'],
+    standalone: false,
 })
 export class InfoComponent implements OnInit {
+    public appVersion: string;
+    public nodeVersion: string;
+    public electronVersion: string;
+    public chromeVersion: string;
+    public angularVersion: string;
 
-  public appVersion: string;
-  public nodeVersion: string;
-  public electronVersion: string;
-  public chromeVersion: string;
-  public angularVersion: string;
+    constructor(private utils: UtilsService) {}
 
-  constructor(
-    private utils: UtilsService
-  ) { }
-
-  ngOnInit(): void {
-    this.init();
-  }
-
-  private async init(): Promise<void>
-  {
-    this.appVersion = await window.ipc.getAppVersion();
-    const processVersions: IProcessVersions = await window.ipc.getProcessVersions();
-    this.nodeVersion = processVersions.node;
-    this.electronVersion = processVersions.electron;
-    this.chromeVersion = processVersions.chrome;
-    this.angularVersion = VERSION.full;
-  }
-
-  public changeLanguage(languageId: string): void {
-    if (languageId !== this.getCurrentLanguageId()) {
-      this.utils.changeLanguage(languageId);
+    ngOnInit(): void {
+        this.init();
     }
-  }
 
-  public getCurrentLanguageId(): string {
-    return this.utils.getCurrentLanguageId();
-  }
+    private async init(): Promise<void> {
+        this.appVersion = await window.ipc.getAppVersion();
+        const processVersions: IProcessVersions = await window.ipc.getProcessVersions();
+        this.nodeVersion = processVersions.node;
+        this.electronVersion = processVersions.electron;
+        this.chromeVersion = processVersions.chrome;
+        this.angularVersion = VERSION.full;
+    }
 
-  public getLanguagesMenuArray(): { id: string; label: string; img: string }[] {
-    return this.utils.getLanguagesMenuArray();
-  }
+    public changeLanguage(languageId: string): void {
+        if (languageId !== this.getCurrentLanguageId()) {
+            this.utils.changeLanguage(languageId);
+        }
+    }
 
-  public getLanguageData(langId: string): string {
-    return this.utils.getLanguageData(langId);
-  }
+    public getCurrentLanguageId(): string {
+        return this.utils.getCurrentLanguageId();
+    }
+
+    public getLanguagesMenuArray(): { id: string; label: string; img: string }[] {
+        return this.utils.getLanguagesMenuArray();
+    }
+
+    public getLanguageData(langId: string): string {
+        return this.utils.getLanguageData(langId);
+    }
 }

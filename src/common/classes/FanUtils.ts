@@ -17,13 +17,10 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type { ITccFanTableEntry } from "../models/TccFanTable";
-const fsp: typeof import("fs").promises = require("fs").promises;
+import type { ITccFanTableEntry } from '../models/TccFanTable';
+const fsp: typeof import('fs').promises = require('fs').promises;
 
-async function interpolatePoints(
-    points: ITccFanTableEntry[],
-    x: number
-): Promise<number> {
+async function interpolatePoints(points: ITccFanTableEntry[], x: number): Promise<number> {
     const first: ITccFanTableEntry = points[0];
     const last: ITccFanTableEntry = points[points.length - 1];
     if (x <= first.temp) {
@@ -33,10 +30,7 @@ async function interpolatePoints(
         return last.speed;
     }
     const i: number =
-        points.findIndex(
-            (p: ITccFanTableEntry, idx: number): boolean =>
-                p.temp >= x || idx === points.length - 1
-        ) - 1;
+        points.findIndex((p: ITccFanTableEntry, idx: number): boolean => p.temp >= x || idx === points.length - 1) - 1;
     const { temp: x1, speed: y1 } = points[i];
     const { temp: x2, speed: y2 } = points[i + 1];
     const m: number = (y2 - y1) / (x2 - x1);
@@ -44,15 +38,9 @@ async function interpolatePoints(
     return Math.round(m * x + b);
 }
 
-export async function interpolatePointsArray(
-    points: ITccFanTableEntry[]
-): Promise<number[]> {
+export async function interpolatePointsArray(points: ITccFanTableEntry[]): Promise<number[]> {
     return Promise.all(
-        Array.from(
-            { length: 101 },
-            (_: unknown, i: number): Promise<number> =>
-                interpolatePoints(points, i)
-        )
+        Array.from({ length: 101 }, (_: unknown, i: number): Promise<number> => interpolatePoints(points, i)),
     );
 }
 
@@ -68,16 +56,12 @@ export function formatTemp(value: number, usingFahrenheit: boolean): string {
  * Ensure minimum fan speed if temperature is high
  */
 export function manageCriticalTemperature(temp: number, speed: number): number {
-    return temp >= 90
-        ? Math.max(40, speed)
-        : temp >= 80
-        ? Math.max(30, speed)
-        : speed;
+    return temp >= 90 ? Math.max(40, speed) : temp >= 80 ? Math.max(30, speed) : speed;
 }
 
 export async function getHwmonPathWithName(name: string): Promise<string> {
     try {
-        const basePath = "/sys/class/hwmon";
+        const basePath = '/sys/class/hwmon';
         const hwmonDirs: string[] = await fsp.readdir(basePath);
 
         for (const dirName of hwmonDirs) {
@@ -87,10 +71,7 @@ export async function getHwmonPathWithName(name: string): Promise<string> {
             const nameFilePath: string = `${dirPath}/name`;
 
             try {
-                const content: string = await fsp.readFile(
-                    nameFilePath,
-                    "utf-8"
-                );
+                const content: string = await fsp.readFile(nameFilePath, 'utf-8');
 
                 if (content.trim() === name) {
                     return dirPath;
@@ -103,5 +84,5 @@ export async function getHwmonPathWithName(name: string): Promise<string> {
         console.error(`FanUtils: getHwmonPathWithName: ${err}`);
     }
 
-    return "";
+    return '';
 }

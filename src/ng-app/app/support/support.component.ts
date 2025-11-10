@@ -26,156 +26,167 @@ import type { MatInput } from '@angular/material/input';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
-  selector: 'app-support',
-  templateUrl: './support.component.html',
-  styleUrls: ['./support.component.scss'],
-  providers: [
-    {
-      provide: STEPPER_GLOBAL_OPTIONS,
-      useValue: { displayDefaultIndicatorType: false }
-    }
-  ],
-  standalone: false
+    selector: 'app-support',
+    templateUrl: './support.component.html',
+    styleUrls: ['./support.component.scss'],
+    providers: [
+        {
+            provide: STEPPER_GLOBAL_OPTIONS,
+            useValue: { displayDefaultIndicatorType: false },
+        },
+    ],
+    standalone: false,
 })
 export class SupportComponent implements OnInit {
-  public anydeskInstalled: boolean;
-  public aptInstalled: boolean = false;
-  public webfaiCreatorInstalled: boolean;
-  public isX11: number = -1;
-  public formTicketNumber: FormGroup;
-  public systeminfoRunOutput: string = '';
-  public systeminfoRunProgress: boolean = false;
-  public systemInfosCompleted: boolean = false;
-  public anydeskProgramName: string = 'anydesk';
-  public webfaiCreatorProgramName: string = 'tuxedo-webfai-creator';
-  // TODO how can we buffer this value better without using sync calls that will likely blockade everything?
-  private installProgress: Map<string, boolean> = new Map();
-  private isCheckingInstallation: Map<string, boolean> = new Map();
+    public anydeskInstalled: boolean;
+    public aptInstalled: boolean = false;
+    public webfaiCreatorInstalled: boolean;
+    public isX11: number = -1;
+    public formTicketNumber: FormGroup;
+    public systeminfoRunOutput: string = '';
+    public systeminfoRunProgress: boolean = false;
+    public systemInfosCompleted: boolean = false;
+    public anydeskProgramName: string = 'anydesk';
+    public webfaiCreatorProgramName: string = 'tuxedo-webfai-creator';
+    // TODO how can we buffer this value better without using sync calls that will likely blockade everything?
+    private installProgress: Map<string, boolean> = new Map();
+    private isCheckingInstallation: Map<string, boolean> = new Map();
 
-  constructor(
-    private utils: UtilsService,
-    private route: ActivatedRoute
-  ) { }
+    constructor(
+        private utils: UtilsService,
+        private route: ActivatedRoute,
+    ) {}
 
-  public ngOnInit(): void {
-    this.setVariablesWithRouteSnapshot();
-    this.updateProgressStatus();
-    this.formTicketNumber = new FormGroup({
-      inputTicketNumber: new FormControl('', [Validators.required, Validators.pattern('^(99)([0-9]){7}')])
-    });
-
-    window.ipc.onUpdateSystemInfosLabel((event: any, text: string): void => {
-        this.systeminfoOutput(text);
-    });
-  }
-  
-  private setVariablesWithRouteSnapshot(): void {
-    const data = this.route.snapshot.data;
-    
-    this.anydeskInstalled = data.anydeskInstalled;
-    this.aptInstalled = data.aptInstalled;
-    this.webfaiCreatorInstalled = data.webfaiCreatorInstalled;
-    this.isX11 = data.x11Status;
-  }
-
-  public focusControl(control: MatInput): void  {
-    setTimeout((): void => { control.focus(); }, 0);
-  }
-
-  public openExternalUrl(url: string): void {
-    this.utils.openExternal(url);
-  }
-
-  public async updateAnydeskInstallStatus(): Promise<void> {
-    this.anydeskInstalled = await window.pgms.anydeskInstalled();
-    this.isCheckingInstallation.set(this.anydeskProgramName, false);
-  }
-
-  public async updateWebfaiCreatorInstallStatus(): Promise<void> {
-    this.webfaiCreatorInstalled = await window.pgms.webfaiCreatorInstalled();
-    this.isCheckingInstallation.set(this.webfaiCreatorProgramName, false);
-  }
-
-  public buttonInstallRemoveAnydesk(): void {
-    this.installProgress.set(this.anydeskProgramName,true);
-    this.isCheckingInstallation.set(this.anydeskProgramName,true);
-    if (this.anydeskInstalled) {
-      window.pgms.uninstallAnydesk().then((): void => {
-        this.updateAnydeskInstallStatus();
+    public ngOnInit(): void {
+        this.setVariablesWithRouteSnapshot();
         this.updateProgressStatus();
-      });
-    } else {
-      window.pgms.installAnydesk().then((): void => {
-        this.updateAnydeskInstallStatus();
-        this.updateProgressStatus();
-      });
+        this.formTicketNumber = new FormGroup({
+            inputTicketNumber: new FormControl('', [Validators.required, Validators.pattern('^(99)([0-9]){7}')]),
+        });
+
+        window.ipc.onUpdateSystemInfosLabel((event: any, text: string): void => {
+            this.systeminfoOutput(text);
+        });
     }
-    this.updateProgressStatus();
-    setTimeout((): void => { this.updateProgressStatus() },500);
-    setTimeout((): void => { this.updateProgressStatus() },1000);
-  }
 
-  public buttonInstallRemoveWebfaiCreator(): void {
-    this.installProgress.set(this.webfaiCreatorProgramName,true);
-    this.isCheckingInstallation.set(this.webfaiCreatorProgramName,true);
-    if (this.webfaiCreatorInstalled) {
-      window.pgms.uninstallWebfaiCreator().then((): void => {
-        this.updateWebfaiCreatorInstallStatus();
-        this.updateProgressStatus();
-      });
-    } else {
-        window.pgms.installWebfaiCreator().then((): void => {
-        this.updateWebfaiCreatorInstallStatus();
-        this.updateProgressStatus();
-      });
+    private setVariablesWithRouteSnapshot(): void {
+        const data = this.route.snapshot.data;
+
+        this.anydeskInstalled = data.anydeskInstalled;
+        this.aptInstalled = data.aptInstalled;
+        this.webfaiCreatorInstalled = data.webfaiCreatorInstalled;
+        this.isX11 = data.x11Status;
     }
-    this.updateProgressStatus();
-    setTimeout((): void => { this.updateProgressStatus() },500);
-    setTimeout((): void => { this.updateProgressStatus() },1000);
-  }
 
-  public buttonStartAnydesk(): void {
-    window.pgms.startAnydesk();
-  }
+    public focusControl(control: MatInput): void {
+        setTimeout((): void => {
+            control.focus();
+        }, 0);
+    }
 
-  public buttonStartWebfaiCreator(): void {
-    window.pgms.startWebfaiCreator();
-  }
+    public openExternalUrl(url: string): void {
+        this.utils.openExternal(url);
+    }
 
-  public progress(): Map<string, boolean> {
-    return this.installProgress;
-  }
+    public async updateAnydeskInstallStatus(): Promise<void> {
+        this.anydeskInstalled = await window.pgms.anydeskInstalled();
+        this.isCheckingInstallation.set(this.anydeskProgramName, false);
+    }
 
-  public progressCheck(): Map<string, boolean> {
-    return this.isCheckingInstallation;
-  }
+    public async updateWebfaiCreatorInstallStatus(): Promise<void> {
+        this.webfaiCreatorInstalled = await window.pgms.webfaiCreatorInstalled();
+        this.isCheckingInstallation.set(this.webfaiCreatorProgramName, false);
+    }
 
-  private async updateProgressStatus(): Promise<void> {
-    this.installProgress = await window.pgms.isInProgress();
-    this.isCheckingInstallation = await window.pgms.isCheckingInstallation();
-  }
+    public buttonInstallRemoveAnydesk(): void {
+        this.installProgress.set(this.anydeskProgramName, true);
+        this.isCheckingInstallation.set(this.anydeskProgramName, true);
+        if (this.anydeskInstalled) {
+            window.pgms.uninstallAnydesk().then((): void => {
+                this.updateAnydeskInstallStatus();
+                this.updateProgressStatus();
+            });
+        } else {
+            window.pgms.installAnydesk().then((): void => {
+                this.updateAnydeskInstallStatus();
+                this.updateProgressStatus();
+            });
+        }
+        this.updateProgressStatus();
+        setTimeout((): void => {
+            this.updateProgressStatus();
+        }, 500);
+        setTimeout((): void => {
+            this.updateProgressStatus();
+        }, 1000);
+    }
 
+    public buttonInstallRemoveWebfaiCreator(): void {
+        this.installProgress.set(this.webfaiCreatorProgramName, true);
+        this.isCheckingInstallation.set(this.webfaiCreatorProgramName, true);
+        if (this.webfaiCreatorInstalled) {
+            window.pgms.uninstallWebfaiCreator().then((): void => {
+                this.updateWebfaiCreatorInstallStatus();
+                this.updateProgressStatus();
+            });
+        } else {
+            window.pgms.installWebfaiCreator().then((): void => {
+                this.updateWebfaiCreatorInstallStatus();
+                this.updateProgressStatus();
+            });
+        }
+        this.updateProgressStatus();
+        setTimeout((): void => {
+            this.updateProgressStatus();
+        }, 500);
+        setTimeout((): void => {
+            this.updateProgressStatus();
+        }, 1000);
+    }
 
-  public buttonStartSysteminfo(systeminfoStepper: MatStepper): void {
-    this.systeminfoRunProgress = true;
-    this.utils.pageDisabled = true;
-    window.ipc.runSysteminfo(this.formTicketNumber.controls.inputTicketNumber.value).then(() => {
-      this.systeminfoOutput('Done');
-      this.systemInfosCompleted = true;
-      systeminfoStepper.selected.completed = true;
-      systeminfoStepper.next();
-    }).catch((err: unknown): void => {
-      console.error(`support: buttonStartSysteminfo failed => ${err}`)
-      this.systeminfoRunOutput = err.toString();
-    }).finally((): void => {
-      this.systeminfoRunProgress = false;
-      this.utils.pageDisabled = false;
-    });
-  }
+    public buttonStartAnydesk(): void {
+        window.pgms.startAnydesk();
+    }
 
-  public systeminfoOutput(text: string): void {
-    this.systeminfoRunOutput = text;
-  }
+    public buttonStartWebfaiCreator(): void {
+        window.pgms.startWebfaiCreator();
+    }
+
+    public progress(): Map<string, boolean> {
+        return this.installProgress;
+    }
+
+    public progressCheck(): Map<string, boolean> {
+        return this.isCheckingInstallation;
+    }
+
+    private async updateProgressStatus(): Promise<void> {
+        this.installProgress = await window.pgms.isInProgress();
+        this.isCheckingInstallation = await window.pgms.isCheckingInstallation();
+    }
+
+    public buttonStartSysteminfo(systeminfoStepper: MatStepper): void {
+        this.systeminfoRunProgress = true;
+        this.utils.pageDisabled = true;
+        window.ipc
+            .runSysteminfo(this.formTicketNumber.controls.inputTicketNumber.value)
+            .then(() => {
+                this.systeminfoOutput('Done');
+                this.systemInfosCompleted = true;
+                systeminfoStepper.selected.completed = true;
+                systeminfoStepper.next();
+            })
+            .catch((err: unknown): void => {
+                console.error(`support: buttonStartSysteminfo failed => ${err}`);
+                this.systeminfoRunOutput = err.toString();
+            })
+            .finally((): void => {
+                this.systeminfoRunProgress = false;
+                this.utils.pageDisabled = false;
+            });
+    }
+
+    public systeminfoOutput(text: string): void {
+        this.systeminfoRunOutput = text;
+    }
 }
-
-

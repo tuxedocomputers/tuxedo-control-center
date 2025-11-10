@@ -17,14 +17,14 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Injectable } from "@angular/core";
-import type { Resolve } from "@angular/router";
-import { type Observable, from } from "rxjs";
-import { filter, first } from "rxjs/operators";
-import { PowerStateService } from "./power-state.service";
+import { Injectable } from '@angular/core';
+import type { Resolve } from '@angular/router';
+import { type Observable, from } from 'rxjs';
+import { filter, first } from 'rxjs/operators';
+import { PowerStateService } from './power-state.service';
 
 @Injectable({
-    providedIn: "root",
+    providedIn: 'root',
 })
 export class PowerStateStatusResolver implements Resolve<string> {
     constructor(private power: PowerStateService) {}
@@ -32,12 +32,12 @@ export class PowerStateStatusResolver implements Resolve<string> {
     resolve(): Observable<string> {
         return from(this.power.getDGpuPowerState()).pipe(
             filter((value: string): boolean => value !== undefined),
-            first()
+            first(),
         );
     }
 }
 @Injectable({
-    providedIn: "root",
+    providedIn: 'root',
 })
 export class DGpuStatusResolver implements Resolve<boolean> {
     resolve(): boolean {
@@ -45,7 +45,7 @@ export class DGpuStatusResolver implements Resolve<boolean> {
     }
 }
 @Injectable({
-    providedIn: "root",
+    providedIn: 'root',
 })
 export class IGpuStatusResolver implements Resolve<boolean> {
     resolve(): boolean {
@@ -53,7 +53,7 @@ export class IGpuStatusResolver implements Resolve<boolean> {
     }
 }
 @Injectable({
-    providedIn: "root",
+    providedIn: 'root',
 })
 export class AmdGpuCountResolver implements Resolve<number> {
     resolve(): number {
@@ -62,13 +62,13 @@ export class AmdGpuCountResolver implements Resolve<number> {
 }
 
 @Injectable({
-    providedIn: "root",
+    providedIn: 'root',
 })
 export class CpuVendorResolver implements Resolve<string> {
     resolve(): Observable<string> {
         return from(window.vendor.getCpuVendor()).pipe(
             filter((value: string): boolean => value !== undefined),
-            first()
+            first(),
         );
     }
 }

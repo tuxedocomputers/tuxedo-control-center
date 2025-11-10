@@ -17,12 +17,15 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type { IpcMain, IpcMainInvokeEvent } from "electron";
+import type { IpcMain, IpcMainInvokeEvent } from 'electron';
 
 const debugAPICalls = false;
 
-export function registerAPI (ipcMain: IpcMain, apiHandle: string, mainsideHandlers: Map<string, (...args: any[]) => any>): void {
-
+export function registerAPI(
+    ipcMain: IpcMain,
+    apiHandle: string,
+    mainsideHandlers: Map<string, (...args: any[]) => any>,
+): void {
     ipcMain.handle(apiHandle, async (event: IpcMainInvokeEvent, args: any[]): Promise<any> => {
         const mainsideFunction: (...args: any[]) => any = mainsideHandlers.get(args[0]);
         if (mainsideFunction === undefined) {

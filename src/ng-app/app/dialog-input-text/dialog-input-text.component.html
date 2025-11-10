@@ -21,14 +21,16 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 <mat-dialog-content class="mat-typography">
     <h3 *ngIf="data.heading">{{ data.heading }}</h3>
     <mat-form-field class="input-text">
-        <input matInput #inputText="matInput"
+        <input
+            matInput
+            #inputText="matInput"
             cdkFocusInitial
             type="text"
             minLength="1"
             maxLength="30"
             [value]="data.prefill"
             (keyup.enter)="closeDialog(inputText.value)"
-            (focus)="$event.target.select()">
+            (focus)="$event.target.select()" />
     </mat-form-field>
     <p class="description">{{ data.description }}</p>
 </mat-dialog-content>

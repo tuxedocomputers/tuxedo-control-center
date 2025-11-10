@@ -16,11 +16,11 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
- 
-.profile-overview-tile{
+
+.profile-overview-tile {
     position: relative;
     z-index: 10;
-    
+
     height: 100%;
     width: 225px;
     padding: 10px;
@@ -46,7 +46,7 @@
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
-            margin:auto;
+            margin: auto;
         }
     }
 
@@ -115,7 +115,7 @@
                     width: inherit;
                     height: inherit;
                 }
-    
+
                 --icon-detail: var(--icon-main);
             }
 

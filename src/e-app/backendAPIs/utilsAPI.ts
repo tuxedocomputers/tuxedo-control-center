@@ -17,80 +17,102 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ipcMain, app, dialog, shell } from "electron";
-import type { IpcMainEvent, IpcMainInvokeEvent } from "electron";
-import * as fs from "node:fs";
-import * as path from "node:path";
-import * as child_process from "node:child_process";
-import {
-    userConfig,
-    updateTrayProfiles,
-    watchOption,
-    translation,
-} from "./initMain";
-import type { OpenDialogReturnValue, SaveDialogReturnValue } from "electron/main";
-import { tccWindow } from "./browserWindowsAPI";
-import { systemInfosURL } from "./systemInfosAPI"
+import { ipcMain, app, dialog, shell } from 'electron';
+import type { IpcMainEvent, IpcMainInvokeEvent } from 'electron';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
+import * as child_process from 'node:child_process';
+import { userConfig, updateTrayProfiles, watchOption, translation } from './initMain';
+import type { OpenDialogReturnValue, SaveDialogReturnValue } from 'electron/main';
+import { tccWindow } from './browserWindowsAPI';
+import { systemInfosURL } from './systemInfosAPI';
 
 export const cwd: string = process.cwd();
 export const environmentIsProduction: boolean = app.isPackaged;
 
-ipcMain.handle('fs-write-text-file', async (event: IpcMainInvokeEvent, filePath: string, fileData: string | Buffer, writeFileOptions?: fs.WriteFileOptions): Promise<void> => {
-    return writeTextFile(filePath, fileData, writeFileOptions);
-});
+ipcMain.handle(
+    'fs-write-text-file',
+    async (
+        event: IpcMainInvokeEvent,
+        filePath: string,
+        fileData: string | Buffer,
+        writeFileOptions?: fs.WriteFileOptions,
+    ): Promise<void> => {
+        return writeTextFile(filePath, fileData, writeFileOptions);
+    },
+);
 
 ipcMain.handle('fs-read-text-file', async (event: IpcMainInvokeEvent, filePath: string): Promise<string> => {
     return readTextFile(filePath);
 });
 
 ipcMain.on('get-cwd-sync', (event: IpcMainEvent): void => {
-    event.returnValue = { data: process.cwd() }
+    event.returnValue = { data: process.cwd() };
 });
 
-
 ipcMain.handle('get-app-version', (event: IpcMainInvokeEvent): Promise<string> => {
-    return new Promise<string>((resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
-        const requestedInfo: string = app.getVersion();
-        resolve(requestedInfo);
-    });
+    return new Promise<string>(
+        (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
+            const requestedInfo: string = app.getVersion();
+            resolve(requestedInfo);
+        },
+    );
 });
 
 ipcMain.handle('get-cwd', (event: IpcMainInvokeEvent): Promise<string> => {
-    return new Promise<string>((resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
-        const requestedInfo: string = process.cwd();
-        resolve(requestedInfo);
-    });
+    return new Promise<string>(
+        (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
+            const requestedInfo: string = process.cwd();
+            resolve(requestedInfo);
+        },
+    );
 });
 
 ipcMain.handle('get-process-versions', (event: IpcMainInvokeEvent): Promise<NodeJS.ProcessVersions> => {
-    return new Promise<NodeJS.ProcessVersions>((resolve: (value: NodeJS.ProcessVersions | PromiseLike<NodeJS.ProcessVersions>) => void, reject: (reason?: unknown) => void): void => {
-        const requestedInfo: NodeJS.ProcessVersions = process.versions;
-        resolve(requestedInfo);
-    });
+    return new Promise<NodeJS.ProcessVersions>(
+        (
+            resolve: (value: NodeJS.ProcessVersions | PromiseLike<NodeJS.ProcessVersions>) => void,
+            reject: (reason?: unknown) => void,
+        ): void => {
+            const requestedInfo: NodeJS.ProcessVersions = process.versions;
+            resolve(requestedInfo);
+        },
+    );
 });
 
-ipcMain.handle('show-save-dialog', async (event: IpcMainInvokeEvent, arg: Electron.SaveDialogOptions): Promise<SaveDialogReturnValue> => {
-    return new Promise<SaveDialogReturnValue>((resolve: (value: SaveDialogReturnValue | PromiseLike<SaveDialogReturnValue>) => void, reject: (reason?: unknown) => void): void => {
-        const results: Promise<SaveDialogReturnValue> = dialog.showSaveDialog(arg);
-        resolve(results);
-    });
+ipcMain.handle(
+    'show-save-dialog',
+    async (event: IpcMainInvokeEvent, arg: Electron.SaveDialogOptions): Promise<SaveDialogReturnValue> => {
+        return new Promise<SaveDialogReturnValue>(
+            (
+                resolve: (value: SaveDialogReturnValue | PromiseLike<SaveDialogReturnValue>) => void,
+                reject: (reason?: unknown) => void,
+            ): void => {
+                const results: Promise<SaveDialogReturnValue> = dialog.showSaveDialog(arg);
+                resolve(results);
+            },
+        );
+    },
+);
+
+ipcMain.handle(
+    'show-open-dialog',
+    async (event: IpcMainInvokeEvent, arg: Electron.OpenDialogOptions): Promise<OpenDialogReturnValue> => {
+        return dialog.showOpenDialog(arg);
+    },
+);
+
+ipcMain.handle('get-path', (event: IpcMainInvokeEvent, arg: 'documents'): Promise<string> => {
+    return new Promise<string>(
+        (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
+            const requestedPath: string = app.getPath(arg);
+            resolve(requestedPath);
+        },
+    );
 });
-
-
-ipcMain.handle('show-open-dialog', async (event: IpcMainInvokeEvent, arg: Electron.OpenDialogOptions): Promise<OpenDialogReturnValue> => {
-    return dialog.showOpenDialog(arg);
-});
-
-ipcMain.handle('get-path', (event: IpcMainInvokeEvent, arg: "documents"): Promise<string>  => {
-    return new Promise<string>((resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
-        const requestedPath: string = app.getPath(arg);
-        resolve(requestedPath);
-    });
-});
-
 
 ipcMain.on('show-tcc-window', (event: IpcMainEvent): void => {
-    if(!tccWindow.isVisible()) {
+    if (!tccWindow.isVisible()) {
         tccWindow.show();
     }
 });
@@ -100,7 +122,7 @@ ipcMain.on('utils-get-systeminfos-url-sync', (event: IpcMainEvent): void => {
 });
 
 async function changeLanguage(newLangId: string): Promise<void> {
-    if (newLangId !== await userConfig.get('langId')) {
+    if (newLangId !== (await userConfig.get('langId'))) {
         await userConfig.set('langId', newLangId);
         await loadTranslation(newLangId);
         await updateTrayProfiles();
@@ -112,57 +134,61 @@ async function changeLanguage(newLangId: string): Promise<void> {
 }
 
 ipcMain.on('open-external', (event: IpcMainEvent, url: string): void => {
-    if(url.startsWith('http://') || url.startsWith('https://'))
-    {
+    if (url.startsWith('http://') || url.startsWith('https://')) {
         shell.openExternal(url);
-    }
-    else
-    {
+    } else {
         console.error(`utilsAPI: ${url} needs to be a weblink`);
     }
 });
 
-export async function writeTextFile(filePath: string, fileData: string | Buffer, writeFileOptions?: fs.WriteFileOptions): Promise<void>  {
-    return new Promise<void>((resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): void => {
-    try {
-        if (!fs.existsSync(path.dirname(filePath))) {
-            fs.mkdirSync(path.dirname(filePath), { mode: 0o755, recursive: true });
-        }
-        fs.writeFile(filePath, fileData, writeFileOptions, (err: unknown): void => {
-          if (err) {
-            reject(err);
-          } else {
-            resolve();
-          }
-        });
-      } catch (err: unknown) {
-        console.error(`utilsAPI: writeTextFile failed => ${err}`)
-        reject(err);
-      }
-    });
+export async function writeTextFile(
+    filePath: string,
+    fileData: string | Buffer,
+    writeFileOptions?: fs.WriteFileOptions,
+): Promise<void> {
+    return new Promise<void>(
+        (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): void => {
+            try {
+                if (!fs.existsSync(path.dirname(filePath))) {
+                    fs.mkdirSync(path.dirname(filePath), { mode: 0o755, recursive: true });
+                }
+                fs.writeFile(filePath, fileData, writeFileOptions, (err: unknown): void => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
+                });
+            } catch (err: unknown) {
+                console.error(`utilsAPI: writeTextFile failed => ${err}`);
+                reject(err);
+            }
+        },
+    );
 }
 
 export async function readTextFile(filePath: string): Promise<string> {
-    return new Promise<string>((resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
-        try {
-          fs.readFile(filePath,(err: unknown, data: Buffer): void => {
-            if (err) {
-              reject(err);
-            } else {
-              resolve(data + "");
+    return new Promise<string>(
+        (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
+            try {
+                fs.readFile(filePath, (err: unknown, data: Buffer): void => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(data + '');
+                    }
+                });
+            } catch (err: unknown) {
+                console.error(`utilsAPI: readTextFile failed => ${err}`);
+                reject(err);
             }
-          });
-        } catch (err: unknown) {
-          console.error(`utilsAPI: readTextFile failed => ${err}`)
-          reject(err);
-        }
-      });
+        },
+    );
 }
 
 ipcMain.on('fs-file-exists-sync', (event: IpcMainEvent, filePath: string): void => {
     event.returnValue = fs.existsSync(filePath);
 });
-
 
 ipcMain.on('trigger-language-change', (event: IpcMainEvent, arg: string): void => {
     const langId: string = arg;
@@ -170,60 +196,64 @@ ipcMain.on('trigger-language-change', (event: IpcMainEvent, arg: string): void =
 });
 
 export async function execCmd(cmd: string): Promise<string> {
-    return new Promise<string>((resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
-    child_process.exec(cmd, (err: unknown, stdout: string, stderr: string): void => {
-        if (err) {
-            reject(stderr);
-        } else {
-            resolve(stdout);
-        }
-    });
-});
+    return new Promise<string>(
+        (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
+            child_process.exec(cmd, (err: unknown, stdout: string, stderr: string): void => {
+                if (err) {
+                    reject(stderr);
+                } else {
+                    resolve(stdout);
+                }
+            });
+        },
+    );
 }
 
-export function execCmdSync(cmd: string):string {
-        try {
-            return child_process.execSync(cmd).toString();
-        } catch (err: unknown) {
-            console.error(`utilsAPI: execCmdSync failed => ${err}`)
-            return err.toString();
-        }
+export function execCmdSync(cmd: string): string {
+    try {
+        return child_process.execSync(cmd).toString();
+    } catch (err: unknown) {
+        console.error(`utilsAPI: execCmdSync failed => ${err}`);
+        return err.toString();
+    }
 }
 
 // todo: rename into execFileAsync or somehow else indicate that function is async
-export async function execFile(arg: string): Promise<{ data: string, error: unknown}> {
-    return new Promise<{ data: string, error: unknown}>( (resolve: (value: { data: string, error: unknown} | PromiseLike<{ data: string, error: unknown}>) => void, reject: (reason?: unknown) => void): void => {
-        const strArg: string = arg;
-        const cmdList: string[] = strArg.split(' ');
-        const cmd: string = cmdList.shift();
-        child_process.execFile(cmd, cmdList, (err: unknown, stdout: string, stderr: string): void => {
-                    if (err) {
-                        reject({ data: stderr, error: err });
-                    } else {
-                        resolve({ data: stdout, error: err });
-                    }
-        });
-    });
+export async function execFile(arg: string): Promise<{ data: string; error: unknown }> {
+    return new Promise<{ data: string; error: unknown }>(
+        (
+            resolve: (value: { data: string; error: unknown } | PromiseLike<{ data: string; error: unknown }>) => void,
+            reject: (reason?: unknown) => void,
+        ): void => {
+            const strArg: string = arg;
+            const cmdList: string[] = strArg.split(' ');
+            const cmd: string = cmdList.shift();
+            child_process.execFile(cmd, cmdList, (err: unknown, stdout: string, stderr: string): void => {
+                if (err) {
+                    reject({ data: stderr, error: err });
+                } else {
+                    resolve({ data: stdout, error: err });
+                }
+            });
+        },
+    );
 }
 
 export async function execFileSync(arg: string): Promise<unknown | string> {
-        const strArg: string = arg;
-        const cmdList: string[] = strArg.split(' ');
-        const cmd: string = cmdList.shift();
-        let data: Buffer;
-        try {
-            data = child_process.execFileSync(cmd, cmdList);
-            return data.toString();
-        }
-        catch (err: unknown) {
-            console.error(`utilsAPI: execFileSync failed => ${err}`)
-            return err;
-        }
+    const strArg: string = arg;
+    const cmdList: string[] = strArg.split(' ');
+    const cmd: string = cmdList.shift();
+    let data: Buffer;
+    try {
+        data = child_process.execFileSync(cmd, cmdList);
+        return data.toString();
+    } catch (err: unknown) {
+        console.error(`utilsAPI: execFileSync failed => ${err}`);
+        return err;
+    }
 }
 
-
 export async function loadTranslation(langId: string): Promise<void> {
-
     // Watch mode Workaround: Waiting for translation when starting in watch mode
     let canLoadTranslation: boolean = false;
     while (watchOption && !canLoadTranslation) {
@@ -231,7 +261,7 @@ export async function loadTranslation(langId: string): Promise<void> {
             await translation.loadLanguage(langId);
             canLoadTranslation = true;
         } catch (err: unknown) {
-            console.log(`utilsAPI: loadTranslation: watch mode, waiting for translation => ${err}`)
+            console.log(`utilsAPI: loadTranslation: watch mode, waiting for translation => ${err}`);
             await new Promise<void>((resolve: () => void): NodeJS.Timeout => setTimeout(resolve, 3000));
         }
     }
@@ -246,7 +276,7 @@ export async function loadTranslation(langId: string): Promise<void> {
         try {
             await translation.loadLanguage(fallbackLangId);
         } catch (err: unknown) {
-            console.error(`utilsAPI: loadTranslation: loadLanguage failed => ${err}`)
+            console.error(`utilsAPI: loadTranslation: loadLanguage failed => ${err}`);
         }
     }
 }

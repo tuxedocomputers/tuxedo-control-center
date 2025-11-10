@@ -17,21 +17,21 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ipcMain } from "electron";
-import { aquarisAPIHandle } from "../common/models/IAquarisAPI";
-import { dbusAPIHandle } from "../common/models/IDbusAPI";
-import { aquarisHandlers } from "./backendAPIs/aquarisAPI";
-import { dbusHandlers } from "./backendAPIs/dbusAPI";
-import { registerAPI } from "./backendAPIs/apiManagement";
-import { tomteAPIHandle } from "../common/models/ITomteAPI";
-import { webcamAPIHandle } from "../common/models/IWebcamAPI";
-import { webcamHandlers } from "./backendAPIs/webcamAPI";
-import { tomteHandlers } from "./backendAPIs/tomteAPI";
+import { ipcMain } from 'electron';
+import { aquarisAPIHandle } from '../common/models/IAquarisAPI';
+import { dbusAPIHandle } from '../common/models/IDbusAPI';
+import { aquarisHandlers } from './backendAPIs/aquarisAPI';
+import { dbusHandlers } from './backendAPIs/dbusAPI';
+import { registerAPI } from './backendAPIs/apiManagement';
+import { tomteAPIHandle } from '../common/models/ITomteAPI';
+import { webcamAPIHandle } from '../common/models/IWebcamAPI';
+import { webcamHandlers } from './backendAPIs/webcamAPI';
+import { tomteHandlers } from './backendAPIs/tomteAPI';
 
-require("./backendAPIs/initMain");
-require("./backendAPIs/browserWindowsAPI");
-require("./backendAPIs/ipcBackendAPI");
-require("./backendAPIs/webcamAPI");
+require('./backendAPIs/initMain');
+require('./backendAPIs/browserWindowsAPI');
+require('./backendAPIs/ipcBackendAPI');
+require('./backendAPIs/webcamAPI');
 
 registerAPI(ipcMain, aquarisAPIHandle, aquarisHandlers);
 registerAPI(ipcMain, dbusAPIHandle, dbusHandlers);

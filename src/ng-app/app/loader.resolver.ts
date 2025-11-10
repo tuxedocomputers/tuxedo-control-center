@@ -24,7 +24,7 @@ import { type Observable, of, from } from 'rxjs';
 import { TccDBusClientService } from './tcc-dbus-client.service';
 
 @Injectable({
-    providedIn: 'root'
+    providedIn: 'root',
 })
 export class LoaderResolver implements Resolve<Observable<boolean>> {
     constructor(private dbus: TccDBusClientService) {}
@@ -42,7 +42,9 @@ export class LoaderResolver implements Resolve<Observable<boolean>> {
 
     private async waitForDBusData(timeoutMs: number): Promise<boolean> {
         let timedOut: boolean = false;
-        setTimeout((): void => { timedOut = true; }, timeoutMs);
+        setTimeout((): void => {
+            timedOut = true;
+        }, timeoutMs);
 
         while (!this.dbus.dataLoaded && !timedOut) {
             await new Promise<void>((resolve: () => void): NodeJS.Timeout => setTimeout(resolve, 50));
