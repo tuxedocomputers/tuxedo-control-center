@@ -70,11 +70,6 @@ async function main() {
         console.log((await execp('npm run build-prod')).stdout);
         console.log('Run electron-builder');
         console.log((await execp(`npm run electron-builder "fnameadd=${filenameAddition}"`)).stdout);
-        console.log('Run deb compression');
-        console.log(
-            (await execp(`npm run deb-compression --deb-path="${packageName}_${newVersion}${filenameAddition}.deb"`))
-                .stdout,
-        );
     } catch (err) {
         console.log('Error on build => ' + err);
         process.exit(1);

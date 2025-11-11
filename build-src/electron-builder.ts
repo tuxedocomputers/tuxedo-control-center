@@ -101,6 +101,7 @@ async function buildDeb(filenameAddition: string): Promise<void> {
                 '--conflicts=tuxedofancontrol',
                 '--replaces=tuxedofancontrol',
                 '--inputs=build-src/package-files.txt',
+                '--deb-compression-level=9',
             ],
         },
     };
