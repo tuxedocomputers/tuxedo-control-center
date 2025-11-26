@@ -36,9 +36,6 @@ import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
   ]
 })
 export class SupportComponent implements OnInit {
-
-  public anydeskProgramName = 'anydesk';
-  public anydeskInstalled: boolean;
   public webFAICreatorProgramName = 'tuxedo-webfai-creator';
   public webFAICreatorInstalled: boolean;
 
@@ -56,7 +53,6 @@ export class SupportComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.updateAnydeskInstallStatus();
     this.updateWebFAICreatorInstallStatus();
     this.formTicketNumber = new FormGroup({
       inputTicketNumber: new FormControl('', [Validators.required, Validators.pattern('^(99)([0-9]){7}')])
@@ -71,30 +67,10 @@ export class SupportComponent implements OnInit {
     this.electron.shell.openExternal(url);
   }
 
-  public updateAnydeskInstallStatus(): void {
-    if (!this.progress().get(this.anydeskProgramName)) {
-      this.program.isInstalled(this.anydeskProgramName).then((isInstalled) => {
-        this.anydeskInstalled = isInstalled;
-      });
-    }
-  }
-
   public updateWebFAICreatorInstallStatus(): void {
     if (!this.progress().get(this.webFAICreatorProgramName)) {
       this.program.isInstalled(this.webFAICreatorProgramName).then((isInstalled) => {
         this.webFAICreatorInstalled = isInstalled;
-      });
-    }
-  }
-
-  public buttonInstallRemoveAnydesk(): void {
-    if (this.anydeskInstalled) {
-      this.program.remove(this.anydeskProgramName).then(() => {
-        this.updateAnydeskInstallStatus();
-      });
-    } else {
-      this.program.install(this.anydeskProgramName).then(() => {
-        this.updateAnydeskInstallStatus();
       });
     }
   }
@@ -109,10 +85,6 @@ export class SupportComponent implements OnInit {
         this.updateWebFAICreatorInstallStatus();
       });
     }
-  }
-
-  public buttonStartAnydesk(): void {
-    this.program.run(this.anydeskProgramName);
   }
 
   public buttonStartWebFAICreator(): void {

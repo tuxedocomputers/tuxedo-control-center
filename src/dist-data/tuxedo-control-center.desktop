@@ -7,3 +7,4 @@ Type=Application
 Icon=/opt/tuxedo-control-center/resources/dist/tuxedo-control-center/data/dist-data/tuxedo-control-center_256.svg
 StartupWMClass=tuxedo-control-center
 Categories=System;
+Keywords=TCC

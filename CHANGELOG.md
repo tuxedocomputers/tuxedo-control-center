@@ -1,5 +1,16 @@
 # Changelog
 
+## [] - UNRELEASED
+### Added
+- "TCC" keyword to desktop-file
+
+### Changed
+- "Remote support" removed from support area
+
+### Fixed
+- Default "System profile" in some cases not being the highest performing one
+- Text tweaks and typos
+
 ## [2.1.20] - 2025-09-10
 ### Fixed
 - Revert the Sirius "start TCC" shortcut due to an issue with keyboard input in certain applications in Wayland
@@ -277,7 +288,7 @@
 ### Added
 - Battery charging options for a number of devices
   - Choose one of three "charging profiles" to influence peak charge and charging time
-  - Choose whether to priorize charging or performance when on USB-C PD
+  - Choose whether to prioritize charging or performance when on USB-C PD
   - For now available through "Settings" => "Battery charging options" (for devices with this feature)
   - Tray shortcut coming soon
 

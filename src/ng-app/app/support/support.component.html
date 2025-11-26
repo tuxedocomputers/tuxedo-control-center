@@ -110,33 +110,6 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     <mat-expansion-panel>
         <mat-expansion-panel-header>
             <mat-panel-title>
-                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_remotesupport.svg#Icon"></use></svg></mat-icon>
-                <ng-container i18n>Remote support</ng-container>
-            </mat-panel-title>
-        </mat-expansion-panel-header>
-
-        <div class="content-container">
-            <div i18n>
-                <p>If your problem cannot be solved by means of our system diagnostics, we are happy to offer you free live support via <i>AnyDesk</i> remote maintenance software.</p>
-                <p>This way, a support employee can connect online to your TUXEDO computer and solve the problem together with you.</p>
-                <p>Our support gets access to your system only temporarily and in your presence. NO personal data is collected!</p>
-            </div>
-            <p>
-                <button mat-raised-button (click)="buttonInstallRemoveAnydesk()" [disabled]="progress().get(anydeskProgramName) || progressCheck().get(anydeskProgramName)">
-                    <i class="fas fa-cog" [ngClass]="{'fa-spin': progress().get(anydeskProgramName) || progressCheck().get(anydeskProgramName) }"></i>&nbsp;
-                    <span *ngIf="!anydeskInstalled && !progressCheck().get(anydeskProgramName)" i18n="@@cSupportAnydeskInstallButton">Install Anydesk</span>
-                    <span *ngIf="anydeskInstalled && !progressCheck().get(anydeskProgramName)" i18n="@@cSupportAnydeskRemoveButton">Remove Anydesk</span>
-                    <span *ngIf="progressCheck().get(anydeskProgramName)" i18n="@@cSupportAnydeskProgressButton">Checking</span>
-                </button>
-                &nbsp;
-                <button mat-raised-button color="primary" (click)="buttonStartAnydesk()" *ngIf="anydeskInstalled" i18n="@@cSupportAnydeskStartButton">Start Anydesk</button>
-            </p>
-        </div>
-    </mat-expansion-panel>
-
-    <mat-expansion-panel>
-        <mat-expansion-panel-header>
-            <mat-panel-title>
                 <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_restoresystem.svg#Icon"></use></svg></mat-icon>
                 <ng-container i18n>Restore system</ng-container>
             </mat-panel-title>
