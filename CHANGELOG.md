@@ -1,5 +1,16 @@
 # Changelog
 
+## [] - UNRELEASED
+### Added
+- "TCC" keyword to desktop-file
+
+### Changed
+- "Remote support" removed from support area
+
+### Fixed
+- Default "System profile" in some cases not being the highest performing one
+- Text tweaks and typos
+
 ## [2.1.20] - 2025-09-10
 ### Fixed
 - Revert the Sirius "start TCC" shortcut due to an issue with keyboard input in certain applications in Wayland
