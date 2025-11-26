@@ -1,6 +1,6 @@
 # Changelog
 
-## [] - UNRELEASED
+## [2.1.21] - 2025-11-26
 ### Added
 - "TCC" keyword to desktop-file
 
