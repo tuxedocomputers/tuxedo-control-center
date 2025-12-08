@@ -214,7 +214,7 @@ export class GpuInfoWorker extends DaemonWorker {
     private async checkNvidiaSmiInstalled(): Promise<boolean> {
         try {
             const stdout: string = await execCommandAsync('which nvidia-smi');
-            return stdout.trim()?.length > 0;
+            return stdout?.trim()?.length > 0;
         } catch (err: unknown) {
             console.error(`GpuInfoWorker: checkNvidiaSmiInstalled: ${err}`);
             return false;
