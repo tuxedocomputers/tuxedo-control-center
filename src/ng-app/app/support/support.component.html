@@ -31,11 +31,15 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                 <div class="contact-information">
                     <div class="phone-info">
-                        <svg viewBox="0 0 512 512" class="tcc-icons"><use href="./assets/images/icon_support.svg#Icon"></use></svg>
+                        <svg viewBox="0 0 512 512" class="tcc-icons">
+                            <use href="./assets/images/icon_support.svg#Icon"></use>
+                        </svg>
                         <div class="phone-number">+49 (0) 821 / 8998 2992</div>
                     </div>
                     <div class="web-info">
-                        <svg viewBox="0 0 512 512" class="tcc-icons"><use href="./assets/images/icon_online.svg#Icon"></use></svg>
+                        <svg viewBox="0 0 512 512" class="tcc-icons">
+                            <use href="./assets/images/icon_online.svg#Icon"></use>
+                        </svg>
                         <button mat-stroked-button color="basic" (click)="openExternalUrl('https://www.tuxedocomputers.com/en/Contact.tuxedo')">
                             <strong i18n="@@cSupportButtonOnline" class="support-button">TUXEDO online support</strong>
                         </button>
@@ -48,9 +52,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <mat-expansion-panel (click)="focusControl(frmInputTicketNumber)">
                 <mat-expansion-panel-header>
                     <mat-panel-title>
-                        <mat-icon
-                            ><svg viewBox="0 0 512 512"><use href="./assets/images/icon_systemdiagnose.svg#Icon"></use></svg
-                        ></mat-icon>
+                        <mat-icon>
+                            <svg viewBox="0 0 512 512">
+                                <use href="./assets/images/icon_systemdiagnose.svg#Icon"></use>
+                            </svg>
+                        </mat-icon>
                         <div i18n="@@cSupportSystemDiagnosticsTitle" class="panel-title">System diagnostics</div>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
@@ -130,9 +136,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <mat-expansion-panel *ngIf="aptInstalled">
                 <mat-expansion-panel-header>
                     <mat-panel-title>
-                        <mat-icon
-                            ><svg viewBox="0 0 512 512"><use href="./assets/images/icon_remotesupport.svg#Icon"></use></svg
-                        ></mat-icon>
+                        <mat-icon>
+                            <svg viewBox="0 0 512 512">
+                                <use href="./assets/images/icon_remotesupport.svg#Icon"></use>
+                            </svg>
+                        </mat-icon>
                         <div i18n="@@cSupportRemoteSupport" class="panel-title">Remote support</div>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
@@ -172,9 +180,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <mat-expansion-panel *ngIf="aptInstalled">
                 <mat-expansion-panel-header>
                     <mat-panel-title>
-                        <mat-icon
-                            ><svg viewBox="0 0 512 512"><use href="./assets/images/icon_restoresystem.svg#Icon"></use></svg
-                        ></mat-icon>
+                        <mat-icon>
+                            <svg viewBox="0 0 512 512">
+                                <use href="./assets/images/icon_restoresystem.svg#Icon"></use>
+                            </svg>
+                        </mat-icon>
                         <div i18n="@@cSupportRestoreTitle" class="panel-title">Restore system</div>
                     </mat-panel-title>
                 </mat-expansion-panel-header>

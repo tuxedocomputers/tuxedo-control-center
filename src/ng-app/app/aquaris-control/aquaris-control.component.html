@@ -19,9 +19,13 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 <mat-card class="tcc-card aquaris-control">
     <mat-card-title class="theme-page-title">
         <a class="icon-link-info" matTooltip="Open info page..." i18n-matTooltip="@@aqTitleOpenInfoTooltip" matTooltipPosition="left" (click)="openExternalUrl(aquarisInfoUrlHref)">
-            <svg viewBox="0 0 512 512" class="aquaris-logo" class="tcc-icons"><use href="./assets/images/icon_info.svg#Icon"></use></svg>
+            <svg viewBox="0 0 512 512" class="aquaris-logo" class="tcc-icons">
+                <use href="./assets/images/icon_info.svg#Icon"></use>
+            </svg>
         </a>
-        <svg viewBox="0 0 512 512" class="aquaris-logo"><use href="./assets/images/aquaris_logo.svg#Icon"></use></svg>
+        <svg viewBox="0 0 512 512" class="aquaris-logo">
+            <use href="./assets/images/aquaris_logo.svg#Icon"></use>
+        </svg>
         <header>TUXEDO <span class="emph">AQUARIS</span></header>
         <span class="connection-status">
             <div class="inner-connection-status">
@@ -31,7 +35,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     [ngClass]="{
                         searching: !isConnected || isConnecting || isDisconnecting,
                         connected: isConnected && !isConnecting && !isDisconnecting,
-                    }"></span>
+                    }">
+                </span>
                 <mat-icon *ngIf="!hasBluetooth">bluetooth_disabled</mat-icon>
                 <span class="value"
                     >{{ connectedStatusString() }} <b *ngIf="isConnected && !isConnecting && !isDisconnecting">{{ connectedDisplayName() }}</b></span
@@ -49,7 +54,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <!-- Fan control -->
             <div class="category">
                 <header>
-                    <svg viewBox="0 0 512 512" class="tcc-icons"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
+                    <svg viewBox="0 0 512 512" class="tcc-icons">
+                        <use href="./assets/images/icon_fan.svg#Icon"></use>
+                    </svg>
                     <div i18n="@@aqLabelFanControl" class="title">Fan control</div>
                 </header>
                 <button mat-stroked-button [matMenuTriggerFor]="fanPresetMenu" i18n="@@aqButtonFanPresetsLabel">Fan presets</button>
@@ -62,7 +69,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <mwl-gauge [max]="100" [min]="0" [value]="fanSpeed.value" [showValue]="false" [dialStartAngle]="130" [dialEndAngle]="50" [animated]="true" [animationDuration]="0.3"> </mwl-gauge>
                     <div class="custom-value-text">{{ fanSpeed.value }}</div>
                     <div class="unit-text">%</div>
-                    <svg viewBox="0 0 512 512" class="icon"><use href="./assets/images/icon_fan.svg#Icon"></use></svg>
+                    <svg viewBox="0 0 512 512" class="icon">
+                        <use href="./assets/images/icon_fan.svg#Icon"></use>
+                    </svg>
                     <div class="legend">
                         <div class="description" i18n="@@aqFanGaugeLegendText">Fan speed</div>
                     </div>
@@ -112,7 +121,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <!-- LED Control-->
             <div class="category">
                 <header>
-                    <svg viewBox="0 0 512 512" class="tcc-icons"><use href="./assets/images/icon_theme.svg#Icon"></use></svg>
+                    <svg viewBox="0 0 512 512" class="tcc-icons">
+                        <use href="./assets/images/icon_theme.svg#Icon"></use>
+                    </svg>
                     <div i18n="@@aqLabelLEDControl" class="title">LED Control</div>
                 </header>
                 <mat-slide-toggle

@@ -27,12 +27,16 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         <div>
             <span class="info-options">
                 <mat-button-toggle-group [(ngModel)]="viewDetails">
-                    <mat-button-toggle [value]="false"
-                        ><svg viewBox="0 0 512 512"><use href="./assets/images/icon_info.svg#Icon"></use></svg
-                    ></mat-button-toggle>
-                    <mat-button-toggle [value]="true"
-                        ><svg viewBox="0 0 512 512"><use href="./assets/images/icon_dashboard.svg#Icon"></use></svg
-                    ></mat-button-toggle>
+                    <mat-button-toggle [value]="false">
+                        <svg viewBox="0 0 512 512">
+                            <use href="./assets/images/icon_info.svg#Icon"></use>
+                        </svg>
+                    </mat-button-toggle>
+                    <mat-button-toggle [value]="true">
+                        <svg viewBox="0 0 512 512">
+                            <use href="./assets/images/icon_dashboard.svg#Icon"></use>
+                        </svg>
+                    </mat-button-toggle>
                 </mat-button-toggle-group>
             </span>
             <span>

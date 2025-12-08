@@ -84,7 +84,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             i18n-matTooltip="@@cTomteGuiTomteOperationModeAutomaticButtonTooltip"
                                             matTooltip="This is the default mode. Tomte will automatically update existing modules, install new ones and remove no longer required modules from your computer."
                                             [matTooltipShowDelay]="infoTooltipShowDelay">
-                                            <svg viewBox="0 0 512 512"><use href="./assets/images/icon_info.svg#Icon"></use></svg>
+                                            <svg viewBox="0 0 512 512">
+                                                <use href="./assets/images/icon_info.svg#Icon"></use>
+                                            </svg>
                                         </mat-icon>
                                     </div>
                                 </div>
@@ -98,7 +100,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             i18n-matTooltip="@@cTomteGuiTomteOperationModeUpdatesOnlyTooltip"
                                             matTooltip="Tomte will only update the existing modules, but won't install or remove modules without your approval. You will be notified once new modules are available."
                                             [matTooltipShowDelay]="infoTooltipShowDelay">
-                                            <svg viewBox="0 0 512 512"><use href="./assets/images/icon_info.svg#Icon"></use></svg>
+                                            <svg viewBox="0 0 512 512">
+                                                <use href="./assets/images/icon_info.svg#Icon"></use>
+                                            </svg>
                                         </mat-icon>
                                     </div>
                                 </div>
@@ -112,7 +116,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             i18n-matTooltip="@@cTomteGuiTomteOperationModeDisabledTooltip"
                                             matTooltip="Tomte will neither update existing modules nor install new ones or remove no longer required modules from your computer. The existing modules stay active."
                                             [matTooltipShowDelay]="infoTooltipShowDelay">
-                                            <svg viewBox="0 0 512 512"><use href="./assets/images/icon_info.svg#Icon"></use></svg>
+                                            <svg viewBox="0 0 512 512">
+                                                <use href="./assets/images/icon_info.svg#Icon"></use>
+                                            </svg>
                                         </mat-icon>
                                     </div>
                                 </div>
@@ -190,7 +196,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             <th mat-header-cell *matHeaderCellDef i18n="@@cTomteGuiTomteConfigurationTableColumnHeaderModuleInfo">Info</th>
                             <td mat-cell *matCellDef="let line">
                                 <mat-icon class="info-icon" [matTooltip]="moduleToolTips.get(line.moduleName)" [matTooltipShowDelay]="infoTooltipShowDelay">
-                                    <svg viewBox="0 0 512 512"><use href="./assets/images/icon_info.svg#Icon"></use></svg>
+                                    <svg viewBox="0 0 512 512">
+                                        <use href="./assets/images/icon_info.svg#Icon"></use>
+                                    </svg>
                                 </mat-icon>
                             </td>
                         </div>
