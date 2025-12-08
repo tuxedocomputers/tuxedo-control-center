@@ -824,6 +824,34 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         };
     }
 
+    // only for odm slider that use deviceSystemProfileInfo from ISystemProfileInfo
+    public modifyDeviceSpecificODMSlider(offset: number): () => void {
+        return (): void => {
+            const profileName = this.deviceSystemProfileInfo.pl[this.powerLimitSliderIndex].odmName;
+            let newIndex: number = undefined;
+
+            for (let i: number = 0; i < this.deviceSystemProfileInfo.pl?.length; i++) {
+                if (this.deviceSystemProfileInfo.pl[i].odmName === profileName) {
+                    newIndex = i;
+                }
+            }
+
+            if (newIndex === undefined) {
+                return;
+            }
+
+            newIndex += offset;
+            newIndex = Math.max(0, Math.min(this.deviceSystemProfileInfo.pl?.length - 1, newIndex));
+
+            this.profileFormGroup.patchValue({
+                odmProfile: { name: this.deviceSystemProfileInfo.pl[newIndex].odmName },
+            });
+            this.profileFormGroup.markAsDirty();
+
+            this.powerLimitSliderIndex = newIndex;
+        };
+    }
+
     @ViewChild('fancontrolHeader') fancontrolHeaderE;
     public toggleFanGraphs(): void {
         if (!this.showFanGraphs) {

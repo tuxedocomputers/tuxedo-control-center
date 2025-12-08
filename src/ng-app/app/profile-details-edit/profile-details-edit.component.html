@@ -667,6 +667,26 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         <content class="value" [hidden]="!editProfile" [ngClass]="{ inactive: false }">{{
                                             getPowerLimitToName(profileFormGroup.controls.odmProfile.controls.name.value)
                                         }}</content>
+                                        <div class="increment-decrement-buttons">
+                                            <button
+                                                mat-icon-button
+                                                color="primary"
+                                                [hidden]="!editProfile"
+                                                (mousedown)="buttonRepeatDown(modifyDeviceSpecificODMSlider(-1))"
+                                                (mouseup)="buttonRepeatUp()"
+                                                (mouseleave)="buttonRepeatUp()">
+                                                <mat-icon>remove</mat-icon>
+                                            </button>
+                                            <button
+                                                mat-icon-button
+                                                color="primary"
+                                                [hidden]="!editProfile"
+                                                (mousedown)="buttonRepeatDown(modifyDeviceSpecificODMSlider(1))"
+                                                (mouseup)="buttonRepeatUp()"
+                                                (mouseleave)="buttonRepeatUp()">
+                                                <mat-icon>add</mat-icon>
+                                            </button>
+                                        </div>
                                     </mat-grid-tile>
                                     <mat-grid-tile [colspan]="gridParams.input">
                                         <content class="input" [hidden]="!editProfile" [ngClass]="{ inactive: false }">
