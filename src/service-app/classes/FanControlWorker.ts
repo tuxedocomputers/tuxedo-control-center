@@ -108,6 +108,10 @@ export class FanControlWorker extends DaemonWorker {
 
     public async onWork(): Promise<void> {
         try {
+            if (this.fanApi === undefined || this.fanApi === null) {
+                return;
+            }
+
             const fanControlEnabled: boolean = this.tccd.settings.fanControlEnabled;
             const sensorCollection: boolean = this.tccd.dbusData.sensorDataCollectionStatus;
 
