@@ -127,7 +127,16 @@ async function changeLanguage(newLangId: string): Promise<void> {
         await loadTranslation(newLangId);
         await updateTrayProfiles();
         if (tccWindow) {
-            const indexPath: string = path.join(__dirname, '..', '..', '..', 'ng-app', newLangId, 'index.html');
+            const indexPath: string = path.join(
+                __dirname,
+                '..',
+                '..',
+                '..',
+                'ng-app',
+                'browser',
+                newLangId,
+                'index.html',
+            );
             await tccWindow.loadFile(indexPath);
         }
     }
