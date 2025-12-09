@@ -31,6 +31,7 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
     private displayInfoFound: boolean = false;
     private previousUsers: string[] = [];
     private wAvailable: boolean = undefined;
+    private disallowedUserNames: string[] = ['sddm', 'gdm', 'gdm-gree', 'root'];
 
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(5000, 'DisplayRefreshrateWorker', tccd);
@@ -62,7 +63,7 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
             if (result) {
                 const userName: string = result[0];
 
-                if (userName && userName !== 'sddm' && userName !== 'gdm') {
+                if (userName && !this.disallowedUserNames.includes(userName)) {
                     loggedInUsers.push(userName);
                 }
             }
@@ -70,7 +71,9 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
 
         const usersAvailable: boolean = loggedInUsers.length > 0;
         const usersChanged: boolean = JSON.stringify(loggedInUsers) !== JSON.stringify(this.previousUsers);
+
         this.previousUsers = loggedInUsers;
+
         return [usersAvailable, usersChanged];
     }
 
