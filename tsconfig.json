@@ -7,10 +7,11 @@
         "sourceMap": true,
         "declaration": false,
         "downlevelIteration": true,
-        "moduleResolution": "node",
+        "moduleResolution": "bundler",
         "experimentalDecorators": true,
         "importHelpers": true,
         "target": "esnext",
-        "lib": ["esnext", "dom"]
+        "lib": ["esnext", "dom"],
+        "skipLibCheck": true
     }
 }

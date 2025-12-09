@@ -18,7 +18,7 @@
  */
 
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, provideZoneChangeDetection } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -176,7 +176,7 @@ declare const require;
         MatRadioModule,
         BaseChartDirective,
     ],
-    providers: [DecimalPipe, ThemeService, ProfileConflictDialogService],
+    providers: [DecimalPipe, ThemeService, ProfileConflictDialogService, provideZoneChangeDetection()],
     bootstrap: [AppComponent],
 })
 export class AppModule {

@@ -3,7 +3,7 @@
     "compilerOptions": {
         "outDir": "../../dist/tuxedo-control-center/service-app",
         "rootDir": "../",
-        "module": "commonjs",
+        "module": "esnext",
         "types": ["node"],
         "target": "esnext"
     },
