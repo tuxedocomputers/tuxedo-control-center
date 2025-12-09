@@ -2329,48 +2329,6 @@ Commercial register number - Part B of the commercial register - 27755
           <context context-type="linenumber">136,140</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="cSupportAnydeskX11Description" datatype="html">
-        <source><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>If your problem cannot be solved by means of our system diagnostics, we are happy to offer you free live support via <x id="START_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;i&gt;"/>AnyDesk<x id="CLOSE_ITALIC_TEXT" ctype="x-i" equiv-text="&lt;/i&gt;"/> remote maintenance software.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>This way, a support employee can connect online to your TUXEDO computer and solve the problem together with you.<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/><x id="START_PARAGRAPH" ctype="x-p" equiv-text="&lt;p&gt;"/>Our support gets access to your system only temporarily and in your presence. NO personal data is collected!<x id="CLOSE_PARAGRAPH" ctype="x-p" equiv-text="&lt;/p&gt;"/></source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">143,146</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cSupportAnydeskInstallButton" datatype="html">
-        <source>Install Anydesk</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">150,151</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cSupportAnydeskRemoveButton" datatype="html">
-        <source>Remove Anydesk</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">151,152</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cSupportAnydeskProgressButton" datatype="html">
-        <source>Checking</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">152,155</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cSupportAnydeskStartButton" datatype="html">
-        <source> Start Anydesk </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">161,164</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cSupportAnydeskWaylandDescription" datatype="html">
-        <source> To use AnyDesk, your operating system must be restarted with the X11 graphics system. Please log out and select X11 on the login screen. </source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">167,171</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="cSupportRestoreTitle" datatype="html">
         <source>Restore system</source>
         <context-group purpose="location">

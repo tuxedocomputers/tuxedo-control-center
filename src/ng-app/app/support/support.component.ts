@@ -38,7 +38,6 @@ import { ActivatedRoute } from '@angular/router';
     standalone: false,
 })
 export class SupportComponent implements OnInit {
-    public anydeskInstalled: boolean;
     public aptInstalled: boolean = false;
     public webfaiCreatorInstalled: boolean;
     public isX11: number = -1;
@@ -46,7 +45,6 @@ export class SupportComponent implements OnInit {
     public systeminfoRunOutput: string = '';
     public systeminfoRunProgress: boolean = false;
     public systemInfosCompleted: boolean = false;
-    public anydeskProgramName: string = 'anydesk';
     public webfaiCreatorProgramName: string = 'tuxedo-webfai-creator';
     // TODO how can we buffer this value better without using sync calls that will likely blockade everything?
     private installProgress: Map<string, boolean> = new Map();
@@ -72,7 +70,6 @@ export class SupportComponent implements OnInit {
     private setVariablesWithRouteSnapshot(): void {
         const data = this.route.snapshot.data;
 
-        this.anydeskInstalled = data.anydeskInstalled;
         this.aptInstalled = data.aptInstalled;
         this.webfaiCreatorInstalled = data.webfaiCreatorInstalled;
         this.isX11 = data.x11Status;
@@ -88,37 +85,9 @@ export class SupportComponent implements OnInit {
         this.utils.openExternal(url);
     }
 
-    public async updateAnydeskInstallStatus(): Promise<void> {
-        this.anydeskInstalled = await window.pgms.anydeskInstalled();
-        this.isCheckingInstallation.set(this.anydeskProgramName, false);
-    }
-
     public async updateWebfaiCreatorInstallStatus(): Promise<void> {
         this.webfaiCreatorInstalled = await window.pgms.webfaiCreatorInstalled();
         this.isCheckingInstallation.set(this.webfaiCreatorProgramName, false);
-    }
-
-    public buttonInstallRemoveAnydesk(): void {
-        this.installProgress.set(this.anydeskProgramName, true);
-        this.isCheckingInstallation.set(this.anydeskProgramName, true);
-        if (this.anydeskInstalled) {
-            window.pgms.uninstallAnydesk().then((): void => {
-                this.updateAnydeskInstallStatus();
-                this.updateProgressStatus();
-            });
-        } else {
-            window.pgms.installAnydesk().then((): void => {
-                this.updateAnydeskInstallStatus();
-                this.updateProgressStatus();
-            });
-        }
-        this.updateProgressStatus();
-        setTimeout((): void => {
-            this.updateProgressStatus();
-        }, 500);
-        setTimeout((): void => {
-            this.updateProgressStatus();
-        }, 1000);
     }
 
     public buttonInstallRemoveWebfaiCreator(): void {
@@ -142,10 +111,6 @@ export class SupportComponent implements OnInit {
         setTimeout((): void => {
             this.updateProgressStatus();
         }, 1000);
-    }
-
-    public buttonStartAnydesk(): void {
-        window.pgms.startAnydesk();
     }
 
     public buttonStartWebfaiCreator(): void {

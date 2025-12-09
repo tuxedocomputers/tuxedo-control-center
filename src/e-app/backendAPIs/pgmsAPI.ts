@@ -24,7 +24,6 @@ import { ProgramManagementService } from './pgmsService';
 const pgms = new ProgramManagementService();
 const aptName = 'apt';
 const tomteName = 'tuxedo-tomte';
-const anydeskProgramName = 'anydesk';
 const webfaiCreatorProgramName = 'tuxedo-webfai-creator';
 
 ipcMain.handle('pgms-is-in-progress', (event: IpcMainInvokeEvent): Promise<Map<string, boolean>> => {
@@ -85,38 +84,6 @@ ipcMain.handle('pgms-start-tomte', (event: IpcMainInvokeEvent): Promise<void> =>
     return new Promise<void>(
         (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): void => {
             resolve(pgms.run(tomteName));
-        },
-    );
-});
-
-ipcMain.handle('pgms-anydesk-installed', (event: IpcMainInvokeEvent): Promise<boolean> => {
-    return new Promise<boolean>(
-        (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
-            resolve(pgms.isInstalled(anydeskProgramName));
-        },
-    );
-});
-
-ipcMain.handle('pgms-install-anydesk', (event: IpcMainInvokeEvent): Promise<boolean> => {
-    return new Promise<boolean>(
-        (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
-            resolve(pgms.install(anydeskProgramName));
-        },
-    );
-});
-
-ipcMain.handle('pgms-uninstall-anydesk', (event: IpcMainInvokeEvent): Promise<boolean> => {
-    return new Promise<boolean>(
-        (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
-            resolve(pgms.remove(anydeskProgramName));
-        },
-    );
-});
-
-ipcMain.handle('pgms-start-anydesk', (event: IpcMainInvokeEvent): Promise<void> => {
-    return new Promise<void>(
-        (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): void => {
-            resolve(pgms.run(anydeskProgramName));
         },
     );
 });

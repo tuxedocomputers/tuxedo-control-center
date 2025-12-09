@@ -49,7 +49,6 @@ import {
     PowerStateStatusResolver,
 } from './dashboard.resolver';
 import { X11StatusResolver } from './x11.resolver';
-import { AnydeskInstalledResolver } from './anydesk.resolver';
 import { AptInstalledResolver } from './apt.resolver';
 import { TomteInstalledResolver } from './tomte.resolver';
 import { WebfaiCreatorInstalledResolver } from './webfaiCreator.resolver';
@@ -70,7 +69,6 @@ const routes: Routes = [
                 path: 'support',
                 component: SupportComponent,
                 resolve: {
-                    anydeskInstalled: AnydeskInstalledResolver,
                     aptInstalled: AptInstalledResolver,
                     webfaiCreatorInstalled: WebfaiCreatorInstalledResolver,
                     x11Status: X11StatusResolver,

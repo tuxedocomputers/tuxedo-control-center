@@ -122,10 +122,6 @@ interface PGMS {
     installTomte: () => Promise<boolean>;
     uninstallTomte: () => Promise<boolean>;
     startTomte: () => Promise<void>;
-    anydeskInstalled: () => Promise<boolean>;
-    installAnydesk: () => Promise<boolean>;
-    uninstallAnydesk: () => Promise<boolean>;
-    startAnydesk: () => Promise<void>;
     webfaiCreatorInstalled: () => Promise<boolean>;
     installWebfaiCreator: () => Promise<boolean>;
     uninstallWebfaiCreator: () => Promise<boolean>;
