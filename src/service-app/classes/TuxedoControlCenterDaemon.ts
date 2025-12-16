@@ -655,14 +655,30 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             profile.cpu.useMaxPerfGov = false;
         }
 
-        const minFreq = cpu.cores[0].cpuinfoMinFreq.readValueNT();
+        // Min and max range considering all cores. Takes into consideration that
+        // different cores can have different ranges.
+        let cpuInfoMinFreq = cpu.cores[0].cpuinfoMinFreq.readValueNT();
+        let cpuInfoMaxFreq = cpu.cores[0].cpuinfoMaxFreq.readValueNT();
+        for (const core of cpu.cores) {
+            const coreMinFreq = core.cpuinfoMinFreq.readValueNT();
+            const coreMaxFreq = core.cpuinfoMaxFreq.readValueNT();
+            if (coreMinFreq !== undefined && (coreMinFreq < cpuInfoMinFreq)) {
+                cpuInfoMinFreq = coreMinFreq;
+            }
+            if (coreMaxFreq !== undefined && (coreMaxFreq > cpuInfoMaxFreq)) {
+                cpuInfoMaxFreq = coreMaxFreq;
+            }
+        }
+
+        const minFreq = cpuInfoMinFreq;
+
         if (profile.cpu.scalingMinFrequency === undefined || profile.cpu.scalingMinFrequency < minFreq) {
             profile.cpu.scalingMinFrequency = minFreq;
         }
 
         const scalingAvailableFrequencies = cpu.cores[0].scalingAvailableFrequencies.readValueNT();
         const scalingdriver = cpu.cores[0].scalingDriver.readValueNT()
-        let maxFreq = scalingAvailableFrequencies !== undefined ? scalingAvailableFrequencies[0] : cpu.cores[0].cpuinfoMaxFreq.readValueNT();
+        let maxFreq = scalingAvailableFrequencies !== undefined ? scalingAvailableFrequencies[0] : cpuInfoMaxFreq;
         const boost = cpu.boost.readValueNT();
         if (boost !== undefined && scalingdriver === ScalingDriver.acpi_cpufreq) {
             maxFreq += 1000000;
