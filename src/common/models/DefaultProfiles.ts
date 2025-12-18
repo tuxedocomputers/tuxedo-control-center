@@ -425,6 +425,7 @@ export enum TUXEDODevice {
     STELLARIS16I07,
     SIRIUS1601,
     SIRIUS1602,
+    GEMINI17I04,
 };
 
 /*
