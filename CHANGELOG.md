@@ -1,6 +1,6 @@
 # Changelog
 
-## [] - UNRELEASED
+## [2.1.22] - 2025-12-19
 ### Added
 - Quirk for Gemini Gen4 Intel using CPU EPP `performance` instead of default `balance_performance`
 - GPU hybrid graphics selection identification for InfinityBook Max Gen10 AMD
