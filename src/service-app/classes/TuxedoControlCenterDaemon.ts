@@ -514,6 +514,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         dmiSKUDeviceMap.set('OMNIA08IMK2', TUXEDODevice.IBPG8);
         dmiSKUDeviceMap.set('IBP14A10MK1 / IBP15A10MK1', TUXEDODevice.IBPG10AMD);
         dmiSKUDeviceMap.set('IIBP14A10MK1 / IBP15A10MK1', TUXEDODevice.IBPG10AMD);
+        dmiSKUDeviceMap.set('IBM15A10', TUXEDODevice.IBM15A10);
         dmiSKUDeviceMap.set('POLARIS1XA02', TUXEDODevice.POLARIS1XA02);
         dmiSKUDeviceMap.set('POLARIS1XI02', TUXEDODevice.POLARIS1XI02);
         dmiSKUDeviceMap.set('POLARIS1XA03', TUXEDODevice.POLARIS1XA03);
@@ -538,6 +539,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         dmiSKUDeviceMap.set('STELLARIS16I07', TUXEDODevice.STELLARIS16I07);
         dmiSKUDeviceMap.set('SIRIUS1601', TUXEDODevice.SIRIUS1601);
         dmiSKUDeviceMap.set('SIRIUS1602', TUXEDODevice.SIRIUS1602);
+        dmiSKUDeviceMap.set('GEMINI17I04', TUXEDODevice.GEMINI17I04);
 
         const skuMatch = dmiSKUDeviceMap.get(productSKU);
 
@@ -655,14 +657,34 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             profile.cpu.useMaxPerfGov = false;
         }
 
-        const minFreq = cpu.cores[0].cpuinfoMinFreq.readValueNT();
+        // Min and max range considering all cores. Takes into consideration that
+        // different cores can have different ranges.
+        let cpuInfoMinFreq = cpu.cores[0].cpuinfoMinFreq.readValueNT();
+        let cpuInfoMaxFreq = cpu.cores[0].cpuinfoMaxFreq.readValueNT();
+        for (const core of cpu.cores) {
+            const coreMinFreq = core.cpuinfoMinFreq.readValueNT();
+            const coreMaxFreq = core.cpuinfoMaxFreq.readValueNT();
+            if (coreMinFreq !== undefined && (coreMinFreq < cpuInfoMinFreq)) {
+                cpuInfoMinFreq = coreMinFreq;
+            }
+            if (coreMaxFreq !== undefined && (coreMaxFreq > cpuInfoMaxFreq)) {
+                cpuInfoMaxFreq = coreMaxFreq;
+            }
+        }
+
+        const minFreq = cpuInfoMinFreq;
+
         if (profile.cpu.scalingMinFrequency === undefined || profile.cpu.scalingMinFrequency < minFreq) {
             profile.cpu.scalingMinFrequency = minFreq;
         }
 
         const scalingAvailableFrequencies = cpu.cores[0].scalingAvailableFrequencies.readValueNT();
         const scalingdriver = cpu.cores[0].scalingDriver.readValueNT()
-        let maxFreq = scalingAvailableFrequencies !== undefined ? scalingAvailableFrequencies[0] : cpu.cores[0].cpuinfoMaxFreq.readValueNT();
+        let maxFreq = scalingAvailableFrequencies !== undefined ? scalingAvailableFrequencies[0] : cpuInfoMaxFreq;
+        if (scalingdriver === ScalingDriver.intel_pstate && dev === TUXEDODevice.GEMINI17I04) {
+            // Workaround for not being able to activate turbo boost for profile generation
+            maxFreq = 5800000;
+        }
         const boost = cpu.boost.readValueNT();
         if (boost !== undefined && scalingdriver === ScalingDriver.acpi_cpufreq) {
             maxFreq += 1000000;

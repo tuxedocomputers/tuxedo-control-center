@@ -403,6 +403,7 @@ export enum TUXEDODevice {
     IBP14G7_AQF_ARX,
     IBPG8,
     IBPG10AMD,
+    IBM15A10,
     PULSE1502,
     AURA14G3,
     AURA15G3,
@@ -425,6 +426,7 @@ export enum TUXEDODevice {
     STELLARIS16I07,
     SIRIUS1601,
     SIRIUS1602,
+    GEMINI17I04,
 };
 
 /*
