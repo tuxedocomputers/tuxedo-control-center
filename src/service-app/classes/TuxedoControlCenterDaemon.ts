@@ -261,31 +261,11 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.dbusData.device = JSON.stringify(dev);
         this.readOrCreateConfigurationFiles(dev);
 
-        // Workaround for intel_pstate where we can not read out min/max frequencies if no_turbo is set
-        // This is necessary for the various fillDeviceSpecificDefaults calls
-        const cpu: CpuController = new CpuController('/sys/devices/system/cpu');
-        const previousNoTurboState = cpu.intelPstate.noTurbo.readValueNT();
-        if (previousNoTurboState !== undefined) {
-            try {
-                cpu.intelPstate.noTurbo.writeValue(false);
-            } catch (err) {
-                this.logLine('loadConfigsAndProfiles: failed to unset no_turbo');
-            }
-        }
-
         // Fill exported profile lists (for GUI)
         const defaultProfilesFilled = this.config.getDefaultProfiles(dev).map(this.fillDeviceSpecificDefaults,this)
         let customProfilesFilled = this.customProfiles.map(this.fillDeviceSpecificDefaults,this);
 
         const defaultValuesProfileFilled = this.fillDeviceSpecificDefaults(JSON.parse(JSON.stringify(this.config.getDefaultCustomProfiles(dev)[0])));
-
-        if (previousNoTurboState !== undefined) {
-            try {
-                cpu.intelPstate.noTurbo.writeValue(previousNoTurboState);
-            } catch (err) {
-                this.logLine('loadConfigsAndProfiles: failed to re-set no_turbo');
-            }
-        }
 
         // Make sure assigned states and assigned profiles exist, otherwise fill with defaults
         let settingsChanged = false;
