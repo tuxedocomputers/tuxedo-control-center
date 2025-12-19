@@ -261,31 +261,11 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.dbusData.device = JSON.stringify(dev);
         this.readOrCreateConfigurationFiles(dev);
 
-        // Workaround for intel_pstate where we can not read out min/max frequencies if no_turbo is set
-        // This is necessary for the various fillDeviceSpecificDefaults calls
-        const cpu: CpuController = new CpuController('/sys/devices/system/cpu');
-        const previousNoTurboState = cpu.intelPstate.noTurbo.readValueNT();
-        if (previousNoTurboState !== undefined) {
-            try {
-                cpu.intelPstate.noTurbo.writeValue(false);
-            } catch (err) {
-                this.logLine('loadConfigsAndProfiles: failed to unset no_turbo');
-            }
-        }
-
         // Fill exported profile lists (for GUI)
         const defaultProfilesFilled = this.config.getDefaultProfiles(dev).map(this.fillDeviceSpecificDefaults,this)
         let customProfilesFilled = this.customProfiles.map(this.fillDeviceSpecificDefaults,this);
 
         const defaultValuesProfileFilled = this.fillDeviceSpecificDefaults(JSON.parse(JSON.stringify(this.config.getDefaultCustomProfiles(dev)[0])));
-
-        if (previousNoTurboState !== undefined) {
-            try {
-                cpu.intelPstate.noTurbo.writeValue(previousNoTurboState);
-            } catch (err) {
-                this.logLine('loadConfigsAndProfiles: failed to re-set no_turbo');
-            }
-        }
 
         // Make sure assigned states and assigned profiles exist, otherwise fill with defaults
         let settingsChanged = false;
@@ -701,6 +681,10 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         const scalingAvailableFrequencies = cpu.cores[0].scalingAvailableFrequencies.readValueNT();
         const scalingdriver = cpu.cores[0].scalingDriver.readValueNT()
         let maxFreq = scalingAvailableFrequencies !== undefined ? scalingAvailableFrequencies[0] : cpuInfoMaxFreq;
+        if (scalingdriver === ScalingDriver.intel_pstate && dev === TUXEDODevice.GEMINI17I04) {
+            // Workaround for not being able to activate turbo boost for profile generation
+            maxFreq = 5800000;
+        }
         const boost = cpu.boost.readValueNT();
         if (boost !== undefined && scalingdriver === ScalingDriver.acpi_cpufreq) {
             maxFreq += 1000000;
