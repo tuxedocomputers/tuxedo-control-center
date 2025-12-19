@@ -701,6 +701,10 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         const scalingAvailableFrequencies = cpu.cores[0].scalingAvailableFrequencies.readValueNT();
         const scalingdriver = cpu.cores[0].scalingDriver.readValueNT()
         let maxFreq = scalingAvailableFrequencies !== undefined ? scalingAvailableFrequencies[0] : cpuInfoMaxFreq;
+        if (scalingdriver === ScalingDriver.intel_pstate && dev === TUXEDODevice.GEMINI17I04) {
+            // Workaround for not being able to activate turbo boost for profile generation
+            maxFreq = 5800000;
+        }
         const boost = cpu.boost.readValueNT();
         if (boost !== undefined && scalingdriver === ScalingDriver.acpi_cpufreq) {
             maxFreq += 1000000;
