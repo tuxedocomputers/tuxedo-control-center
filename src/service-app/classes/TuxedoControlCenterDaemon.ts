@@ -261,11 +261,31 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.dbusData.device = JSON.stringify(dev);
         this.readOrCreateConfigurationFiles(dev);
 
+        // Workaround for intel_pstate where we can not read out min/max frequencies if no_turbo is set
+        // This is necessary for the various fillDeviceSpecificDefaults calls
+        const cpu: CpuController = new CpuController('/sys/devices/system/cpu');
+        const previousNoTurboState = cpu.intelPstate.noTurbo.readValueNT();
+        if (previousNoTurboState !== undefined) {
+            try {
+                cpu.intelPstate.noTurbo.writeValue(false);
+            } catch (err) {
+                this.logLine('loadConfigsAndProfiles: failed to unset no_turbo');
+            }
+        }
+
         // Fill exported profile lists (for GUI)
         const defaultProfilesFilled = this.config.getDefaultProfiles(dev).map(this.fillDeviceSpecificDefaults,this)
         let customProfilesFilled = this.customProfiles.map(this.fillDeviceSpecificDefaults,this);
 
         const defaultValuesProfileFilled = this.fillDeviceSpecificDefaults(JSON.parse(JSON.stringify(this.config.getDefaultCustomProfiles(dev)[0])));
+
+        if (previousNoTurboState !== undefined) {
+            try {
+                cpu.intelPstate.noTurbo.writeValue(previousNoTurboState);
+            } catch (err) {
+                this.logLine('loadConfigsAndProfiles: failed to re-set no_turbo');
+            }
+        }
 
         // Make sure assigned states and assigned profiles exist, otherwise fill with defaults
         let settingsChanged = false;
@@ -539,6 +559,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         dmiSKUDeviceMap.set('STELLARIS16I07', TUXEDODevice.STELLARIS16I07);
         dmiSKUDeviceMap.set('SIRIUS1601', TUXEDODevice.SIRIUS1601);
         dmiSKUDeviceMap.set('SIRIUS1602', TUXEDODevice.SIRIUS1602);
+        dmiSKUDeviceMap.set('GEMINI17I04', TUXEDODevice.GEMINI17I04);
 
         const skuMatch = dmiSKUDeviceMap.get(productSKU);
 
@@ -656,14 +677,30 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             profile.cpu.useMaxPerfGov = false;
         }
 
-        const minFreq = cpu.cores[0].cpuinfoMinFreq.readValueNT();
+        // Min and max range considering all cores. Takes into consideration that
+        // different cores can have different ranges.
+        let cpuInfoMinFreq = cpu.cores[0].cpuinfoMinFreq.readValueNT();
+        let cpuInfoMaxFreq = cpu.cores[0].cpuinfoMaxFreq.readValueNT();
+        for (const core of cpu.cores) {
+            const coreMinFreq = core.cpuinfoMinFreq.readValueNT();
+            const coreMaxFreq = core.cpuinfoMaxFreq.readValueNT();
+            if (coreMinFreq !== undefined && (coreMinFreq < cpuInfoMinFreq)) {
+                cpuInfoMinFreq = coreMinFreq;
+            }
+            if (coreMaxFreq !== undefined && (coreMaxFreq > cpuInfoMaxFreq)) {
+                cpuInfoMaxFreq = coreMaxFreq;
+            }
+        }
+
+        const minFreq = cpuInfoMinFreq;
+
         if (profile.cpu.scalingMinFrequency === undefined || profile.cpu.scalingMinFrequency < minFreq) {
             profile.cpu.scalingMinFrequency = minFreq;
         }
 
         const scalingAvailableFrequencies = cpu.cores[0].scalingAvailableFrequencies.readValueNT();
         const scalingdriver = cpu.cores[0].scalingDriver.readValueNT()
-        let maxFreq = scalingAvailableFrequencies !== undefined ? scalingAvailableFrequencies[0] : cpu.cores[0].cpuinfoMaxFreq.readValueNT();
+        let maxFreq = scalingAvailableFrequencies !== undefined ? scalingAvailableFrequencies[0] : cpuInfoMaxFreq;
         const boost = cpu.boost.readValueNT();
         if (boost !== undefined && scalingdriver === ScalingDriver.acpi_cpufreq) {
             maxFreq += 1000000;

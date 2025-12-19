@@ -79,11 +79,27 @@ export class SysFsService implements OnDestroy {
   public getGeneralCpuInfo(): IGeneralCPUInfo {
     let cpuInfo: IGeneralCPUInfo;
     const scalingDriver = this.cpu.cores[0].scalingDriver.readValueNT();
+
+    // Min and max range considering all cores. Takes into consideration that
+    // different cores can have different ranges.
+    let cpuInfoMinFreq = this.cpu.cores[0].cpuinfoMinFreq.readValueNT();
+    let cpuInfoMaxFreq = this.cpu.cores[0].cpuinfoMaxFreq.readValueNT();
+    for (const core of this.cpu.cores) {
+        const coreMinFreq = core.cpuinfoMinFreq.readValueNT();
+        const coreMaxFreq = core.cpuinfoMaxFreq.readValueNT();
+        if (coreMinFreq !== undefined && (coreMinFreq < cpuInfoMinFreq)) {
+            cpuInfoMinFreq = coreMinFreq;
+        }
+        if (coreMaxFreq !== undefined && (coreMaxFreq > cpuInfoMaxFreq)) {
+            cpuInfoMaxFreq = coreMaxFreq;
+        }
+    }
+
     try {
       cpuInfo = {
         availableCores: this.cpu.cores.length,
-        minFreq: this.cpu.cores[0].cpuinfoMinFreq.readValueNT(),
-        maxFreq: this.cpu.cores[0].cpuinfoMaxFreq.readValueNT(),
+        minFreq: cpuInfoMinFreq,
+        maxFreq: cpuInfoMaxFreq,
         scalingAvailableFrequencies: this.cpu.cores[0].scalingAvailableFrequencies.readValueNT(),
         scalingAvailableGovernors: this.cpu.cores[0].scalingAvailableGovernors.readValueNT(),
         energyPerformanceAvailablePreferences: this.cpu.cores[0].energyPerformanceAvailablePreferences.readValueNT(),
