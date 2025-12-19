@@ -1,5 +1,13 @@
 # Changelog
 
+## [] - UNRELEASED
+### Added
+- Quirk for Gemini Gen4 Intel using CPU EPP `performance` instead of default `balance_performance`
+- GPU hybrid graphics selection identification for InfinityBook Max Gen10 AMD
+
+### Fixed
+- Workaround for profile generation when intel_pstate starts with no_turbo enabled
+
 ## [2.1.21] - 2025-11-26
 ### Added
 - "TCC" keyword to desktop-file
