@@ -17,11 +17,10 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { DaemonWorker } from './DaemonWorker';
 import { DisplayBacklightController } from '../../common/classes/DisplayBacklightController';
-
+import type { ITccProfile } from '../../common/models/TccProfile';
+import { DaemonWorker } from './DaemonWorker';
 import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
-import type { ITccProfile } from 'src/common/models/TccProfile';
 
 export class DisplayBacklightWorker extends DaemonWorker {
     private controllers: DisplayBacklightController[];

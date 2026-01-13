@@ -17,8 +17,9 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as util from 'util';
 import * as child_process from 'node:child_process';
+import * as util from 'util';
+
 const execp = util.promisify(child_process.exec);
 
 const tccPackage = require('../package.json');

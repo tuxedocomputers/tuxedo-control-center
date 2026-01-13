@@ -17,12 +17,12 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { Mutex } from 'async-mutex';
 import * as dbus from 'dbus-next';
-import type { TDPInfo } from '../../native-lib/TuxedoIOAPI';
+import { app } from 'electron';
 // todo: ChargeType is not used as a type here and thus can not have the type keyword, needs to be fixed
 import { ChargeType } from '../../common/classes/PowerSupplyController';
-import { app } from 'electron';
-import { Mutex } from 'async-mutex';
+import type { TDPInfo } from '../../native-lib/TuxedoIOAPI';
 
 export class TccDBusController {
     private busName: string = 'com.tuxedocomputers.tccd';

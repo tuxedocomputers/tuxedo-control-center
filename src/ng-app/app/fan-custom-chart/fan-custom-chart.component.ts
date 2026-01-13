@@ -17,21 +17,14 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
-
 import type { ElementRef, OnInit } from '@angular/core';
-
-import type { FormGroup } from '@angular/forms';
-
-import { FormBuilder } from '@angular/forms';
-
-import type { ITccFanProfile, ITccFanTableEntry } from 'src/common/models/TccFanTable';
-import { customFanPreset } from 'src/common/models/TccFanTable';
-
-import { Chart } from 'chart.js';
-
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+// biome-ignore lint: injection token
+import { FormBuilder, type FormGroup } from '@angular/forms';
 import type { ChartConfiguration, ChartType, ChartTypeRegistry, TooltipItem } from 'chart.js';
-
+import { Chart } from 'chart.js';
+import type { ITccFanProfile, ITccFanTableEntry } from '../../../common/models/TccFanTable';
+import { customFanPreset } from '../../../common/models/TccFanTable';
 import 'chartjs-plugin-datalabels';
 import 'chartjs-plugin-dragdata';
 import {
@@ -41,10 +34,11 @@ import {
     chartResponsive,
     createLineChartDataset,
     createLineChartScales,
-} from 'src/common/classes/FanChartProperties';
-import { interpolatePointsArray, manageCriticalTemperature } from 'src/common/classes/FanUtils';
-import { formatTemp } from '../../../common/classes/FanUtils';
+} from '../../../common/classes/FanChartProperties';
+import { formatTemp, interpolatePointsArray, manageCriticalTemperature } from '../../../common/classes/FanUtils';
+// biome-ignore lint: injection token
 import { ConfigService } from '../config.service';
+// biome-ignore lint: injection token
 import { UtilsService } from '../utils.service';
 
 @Component({

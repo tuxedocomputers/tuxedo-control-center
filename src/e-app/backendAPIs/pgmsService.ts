@@ -18,8 +18,8 @@
  */
 
 import * as child_process from 'node:child_process';
-import { execCmd } from './utilsAPI';
 import { dialog } from 'electron';
+import { execCmd } from './utilsAPI';
 
 export class ProgramManagementService {
     public isInProgress: Map<string, boolean>;

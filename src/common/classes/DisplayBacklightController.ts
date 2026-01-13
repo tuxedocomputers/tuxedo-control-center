@@ -18,8 +18,8 @@
  */
 
 import * as path from 'node:path';
-import { SysFsPropertyInteger } from './SysFsProperties';
 import { SysFsController } from './SysFsController';
+import { SysFsPropertyInteger } from './SysFsProperties';
 
 // Exception for amd backlight driver (amdgpu_bl)
 // amdgpu brightness workaround, scale actual_brightness [0, 0xffff] to [0, 0xff]

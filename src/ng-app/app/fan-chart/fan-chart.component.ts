@@ -26,17 +26,23 @@ import {
     type OnInit,
     ViewChild,
 } from '@angular/core';
-import { Chart, type ChartTypeRegistry, type ChartConfiguration, type TooltipItem } from 'chart.js';
+import { Chart, type ChartConfiguration, type ChartTypeRegistry, type TooltipItem } from 'chart.js';
 import {
     chartAnimation,
     chartMaintainAspectRatio,
     chartResponsive,
     createLineChartDataset,
     createLineChartScales,
-} from 'src/common/classes/FanChartProperties';
-import { formatTemp, manageCriticalTemperature } from 'src/common/classes/FanUtils';
-import { type ITccFanProfile, type ITccFanTableEntry, defaultFanProfiles } from 'src/common/models/TccFanTable';
+} from '../../../../src/common/classes/FanChartProperties';
+import { formatTemp, manageCriticalTemperature } from '../../../../src/common/classes/FanUtils';
+import {
+    defaultFanProfiles,
+    type ITccFanProfile,
+    type ITccFanTableEntry,
+} from '../../../../src/common/models/TccFanTable';
+// biome-ignore lint: injection token
 import { ConfigService } from '../config.service';
+// biome-ignore lint: injection token
 import { UtilsService } from '../utils.service';
 
 @Component({

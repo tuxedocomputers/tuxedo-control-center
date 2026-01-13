@@ -17,8 +17,8 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { TUXEDODevice } from '../../common/models/DefaultProfiles';
 import { getHwmonPathWithName } from '../../common/classes/FanUtils';
+import { TUXEDODevice } from '../../common/models/DefaultProfiles';
 import { FanControlHwmon } from './FanControlHwmon';
 import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 

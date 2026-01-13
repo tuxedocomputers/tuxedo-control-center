@@ -17,8 +17,8 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ipcMain } from 'electron';
 import type { IpcMainInvokeEvent } from 'electron';
+import { ipcMain } from 'electron';
 import { ProgramManagementService } from './pgmsService';
 
 const pgms = new ProgramManagementService();

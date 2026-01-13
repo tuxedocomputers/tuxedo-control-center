@@ -17,12 +17,12 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ipcMain } from 'electron';
+import * as path from 'node:path';
 import type { IpcMainEvent, IpcMainInvokeEvent } from 'electron';
+import { ipcMain } from 'electron';
+import { amdDGpuDeviceIdString } from '../../common/classes/AmdDeviceIDs';
 import { AvailabilityService } from '../../common/classes/availability.service';
 import { execCmdSync, execFile, readTextFile } from './utilsAPI';
-import * as path from 'node:path';
-import { amdDGpuDeviceIdString } from '../../common/classes/AmdDeviceIDs';
 
 const availabilityService: AvailabilityService = new AvailabilityService();
 

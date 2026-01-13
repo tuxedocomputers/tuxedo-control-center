@@ -17,17 +17,17 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { DaemonWorker } from './DaemonWorker';
-import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
-import type { IdGpuInfo, IiGpuInfo } from 'src/common/models/TccGpuValues';
-import { SysFsPropertyInteger, SysFsPropertyString } from '../../common/classes/SysFsProperties';
 import * as path from 'node:path';
+import { amdDGpuDeviceIdString, amdIGpuDeviceIdString } from '../../common/classes/AmdDeviceIDs';
+import type { AvailabilityService } from '../../common/classes/availability.service';
+import { intelIGpuDeviceIdString } from '../../common/classes/IntelDeviceIDs';
 import { IntelRAPLController } from '../../common/classes/IntelRAPLController';
 import { PowerController } from '../../common/classes/PowerController';
-import { amdDGpuDeviceIdString, amdIGpuDeviceIdString } from '../../common/classes/AmdDeviceIDs';
-import { intelIGpuDeviceIdString } from '../../common/classes/IntelDeviceIDs';
-import { execCommandAsync, countLines } from '../../common/classes/Utils';
-import type { AvailabilityService } from '../../common/classes/availability.service';
+import { SysFsPropertyInteger, SysFsPropertyString } from '../../common/classes/SysFsProperties';
+import { countLines, execCommandAsync } from '../../common/classes/Utils';
+import type { IdGpuInfo, IiGpuInfo } from '../../common/models/TccGpuValues';
+import { DaemonWorker } from './DaemonWorker';
+import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
 export class GpuInfoWorker extends DaemonWorker {
     private isNvidiaSmiInstalled: boolean = false;

@@ -17,13 +17,13 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ipcMain } from 'electron';
 import type { IpcMainInvokeEvent } from 'electron';
-import { AquarisAPIFunctions } from '../../common/models/IAquarisAPI';
+import { ipcMain } from 'electron';
 import type { AquarisState } from '../../common/models/IAquarisAPI';
-import { LCT21001, PumpVoltage, RGBState } from '../LCT21001';
+import { AquarisAPIFunctions } from '../../common/models/IAquarisAPI';
 import type { DeviceInfo } from '../LCT21001';
-import { userConfig, hasAquaris } from './initMain';
+import { LCT21001, PumpVoltage, RGBState } from '../LCT21001';
+import { hasAquaris, userConfig } from './initMain';
 
 let aquarisStateExpected: AquarisState;
 let aquarisStateCurrent: AquarisState;

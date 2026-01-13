@@ -27,8 +27,8 @@ import type {
     ScaleOptionsByType,
     Tick,
 } from 'chart.js';
-import { formatTemp } from './FanUtils';
 import type { _DeepPartialObject } from 'node_modules/chart.js/dist/types/utils';
+import { formatTemp } from './FanUtils';
 
 export const chartInteraction: _DeepPartialObject<CoreInteractionOptions> = {
     mode: 'index',

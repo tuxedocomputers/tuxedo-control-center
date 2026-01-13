@@ -17,8 +17,8 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ipcMain } from 'electron';
 import type { IpcMainEvent } from 'electron';
+import { ipcMain } from 'electron';
 import { VendorService } from '../../common/classes/Vendor.service';
 
 const vendorService: VendorService = new VendorService();

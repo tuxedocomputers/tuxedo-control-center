@@ -19,13 +19,15 @@
 
 import { type AfterContentInit, Component, type OnDestroy, type OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+// biome-ignore lint: injection token
+import { MatDialog, type MatDialogRef } from '@angular/material/dialog';
+import type { AquarisState } from '../../../common/models/IAquarisAPI';
 import { type DeviceInfo as AquarisDeviceInfo, RGBState } from '../../../e-app/LCT21001';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { DialogInputTextComponent } from '../dialog-input-text/dialog-input-text.component';
-import { UtilsService } from '../utils.service';
-import type { IAquarisClientAPI } from 'src/e-app/preloadAPIs/AquarisClientAPI';
-import type { AquarisState } from 'src/common/models/IAquarisAPI';
+import type { IAquarisClientAPI } from '../../../e-app/preloadAPIs/AquarisClientAPI';
 import type { ConfirmDialogResult } from '../dialog-confirm/dialog-confirm.component';
+import { DialogInputTextComponent } from '../dialog-input-text/dialog-input-text.component';
+// biome-ignore lint: injection token
+import { UtilsService } from '../utils.service';
 
 interface FanPreset {
     name: string;

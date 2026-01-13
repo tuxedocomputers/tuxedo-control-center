@@ -17,10 +17,10 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { determineState } from '../../common/classes/StateUtils';
+import type { ProfileStates } from '../../common/models/TccSettings';
 import { DaemonWorker } from './DaemonWorker';
 import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
-import type { ProfileStates } from '../../common/models/TccSettings';
-import { determineState } from '../../common/classes/StateUtils';
 
 export class StateSwitcherWorker extends DaemonWorker {
     private currentState: ProfileStates;

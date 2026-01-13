@@ -17,23 +17,31 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, type OnInit, type OnDestroy } from '@angular/core';
-import type { ILogicalCoreInfo, IGeneralCPUInfo, IPstateInfo } from 'src/common/models/ICpuInfos';
-import { SysFsService } from '../sys-fs.service';
-import { Subscription } from 'rxjs';
-import { UtilsService } from '../utils.service';
-import { TccDBusClientService } from '../tcc-dbus-client.service';
-import type { IDBusFanData } from 'src/common/models/IFanData';
-import type { ITccProfile } from 'src/common/models/TccProfile';
-import { StateService } from '../state.service';
+import { Component, type OnDestroy, type OnInit } from '@angular/core';
+// biome-ignore lint: injection token
 import { ActivatedRoute, Router } from '@angular/router';
-import { ConfigService } from '../config.service';
-import { CompatibilityService } from '../compatibility.service';
-import type { ICpuPower } from 'src/common/models/TccPowerSettings';
-import type { IdGpuInfo, IiGpuInfo } from 'src/common/models/TccGpuValues';
+import { Subscription } from 'rxjs';
 import { filter, first, tap } from 'rxjs/operators';
-import type { TDPInfo } from 'src/native-lib/TuxedoIOAPI';
+import type { IGeneralCPUInfo, ILogicalCoreInfo, IPstateInfo } from '../../../common/models/ICpuInfos';
+import type { IDBusFanData } from '../../../common/models/IFanData';
+import type { IdGpuInfo, IiGpuInfo } from '../../../common/models/TccGpuValues';
+import type { ICpuPower } from '../../../common/models/TccPowerSettings';
+import type { ITccProfile } from '../../../common/models/TccProfile';
+import type { TDPInfo } from '../../../native-lib/TuxedoIOAPI';
+// biome-ignore lint: injection token
+import { CompatibilityService } from '../compatibility.service';
+// biome-ignore lint: injection token
+import { ConfigService } from '../config.service';
+// biome-ignore lint: injection token
 import { PowerStateService } from '../power-state.service';
+// biome-ignore lint: injection token
+import { StateService } from '../state.service';
+// biome-ignore lint: injection token
+import { SysFsService } from '../sys-fs.service';
+// biome-ignore lint: injection token
+import { TccDBusClientService } from '../tcc-dbus-client.service';
+// biome-ignore lint: injection token
+import { UtilsService } from '../utils.service';
 
 @Component({
     selector: 'app-dashboard',

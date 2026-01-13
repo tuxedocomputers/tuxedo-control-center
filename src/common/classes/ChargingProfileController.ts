@@ -18,8 +18,8 @@
  */
 
 import * as path from 'node:path';
-import { SysFsPropertyString, SysFsPropertyStringList } from './SysFsProperties';
 import { SysFsController } from './SysFsController';
+import { SysFsPropertyString, SysFsPropertyStringList } from './SysFsProperties';
 
 export class ChargingProfileController extends SysFsController {
     constructor(public readonly basePath: string) {

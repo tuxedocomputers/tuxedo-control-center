@@ -17,11 +17,11 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { ChargingPriorityController } from '../../common/classes/ChargingPriorityController';
+import { ChargingProfileController } from '../../common/classes/ChargingProfileController';
+import { ChargeType, PowerSupplyController } from '../../common/classes/PowerSupplyController';
 import { DaemonWorker } from './DaemonWorker';
 import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
-import { ChargingProfileController } from '../../common/classes/ChargingProfileController';
-import { ChargingPriorityController } from '../../common/classes/ChargingPriorityController';
-import { ChargeType, PowerSupplyController } from '../../common/classes/PowerSupplyController';
 
 export class ChargingWorker extends DaemonWorker {
     private chargingProfile: ChargingProfileController = new ChargingProfileController(

@@ -17,11 +17,11 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { DaemonWorker } from './DaemonWorker';
-import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
-import type { ICpuPower } from '../../common/models/TccPowerSettings';
 import { IntelRAPLController } from '../../common/classes/IntelRAPLController';
 import { PowerController } from '../../common/classes/PowerController';
+import type { ICpuPower } from '../../common/models/TccPowerSettings';
+import { DaemonWorker } from './DaemonWorker';
+import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
 export class CpuPowerWorker extends DaemonWorker {
     private RAPLConstraint0Status: boolean = false;

@@ -17,11 +17,10 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import type { ITccODMPowerLimits } from 'src/common/models/TccProfile';
+import { TuxedoIOAPI as ioAPI, type TDPInfo } from '../../native-lib/TuxedoIOAPI';
 import { DaemonWorker } from './DaemonWorker';
 import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
-
-import { TuxedoIOAPI as ioAPI, type TDPInfo } from '../../native-lib/TuxedoIOAPI';
-import type { ITccODMPowerLimits } from 'src/common/models/TccProfile';
 
 export class ODMPowerLimitWorker extends DaemonWorker {
     constructor(tccd: TuxedoControlCenterDaemon) {

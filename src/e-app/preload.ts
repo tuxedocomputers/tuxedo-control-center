@@ -17,19 +17,20 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import type * as fs from 'node:fs';
+import type { IpcRendererEvent, OpenDialogReturnValue, SaveDialogReturnValue } from 'electron';
+import type { IDisplayBrightnessInfo, IGeneralCPUInfo, ILogicalCoreInfo } from '../common/models/ICpuInfos';
+import type { IDrive } from '../common/models/IDrive';
+import type { ITccFanProfile } from '../common/models/TccFanTable';
 import type { ITccProfile } from '../common/models/TccProfile';
 import type { ITccSettings } from '../common/models/TccSettings';
 import type { WebcamConstraints } from '../common/models/TccWebcamSettings';
+import type { BrightnessModeString } from './backendAPIs/brightnessAPI';
 import { AquarisClientAPI } from './preloadAPIs/AquarisClientAPI';
 import { DbusClientAPI } from './preloadAPIs/DbusClientAPI';
 import { TomteClientAPI } from './preloadAPIs/tomteClientAPI';
 import { WebcamClientAPI } from './preloadAPIs/webcamClientAPI';
-import type * as fs from 'node:fs';
-import type { ITccFanProfile } from '../common/models/TccFanTable';
-import type { IDrive } from '../common/models/IDrive';
-import type { IpcRendererEvent, OpenDialogReturnValue, SaveDialogReturnValue } from 'electron';
-import type { BrightnessModeString } from './backendAPIs/brightnessAPI';
-import type { IDisplayBrightnessInfo, IGeneralCPUInfo, ILogicalCoreInfo } from '../common/models/ICpuInfos';
+
 const { contextBridge, ipcRenderer } = require('electron');
 
 const callbacks: string[] = [];

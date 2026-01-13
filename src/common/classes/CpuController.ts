@@ -18,14 +18,14 @@
  */
 
 import * as path from 'node:path';
+import { IntelPstateController } from './IntelPStateController';
 import { LogicalCpuController, ScalingDriver } from './LogicalCpuController';
 import {
+    SysFsPropertyBoolean,
     SysFsPropertyInteger,
     SysFsPropertyNumList,
-    SysFsPropertyBoolean,
     SysFsPropertyString,
 } from './SysFsProperties';
-import { IntelPstateController } from './IntelPStateController';
 import { findClosestValue } from './Utils';
 
 export class CpuController {

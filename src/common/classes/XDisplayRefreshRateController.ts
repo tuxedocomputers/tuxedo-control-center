@@ -17,9 +17,9 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type { IDisplayFreqRes, IDisplayMode } from '../models/DisplayFreqRes';
 import * as child_process from 'node:child_process';
 import * as fs from 'node:fs';
+import type { IDisplayFreqRes, IDisplayMode } from '../models/DisplayFreqRes';
 
 export class XDisplayRefreshRateController {
     private displayName: string = '';

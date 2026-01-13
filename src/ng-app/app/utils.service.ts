@@ -17,34 +17,37 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Injectable, Inject, LOCALE_ID } from '@angular/core';
-import { DecimalPipe } from '@angular/common';
+import type * as fs from 'node:fs';
+// biome-ignore lint: deb does build with type, but creates constructor dependency injection error
 import { OverlayContainer } from '@angular/cdk/overlay';
+// biome-ignore lint: deb does build with type, but creates constructor dependency injection error
+import { DecimalPipe } from '@angular/common';
+import { Inject, Injectable, LOCALE_ID } from '@angular/core';
+// biome-ignore lint: deb does build with type, but creates constructor dependency injection error
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import type { OpenDialogReturnValue, SaveDialogReturnValue } from 'electron';
 import { BehaviorSubject } from 'rxjs';
 import {
-    type ConfirmDialogData,
-    type ConfirmDialogResult,
-    DialogConfirmComponent,
-} from './dialog-confirm/dialog-confirm.component';
+    DefaultProfileIDs,
+    type IProfileTextMappings,
+    LegacyDefaultProfileIDs,
+} from '../../common/models/DefaultProfiles';
+import type { ITccProfile } from '../../common/models/TccProfile';
+import type { BrightnessModeString } from '../../e-app/backendAPIs/brightnessAPI';
 import {
     type ChoiceDialogData,
     type ConfirmChoiceResult,
     DialogChoiceComponent,
     type WaitingDialogData,
 } from './dialog-choice/dialog-choice.component';
-
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import type { ITccProfile } from '../../common/models/TccProfile';
 import {
-    DefaultProfileIDs,
-    type IProfileTextMappings,
-    LegacyDefaultProfileIDs,
-} from '../../common/models/DefaultProfiles';
+    type ConfirmDialogData,
+    type ConfirmDialogResult,
+    DialogConfirmComponent,
+} from './dialog-confirm/dialog-confirm.component';
+// biome-ignore lint: deb does build with type, but creates constructor dependency injection error
 import { DialogInputTextComponent, InputDialogData } from './dialog-input-text/dialog-input-text.component';
 import { DialogWaitingComponent } from './dialog-waiting/dialog-waiting.component';
-import type * as fs from 'fs';
-import type { OpenDialogReturnValue, SaveDialogReturnValue } from 'electron';
-import type { BrightnessModeString } from 'src/e-app/backendAPIs/brightnessAPI';
 
 @Injectable({
     providedIn: 'root',

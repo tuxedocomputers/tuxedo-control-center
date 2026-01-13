@@ -18,27 +18,29 @@
  */
 
 import { Component, type OnInit } from '@angular/core';
+import { type AbstractControl, FormControl, FormGroup, type ValidationErrors, type ValidatorFn } from '@angular/forms';
+import { MatOptionSelectionChange } from '@angular/material/core';
+import type { MatTab } from '@angular/material/tabs';
+import { Mutex } from 'async-mutex';
+import { TccPaths } from '../../../common/classes/TccPaths';
+import { GridParamsSettings, type IGridParams } from '../../../common/models/IGridParams';
 import type {
-    WebcamPreset,
-    WebcamDeviceInformation,
     WebcamConstraints,
     WebcamDevice,
-    WebcamPresetValues,
+    WebcamDeviceInformation,
     WebcamPath,
-} from 'src/common/models/TccWebcamSettings';
-import { UtilsService } from '../utils.service';
-import { WebcamSettingsGuard } from '../webcam.guard';
-import { type AbstractControl, FormControl, type ValidationErrors, type ValidatorFn } from '@angular/forms';
-import { FormGroup } from '@angular/forms';
-import { TccPaths } from 'src/common/classes/TccPaths';
-import { MatOptionSelectionChange } from '@angular/material/core';
-import { Mutex } from 'async-mutex';
+    WebcamPreset,
+    WebcamPresetValues,
+} from '../../../common/models/TccWebcamSettings';
 import { environment } from '../../environments/environment';
-import type { MatTab } from '@angular/material/tabs';
-import type { ConfirmDialogData, ConfirmDialogResult } from '../dialog-confirm/dialog-confirm.component';
 import type { ChoiceDialogData, ConfirmChoiceResult } from '../dialog-choice/dialog-choice.component';
+import type { ConfirmDialogData, ConfirmDialogResult } from '../dialog-confirm/dialog-confirm.component';
 import type { InputDialogData } from '../dialog-input-text/dialog-input-text.component';
-import { GridParamsSettings, type IGridParams } from 'src/common/models/IGridParams';
+// biome-ignore lint: injection token
+import { UtilsService } from '../utils.service';
+// biome-ignore lint: injection token
+import { WebcamSettingsGuard } from '../webcam.guard';
+// biome-ignore lint: injection token
 import { WebcamService } from '../webcam.service';
 
 // todo: move dialog functions into a new file

@@ -17,11 +17,11 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ipcMain } from 'electron';
 import type { IpcMainEvent, IpcMainInvokeEvent } from 'electron';
-import type { IGeneralCPUInfo, ILogicalCoreInfo } from '../../common/models/ICpuInfos';
+import { ipcMain } from 'electron';
 import { CpuController } from '../../common/classes/CpuController';
 import { ScalingDriver } from '../../common/classes/LogicalCpuController';
+import type { IGeneralCPUInfo, ILogicalCoreInfo } from '../../common/models/ICpuInfos';
 
 const cpu: CpuController = new CpuController('/sys/devices/system/cpu');
 

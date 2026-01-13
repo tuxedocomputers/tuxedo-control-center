@@ -17,14 +17,12 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import type { ITccODMProfile } from 'src/common/models/TccProfile';
+import { SysFsPropertyString, SysFsPropertyStringList } from '../../common/classes/SysFsProperties';
+import { TUXEDODevice } from '../../common/models/DefaultProfiles';
+import { TuxedoIOAPI as ioAPI, type ObjWrapper } from '../../native-lib/TuxedoIOAPI';
 import { DaemonWorker } from './DaemonWorker';
 import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
-
-import { TuxedoIOAPI as ioAPI, type ObjWrapper } from '../../native-lib/TuxedoIOAPI';
-
-import { SysFsPropertyString, SysFsPropertyStringList } from '../../common/classes/SysFsProperties';
-import type { ITccODMProfile } from 'src/common/models/TccProfile';
-import { TUXEDODevice } from '../../common/models/DefaultProfiles';
 
 export class ODMProfileWorker extends DaemonWorker {
     private static tuxedoPlatformProfile: SysFsPropertyString = new SysFsPropertyString(

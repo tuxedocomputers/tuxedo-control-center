@@ -17,19 +17,19 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type { IAquarisClientAPI } from '../../e-app/preloadAPIs/AquarisClientAPI';
 import type { EventEmitter } from 'node:events';
-import type { IDrive } from '../../common/models/IDrive';
+import type { IpcRendererEvent, OpenDialogReturnValue, SaveDialogReturnValue } from 'electron';
 import type { IDisplayBrightnessInfo, IGeneralCPUInfo, ILogicalCoreInfo } from '../../common/models/ICpuInfos';
+import type { IDrive } from '../../common/models/IDrive';
+import type { ITccFanProfile } from '../../common/models/TccFanTable';
 import type { ITccProfile } from '../../common/models/TccProfile';
 import type { ITccSettings } from '../../common/models/TccSettings';
-import type { ITccFanProfile } from '../../common/models/TccFanTable';
-import type { IDbusClientAPI } from '../../e-app/preloadAPIs/DbusClientAPI';
-import type { ITomteClientAPI } from 'src/e-app/preloadAPIs/tomteClientAPI';
-import type { IWebcamClientAPI } from 'src/e-app/preloadAPIs/webcamClientAPI';
 import type { WebcamConstraints } from '../../common/models/TccWebcamSettings';
-import type { IpcRendererEvent, OpenDialogReturnValue, SaveDialogReturnValue } from 'electron';
-import type { BrightnessModeString } from 'src/e-app/backendAPIs/brightnessAPI';
+import type { IAquarisClientAPI } from '../../e-app/preloadAPIs/AquarisClientAPI';
+import type { IDbusClientAPI } from '../../e-app/preloadAPIs/DbusClientAPI';
+import type { BrightnessModeString } from '../e-app/backendAPIs/brightnessAPI';
+import type { ITomteClientAPI } from '../e-app/preloadAPIs/tomteClientAPI';
+import type { IWebcamClientAPI } from '../e-app/preloadAPIs/webcamClientAPI';
 
 // todo: variables shouldn't be uppercase in every letter
 interface IPC extends EventEmitter {

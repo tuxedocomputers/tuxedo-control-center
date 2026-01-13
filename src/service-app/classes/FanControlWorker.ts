@@ -17,17 +17,17 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { DaemonWorker } from './DaemonWorker';
-import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
-import type { ITccFanProfile, ITccFanTableEntry } from '../../common/models/TccFanTable';
-import { FanControlTuxedoIO } from './FanControlTuxedoIO';
-import { FanControlPwm } from './FanControlPwm';
-import type { FanControlLogic } from './FanControlLogic';
-import { getCurrentCustomProfile } from './FanControlUtils';
-import type { FanControlBaseClass } from './FanControlBaseClass';
-import { FanData } from '../../common/models/IFanData';
-import { FanControlTuxi } from './FanControlTuxi';
 import type { TUXEDODevice } from 'src/common/models/DefaultProfiles';
+import { FanData } from '../../common/models/IFanData';
+import type { ITccFanProfile, ITccFanTableEntry } from '../../common/models/TccFanTable';
+import { DaemonWorker } from './DaemonWorker';
+import type { FanControlBaseClass } from './FanControlBaseClass';
+import type { FanControlLogic } from './FanControlLogic';
+import { FanControlPwm } from './FanControlPwm';
+import { FanControlTuxedoIO } from './FanControlTuxedoIO';
+import { FanControlTuxi } from './FanControlTuxi';
+import { getCurrentCustomProfile } from './FanControlUtils';
+import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
 export class FanControlWorker extends DaemonWorker {
     private fanApi: FanControlBaseClass;

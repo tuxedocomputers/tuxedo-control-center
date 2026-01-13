@@ -19,15 +19,15 @@
 
 import 'jasmine';
 const mock: typeof import('mock-fs') = require('mock-fs');
+
 import * as fs from 'node:fs';
 import * as path from 'node:path';
-
-import { ConfigHandler } from './ConfigHandler';
-import { type ITccSettings, defaultSettings } from '../models/TccSettings';
-import type { ITccProfile } from '../models/TccProfile';
-import { defaultProfiles } from '../models/profiles/LegacyProfiles';
-import { TccPaths } from './TccPaths';
 import { TUXEDODevice } from '../models/DefaultProfiles';
+import { defaultProfiles } from '../models/profiles/LegacyProfiles';
+import type { ITccProfile } from '../models/TccProfile';
+import { defaultSettings, type ITccSettings } from '../models/TccSettings';
+import { ConfigHandler } from './ConfigHandler';
+import { TccPaths } from './TccPaths';
 
 describe('ConfigHandler file IO', (): void => {
     const config = new ConfigHandler(

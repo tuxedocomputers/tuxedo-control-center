@@ -22,9 +22,9 @@ import { SysFsController } from './SysFsController';
 import {
     SysFsPropertyBoolean,
     SysFsPropertyInteger,
-    SysFsPropertyStringList,
-    SysFsPropertyString,
     SysFsPropertyNumList,
+    SysFsPropertyString,
+    SysFsPropertyStringList,
 } from './SysFsProperties';
 
 export enum ScalingDriver {

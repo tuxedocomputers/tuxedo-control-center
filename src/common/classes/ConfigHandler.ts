@@ -19,17 +19,17 @@
 
 import * as fs from 'node:fs';
 import * as path from 'node:path';
-import { type ITccSettings, defaultSettings, deviceCustomSettings } from '../models/TccSettings';
-import { generateProfileId, type ITccProfile } from '../models/TccProfile';
-import { defaultProfiles } from '../models/profiles/LegacyProfiles';
-import { type ITccAutosave, defaultAutosave } from '../models/TccAutosave';
-import { type ITccFanProfile, defaultFanProfiles } from '../models/TccFanTable';
 import {
     defaultCustomProfile,
     deviceCustomProfiles,
     deviceProfiles,
     type TUXEDODevice,
 } from '../models/DefaultProfiles';
+import { defaultProfiles } from '../models/profiles/LegacyProfiles';
+import { defaultAutosave, type ITccAutosave } from '../models/TccAutosave';
+import { defaultFanProfiles, type ITccFanProfile } from '../models/TccFanTable';
+import { generateProfileId, type ITccProfile } from '../models/TccProfile';
+import { defaultSettings, deviceCustomSettings, type ITccSettings } from '../models/TccSettings';
 import type { WebcamPreset } from '../models/TccWebcamSettings';
 
 export class ConfigHandler {

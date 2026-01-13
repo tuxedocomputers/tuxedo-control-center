@@ -17,11 +17,11 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import type { Dirent } from 'node:fs';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 import { SysFsController } from './SysFsController';
 import { SysFsPropertyIntegerHex, SysFsPropertyString } from './SysFsProperties';
-import * as path from 'node:path';
-import * as fs from 'node:fs';
-import type { Dirent } from 'node:fs';
 
 export class UsbController extends SysFsController {
     private static readonly USB_DEVICES_PATH: string = '/sys/bus/usb/devices';

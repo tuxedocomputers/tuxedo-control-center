@@ -18,13 +18,14 @@
  */
 
 import { Component, type ElementRef, type EventEmitter, Input, ViewChild } from '@angular/core';
-import { Chart, ChartTypeRegistry, type ChartConfiguration, type TooltipItem } from 'chart.js';
+import { Chart, type ChartConfiguration, type ChartTypeRegistry, type TooltipItem } from 'chart.js';
 import {
     chartAnimation,
     chartMaintainAspectRatio,
     chartResponsive,
     createBarChartDataset,
-} from 'src/common/classes/FanChartProperties';
+} from '../../../common/classes/FanChartProperties';
+// biome-ignore lint: injection token
 import { UtilsService } from '../utils.service';
 
 @Component({

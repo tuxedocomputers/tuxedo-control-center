@@ -18,17 +18,19 @@
  */
 
 import { Component, type OnInit } from '@angular/core';
-import { TccDBusClientService } from '../tcc-dbus-client.service';
-import { ConfigService } from '../config.service';
+import type { MatSliderThumb } from '@angular/material/slider';
+import { interval, Subscription } from 'rxjs';
+import { filter, take } from 'rxjs/operators';
+import { GridParamsBacklight, type IGridParams } from '../../../common/models/IGridParams';
 import {
     type KeyboardBacklightCapabilitiesInterface,
     KeyboardBacklightColorModes,
     type KeyboardBacklightStateInterface,
 } from '../../../common/models/TccSettings';
-import { filter, take } from 'rxjs/operators';
-import { interval, Subscription } from 'rxjs';
-import { GridParamsBacklight, type IGridParams } from 'src/common/models/IGridParams';
-import type { MatSliderThumb } from '@angular/material/slider';
+// biome-ignore lint: injection token
+import { ConfigService } from '../config.service';
+// biome-ignore lint: injection token
+import { TccDBusClientService } from '../tcc-dbus-client.service';
 
 @Component({
     selector: 'app-keyboard-backlight',

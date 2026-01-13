@@ -18,12 +18,12 @@
  */
 
 import * as path from 'node:path';
-import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
-import { FanControlLogic } from './FanControlLogic';
-import type { FAN_LOGIC } from './FanControlLogic';
+import { SysFsPropertyInteger, SysFsPropertyString } from '../../common/classes/SysFsProperties';
 import type { ITccFanProfile } from '../../common/models/TccFanTable';
 import type { ITccProfile } from '../../common/models/TccProfile';
-import { SysFsPropertyInteger, SysFsPropertyString } from '../../common/classes/SysFsProperties';
+import type { FAN_LOGIC } from './FanControlLogic';
+import { FanControlLogic } from './FanControlLogic';
+import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
 export abstract class FanControlBaseClass {
     constructor(public tccd: TuxedoControlCenterDaemon) {}

@@ -17,15 +17,19 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, HostListener, Inject, type OnInit, type OnDestroy } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import type { ITccProfile } from 'src/common/models/TccProfile';
+import { Component, HostListener, Inject, type OnDestroy, type OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { UtilsService } from '../utils.service';
-import { SysFsService } from '../sys-fs.service';
-import type { IGeneralCPUInfo } from 'src/common/models/ICpuInfos';
+// biome-ignore lint: injection token
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
+import type { IGeneralCPUInfo } from '../../../common/models/ICpuInfos';
+import type { ITccProfile } from '../../../common/models/TccProfile';
+// biome-ignore lint: injection token
 import { CompatibilityService } from '../compatibility.service';
+// biome-ignore lint: injection token
+import { SysFsService } from '../sys-fs.service';
+// biome-ignore lint: injection token
+import { UtilsService } from '../utils.service';
 
 export interface IProfileConflictDialogResult {
     action: string;

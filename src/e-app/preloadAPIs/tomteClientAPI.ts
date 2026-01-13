@@ -17,7 +17,8 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { tomteAPIHandle, TomteAPIFunctions, type ITomteInformation } from '../../common/models/ITomteAPI';
+import { type ITomteInformation, TomteAPIFunctions, tomteAPIHandle } from '../../common/models/ITomteAPI';
+
 const { ipcRenderer } = require('electron');
 
 // for preload script

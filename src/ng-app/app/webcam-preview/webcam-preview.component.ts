@@ -17,9 +17,10 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+// biome-ignore lint: injection token
 import { ChangeDetectorRef, Component, type ElementRef, type OnInit, ViewChild } from '@angular/core';
 import type { IpcRendererEvent } from 'electron';
-import type { WebcamConstraints } from 'src/common/models/TccWebcamSettings';
+import type { WebcamConstraints } from '../../../common/models/TccWebcamSettings';
 
 @Component({
     selector: 'app-webcam-preview',

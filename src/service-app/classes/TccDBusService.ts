@@ -17,12 +17,11 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { DaemonWorker } from './DaemonWorker';
-import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
-import { TccDBusInterface, type TccDBusData, TccDBusOptions } from './TccDBusInterface';
 import * as dbus from 'dbus-next';
-
 import { TuxedoIOAPI } from '../../native-lib/TuxedoIOAPI';
+import { DaemonWorker } from './DaemonWorker';
+import { type TccDBusData, TccDBusInterface, TccDBusOptions } from './TccDBusInterface';
+import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
 export class TccDBusService extends DaemonWorker {
     private interface: TccDBusInterface;

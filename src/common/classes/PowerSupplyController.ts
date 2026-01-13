@@ -18,6 +18,7 @@
  */
 
 const path: typeof import('path') = require('path');
+
 import { SysFsController } from './SysFsController';
 import {
     SysFsPropertyBoolean,

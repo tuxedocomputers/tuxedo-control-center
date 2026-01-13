@@ -17,10 +17,10 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ipcMain } from 'electron';
-import type { IpcMainInvokeEvent } from 'electron';
-import { execCmd } from './utilsAPI';
 import * as fs from 'node:fs';
+import type { IpcMainInvokeEvent } from 'electron';
+import { ipcMain } from 'electron';
+import { execCmd } from './utilsAPI';
 
 ipcMain.handle(
     'set-shutdown-time',

@@ -17,8 +17,8 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ipcMain } from 'electron';
 import type { IpcMainInvokeEvent } from 'electron';
+import { ipcMain } from 'electron';
 import { DriveController } from '../../common/classes/DriveController';
 import type { IDrive } from '../../common/models/IDrive';
 import { execCmd } from './utilsAPI';

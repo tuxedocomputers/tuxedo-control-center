@@ -17,13 +17,12 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ipcMain, nativeTheme } from 'electron';
+import type { MessageBus } from 'dbus-next';
 import type { IpcMainEvent, IpcMainInvokeEvent } from 'electron';
+import { ipcMain, nativeTheme } from 'electron';
 import { Subject } from 'rxjs';
 import { DBusDisplayBrightnessGnome } from '../../common/classes/DBusDisplayBrightnessGnome';
 import { userConfig } from './initMain';
-import type { MessageBus } from 'dbus-next';
-('../../common/classes/DBusDisplayBrightnessGnome');
 
 export type BrightnessModeString = 'light' | 'dark' | 'system';
 

@@ -17,8 +17,8 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { execCommandSync } from './Utils';
 import * as dbus from 'dbus-next';
+import { execCommandSync } from './Utils';
 
 type OnChangedFunction = (value: number) => void;
 

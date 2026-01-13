@@ -17,8 +17,8 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ipcMain } from 'electron';
 import type { IpcMainEvent } from 'electron';
+import { ipcMain } from 'electron';
 import { DisplayBacklightController } from '../../common/classes/DisplayBacklightController';
 import type { IDisplayBrightnessInfo } from '../../common/models/ICpuInfos';
 

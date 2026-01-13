@@ -18,7 +18,7 @@
  */
 
 import * as path from 'node:path';
-import { SysFsPropertyString, SysFsPropertyInteger, SysFsPropertyBoolean } from './SysFsProperties';
+import { SysFsPropertyBoolean, SysFsPropertyInteger, SysFsPropertyString } from './SysFsProperties';
 
 // todo: move into a different file
 interface IRAPLProperties {

@@ -20,9 +20,9 @@
 import 'jasmine';
 const mock: typeof import('mock-fs') = require('mock-fs');
 
-import { FanControlPwm } from './FanControlPwm';
 import { SysFsPropertyInteger } from '../../common/classes/SysFsProperties';
-import { IFanTempData } from 'src/common/models/ITccFans';
+import type { IFanTempData } from '../../common/models/ITccFans';
+import { FanControlPwm } from './FanControlPwm';
 
 describe('FanControlPwm', (): void => {
     it('Pulse Gen 4: check pwm available', async (): Promise<void> => {

@@ -17,14 +17,14 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ipcMain, app, dialog, shell } from 'electron';
-import type { IpcMainEvent, IpcMainInvokeEvent } from 'electron';
+import * as child_process from 'node:child_process';
 import * as fs from 'node:fs';
 import * as path from 'node:path';
-import * as child_process from 'node:child_process';
-import { userConfig, updateTrayProfiles, watchOption, translation } from './initMain';
+import type { IpcMainEvent, IpcMainInvokeEvent } from 'electron';
+import { app, dialog, ipcMain, shell } from 'electron';
 import type { OpenDialogReturnValue, SaveDialogReturnValue } from 'electron/main';
 import { tccWindow } from './browserWindowsAPI';
+import { translation, updateTrayProfiles, userConfig, watchOption } from './initMain';
 import { systemInfosURL } from './systemInfosAPI';
 
 export const cwd: string = process.cwd();

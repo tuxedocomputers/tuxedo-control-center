@@ -18,8 +18,8 @@
  */
 
 import * as path from 'node:path';
-import { SysFsPropertyString } from './SysFsProperties';
 import { SysFsController } from './SysFsController';
+import { SysFsPropertyString } from './SysFsProperties';
 
 export class DMIController extends SysFsController {
     constructor(public readonly basePath: string) {

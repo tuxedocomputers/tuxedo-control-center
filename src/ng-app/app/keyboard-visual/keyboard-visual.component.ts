@@ -18,7 +18,7 @@
  */
 
 import { Component, EventEmitter, HostListener, Input, type OnInit, Output } from '@angular/core';
-import type { KeyboardBacklightCapabilitiesInterface } from 'src/common/models/TccSettings';
+import type { KeyboardBacklightCapabilitiesInterface } from '../../../common/models/TccSettings';
 
 @Component({
     selector: 'app-keyboard-visual',

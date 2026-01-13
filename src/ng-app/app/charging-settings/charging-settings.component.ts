@@ -18,13 +18,14 @@
  */
 
 import { Component, EventEmitter, type OnDestroy, type OnInit, Output } from '@angular/core';
-import { UtilsService } from '../utils.service';
 import { FormControl } from '@angular/forms';
 import type { MatCheckboxChange } from '@angular/material/checkbox';
-import { ChargeType } from 'src/common/classes/PowerSupplyController';
 import type { MatRadioChange } from '@angular/material/radio';
-import { GridParamsSettings, type IGridParams } from 'src/common/models/IGridParams';
+import { ChargeType } from '../../../common/classes/PowerSupplyController';
+import { GridParamsSettings, type IGridParams } from '../../../common/models/IGridParams';
 import type { ConfirmDialogData } from '../dialog-confirm/dialog-confirm.component';
+// biome-ignore lint: injection token
+import { UtilsService } from '../utils.service';
 
 class ThresholdPresets {
     constructor(

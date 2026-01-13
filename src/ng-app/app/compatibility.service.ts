@@ -18,12 +18,14 @@
  */
 
 import { Injectable } from '@angular/core';
+import type { IDBusFanData, TimeData } from '../../common/models/IFanData';
+import { deviceSystemProfileInfo, type SystemProfileInfo } from '../../common/models/ISystemProfileInfo';
+import type { IdGpuInfo, IiGpuInfo } from '../../common/models/TccGpuValues';
+import type { ICpuPower } from '../../common/models/TccPowerSettings';
+// biome-ignore lint: deb does build with type, but creates constructor dependency injection error
 import { SysFsService } from './sys-fs.service';
+// biome-ignore lint: deb does build with type, but creates constructor dependency injection error
 import { TccDBusClientService } from './tcc-dbus-client.service';
-import type { IdGpuInfo, IiGpuInfo } from 'src/common/models/TccGpuValues';
-import type { IDBusFanData, TimeData } from 'src/common/models/IFanData';
-import { type SystemProfileInfo, deviceSystemProfileInfo } from 'src/common/models/ISystemProfileInfo';
-import type { ICpuPower } from 'src/common/models/TccPowerSettings';
 
 @Injectable({
     providedIn: 'root',

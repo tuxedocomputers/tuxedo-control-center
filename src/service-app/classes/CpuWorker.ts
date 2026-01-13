@@ -17,13 +17,12 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { DaemonWorker } from './DaemonWorker';
 import { CpuController } from '../../common/classes/CpuController';
-
-import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
-import type { ITccProfile } from '../../common/models/TccProfile';
 import { ScalingDriver } from '../../common/classes/LogicalCpuController';
 import { TUXEDODevice } from '../../common/models/DefaultProfiles';
+import type { ITccProfile } from '../../common/models/TccProfile';
+import { DaemonWorker } from './DaemonWorker';
+import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
 export class CpuWorker extends DaemonWorker {
     private readonly basePath: string = '/sys/devices/system/cpu';

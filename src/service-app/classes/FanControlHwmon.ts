@@ -19,10 +19,10 @@
 
 import * as fs from 'node:fs';
 import type { SysFsPropertyInteger } from '../../common/classes/SysFsProperties';
-import { FanControlBaseClass } from './FanControlBaseClass';
 import type { IFanDataInputs, IFanTempData } from '../../common/models/ITccFans';
-import { FAN_LOGIC } from './FanControlLogic';
+import { FanControlBaseClass } from './FanControlBaseClass';
 import type { FanControlLogic } from './FanControlLogic';
+import { FAN_LOGIC } from './FanControlLogic';
 
 export class FanControlHwmon extends FanControlBaseClass {
     public fanControlName: string = '';

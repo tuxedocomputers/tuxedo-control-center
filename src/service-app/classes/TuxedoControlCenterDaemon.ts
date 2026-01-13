@@ -17,40 +17,40 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as os from 'os';
 import { SIGTERM } from 'node:constants';
-import { SingleProcess } from './SingleProcess';
-import { TccPaths } from '../../common/classes/TccPaths';
+import * as os from 'node:os';
+import type { WebcamPreset } from 'src/common/models/TccWebcamSettings';
+import { AvailabilityService } from '../../common/classes/availability.service';
 import { ConfigHandler } from '../../common/classes/ConfigHandler';
-import { type ITccSettings, ProfileStates } from '../../common/models/TccSettings';
+import { CpuController } from '../../common/classes/CpuController';
+import { DMIController } from '../../common/classes/DMIController';
+import { ScalingDriver } from '../../common/classes/LogicalCpuController';
+import { TccPaths } from '../../common/classes/TccPaths';
+import { defaultCustomProfile, TUXEDODevice } from '../../common/models/DefaultProfiles';
+import type { ITccAutosave } from '../../common/models/TccAutosave';
+import { customFanPreset, type ITccFanProfile } from '../../common/models/TccFanTable';
 import { generateProfileId, type ITccProfile } from '../../common/models/TccProfile';
+import { type ITccSettings, ProfileStates } from '../../common/models/TccSettings';
+import { ModuleInfo, type TDPInfo, TuxedoIOAPI } from '../../native-lib/TuxedoIOAPI';
+import { ChargingWorker } from './ChargingWorker';
+import { CpuPowerWorker } from './CpuPowerWorker';
+import { CpuWorker } from './CpuWorker';
 import type { DaemonWorker } from './DaemonWorker';
 import { DisplayBacklightWorker } from './DisplayBacklightWorker';
 import { DisplayRefreshRateWorker } from './DisplayRefreshRateWorker';
-import { CpuWorker } from './CpuWorker';
-import type { ITccAutosave } from '../../common/models/TccAutosave';
-import { StateSwitcherWorker } from './StateSwitcherWorker';
-import { WebcamWorker } from './WebcamWorker';
 import { FanControlWorker } from './FanControlWorker';
-import { YCbCr420WorkaroundWorker } from './YCbCr420WorkaroundWorker';
-import { type ITccFanProfile, customFanPreset } from '../../common/models/TccFanTable';
-import { TccDBusService } from './TccDBusService';
-import { TccDBusData } from './TccDBusInterface';
-import { TuxedoIOAPI, ModuleInfo, type TDPInfo } from '../../native-lib/TuxedoIOAPI';
-import { ODMProfileWorker } from './ODMProfileWorker';
-import { ODMPowerLimitWorker } from './ODMPowerLimitWorker';
-import { CpuController } from '../../common/classes/CpuController';
-import { DMIController } from '../../common/classes/DMIController';
-import { TUXEDODevice, defaultCustomProfile } from '../../common/models/DefaultProfiles';
-import { ScalingDriver } from '../../common/classes/LogicalCpuController';
-import { ChargingWorker } from './ChargingWorker';
-import type { WebcamPreset } from 'src/common/models/TccWebcamSettings';
 import { GpuInfoWorker } from './GpuInfoWorker';
-import { CpuPowerWorker } from './CpuPowerWorker';
-import { PrimeWorker } from './PrimeWorker';
 import { KeyboardBacklightListener } from './KeyboardBacklightListener';
 import { NVIDIAPowerCTRLListener } from './NVIDIAPowerCTRLListener';
-import { AvailabilityService } from '../../common/classes/availability.service';
+import { ODMPowerLimitWorker } from './ODMPowerLimitWorker';
+import { ODMProfileWorker } from './ODMProfileWorker';
+import { PrimeWorker } from './PrimeWorker';
+import { SingleProcess } from './SingleProcess';
+import { StateSwitcherWorker } from './StateSwitcherWorker';
+import { TccDBusData } from './TccDBusInterface';
+import { TccDBusService } from './TccDBusService';
+import { WebcamWorker } from './WebcamWorker';
+import { YCbCr420WorkaroundWorker } from './YCbCr420WorkaroundWorker';
 
 const tccPackage: any = require('../../package.json');
 

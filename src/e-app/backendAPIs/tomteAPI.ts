@@ -17,8 +17,8 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { TomteAPIFunctions } from '../../common/models/ITomteAPI';
 import type { ITomteInformation } from '../../common/models/ITomteAPI';
+import { TomteAPIFunctions } from '../../common/models/ITomteAPI';
 import { execCmd, execFile } from './utilsAPI';
 
 // todo: refactor

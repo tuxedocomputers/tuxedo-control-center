@@ -18,16 +18,20 @@
  */
 
 import { Component, type OnInit } from '@angular/core';
-import { ConfigService } from '../config.service';
-import { UtilsService } from '../utils.service';
-import { filter, firstValueFrom, Subscription } from 'rxjs';
-import { TccDBusClientService } from '../tcc-dbus-client.service';
 import { FormControl } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
 import type { MatCheckboxChange } from '@angular/material/checkbox';
-import type { BrightnessModeString } from 'src/e-app/backendAPIs/brightnessAPI';
-import { GridParamsSettings, type IGridParams } from 'src/common/models/IGridParams';
+// biome-ignore lint: injection token
+import { ActivatedRoute, Router } from '@angular/router';
 import { Mutex } from 'async-mutex';
+import { filter, firstValueFrom, Subscription } from 'rxjs';
+import { GridParamsSettings, type IGridParams } from '../../../common/models/IGridParams';
+import type { BrightnessModeString } from '../../../e-app/backendAPIs/brightnessAPI';
+// biome-ignore lint: injection token
+import { ConfigService } from '../config.service';
+// biome-ignore lint: injection token
+import { TccDBusClientService } from '../tcc-dbus-client.service';
+// biome-ignore lint: injection token
+import { UtilsService } from '../utils.service';
 
 @Component({
     selector: 'app-global-settings',

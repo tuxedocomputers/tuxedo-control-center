@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { TUXEDODevice, defaultCustomProfile, defaultMobileCustomProfileID } from './DefaultProfiles';
+import { defaultCustomProfile, defaultMobileCustomProfileID, TUXEDODevice } from './DefaultProfiles';
 
 export enum ProfileStates {
     AC = 'power_ac',

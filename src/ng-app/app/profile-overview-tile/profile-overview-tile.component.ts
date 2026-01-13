@@ -17,20 +17,27 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, type OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { type ITccProfile, profileImageMap } from '../../../common/models/TccProfile';
-import { UtilsService } from '../utils.service';
-import { StateService, type IStateInfo } from '../state.service';
-import type { ITccSettings } from '../../../common/models/TccSettings';
-import { ConfigService } from '../config.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Component, EventEmitter, Input, type OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { CompatibilityService } from '../compatibility.service';
-import { SysFsService } from '../sys-fs.service';
-import type { IGeneralCPUInfo } from 'src/common/models/ICpuInfos';
+// biome-ignore lint: injection token
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
-import { TccDBusClientService } from '../tcc-dbus-client.service';
+import type { IGeneralCPUInfo } from '../../../common/models/ICpuInfos';
+import { type ITccProfile, profileImageMap } from '../../../common/models/TccProfile';
+import type { ITccSettings } from '../../../common/models/TccSettings';
 import type { TDPInfo } from '../../../native-lib/TuxedoIOAPI';
+// biome-ignore lint: injection token
+import { CompatibilityService } from '../compatibility.service';
+// biome-ignore lint: injection token
+import { ConfigService } from '../config.service';
+// biome-ignore lint: injection token
+import { type IStateInfo, StateService } from '../state.service';
+// biome-ignore lint: injection token
+import { SysFsService } from '../sys-fs.service';
+// biome-ignore lint: injection token
+import { TccDBusClientService } from '../tcc-dbus-client.service';
+// biome-ignore lint: injection token
+import { UtilsService } from '../utils.service';
 
 @Component({
     selector: 'app-profile-overview-tile',

@@ -20,13 +20,13 @@
 import { ipcMain } from 'electron';
 import { aquarisAPIHandle } from '../common/models/IAquarisAPI';
 import { dbusAPIHandle } from '../common/models/IDbusAPI';
-import { aquarisHandlers } from './backendAPIs/aquarisAPI';
-import { dbusHandlers } from './backendAPIs/dbusAPI';
-import { registerAPI } from './backendAPIs/apiManagement';
 import { tomteAPIHandle } from '../common/models/ITomteAPI';
 import { webcamAPIHandle } from '../common/models/IWebcamAPI';
-import { webcamHandlers } from './backendAPIs/webcamAPI';
+import { registerAPI } from './backendAPIs/apiManagement';
+import { aquarisHandlers } from './backendAPIs/aquarisAPI';
+import { dbusHandlers } from './backendAPIs/dbusAPI';
 import { tomteHandlers } from './backendAPIs/tomteAPI';
+import { webcamHandlers } from './backendAPIs/webcamAPI';
 
 require('./backendAPIs/initMain');
 require('./backendAPIs/browserWindowsAPI');

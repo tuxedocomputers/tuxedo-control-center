@@ -17,14 +17,13 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ipcMain } from 'electron';
 import type { IpcMainEvent, IpcMainInvokeEvent } from 'electron';
+import { ipcMain } from 'electron';
+import { ConfigHandler } from '../../common/classes/ConfigHandler';
+import { TccPaths } from '../../common/classes/TccPaths';
 import type { ITccProfile } from '../../common/models/TccProfile';
 import type { ITccSettings } from '../../common/models/TccSettings';
-import { TccPaths } from '../../common/classes/TccPaths';
-import { ConfigHandler } from '../../common/classes/ConfigHandler';
-import { cwd, environmentIsProduction } from './utilsAPI';
-import { execFile, execFileSync } from './utilsAPI';
+import { cwd, environmentIsProduction, execFile, execFileSync } from './utilsAPI';
 
 const config: ConfigHandler = new ConfigHandler(
     TccPaths.SETTINGS_FILE,

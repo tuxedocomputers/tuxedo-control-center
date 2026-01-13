@@ -18,11 +18,12 @@
  */
 
 import { Injectable } from '@angular/core';
+// biome-ignore lint: deb does build with type, but creates constructor not compatible with dependency injection error
+import { MatDialog, type MatDialogRef } from '@angular/material/dialog';
 import type { Observable } from 'rxjs';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { ProfileConflictComponent, type IProfileConflictDialogResult } from './profile-conflict-dialog.component';
 import { map, take } from 'rxjs/operators';
-import type { ITccProfile } from 'src/common/models/TccProfile';
+import type { ITccProfile } from '../../../common/models/TccProfile';
+import { type IProfileConflictDialogResult, ProfileConflictComponent } from './profile-conflict-dialog.component';
 
 @Injectable()
 export class ProfileConflictDialogService {

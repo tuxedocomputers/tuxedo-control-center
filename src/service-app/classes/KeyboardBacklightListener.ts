@@ -19,14 +19,13 @@
 
 import * as fs from 'node:fs';
 import * as dbus from 'dbus-next';
-
-import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
+import { fileOK, fileOKAsync, getDirectories, getSymbolicLinks } from '../../common/classes/Utils';
 import {
-    KeyboardBacklightColorModes,
     type KeyboardBacklightCapabilitiesInterface,
+    KeyboardBacklightColorModes,
     type KeyboardBacklightStateInterface,
 } from '../../common/models/TccSettings';
-import { fileOK, fileOKAsync, getDirectories, getSymbolicLinks } from '../../common/classes/Utils';
+import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
 export class KeyboardBacklightListener {
     protected ledsWhiteOnly: string = '/sys/devices/platform/tuxedo_keyboard/leds/white:kbd_backlight';

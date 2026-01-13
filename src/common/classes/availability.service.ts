@@ -17,10 +17,10 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import type { IDeviceCounts } from '../../common/models/TccGpuValues';
 import { amdDGpuDeviceIdString, amdIGpuDeviceIdString } from './AmdDeviceIDs';
 import { intelIGpuDeviceIdString } from './IntelDeviceIDs';
 import { countLines, execCommandSync } from './Utils';
-import type { IDeviceCounts } from 'src/common/models/TccGpuValues';
 
 export class AvailabilityService {
     private iGpuAvailable: boolean = false;

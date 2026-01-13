@@ -17,8 +17,8 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { createBluetooth } from 'node-ble';
 import type * as NodeBle from 'node-ble';
+import { createBluetooth } from 'node-ble';
 
 function sleep(ms: number, arg: string = 'timeout'): Promise<string> {
     return new Promise<string>((resolve: (value: string) => void): NodeJS.Timeout => setTimeout(resolve, ms, arg));

@@ -17,18 +17,23 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, type OnInit, ViewChild, type OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ConfigService } from '../config.service';
-import type { ITccProfile } from '../../../common/models/TccProfile';
-import { UtilsService } from '../utils.service';
+import { Component, type OnDestroy, type OnInit, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import type { MatInput } from '@angular/material/input';
-import { StateService, type IStateInfo } from '../state.service';
+// biome-ignore lint: injection token
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+import type { ITccProfile } from '../../../common/models/TccProfile';
 import type { ITccSettings } from '../../../common/models/TccSettings';
-import { ProfileConflictDialogService } from '../profile-conflict-dialog/profile-conflict-dialog.service';
+// biome-ignore lint: injection token
+import { ConfigService } from '../config.service';
 import type { IProfileConflictDialogResult } from '../profile-conflict-dialog/profile-conflict-dialog.component';
+// biome-ignore lint: injection token
+import { ProfileConflictDialogService } from '../profile-conflict-dialog/profile-conflict-dialog.service';
+// biome-ignore lint: injection token
+import { type IStateInfo, StateService } from '../state.service';
+// biome-ignore lint: injection token
+import { UtilsService } from '../utils.service';
 
 enum InputMode {
     New,

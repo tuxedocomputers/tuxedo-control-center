@@ -17,33 +17,40 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, type OnInit, Input, type OnDestroy, ViewChild, Output, EventEmitter } from '@angular/core';
-import type { ITccProfile, ITccProfileDisplay } from '../../../common/models/TccProfile';
-import { UtilsService } from '../utils.service';
-import type { ITccSettings } from '../../../common/models/TccSettings';
-import { ConfigService } from '../config.service';
-import { StateService, type IStateInfo } from '../state.service';
-import { SysFsService } from '../sys-fs.service';
-import type { IGeneralCPUInfo } from 'src/common/models/ICpuInfos';
-import { Subscription } from 'rxjs';
+import { Component, EventEmitter, Input, type OnDestroy, type OnInit, Output, ViewChild } from '@angular/core';
+// biome-ignore lint: injection token
 import {
-    type FormGroup,
-    FormBuilder,
-    Validators,
-    FormControl,
-    type ValidatorFn,
     type AbstractControl,
     type FormArray,
+    FormBuilder,
+    FormControl,
+    type FormGroup,
+    type ValidatorFn,
+    Validators,
 } from '@angular/forms';
 import type { MatInput } from '@angular/material/input';
-import { CompatibilityService } from '../compatibility.service';
-import { TccDBusClientService } from '../tcc-dbus-client.service';
+import { Subscription } from 'rxjs';
+import type { IDisplayFreqRes, IDisplayMode } from '../../../common/models/DisplayFreqRes';
+import type { IGeneralCPUInfo } from '../../../common/models/ICpuInfos';
+import { GridParamsProfileSettings, GridParamsSettings, type IGridParams } from '../../../common/models/IGridParams';
+import type { SystemProfileInfo } from '../../../common/models/ISystemProfileInfo';
+import type { ITccFanProfile } from '../../../common/models/TccFanTable';
+import type { ITccProfile, ITccProfileDisplay } from '../../../common/models/TccProfile';
+import type { ITccSettings } from '../../../common/models/TccSettings';
 import type { TDPInfo } from '../../../native-lib/TuxedoIOAPI';
+// biome-ignore lint: injection token
+import { CompatibilityService } from '../compatibility.service';
+// biome-ignore lint: injection token
+import { ConfigService } from '../config.service';
 import { FanCustomChartComponent } from '../fan-custom-chart/fan-custom-chart.component';
-import type { ITccFanProfile } from 'src/common/models/TccFanTable';
-import type { IDisplayFreqRes, IDisplayMode } from 'src/common/models/DisplayFreqRes';
-import type { SystemProfileInfo } from 'src/common/models/ISystemProfileInfo';
-import { GridParamsProfileSettings, GridParamsSettings, type IGridParams } from 'src/common/models/IGridParams';
+// biome-ignore lint: injection token
+import { type IStateInfo, StateService } from '../state.service';
+// biome-ignore lint: injection token
+import { SysFsService } from '../sys-fs.service';
+// biome-ignore lint: injection token
+import { TccDBusClientService } from '../tcc-dbus-client.service';
+// biome-ignore lint: injection token
+import { UtilsService } from '../utils.service';
 
 function minControlValidator(comparisonControl: AbstractControl): ValidatorFn {
     return (thisControl: AbstractControl): { min: number; actual: unknown } | null => {

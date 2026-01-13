@@ -20,10 +20,10 @@
 import 'jasmine';
 const mock: typeof import('mock-fs') = require('mock-fs');
 
-import { FanControlTuxi } from './FanControlTuxi';
+import type { IFanTempData } from 'src/common/models/ITccFans';
 import { SysFsPropertyInteger } from '../../common/classes/SysFsProperties';
 import { TUXEDODevice } from '../../common/models/DefaultProfiles';
-import { IFanTempData } from 'src/common/models/ITccFans';
+import { FanControlTuxi } from './FanControlTuxi';
 
 describe('FanControlTuxi', (): void => {
     it('Sirius Gen 2: check hwmon path', async (): Promise<void> => {

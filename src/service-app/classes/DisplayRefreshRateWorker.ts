@@ -17,13 +17,13 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { DaemonWorker } from './DaemonWorker';
-import { XDisplayRefreshRateController } from '../../common/classes/XDisplayRefreshRateController';
-import type { IDisplayFreqRes, IDisplayMode } from '../../common/models/DisplayFreqRes';
-import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 import * as child_process from 'node:child_process';
 import type { ITccProfile } from 'src/common/models/TccProfile';
 import { execCommandAsync } from '../../common/classes/Utils';
+import { XDisplayRefreshRateController } from '../../common/classes/XDisplayRefreshRateController';
+import type { IDisplayFreqRes, IDisplayMode } from '../../common/models/DisplayFreqRes';
+import { DaemonWorker } from './DaemonWorker';
+import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
 export class DisplayRefreshRateWorker extends DaemonWorker {
     private controller: XDisplayRefreshRateController;

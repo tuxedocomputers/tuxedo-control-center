@@ -18,10 +18,9 @@
  */
 
 import * as fs from 'node:fs';
-
+import { fileOK } from '../../common/classes/Utils';
 import { DaemonWorker } from './DaemonWorker';
 import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
-import { fileOK } from '../../common/classes/Utils';
 
 export class YCbCr420WorkaroundWorker extends DaemonWorker {
     constructor(tccd: TuxedoControlCenterDaemon) {

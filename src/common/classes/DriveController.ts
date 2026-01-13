@@ -17,9 +17,9 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as path from 'node:path';
-import * as fs from 'node:fs';
 import * as child_process from 'node:child_process';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 
 import type { IDrive } from '../models/IDrive';
 import { SysFsPropertyInteger } from './SysFsProperties';

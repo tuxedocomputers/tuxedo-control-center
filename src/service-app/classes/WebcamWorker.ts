@@ -17,11 +17,10 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import type { ITccProfile } from 'src/common/models/TccProfile';
+import { type ObjWrapper, TuxedoIOAPI } from '../../native-lib/TuxedoIOAPI';
 import { DaemonWorker } from './DaemonWorker';
 import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
-
-import { TuxedoIOAPI, type ObjWrapper } from '../../native-lib/TuxedoIOAPI';
-import type { ITccProfile } from 'src/common/models/TccProfile';
 
 export class WebcamWorker extends DaemonWorker {
     constructor(tccd: TuxedoControlCenterDaemon) {

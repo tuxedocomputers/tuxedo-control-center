@@ -19,8 +19,8 @@
 
 import { manageCriticalTemperature } from '../../common/classes/FanUtils';
 import type { ITccFanProfile, ITccFanTableEntry } from '../../common/models/TccFanTable';
-import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 import { getCurrentCustomProfile } from './FanControlUtils';
+import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
 export enum FAN_LOGIC {
     CPU,

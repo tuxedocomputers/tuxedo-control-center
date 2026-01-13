@@ -17,13 +17,13 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type { WebcamConstraints, WebcamPreset } from '../../common/models/TccWebcamSettings';
-import { clearWebcamWindow, tccWindow, webcamWindow, createWebcamPreview } from './browserWindowsAPI';
-import { userConfig } from './initMain';
+import * as child_process from 'node:child_process';
 import { ConfigHandler } from '../../common/classes/ConfigHandler';
 import { TccPaths } from '../../common/classes/TccPaths';
-import * as child_process from 'node:child_process';
 import { WebcamAPIFunctions } from '../../common/models/IWebcamAPI';
+import type { WebcamConstraints, WebcamPreset } from '../../common/models/TccWebcamSettings';
+import { clearWebcamWindow, createWebcamPreview, tccWindow, webcamWindow } from './browserWindowsAPI';
+import { userConfig } from './initMain';
 import { cwd, environmentIsProduction, execCmd, execFile } from './utilsAPI';
 
 const webcamConfigHandler: ConfigHandler = new ConfigHandler(

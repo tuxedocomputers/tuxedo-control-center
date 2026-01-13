@@ -17,8 +17,9 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type { ChargeType } from 'src/common/classes/PowerSupplyController';
-import { dbusAPIHandle, DbusAPIFunctions } from '../../common/models/IDbusAPI';
+import type { ChargeType } from '../../common/classes/PowerSupplyController';
+import { DbusAPIFunctions, dbusAPIHandle } from '../../common/models/IDbusAPI';
+
 const { ipcRenderer } = require('electron');
 
 // for preload script

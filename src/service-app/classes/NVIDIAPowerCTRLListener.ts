@@ -17,10 +17,10 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { DaemonListener } from './DaemonListener';
-import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 import { SysFsPropertyInteger } from '../../common/classes/SysFsProperties';
 import { execCommandSync } from '../../common/classes/Utils';
+import { DaemonListener } from './DaemonListener';
+import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
 export class NVIDIAPowerCTRLListener extends DaemonListener {
     private ctgpOffsetPath: string = '/sys/devices/platform/tuxedo_nvidia_power_ctrl/ctgp_offset';

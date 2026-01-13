@@ -17,8 +17,8 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type { ITccProfile } from './TccProfile';
 import { customFanPreset } from './TccFanTable';
+import type { ITccProfile } from './TccProfile';
 
 export enum LegacyDefaultProfileIDs {
     Default = '__legacy_default__',

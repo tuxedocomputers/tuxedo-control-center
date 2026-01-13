@@ -17,13 +17,13 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ipcMain } from 'electron';
-import type { IpcMainInvokeEvent } from 'electron';
+import * as fs from 'node:fs';
+import type { ClientRequest, IncomingMessage } from 'node:http';
 import * as https from 'node:https';
+import type { IpcMainInvokeEvent } from 'electron';
+import { ipcMain } from 'electron';
 import { tccWindow } from './browserWindowsAPI';
 import { execCmd, writeTextFile } from './utilsAPI';
-import type { ClientRequest, IncomingMessage } from 'node:http';
-import * as fs from 'node:fs';
 
 export const systemInfosURL: string = 'https://mytuxedo.de/public.php/dav/files/DcAeZk4TbBTTjRq/?accept=zip';
 const systemInfosFilePath: string = '/tmp/tcc/systeminfos.sh';

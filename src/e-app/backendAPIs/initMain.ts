@@ -17,21 +17,21 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { TccTray } from '../TccTray';
-import * as path from 'node:path';
-import * as os from 'node:os';
-import * as fs from 'node:fs';
-import { app, globalShortcut, nativeTheme, powerSaveBlocker } from 'electron';
-import { UserConfig } from '../UserConfig';
-import type { TccProfile } from '../../common/models/TccProfile';
 import * as child_process from 'node:child_process';
+import * as fs from 'node:fs';
+import * as os from 'node:os';
+import * as path from 'node:path';
+import { app, globalShortcut, nativeTheme, powerSaveBlocker } from 'electron';
+import type { IProfileTextMappings } from '../../common/models/DefaultProfiles';
+import type { TccProfile } from '../../common/models/TccProfile';
 import { NgTranslations, profileIdToI18nId } from '../NgTranslations';
-import { loadTranslation } from './utilsAPI';
-import { activateTccGui, createPrimeWindow, quitCurrentTccSession } from './browserWindowsAPI';
-import { getBrightnessMode, setBrightnessMode } from './brightnessAPI';
+import { TccTray } from '../TccTray';
+import { UserConfig } from '../UserConfig';
 import type { BrightnessModeString } from './brightnessAPI';
+import { getBrightnessMode, setBrightnessMode } from './brightnessAPI';
+import { activateTccGui, createPrimeWindow, quitCurrentTccSession } from './browserWindowsAPI';
 import { tccDBus } from './dbusAPI';
-import type { IProfileTextMappings } from 'src/common/models/DefaultProfiles';
+import { loadTranslation } from './utilsAPI';
 
 export const tray: TccTray = new TccTray(path.join(__dirname, '../../../data/dist-data/tuxedo-control-center_256.png'));
 const trayOnlyOption: boolean = process.argv.includes('--tray');

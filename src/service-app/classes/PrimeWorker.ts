@@ -17,10 +17,10 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import * as fs from 'node:fs';
+import { delay, execCommandAsync } from '../../common/classes/Utils';
 import { DaemonWorker } from './DaemonWorker';
 import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
-import { execCommandAsync, delay } from '../../common/classes/Utils';
-import * as fs from 'node:fs';
 
 export class PrimeWorker extends DaemonWorker {
     private primeSupported: Boolean;

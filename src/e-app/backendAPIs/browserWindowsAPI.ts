@@ -17,16 +17,16 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { aquarisCleanUp } from './aquarisAPI';
 import * as path from 'node:path';
-import { tccDBus } from './dbusAPI';
 import { app, BrowserWindow, globalShortcut, ipcMain, screen } from 'electron';
-import { tray, userConfig } from './initMain';
-import { displayBrightnessGnomeCleanup } from './brightnessAPI';
-import { unregisterAPI } from './apiManagement';
 import { aquarisAPIHandle } from '../../common/models/IAquarisAPI';
 import { dbusAPIHandle } from '../../common/models/IDbusAPI';
 import type { WebcamConstraints } from '../../common/models/TccWebcamSettings';
+import { unregisterAPI } from './apiManagement';
+import { aquarisCleanUp } from './aquarisAPI';
+import { displayBrightnessGnomeCleanup } from './brightnessAPI';
+import { tccDBus } from './dbusAPI';
+import { tray, userConfig } from './initMain';
 export let tccWindow: Electron.BrowserWindow;
 export let webcamWindow: Electron.BrowserWindow;
 let primeWindow: Electron.BrowserWindow;
