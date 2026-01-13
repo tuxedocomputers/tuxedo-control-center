@@ -28,6 +28,7 @@ const fsp: typeof import('fs').promises = require('fs').promises;
 export class PrimeWorker extends DaemonWorker {
     private tuxedoDevice: TUXEDODevice;
     private isDisplayConnectedToNvidia: boolean;
+    private primeAvailable: boolean;
 
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(10000, 'PrimeWorker', tccd);
@@ -43,6 +44,8 @@ export class PrimeWorker extends DaemonWorker {
             this.isDisplayConnectedToNvidia = await this.getDisplayConnectedToNvidia();
         }
 
+        this.primeAvailable = await this.checkPrimeAvailable();
+
         this.setPrimeStatus();
     }
 
@@ -56,10 +59,9 @@ export class PrimeWorker extends DaemonWorker {
     private async setPrimeStatus(): Promise<void> {
         const primeSupported: boolean = await this.checkPrimeSupported();
 
-        if (primeSupported) {
+        if (this.primeAvailable && primeSupported) {
             this.tccd.dbusData.primeState = JSON.stringify(await this.checkPrimeStatus());
-        }
-        if (!primeSupported) {
+        } else {
             this.tccd.dbusData.primeState = JSON.stringify('-1');
         }
     }
@@ -73,9 +75,7 @@ export class PrimeWorker extends DaemonWorker {
 
         const offloadingStatus: boolean = fs.existsSync('/var/lib/ubuntu-drivers-common/requires_offloading') === true;
 
-        const primeAvailable: string = (await execCommandAsync('which prime-select | cat')).toString().trim();
-
-        return offloadingStatus && !!primeAvailable;
+        return offloadingStatus;
     }
 
     private async getDisplayConnectedToNvidia(): Promise<boolean> {
@@ -106,6 +106,10 @@ export class PrimeWorker extends DaemonWorker {
             console.error(`PrimeWorker: getDisplayConnectedToNvidia failed => ${err}`);
             return false;
         }
+    }
+
+    private async checkPrimeAvailable(): Promise<boolean> {
+        return !!(await execCommandAsync('which prime-select')).toString().trim();
     }
 
     private async checkPrimeStatus(): Promise<string> {
