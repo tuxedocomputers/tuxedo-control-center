@@ -27,22 +27,21 @@ tuxedo-control-center
 
 ## Development setup
 
-1. Install git, gcc, g++, make, nodejs, npm and libudev-dev \
-   Ex (deb):
-   ```
-   curl -sL https://deb.nodesource.com/setup_24.x | sudo -E bash -
+1. Install git, gcc, g++, make, nodejs, npm, libudev-dev and rpm \
+    Ex (deb):
+    ```
+    curl -sL https://deb.nodesource.com/setup_24.x | sudo -E bash -
 
-   sudo apt install -y git gcc g++ make nodejs libudev-dev
-   ```
+    sudo apt install -y git gcc g++ make nodejs libudev-dev rpm
+    ```
 2. Clone & install libraries
     ```
     git clone https://github.com/tuxedocomputers/tuxedo-control-center
 
     cd tuxedo-control-center
 
-    npm install
+    npm clean-install
     ```
-   **Note:** Do ***not*** continue with `npm audit fix`. Known to cause various issues.
 
 3. Install service file that points to development build path (or use installed service from packaged version)
    
