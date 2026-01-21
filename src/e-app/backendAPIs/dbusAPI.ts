@@ -616,7 +616,11 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
     .set(DbusAPIFunctions.getNVIDIAPowerCTRLDefaultPowerLimit, async (): Promise<number> => {
         return new Promise<number>(
             (resolve: (value: number | PromiseLike<number>) => void, reject: (reason?: unknown) => void): void => {
-                resolve(tccDBus.getNVIDIAPowerCTRLDefaultPowerLimit());
+                try {
+                    resolve(tccDBus.getNVIDIAPowerCTRLDefaultPowerLimit());
+                } catch (err: unknown) {
+                    console.error(`dbusAPI: getNVIDIAPowerCTRLDefaultPowerLimit failed => ${err}`);
+                }
             },
         );
     })
@@ -624,7 +628,11 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
     .set(DbusAPIFunctions.getNVIDIAPowerCTRLMaxPowerLimit, async (): Promise<number> => {
         return new Promise<number>(
             (resolve: (value: number | PromiseLike<number>) => void, reject: (reason?: unknown) => void): void => {
-                resolve(tccDBus.getNVIDIAPowerCTRLMaxPowerLimit());
+                try {
+                    resolve(tccDBus.getNVIDIAPowerCTRLMaxPowerLimit());
+                } catch (err: unknown) {
+                    console.error(`dbusAPI: getNVIDIAPowerCTRLMaxPowerLimit failed => ${err}`);
+                }
             },
         );
     })
@@ -632,7 +640,11 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
     .set(DbusAPIFunctions.getIsUnsupportedConfigurableTGPDevice, async (): Promise<boolean> => {
         return new Promise<boolean>(
             (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
-                resolve(tccDBus.getIsUnsupportedConfigurableTGPDevice());
+                try {
+                    resolve(tccDBus.getIsUnsupportedConfigurableTGPDevice());
+                } catch (err: unknown) {
+                    console.error(`dbusAPI: getIsUnsupportedConfigurableTGPDevice failed => ${err}`);
+                }
             },
         );
     })
@@ -640,7 +652,11 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
     .set(DbusAPIFunctions.getNVIDIAPowerCTRLAvailable, async (): Promise<boolean> => {
         return new Promise<boolean>(
             (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
-                resolve(tccDBus.getNVIDIAPowerCTRLAvailable());
+                try {
+                    resolve(tccDBus.getNVIDIAPowerCTRLAvailable());
+                } catch (err: unknown) {
+                    console.error(`dbusAPI: getNVIDIAPowerCTRLAvailable failed => ${err}`);
+                }
             },
         );
     });
