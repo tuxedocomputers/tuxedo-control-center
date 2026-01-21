@@ -46,10 +46,13 @@ tuxedo-control-center
 3. Install service file that points to development build path (or use installed service from packaged version)
    
    Manual instructions:
-   1. Copy `tccd.service` and `tccd-sleep.service` (from src/dist-data) to `/etc/systemd/system/`
-   2. Edit the `tccd.service` (exec start/stop) to point to `<dev path>/dist/tuxedo-control-center/data/service/tccd`.
-   3. Copy `com.tuxedocomputers.tccd.conf` to `/usr/share/dbus-1/system.d/`
-   4. Start service `systemctl start tccd`. (And enable for autostart `systemctl enable tccd tccd-sleep`)
+   1. Copy `tccd.service` and `tccd-sleep.service` (from `<tcc folder>/src/dist-data`) to `/etc/systemd/system/`
+   2. Execute `npm run build` in `<tcc folder>`
+   3. Edit the `tccd.service` (exec start/stop) to point to `<tcc folder>/dist/tuxedo-control-center/data/service/tccd`
+   4. Copy `<tcc folder>/src/dist-data/com.tuxedocomputers.tccd.conf` to `/usr/share/dbus-1/system.d/`
+   5. Start service with `systemctl start tccd`
+   6. Enable autostart with `systemctl enable tccd tccd-sleep`
+   7. Execute `npm run start` in `<tcc folder>` to start the GUI
 
 ### NPM scripts 
 `npm run <script-name>`
