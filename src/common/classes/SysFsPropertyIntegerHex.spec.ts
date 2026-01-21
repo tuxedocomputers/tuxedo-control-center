@@ -24,7 +24,7 @@ import * as fs from 'node:fs';
 
 import { SysFsPropertyIntegerHex } from './SysFsProperties';
 
-describe('SysDevPropertyInteger', (): void => {
+describe('SysDevPropertyIntegerHex', (): void => {
     const dev = new SysFsPropertyIntegerHex(
         '/sys/bus/usb/drivers/usb/1-2/idProduct',
         '/sys/bus/usb/drivers/usb/1-2/idProduct',
