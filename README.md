@@ -5,9 +5,9 @@ To get a more detailed description of features, plans and the ideas behind pleas
 
 ## Using it
 
-There are pre-build packages for Ubuntu 16.04/18.04/20.04 as well as openSUSE Leap 15.x and Tumbleweed available at our repositories. For details please have a look [over here](https://www.tuxedocomputers.com/en/Add-TUXEDO-software-package-sources.tuxedo).
+There are pre-build packages available at our repositories. For details please have a look [over here](https://www.tuxedocomputers.com/en/Add-TUXEDO-software-package-sources.tuxedo).
 
-Note: TCC depends on the `tuxedo-io` module from the `tuxedo-keyboard` package for some core functionality like fan control.
+Note: TCC depends on `tuxedo-drivers` for some core functionality like fan control.
 
 ## Project structure
 
