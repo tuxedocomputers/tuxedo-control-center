@@ -54,17 +54,16 @@ tuxedo-control-center
 ### NPM scripts 
 `npm run <script-name>`
 
-| Script name                    | Description                                                     |
-| ------------------------------ | --------------------------------------------------------------- |
-| build                          | Build all apps service/electron/angular                         |
-| start                          | Normal start of electron app after build                        |
-| start-watch                    | Start GUI with automatic reload on changes to angular directory |
-| test-common                    | Test common files (jasmine)                                     |
-| gen-lang                       | Generate base for translation (`ng-app/assets/locale/lang.xlf`) |
-| pack-prod -- all \| deb \| rpm | Build and package for chosen target(s)                          |
-| inc-version-patch              | Patch version increase (updates package.json files)             |
-| inc-version-minor              | Minor version increase (updates package.json files)             |
-| inc-version-major              | Major version increase (updates package.json files)             |
+| Script name                  | Description                                                 |
+| ---------------------------- | ----------------------------------------------------------- |
+| build-release (autoversion)  | Build and package release deb and rpm                       |
+| pack-prod all \| deb \| rpm  | Build and package release version for chosen target(s)      |
+| pack-debug all \| deb \| rpm | Build and package debug version for chosen target(s)        |
+| build-prod                   | Build service/electron/angular (release version)            |
+| build-debug                  | Build service/electron/angular (debug version)              |
+| start                        | Start electron app after build                              |
+| start-watch                  | Start with automatic reload on changes to angular directory |
+| tests                        | Run tests                                                   |
 
 ### Debugging
 Debugging of electron main and render process is configured for vscode in .vscode/launch.json
