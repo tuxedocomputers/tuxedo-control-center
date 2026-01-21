@@ -20,8 +20,9 @@
 import { Injectable } from '@angular/core';
 import type { FormGroup } from '@angular/forms';
 import type { CanDeactivate } from '@angular/router';
-import { UtilsService } from './utils.service';
 import type { ConfirmDialogData, ConfirmDialogResult } from './dialog-confirm/dialog-confirm.component';
+// biome-ignore lint: deb does build with type, but creates constructor dependency injection error
+import { UtilsService } from './utils.service';
 
 export interface CanComponentDeactivate {
     webcamFormGroup: FormGroup;

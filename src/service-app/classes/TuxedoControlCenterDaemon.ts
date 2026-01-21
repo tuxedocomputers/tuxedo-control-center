@@ -19,7 +19,6 @@
 
 import { SIGTERM } from 'node:constants';
 import * as os from 'node:os';
-import type { WebcamPreset } from 'src/common/models/TccWebcamSettings';
 import { AvailabilityService } from '../../common/classes/availability.service';
 import { ConfigHandler } from '../../common/classes/ConfigHandler';
 import { CpuController } from '../../common/classes/CpuController';
@@ -31,6 +30,7 @@ import type { ITccAutosave } from '../../common/models/TccAutosave';
 import { customFanPreset, type ITccFanProfile } from '../../common/models/TccFanTable';
 import { generateProfileId, type ITccProfile } from '../../common/models/TccProfile';
 import { type ITccSettings, ProfileStates } from '../../common/models/TccSettings';
+import type { WebcamPreset } from '../../common/models/TccWebcamSettings';
 import { ModuleInfo, type TDPInfo, TuxedoIOAPI } from '../../native-lib/TuxedoIOAPI';
 import { ChargingWorker } from './ChargingWorker';
 import { CpuPowerWorker } from './CpuPowerWorker';

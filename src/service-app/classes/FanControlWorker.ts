@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type { TUXEDODevice } from 'src/common/models/DefaultProfiles';
+import type { TUXEDODevice } from '../../common/models/DefaultProfiles';
 import { FanData } from '../../common/models/IFanData';
 import type { ITccFanProfile, ITccFanTableEntry } from '../../common/models/TccFanTable';
 import { DaemonWorker } from './DaemonWorker';

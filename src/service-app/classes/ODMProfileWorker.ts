@@ -17,9 +17,9 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type { ITccODMProfile } from 'src/common/models/TccProfile';
 import { SysFsPropertyString, SysFsPropertyStringList } from '../../common/classes/SysFsProperties';
 import { TUXEDODevice } from '../../common/models/DefaultProfiles';
+import type { ITccODMProfile } from '../../common/models/TccProfile';
 import { TuxedoIOAPI as ioAPI, type ObjWrapper } from '../../native-lib/TuxedoIOAPI';
 import { DaemonWorker } from './DaemonWorker';
 import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';

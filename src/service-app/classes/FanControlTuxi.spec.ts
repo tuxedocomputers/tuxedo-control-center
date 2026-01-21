@@ -20,9 +20,9 @@
 import 'jasmine';
 const mock: typeof import('mock-fs') = require('mock-fs');
 
-import type { IFanTempData } from 'src/common/models/ITccFans';
 import { SysFsPropertyInteger } from '../../common/classes/SysFsProperties';
 import { TUXEDODevice } from '../../common/models/DefaultProfiles';
+import type { IFanTempData } from '../../common/models/ITccFans';
 import { FanControlTuxi } from './FanControlTuxi';
 
 describe('FanControlTuxi', (): void => {

@@ -17,88 +17,78 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { BrowserModule } from '@angular/platform-browser';
-import { NgModule, provideZoneChangeDetection } from '@angular/core';
-
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatListModule } from '@angular/material/list';
-import { MatIconModule } from '@angular/material/icon';
-import { MatTableModule } from '@angular/material/table';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatSelectModule } from '@angular/material/select';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { MatInputModule } from '@angular/material/input';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatRadioModule } from '@angular/material/radio';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatSliderModule } from '@angular/material/slider';
-import { MatGridListModule } from '@angular/material/grid-list';
-import { MatStepperModule } from '@angular/material/stepper';
-import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import { MatProgressBarModule } from '@angular/material/progress-bar';
-import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatTabsModule } from '@angular/material/tabs';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatMenuModule } from '@angular/material/menu';
-
+import { OverlayModule } from '@angular/cdk/overlay';
 import { DecimalPipe, registerLocaleData } from '@angular/common';
-import { ProfileManagerComponent } from './profile-manager/profile-manager.component';
-import { SupportComponent } from './support/support.component';
 import { HttpClientModule } from '@angular/common/http';
-import { ProfileOverviewTileComponent } from './profile-overview-tile/profile-overview-tile.component';
-import { ProfileDetailsEditComponent } from './profile-details-edit/profile-details-edit.component';
-import { InfoComponent } from './info/info.component';
-
-import { MarkdownModule } from 'ngx-markdown';
-import { DashboardComponent } from './dashboard/dashboard.component';
-
 import localeDe from '@angular/common/locales/de';
 import localeDeExtra from '@angular/common/locales/extra/de';
-
-import { OverlayModule } from '@angular/cdk/overlay';
-
+import { NgModule, provideZoneChangeDetection } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
+import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatGridListModule } from '@angular/material/grid-list';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSliderModule } from '@angular/material/slider';
+import { MatStepperModule } from '@angular/material/stepper';
+import { MatTableModule } from '@angular/material/table';
+import { MatTabsModule } from '@angular/material/tabs';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { GaugeModule } from 'angular-gauge';
-import { GlobalSettingsComponent } from './global-settings/global-settings.component';
-import { ShutdownTimerComponent } from './shutdown-timer/shutdown-timer.component';
-import { ToolsComponent } from './tools/tool.component';
-import { KeyboardBacklightComponent } from './keyboard-backlight/keyboard-backlight.component';
-import { ChangeCryptPasswordComponent } from './change-crypt-password/change-crypt-password.component';
-import { FanChartComponent } from './fan-chart/fan-chart.component';
-
+import { Chart, registerables } from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import { BaseChartDirective, ThemeService } from 'ng2-charts';
 import { ColorPickerModule } from 'ngx-color-picker';
-import { MainGuiComponent } from './main-gui/main-gui.component';
+import { MarkdownModule } from 'ngx-markdown';
+import { AppComponent } from './app.component';
+import { AppRoutingModule } from './app-routing.module';
 import { AquarisControlComponent } from './aquaris-control/aquaris-control.component';
-import { DialogInputTextComponent } from './dialog-input-text/dialog-input-text.component';
-import { DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
-import { TomteGuiComponent } from './tomte-gui/tomte-gui.component';
-import { ProfileConflictDialogService } from './profile-conflict-dialog/profile-conflict-dialog.service';
-import { ProfileConflictComponent } from './profile-conflict-dialog/profile-conflict-dialog.component';
+import { ChangeCryptPasswordComponent } from './change-crypt-password/change-crypt-password.component';
 import { ChargingSettingsComponent } from './charging-settings/charging-settings.component';
-import { WebcamSettingsComponent } from './webcam-settings/webcam-settings.component';
-import { WebcamPreviewComponent } from './webcam-preview/webcam-preview.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 import { DialogChoiceComponent } from './dialog-choice/dialog-choice.component';
-import { KeyboardVisualComponent } from './keyboard-visual/keyboard-visual.component';
+import { DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
+import { DialogInputTextComponent } from './dialog-input-text/dialog-input-text.component';
 import { DialogWaitingComponent } from './dialog-waiting/dialog-waiting.component';
-import { PrimeSelectComponent } from './prime-select/prime-select.component';
-import { PrimeDialogComponent } from './prime-dialog/prime-dialog.component';
+import { FanChartComponent } from './fan-chart/fan-chart.component';
 import { FanCustomChartComponent } from './fan-custom-chart/fan-custom-chart.component';
+import { GlobalSettingsComponent } from './global-settings/global-settings.component';
+import { InfoComponent } from './info/info.component';
+import { KeyboardBacklightComponent } from './keyboard-backlight/keyboard-backlight.component';
+import { KeyboardVisualComponent } from './keyboard-visual/keyboard-visual.component';
+import { MainGuiComponent } from './main-gui/main-gui.component';
+import { PrimeDialogComponent } from './prime-dialog/prime-dialog.component';
+import { PrimeSelectComponent } from './prime-select/prime-select.component';
+import { ProfileConflictComponent } from './profile-conflict-dialog/profile-conflict-dialog.component';
+import { ProfileConflictDialogService } from './profile-conflict-dialog/profile-conflict-dialog.service';
+import { ProfileDetailsEditComponent } from './profile-details-edit/profile-details-edit.component';
+import { ProfileManagerComponent } from './profile-manager/profile-manager.component';
+import { ProfileOverviewTileComponent } from './profile-overview-tile/profile-overview-tile.component';
+import { ShutdownTimerComponent } from './shutdown-timer/shutdown-timer.component';
+import { SupportComponent } from './support/support.component';
 import { TgpChartComponent } from './tgp-chart/tgp-chart.component';
-import { Chart, registerables } from 'chart.js';
-
-import ChartDataLabels from 'chartjs-plugin-datalabels';
+import { TomteGuiComponent } from './tomte-gui/tomte-gui.component';
+import { ToolsComponent } from './tools/tool.component';
+import { WebcamPreviewComponent } from './webcam-preview/webcam-preview.component';
+import { WebcamSettingsComponent } from './webcam-settings/webcam-settings.component';
 
 registerLocaleData(localeDe, 'de', localeDeExtra);
 

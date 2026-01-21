@@ -18,10 +18,10 @@
  */
 
 import * as child_process from 'node:child_process';
-import type { ITccProfile } from 'src/common/models/TccProfile';
 import { execCommandAsync } from '../../common/classes/Utils';
 import { XDisplayRefreshRateController } from '../../common/classes/XDisplayRefreshRateController';
 import type { IDisplayFreqRes, IDisplayMode } from '../../common/models/DisplayFreqRes';
+import type { ITccProfile } from '../../common/models/TccProfile';
 import { DaemonWorker } from './DaemonWorker';
 import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 

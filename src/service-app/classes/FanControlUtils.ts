@@ -17,10 +17,9 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type { ITccProfile } from 'src/common/models/TccProfile';
-
 import { interpolatePointsArray } from '../../common/classes/FanUtils';
 import { customFanPreset, type ITccFanProfile, type ITccFanTableEntry } from '../../common/models/TccFanTable';
+import type { ITccProfile } from '../../common/models/TccProfile';
 
 export async function getCustomFanCurve(profile: ITccProfile): Promise<ITccFanProfile> {
     if (profile.fan.customFanCurve === undefined) {
