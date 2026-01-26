@@ -70,6 +70,9 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
     public ctrlPumpDutyCycle = new FormControl();
     public ctrlPumpVoltage = new FormControl();
 
+    public ctrlAutoConnect = new FormControl();
+    public autoConnectEnabled = false;
+
     public fwVersion: string = '';
 
     public showPumpControls = false;
@@ -78,7 +81,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
     public readonly TAB_ANIMATION = 1;
 
     public hasBluetooth = true;
-    
+
     constructor(
         private electron: ElectronService,
         public dialog: MatDialog,
@@ -114,6 +117,10 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
         }
         await this.updateState();
         await this.periodicUpdate();
+
+        // Load auto-connect setting
+        this.autoConnectEnabled = await this.aquaris.getAutoConnect();
+        this.ctrlAutoConnect.setValue(this.autoConnectEnabled);
 
         this.connectedTimeout = setInterval(async () => { await this.periodicUpdate(); }, 3000);
     }
@@ -235,11 +242,17 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
     }
 
     private async periodicUpdate() {
+        const wasConnected = this.isConnected;
         this.isConnected = await this.aquaris.isConnected();
         this.hasBluetooth = await this.aquaris.hasBluetooth();
 
         if (!this.isConnected && !this.isConnecting && !this.isDisconnecting) {
             await this.discoverUpdate();
+        }
+
+        // If we just became connected (e.g., via auto-reconnect), update the UI state
+        if (!wasConnected && this.isConnected && !this.isConnecting) {
+            await this.updateState();
         }
     }
 
@@ -383,7 +396,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
 
         const connectNoticeDisable = localStorage.getItem('connectNoticeDisable');
         if (connectNoticeDisable === null || connectNoticeDisable === 'false') {
-            const askToClose = await this.utils.confirmDialog({
+            const result = await this.utils.confirmDialog({
                 title: $localize `:@@aqDialogConnectTitle:Are you ready to connect to your Aquaris?`,
                 description: $localize `:@@aqDialogConnectDescription:Please ensure that your Aquaris' watercooling tubes are plugged into your TUXEDO before pressing the 'Connect' button!`,
                 linkLabel: $localize `:@@aqDialogConnectLinkLabel:Instructions`,
@@ -393,10 +406,10 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
                 checkboxNoBotherLabel: $localize `:@@aqDialogCheckboxNoBotherLabel:Don't ask again`,
                 showCheckboxNoBother: true
             });
-            if (askToClose.noBother) {
+            if (result.noBother) {
                 localStorage.setItem('connectNoticeDisable', 'true');
             }
-            if (!askToClose.confirm) return;
+            if (!result.confirm) return;
         }
 
         this.isConnecting = true;
@@ -442,6 +455,10 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
         this.isDisconnecting = true;
         try {
             await this.aquaris.saveState();
+            // Disable auto-connect when user manually disconnects
+            await this.aquaris.setAutoConnect(false);
+            this.autoConnectEnabled = false;
+            this.ctrlAutoConnect.setValue(false);
             await this.aquaris.disconnect();
             this.isConnected = await this.aquaris.isConnected();
             this.selectedDeviceUUID = this.findDefaultSelectedDevice();
@@ -590,5 +607,53 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
 
     public async openExternalUrl(url: string) {
         await this.electron.shell.openExternal(url);
+    }
+
+    public getAutoConnectTargetDisplay(): string {
+        const lastConnectedUUID = localStorage.getItem('aquarisLastConnected');
+        if (lastConnectedUUID === null) {
+            return null;
+        }
+        const deviceName = this.deviceNameMap.get(lastConnectedUUID);
+        if (deviceName !== undefined) {
+            return `${deviceName} (${lastConnectedUUID})`;
+        }
+        return lastConnectedUUID;
+    }
+
+    public async disableAutoConnect() {
+        this.autoConnectEnabled = false;
+        this.ctrlAutoConnect.setValue(false);
+        await this.aquaris.setAutoConnect(false);
+    }
+
+    public async toggleAutoConnect() {
+        const newValue = this.ctrlAutoConnect.value as boolean;
+
+        // Show warning only when enabling, and only if not dismissed before
+        if (newValue) {
+            const autoConnectWarningDisable = localStorage.getItem('autoConnectWarningDisable');
+            if (autoConnectWarningDisable === null || autoConnectWarningDisable === 'false') {
+                const result = await this.utils.confirmDialog({
+                    title: $localize `:@@aqAutoConnectWarningTitle:Auto-reconnect enabled`,
+                    description: $localize `:@@aqAutoConnectWarningDescription:Remember to disconnect in TCC or disable this setting before physically unplugging your Aquaris. Otherwise, TCC will attempt to reconnect on every startup.`,
+                    buttonAbortLabel: $localize `:@@aqAutoConnectWarningAbortLabel:Cancel`,
+                    buttonConfirmLabel: $localize `:@@aqAutoConnectWarningConfirmLabel:I understand`,
+                    checkboxNoBotherLabel: $localize `:@@aqDialogCheckboxNoBotherLabel:Don't ask again`,
+                    showCheckboxNoBother: true
+                });
+                if (result.noBother) {
+                    localStorage.setItem('autoConnectWarningDisable', 'true');
+                }
+                if (!result.confirm) {
+                    // User cancelled - revert the toggle
+                    this.ctrlAutoConnect.setValue(false);
+                    return;
+                }
+            }
+        }
+
+        this.autoConnectEnabled = newValue;
+        await this.aquaris.setAutoConnect(this.autoConnectEnabled);
     }
 }
