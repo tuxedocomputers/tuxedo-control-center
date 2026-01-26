@@ -95,6 +95,8 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
     public primeState: string;
     public primeSelectValues: string[] = ["iGPU", "dGPU", "on-demand", "off"];
+    public gpuMonitorTabIndex: number = 0;
+    private gpuMonitorTabIndexSet: boolean = false;
 
     private dashboardVisibility: boolean;
     public d0MetricsUsage: boolean;
@@ -308,6 +310,13 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
         this.subscriptions.add(
             this.tccdbus.iGpuInfo.subscribe((iGpuInfo?: IiGpuInfo) => {
                 this.setIGpuValues(iGpuInfo);
+                // Set the default GPU monitor tab once based on whether iGPU has useful data
+                if (!this.gpuMonitorTabIndexSet && iGpuInfo !== undefined) {
+                    // Default to dGPU tab if iGPU frequency is not available or is 0
+                    const hasUsableIGpuFreq = iGpuInfo.coreFrequency !== undefined && iGpuInfo.coreFrequency > 0;
+                    this.gpuMonitorTabIndex = hasUsableIGpuFreq ? 0 : 1;
+                    this.gpuMonitorTabIndexSet = true;
+                }
             })
         );
     }
