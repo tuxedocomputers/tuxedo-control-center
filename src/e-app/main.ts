@@ -93,10 +93,14 @@ app.on('second-instance', (event, cmdLine, workingDir) => {
 });
 
 app.on("ready", () => {
-    electron.powerMonitor.on("resume", () => {
+    electron.powerMonitor.on("resume", async () => {
         if (tccWindow) {
             tccWindow.webContents.send("wakeup-from-suspend");
         }
+        // Attempt Aquaris reconnect after resume with delay for BT stack
+        setTimeout(() => {
+            tryAquarisAutoConnect();
+        }, 5000);
     });
 });
 
@@ -136,6 +140,11 @@ async function startDbusAndInit() {
     }
     initTray();
     initMain();
+
+    // Attempt Aquaris auto-connect after a short delay to let BT stack initialize
+    setTimeout(() => {
+        tryAquarisAutoConnect();
+    }, 5000);
 }
 
 async function initTray() {
@@ -1010,6 +1019,105 @@ async function aquarisConnectedDemo() {
     return aquarisStateCurrent !== undefined && aquarisStateCurrent.deviceUUID === 'demo';
 }
 
+async function tryAquarisAutoConnect() {
+    try {
+        const autoConnect = await userConfig.get('aquarisAutoConnect');
+        if (autoConnect !== 'true') {
+            console.log('Aquaris auto-connect: disabled');
+            return;
+        }
+
+        const savedStateSerialized = await userConfig.get('aquarisSaveState');
+        if (!savedStateSerialized) {
+            console.log('Aquaris auto-connect: no saved state');
+            return;
+        }
+
+        const savedState = JSON.parse(savedStateSerialized) as AquarisState;
+        if (!savedState.deviceUUID || savedState.deviceUUID === 'demo') {
+            console.log('Aquaris auto-connect: no valid device UUID');
+            return;
+        }
+
+        // Check if already connected
+        if (await aquaris.isConnected()) {
+            console.log('Aquaris auto-connect: already connected');
+            return;
+        }
+
+        console.log('Aquaris auto-connect: scanning for ' + savedState.deviceUUID);
+
+        // Scan indefinitely until device is found or auto-connect is disabled
+        let scanCycles = 0;
+        while (true) {
+            // Start/restart discovery
+            aquarisHasBluetooth = await aquaris.startDiscover();
+            if (!aquarisHasBluetooth) {
+                console.log('Aquaris auto-connect: Bluetooth not available, retrying in 10s');
+                await new Promise(resolve => setTimeout(resolve, 10000));
+                continue;
+            }
+
+            // Scan for 10 seconds per cycle
+            let deviceFound = false;
+            for (let i = 0; i < 10; i++) {
+                await new Promise(resolve => setTimeout(resolve, 1000));
+
+                // Check if auto-connect was disabled
+                const stillEnabled = await userConfig.get('aquarisAutoConnect');
+                if (stillEnabled !== 'true') {
+                    console.log('Aquaris auto-connect: disabled, stopping scan');
+                    await aquaris.stopDiscover();
+                    return;
+                }
+
+                // Check if already connected (e.g., user connected manually)
+                if (await aquaris.isConnected()) {
+                    console.log('Aquaris auto-connect: already connected, stopping scan');
+                    await aquaris.stopDiscover();
+                    return;
+                }
+
+                devicesList = await aquaris.getDeviceList();
+                if (devicesList.some(d => d.uuid === savedState.deviceUUID)) {
+                    deviceFound = true;
+                    break;
+                }
+            }
+
+            if (deviceFound) {
+                // Final check before connecting
+                const finalCheck = await userConfig.get('aquarisAutoConnect');
+                if (finalCheck !== 'true') {
+                    console.log('Aquaris auto-connect: disabled before connect, aborting');
+                    await aquaris.stopDiscover();
+                    return;
+                }
+
+                // Use the connect handler to perform the connection
+                const connectHandler = aquarisHandlers.get(ClientAPI.prototype.connect.name);
+                if (connectHandler) {
+                    await connectHandler(savedState.deviceUUID);
+                    console.log('Aquaris auto-connect: connection successful');
+                }
+                return;
+            }
+
+            scanCycles++;
+            if (scanCycles % 6 === 0) {
+                // Log every minute to show it's still trying
+                console.log('Aquaris auto-connect: still scanning for device...');
+            }
+
+            // Brief pause before restarting scan
+            await aquaris.stopDiscover();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+        }
+    } catch (err) {
+        console.log('Aquaris auto-connect: failed - ' + err);
+    }
+}
+
 let devicesList: DeviceInfo[] = [];
 const aquaris = new LCT21001();
 const aquarisHandlers = new Map<string, (...args: any[]) => any>()
@@ -1141,6 +1249,15 @@ const aquarisHandlers = new Map<string, (...args: any[]) => any>()
     .set(ClientAPI.prototype.saveState.name, async () => {
         if (await aquarisConnectedDemo()) return;
         await userConfig.set('aquarisSaveState', JSON.stringify(aquarisStateCurrent));
+    })
+
+    .set(ClientAPI.prototype.getAutoConnect.name, async () => {
+        const value = await userConfig.get('aquarisAutoConnect');
+        return value === 'true';
+    })
+
+    .set(ClientAPI.prototype.setAutoConnect.name, async (enabled: boolean) => {
+        await userConfig.set('aquarisAutoConnect', enabled ? 'true' : 'false');
     });
 
 registerAPI(ipcMain, aquarisAPIHandle, aquarisHandlers);
