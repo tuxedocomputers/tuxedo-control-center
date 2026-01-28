@@ -45,7 +45,7 @@ export class YCbCr420WorkaroundWorker extends DaemonWorker {
                 const path: string = `/sys/kernel/debug/dri/${card}/${port}/force_yuv420_output`;
                 if (fileOK(path)) {
                     const oldValue: boolean = fs.readFileSync(path).toString(undefined, undefined, 1) === '1';
-                    if (oldValue != this.tccd.settings.ycbcr420Workaround[card][port]) {
+                    if (oldValue !== this.tccd.settings.ycbcr420Workaround[card][port]) {
                         settings_changed = true;
                         fs.appendFileSync(path, this.tccd.settings.ycbcr420Workaround[card][port] ? '1' : '0');
                     }

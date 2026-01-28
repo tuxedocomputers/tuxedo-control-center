@@ -159,7 +159,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </div>
                     </div>
 
-                    <div class="content-container active-profile" *ngIf="isX11 === 1 && iGpuAvailable && dGpuAvailable && primeState != undefined && primeState != '-1'">
+                    <div class="content-container active-profile" *ngIf="isX11 === 1 && iGpuAvailable && dGpuAvailable && primeState !== undefined && primeState !== '-1'">
                         <span class="text" i18n="@@cDashboardActiveGraphicsMode">Active Graphics Mode:</span>
                         <a mat-button class="link" (click)="gotoSettings()">
                             {{ getPrimeStateLabel(primeState) }}
@@ -318,7 +318,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <div
                         class="tcc-gauge"
                         [ngClass]="{ 'not-available': !compat.tccDbusAvailable || (!(powerState === 'D0' && compat.hasDGpuPowerDraw && d0MetricsUsage) && powerState !== 'D3cold') }"
-                        [matTooltip]="powerState == 'D3cold' ? '' : !compat.tccDbusAvailable || !compat.hasDGpuPowerDraw ? compat.compatibilityMessage : ''">
+                        [matTooltip]="powerState === 'D3cold' ? '' : !compat.tccDbusAvailable || !compat.hasDGpuPowerDraw ? compat.compatibilityMessage : ''">
                         <mwl-gauge
                             [max]="100"
                             [min]="0"

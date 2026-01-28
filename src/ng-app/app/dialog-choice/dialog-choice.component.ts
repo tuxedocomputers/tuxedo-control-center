@@ -73,7 +73,7 @@ export class DialogChoiceComponent {
     public closeDialog(result?: string): void {
         let dialogResult: ConfirmChoiceResult;
         const noBotherValue = this.ctrlCheckboxNoBother.value as boolean;
-        if (result != undefined) {
+        if (result !== undefined) {
             dialogResult = {
                 value: result,
                 noBother: noBotherValue,

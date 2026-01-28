@@ -359,7 +359,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     </button>
                                 </mat-grid-tile>
 
-                                <div *ngIf="profileFormGroup.controls.fan.controls.fanProfile.value != 'Custom'">
+                                <div *ngIf="profileFormGroup.controls.fan.controls.fanProfile.value !== 'Custom'">
                                     <!-- Minimum fan speed -->
                                     <mat-grid-tile [colspan]="gridParams.header">
                                         <header i18n="@@cProfMgrDetailsMinFanSpeedLabel">Minimum fan speed</header>
@@ -533,7 +533,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             </mat-grid-list>
                         </div>
 
-                        <div *ngIf="profileFormGroup.controls.fan.controls.fanProfile.value == 'Custom'">
+                        <div *ngIf="profileFormGroup.controls.fan.controls.fanProfile.value === 'Custom'">
                             <app-fan-custom-chart
                                 [customFanCurve]="profileFormGroup.get('fan').get('customFanCurve').value"
                                 [showFanGraphs]="showFanGraphs"
@@ -544,7 +544,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             </app-fan-custom-chart>
                         </div>
 
-                        <div *ngIf="profileFormGroup.controls.fan.controls.fanProfile.value != 'Custom'" class="fan-chart-container">
+                        <div *ngIf="profileFormGroup.controls.fan.controls.fanProfile.value !== 'Custom'" class="fan-chart-container">
                             <button mat-stroked-button (click)="toggleFanGraphs()">
                                 <ng-container i18n="@@cProfMgrDetailsToggleFanChartsLabel">Toggle fan table chart</ng-container>
                                 <mat-icon>bar_chart</mat-icon>

@@ -47,7 +47,7 @@ function getWebcamCtrlPythonPath(): string {
 
 export const webcamHandlers: Map<string, (...args: any[]) => any> = new Map<string, (...args: any[]) => any>()
     .set(WebcamAPIFunctions.settingWebcamWithLoading, async (arg: any): Promise<void> => {
-        if (webcamWindow != null) {
+        if (webcamWindow !== null) {
             webcamWindow.webContents.send('setting-webcam-with-loading', arg);
         }
     })

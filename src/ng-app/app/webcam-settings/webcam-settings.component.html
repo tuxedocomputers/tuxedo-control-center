@@ -164,7 +164,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 <div *ngFor="let webcamConfig of getWebcamSettingNames">
                                     <div *ngIf="easyOptions.includes(webcamConfig)">
                                         <!-- SLIDER -->
-                                        <div *ngIf="getOptionValue(webcamConfig, 'type') == 'slider'">
+                                        <div *ngIf="getOptionValue(webcamConfig, 'type') === 'slider'">
                                             <mat-grid-list [cols]="gridParams?.cols" rowHeight="30px" class="profile-details-edit-grid">
                                                 <mat-grid-tile [colspan]="gridParams?.header">
                                                     <header>{{ getConfigTranslation(webcamConfig) }}</header>
@@ -240,7 +240,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             </mat-grid-list>
                                         </div>
                                         <!-- BOOL -->
-                                        <div *ngIf="getOptionValue(webcamConfig, 'type') == 'bool'">
+                                        <div *ngIf="getOptionValue(webcamConfig, 'type') === 'bool'">
                                             <mat-grid-list [cols]="gridParams?.cols" rowHeight="30px" class="profile-details-edit-grid">
                                                 <mat-grid-tile [colspan]="gridParams?.header">
                                                     <header>{{ getConfigTranslation(webcamConfig) }}</header>
@@ -267,7 +267,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             </mat-grid-list>
                                         </div>
                                         <!-- MENU -->
-                                        <div *ngIf="getOptionValue(webcamConfig, 'type') == 'menu'">
+                                        <div *ngIf="getOptionValue(webcamConfig, 'type') === 'menu'">
                                             <mat-grid-list [cols]="gridParams?.cols" rowHeight="30px" class="profile-details-edit-grid">
                                                 <mat-grid-tile [colspan]="gridParams?.header">
                                                     <header>{{ getConfigTranslation(webcamConfig) }}</header>
@@ -389,7 +389,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             </mat-expansion-panel-header>
                             <!-- SLIDER -->
                             <div *ngFor="let webcamConfig of getWebcamSettingNames">
-                                <div *ngIf="getOptionValue(webcamConfig, 'category') == webcamCategory && getOptionValue(webcamConfig, 'type') == 'slider'">
+                                <div *ngIf="getOptionValue(webcamConfig, 'category') === webcamCategory && getOptionValue(webcamConfig, 'type') === 'slider'">
                                     <mat-grid-list [cols]="gridParams?.cols" rowHeight="30px" class="profile-details-edit-grid">
                                         <mat-grid-tile [colspan]="gridParams?.header">
                                             <header [ngClass]="{ inactive: !checkValid(webcamConfig) }">
@@ -466,7 +466,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     </mat-grid-list>
                                 </div>
                                 <!-- BOOL -->
-                                <div *ngIf="getOptionValue(webcamConfig, 'category') == webcamCategory && getOptionValue(webcamConfig, 'type') == 'bool'">
+                                <div *ngIf="getOptionValue(webcamConfig, 'category') === webcamCategory && getOptionValue(webcamConfig, 'type') === 'bool'">
                                     <mat-grid-list [cols]="gridParams?.cols" rowHeight="30px" class="profile-details-edit-grid">
                                         <mat-grid-tile [colspan]="gridParams?.header">
                                             <header>
@@ -495,7 +495,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     </mat-grid-list>
                                 </div>
                                 <!-- MENU -->
-                                <div *ngIf="getOptionValue(webcamConfig, 'category') == webcamCategory && getOptionValue(webcamConfig, 'type') == 'menu'">
+                                <div *ngIf="getOptionValue(webcamConfig, 'category') === webcamCategory && getOptionValue(webcamConfig, 'type') === 'menu'">
                                     <mat-grid-list [cols]="gridParams?.cols" rowHeight="30px" class="profile-details-edit-grid">
                                         <mat-grid-tile [colspan]="gridParams?.header">
                                             <header>

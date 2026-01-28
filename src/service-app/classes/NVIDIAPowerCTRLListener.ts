@@ -53,7 +53,7 @@ export class NVIDIAPowerCTRLListener extends DaemonListener {
                     this.tccd.activeProfile.nvidiaPowerCTRLProfile.cTGPOffset !== undefined
                         ? this.tccd.activeProfile.nvidiaPowerCTRLProfile.cTGPOffset
                         : 0;
-                if (event == 'change' && this.ctgpOffsetSysfsProp.readValueNT() != ctgpOffset) {
+                if (event === 'change' && this.ctgpOffsetSysfsProp.readValueNT() !== ctgpOffset) {
                     this.ctgpOffsetSysfsProp.writeValue(ctgpOffset);
                 }
             }.bind(this),

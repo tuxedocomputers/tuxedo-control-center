@@ -60,7 +60,7 @@ export class KeyboardBacklightListener {
 
         if (this.keyboardBacklightCapabilities?.zones !== undefined) {
             // Init state in settings if not yet done or anything is wonky
-            if (this.keyboardBacklightCapabilities.zones != this.tccd.settings.keyboardBacklightStates?.length) {
+            if (this.keyboardBacklightCapabilities.zones !== this.tccd.settings.keyboardBacklightStates?.length) {
                 this.tccd.settings.keyboardBacklightStates = [];
                 for (let i: number = 0; i < this.keyboardBacklightCapabilities.zones; ++i) {
                     this.tccd.settings.keyboardBacklightStates[i] = {
@@ -132,7 +132,7 @@ export class KeyboardBacklightListener {
     }
 
     private async initSysFSListener(): Promise<void> {
-        if (this.keyboardBacklightCapabilities.maxRed != undefined) {
+        if (this.keyboardBacklightCapabilities.maxRed !== undefined) {
             for (let i: number = 0; i < this.ledsRGBZones?.length; ++i) {
                 if (this.ledsRGBZones[i]) {
                     if (await fileOKAsync(`${this.ledsRGBZones[i]}/multi_intensity`)) {
@@ -183,7 +183,7 @@ export class KeyboardBacklightListener {
         if (keyboardBacklightStatesNewJSON !== undefined) {
             this.keyboardBacklightStatesPendingNewJSON = keyboardBacklightStatesNewJSON;
 
-            if (this.keyboardBacklightStatesWritingNew == false) {
+            if (this.keyboardBacklightStatesWritingNew === false) {
                 this.keyboardBacklightStatesWritingNew = true;
                 while (this.keyboardBacklightStatesPendingNewJSON !== undefined) {
                     const keyboardBacklightStatesNew: Array<KeyboardBacklightStateInterface> = JSON.parse(

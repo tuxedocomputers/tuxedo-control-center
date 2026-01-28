@@ -74,7 +74,7 @@ export class WebcamPreviewComponent implements OnInit {
 
     private stopWebcam(): void {
         this.video.nativeElement.pause();
-        if (this.mediaStream != undefined) {
+        if (this.mediaStream !== undefined) {
             for (const track of this.mediaStream.getTracks()) {
                 track.stop();
             }

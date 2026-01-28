@@ -249,11 +249,11 @@ export class KeyboardBacklightComponent implements OnInit {
 
     private applyPendingChanges(): void {
         if (!this.isPickerInUsage()) {
-            if (this.chosenBrightnessPending != undefined) {
+            if (this.chosenBrightnessPending !== undefined) {
                 this.chosenBrightness = this.chosenBrightnessPending;
                 this.chosenBrightnessPending = undefined;
             }
-            if (this.chosenColorHexPending != undefined) {
+            if (this.chosenColorHexPending !== undefined) {
                 this.chosenColorHex = this.chosenColorHexPending;
                 this.chosenColorHexPending = undefined;
             }
