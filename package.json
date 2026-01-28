@@ -60,7 +60,8 @@
         "start-electron-watch": "electron ./dist/tuxedo-control-center --watch",
         "gen-lang": "ng extract-i18n --output-path src/ng-app/assets/locale/ --out-file lang.xlf",
         "gen-lang-all": "run-s gen-lang && xliff-simple-merge -i 'src/ng-app/assets/locale/lang.xlf' -d 'src/ng-app/assets/locale/lang.en.xlf' -o 'src/ng-app/assets/locale/lang.en.xlf' && xliff-simple-merge -i 'src/ng-app/assets/locale/lang.xlf' -d 'src/ng-app/assets/locale/lang.de.xlf' -o 'src/ng-app/assets/locale/lang.de.xlf'",
-        "ng-update": "ng update"
+        "ng-update": "ng update",
+        "lint": "biome lint ./src"
     },
     "private": true,
     "dependencies": {
