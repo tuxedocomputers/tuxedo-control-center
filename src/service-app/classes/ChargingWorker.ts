@@ -222,6 +222,7 @@ export class ChargingWorker extends DaemonWorker {
             }
             return -1;
         } catch (err: unknown) {
+            console.error(`ChargingWorker: getChargeStartThreshold failed => ${err}`);
             return undefined;
         }
     }
