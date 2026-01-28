@@ -50,10 +50,9 @@ export class TomteGuiComponent implements OnInit {
         'moduleBlocked',
         'moduleDescription',
     ];
-    // TODO maybe there is a better way to handle this
+
     public tomteMode: string = '';
     public tomteModes: string[] = ['AUTOMATIC', 'UPDATES_ONLY', 'DONT_CONFIGURE'];
-    // those are basically just flags that are checked by certain gui components to figure out if they should be shown or not.
     public showRetryButton: boolean = false;
     public loadingInformation: boolean = false;
     public aptInstalled: boolean = false;
@@ -74,12 +73,6 @@ export class TomteGuiComponent implements OnInit {
 
         this.aptInstalled = data.aptInstalled;
         this.tomteInstalled = data.tomteInstalled;
-    }
-
-    public focusControl(control: any): void {
-        setTimeout((): void => {
-            control.focus();
-        }, 0);
     }
 
     public openExternalUrl(url: string): void {
@@ -111,8 +104,6 @@ export class TomteGuiComponent implements OnInit {
                     if (i === 29) {
                         this.showRetryButton = true;
                     }
-                    // todo: unnecessary continue
-                    continue;
                 }
             }
             this.tomteListArray = tomteInformation?.modules ?? [];
