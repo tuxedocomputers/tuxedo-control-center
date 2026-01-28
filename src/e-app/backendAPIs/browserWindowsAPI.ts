@@ -209,8 +209,9 @@ async function createTccWindow(langId: string, module?: string): Promise<void> {
         await tccWindow.loadFile(indexPath);
     }
 }
+
 export function clearWebcamWindow(): void {
-    webcamWindow: Electron.BrowserWindow = null;
+    webcamWindow = null;
 }
 
 export async function createWebcamPreview(langId: string, arg: WebcamConstraints): Promise<void> {
