@@ -17,6 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+// biome-ignore lint: "node:fs" wasn't found because this file is in the common folder
 const fs: typeof import('fs') = require('fs');
 
 import type { Dirent } from 'node:fs';

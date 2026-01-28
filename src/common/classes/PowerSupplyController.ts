@@ -17,6 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+// biome-ignore lint: "node:path" wasn't found because this file is in the common folder
 const path: typeof import('path') = require('path');
 
 import { SysFsController } from './SysFsController';

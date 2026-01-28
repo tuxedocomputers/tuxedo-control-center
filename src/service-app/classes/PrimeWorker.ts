@@ -23,7 +23,7 @@ import { TUXEDODevice } from '../../common/models/DefaultProfiles';
 import { DaemonWorker } from './DaemonWorker';
 import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
-const fsp: typeof import('fs').promises = require('fs').promises;
+const fsp: typeof import('fs').promises = require('node:fs').promises;
 
 export class PrimeWorker extends DaemonWorker {
     private tuxedoDevice: TUXEDODevice;

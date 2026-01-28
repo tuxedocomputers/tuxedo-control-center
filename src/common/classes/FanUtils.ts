@@ -19,6 +19,7 @@
 
 import type { ITccFanTableEntry } from '../models/TccFanTable';
 
+// biome-ignore lint: "node:fs" wasn't found because this file is in the common folder
 const fsp: typeof import('fs').promises = require('fs').promises;
 
 async function interpolatePoints(points: ITccFanTableEntry[], x: number): Promise<number> {

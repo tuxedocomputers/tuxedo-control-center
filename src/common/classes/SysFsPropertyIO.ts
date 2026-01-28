@@ -17,7 +17,9 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+// biome-ignore lint: "node:fs" wasn't found because this file is in the common folder
 const fs: typeof import('fs') = require('fs');
+// biome-ignore lint: "node:fs" wasn't found because this file is in the common folder
 const fsp: typeof import('fs').promises = require('fs').promises;
 
 import type { FSWatcher } from 'node:fs';
