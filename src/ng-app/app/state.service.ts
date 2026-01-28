@@ -57,6 +57,7 @@ export class StateService implements OnDestroy {
 
     constructor(
         private config: ConfigService,
+        // biome-ignore lint: biome says that parameter is never read, but removing tccdbus creates an error
         private tccdbus: TccDBusClientService,
         private utils: UtilsService,
         private dbus: TccDBusClientService,

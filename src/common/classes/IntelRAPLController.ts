@@ -43,6 +43,7 @@ interface IRAPLProperties {
 export class IntelRAPLController {
     private properties: IRAPLProperties;
 
+    // biome-ignore lint: biome says that parameter is never read, but removing basePath creates an error
     constructor(private readonly basePath: string) {
         this.properties = {
             name: new SysFsPropertyString(path.join(basePath, 'name')),

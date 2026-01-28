@@ -182,6 +182,7 @@ export class FanControlLogic {
 
     constructor(
         private fanProfile: ITccFanProfile,
+        // biome-ignore lint: biome says that parameter is never read, but removing type creates an error
         private type: FAN_LOGIC,
         public tccd: TuxedoControlCenterDaemon,
     ) {
