@@ -92,7 +92,9 @@ export class LCT21001 {
     async connect(deviceUUID: string): Promise<void> {
         this.device = await this.adapter.getDevice(deviceUUID);
 
-        let rssi, deviceName: string;
+        let rssi: string;
+        let deviceName: string;
+
         try {
             rssi = await this.device.getRSSI();
         } catch (err: unknown) {

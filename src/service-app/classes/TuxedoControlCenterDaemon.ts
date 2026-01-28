@@ -557,7 +557,8 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         const boardVendor: string = dmi.boardVendor.readValueNT();
         const chassisVendor: string = dmi.chassisVendor.readValueNT();
         const sysVendor: string = dmi.sysVendor.readValueNT();
-        let showAquarisMenu;
+        let showAquarisMenu: boolean;
+
         const isTuxedo: boolean =
             (boardVendor !== undefined && boardVendor.toLowerCase().includes('tuxedo')) ||
             (chassisVendor !== undefined && chassisVendor.toLowerCase().includes('tuxedo')) ||

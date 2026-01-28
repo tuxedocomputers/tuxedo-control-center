@@ -45,7 +45,8 @@ export class DisplayBacklightWorker extends DaemonWorker {
     public async onStart(): Promise<void> {
         // Figure out which brightness percentage to set
         const currentProfile: ITccProfile = this.activeProfile;
-        let brightnessPercent;
+        let brightnessPercent: number;
+
         if (!currentProfile.display.useBrightness || currentProfile.display.brightness === undefined) {
             if (this.tccd.autosave.displayBrightness === undefined) {
                 brightnessPercent = 100;

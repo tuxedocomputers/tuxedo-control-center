@@ -198,13 +198,11 @@ export class KeyboardBacklightListener {
     }
 
     // Utility
-
     private updateKeyboardBacklightCapabilities(): void {
         this.keyboardBacklightCapabilities = {} as KeyboardBacklightCapabilitiesInterface;
-
         this.keyboardBacklightCapabilities.modes = [KeyboardBacklightColorModes.static];
+        let ledsWhitePath: string;
 
-        let ledsWhitePath;
         if (fileOK(`${this.ledsWhiteOnly}/max_brightness`)) {
             ledsWhitePath = this.ledsWhiteOnly;
         } else if (fileOK(`${this.ledsWhiteOnlyNB05}/max_brightness`)) {

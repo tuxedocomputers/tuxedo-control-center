@@ -244,7 +244,8 @@ export class CpuWorker extends DaemonWorker {
             }
         }
 
-        let scalingDriver;
+        let scalingDriver: string;
+
         // Check settings for each core
         for (const core of this.cpuCtrl.cores) {
             if (core.coreIndex !== 0 && !core.online.readValue()) {
@@ -260,7 +261,8 @@ export class CpuWorker extends DaemonWorker {
                 this.cpuCtrl.cores[0].scalingDriver.readValueNT() !== 'intel_pstate'
             ) {
                 scalingDriver = core.scalingDriver.readValueNT();
-                let coreAvailableFrequencies;
+                let coreAvailableFrequencies: number[];
+
                 if (core.scalingAvailableFrequencies.isAvailable()) {
                     coreAvailableFrequencies = core.scalingAvailableFrequencies.readValueNT();
                 }
