@@ -102,76 +102,109 @@ export class TccDBusInterface extends dbus.interface.Interface {
     }
 
     // todo: functions should start with Get or Set
+    // biome-ignore lint: function is never read because of dbus
     private GetDeviceName(): string {
         return this.data.device;
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private DeviceHasAquaris(): boolean {
         return this.data.deviceHasAquaris;
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private GetDisplayModesJSON(): string {
         return this.data.displayModesJSON;
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private GetIsX11(): number {
         return this.data.isX11;
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private TuxedoWmiAvailable(): boolean {
         return this.data.tuxedoWmiAvailable;
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private FanHwmonAvailable(): boolean {
         return this.data.fanHwmonAvailable;
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private TccdVersion(): string {
         return this.data.tccdVersion;
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private GetFanDataJSON(): string {
         return this.data.fanData;
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private WebcamSWAvailable(): boolean {
         return this.data.webcamSwitchAvailable;
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private GetWebcamSWStatus(): boolean {
         return this.data.webcamSwitchStatus;
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private GetForceYUV420OutputSwitchAvailable(): boolean {
         return this.data.forceYUV420OutputSwitchAvailable;
     }
 
+    // biome-ignore lint: function is never read because of dbus
     private GetIGpuInfoValuesJSON(): string {
         this.resetDataCollectionTimeout();
         return this.data.iGpuInfoValuesJSON;
     }
 
+    // biome-ignore lint: function is never read because of dbus
     private GetDGpuInfoValuesJSON(): string {
         this.resetDataCollectionTimeout();
         return this.data.dGpuInfoValuesJSON;
     }
 
+    // biome-ignore lint: function is never read because of dbus
     private GetIGpuAvailable(): number {
         return this.data.iGpuAvailable;
     }
 
+    // biome-ignore lint: function is never read because of dbus
     private GetDGpuAvailable(): number {
         return this.data.dGpuAvailable;
     }
 
+    // biome-ignore lint: function is never read because of dbus
     private GetPrimeState(): string {
         return this.data.primeState;
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private GetCpuPowerValuesJSON(): string {
         return this.data.cpuPowerValuesJSON;
     }
 
+    // biome-ignore lint: function is never read because of dbus
     private SetSensorDataCollectionStatus(status: boolean): void {
         this.data.sensorDataCollectionStatus = status;
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private GetSensorDataCollectionStatus(): boolean {
         return this.data.sensorDataCollectionStatus;
     }
 
+    // biome-ignore lint: function is never read because of dbus
     private SetDGpuD0Metrics(status: boolean): void {
         this.data.d0MetricsUsage = status;
     }
 
+    // biome-ignore lint: function is never read because of dbus
     private ConsumeModeReapplyPending(): boolean {
         // Unlikely, but possible race condition.
         // However no harmful impact, it will just cause the screen to flicker twice instead of once.
@@ -181,123 +214,191 @@ export class TccDBusInterface extends dbus.interface.Interface {
         }
         return false;
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private GetActiveProfileJSON(): string {
         return this.data.activeProfileJSON;
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private SetTempProfile(profileName: string): boolean {
         this.data.tempProfileName = profileName;
         return true;
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private SetTempProfileById(id: string): boolean {
         this.data.tempProfileId = id;
         this.interfaceOptions.triggerStateCheck();
         return true;
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private GetProfilesJSON(): string {
         return this.data.profilesJSON;
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private GetCustomProfilesJSON(): string {
         return this.data.customProfilesJSON;
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private GetDefaultProfilesJSON(): string {
         return this.data.defaultProfilesJSON;
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private GetDefaultValuesProfileJSON(): string {
         return this.data.defaultValuesProfileJSON;
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private GetSettingsJSON(): string {
         return this.data.settingsJSON;
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private ODMProfilesAvailable(): string[] {
         return this.data.odmProfilesAvailable;
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private ODMPowerLimitsJSON(): string {
         return this.data.odmPowerLimitsJSON;
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private GetKeyboardBacklightCapabilitiesJSON(): string {
         return this.data.keyboardBacklightCapabilitiesJSON;
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private GetKeyboardBacklightStatesJSON(): string {
         return this.data.keyboardBacklightStatesJSON;
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private SetKeyboardBacklightStatesJSON(keyboardBacklightStatesJSON: string): boolean {
         this.data.keyboardBacklightStatesNewJSON.next(keyboardBacklightStatesJSON);
         return true;
     }
+
     public ModeReapplyPendingChanged(): boolean {
         return this.data.modeReapplyPending;
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private GetFansMinSpeed(): number {
         return this.data.fansMinSpeed;
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private GetFansOffAvailable(): boolean {
         return this.data.fansOffAvailable;
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private async GetChargingProfilesAvailable(): Promise<string> {
         return JSON.stringify(await this.interfaceOptions.chargingWorker.getChargingProfilesAvailable());
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private async GetCurrentChargingProfile(): Promise<string> {
         return await this.interfaceOptions.chargingWorker.getCurrentChargingProfile();
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private async SetChargingProfile(profileDescriptor: string): Promise<boolean> {
         return await this.interfaceOptions.chargingWorker.applyChargingProfile(profileDescriptor);
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private async GetChargingPrioritiesAvailable(): Promise<string> {
         return JSON.stringify(await this.interfaceOptions.chargingWorker.getChargingPrioritiesAvailable());
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private async GetCurrentChargingPriority(): Promise<string> {
         return await this.interfaceOptions.chargingWorker.getCurrentChargingPriority();
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private async SetChargingPriority(priorityDescriptor: string): Promise<boolean> {
         return await this.interfaceOptions.chargingWorker.applyChargingPriority(priorityDescriptor);
     }
 
+    // biome-ignore lint: function is never read because of dbus
     private async GetChargeStartAvailableThresholds(): Promise<string> {
         return JSON.stringify(await this.interfaceOptions.chargingWorker.getChargeStartAvailableThresholds());
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private async GetChargeEndAvailableThresholds(): Promise<string> {
         return JSON.stringify(await this.interfaceOptions.chargingWorker.getChargeEndAvailableThresholds());
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private async GetChargeStartThreshold(): Promise<number> {
         return await this.interfaceOptions.chargingWorker.getChargeStartThreshold();
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private async GetChargeEndThreshold(): Promise<number> {
         return await this.interfaceOptions.chargingWorker.getChargeEndThreshold();
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private async SetChargeStartThreshold(value: number): Promise<boolean> {
         return await this.interfaceOptions.chargingWorker.setChargeStartThreshold(value);
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private async SetChargeEndThreshold(value: number): Promise<boolean> {
         return await this.interfaceOptions.chargingWorker.setChargeEndThreshold(value);
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private async GetChargeType(): Promise<string> {
         return await this.interfaceOptions.chargingWorker.getChargeType();
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private async SetChargeType(type: ChargeType): Promise<boolean> {
         return await this.interfaceOptions.chargingWorker.setChargeType(type);
     }
 
+    // biome-ignore lint: function is never read because of dbus
     private GetFnLockSupported(): boolean {
         return this.fnLock.getFnLockSupported();
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private GetFnLockStatus(): boolean {
         return this.fnLock.getFnLockStatus();
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private SetFnLockStatus(status: boolean): void {
         this.fnLock.setFnLockStatus(status);
     }
 
+    // biome-ignore lint: function is never read because of dbus
     private GetNVIDIAPowerCTRLDefaultPowerLimit(): number {
         return this.data.nvidiaPowerCTRLDefaultPowerLimit;
     }
 
+    // biome-ignore lint: function is never read because of dbus
     private GetNVIDIAPowerCTRLMaxPowerLimit(): number {
         return this.data.nvidiaPowerCTRLMaxPowerLimit;
     }
 
+    // biome-ignore lint: function is never read because of dbus
     private GetNVIDIAPowerCTRLAvailable(): boolean {
         return this.data.nvidiaPowerCTRLAvailable;
     }
+
+    // biome-ignore lint: function is never read because of dbus
     private GetIsUnsupportedConfigurableTGPDevice(): boolean {
         return this.data.isUnsupportedConfigurableTGPDevice;
     }
