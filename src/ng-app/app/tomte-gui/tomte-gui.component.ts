@@ -66,9 +66,6 @@ export class TomteGuiComponent implements OnInit {
 
     public ngOnInit(): void {
         this.setVariablesWithRouteSnapshot();
-    }
-
-    public ngAfterViewInit(): void {
         this.tomtelist();
     }
 
