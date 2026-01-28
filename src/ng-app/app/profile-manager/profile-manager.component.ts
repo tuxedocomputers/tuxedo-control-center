@@ -265,7 +265,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
         }
         const oldProfiles: ITccProfile[] = this.config.getCustomProfiles();
         let newProfiles: ITccProfile[] = [];
-        for (var i: number = 0; i < profiles?.length; i++) {
+        for (let i: number = 0; i < profiles?.length; i++) {
             const conflictProfileIndex: number = oldProfiles.findIndex(
                 (x: ITccProfile): boolean => x.id === profiles[i].id,
             );

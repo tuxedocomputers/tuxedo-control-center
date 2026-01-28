@@ -418,7 +418,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     private readOrCreateConfigurationFiles(device: TUXEDODevice): void {
         try {
             this.settings = this.config.readSettings();
-            var missingSetting: boolean = false;
+            let missingSetting: boolean = false;
 
             // If settings are missing, attempt to recreate default
             // TODO purge settings no longer in ITccSettings
