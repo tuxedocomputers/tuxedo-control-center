@@ -30,9 +30,9 @@ export class DriveController {
     public static async getDrives(includeLoopDevices: boolean = false): Promise<IDrive[]> {
         const drives: IDrive[] = [];
 
-        const dirs: string[] = fs.readdirSync(this._sysBlockDir);
+        const dirs: string[] = fs.readdirSync(DriveController._sysBlockDir);
         for (const d of dirs) {
-            const dr: IDrive[] = await this.getChildDevices(path.join(this._sysBlockDir, d));
+            const dr: IDrive[] = await DriveController.getChildDevices(path.join(DriveController._sysBlockDir, d));
             if (dr !== undefined) {
                 for (const drive of dr) {
                     if (!includeLoopDevices && !drive.name.startsWith('loop')) {
@@ -75,7 +75,7 @@ export class DriveController {
         const name: string = path.basename(devicePath);
         for (const f of fs.readdirSync(devicePath)) {
             if (f.startsWith(name)) {
-                childDevices.push(await this.getDeviceInfo(path.join(devicePath, f)));
+                childDevices.push(await DriveController.getDeviceInfo(path.join(devicePath, f)));
             }
         }
 

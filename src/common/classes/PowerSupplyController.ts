@@ -91,7 +91,7 @@ export class PowerSupplyController extends SysFsController {
     }
 
     public static async getFirstBattery(): Promise<PowerSupplyController> {
-        const batteries: PowerSupplyController[] = await this.getPowerSupplyBatteries();
+        const batteries: PowerSupplyController[] = await PowerSupplyController.getPowerSupplyBatteries();
         if (batteries?.length > 0) {
             return batteries[0];
         } else {

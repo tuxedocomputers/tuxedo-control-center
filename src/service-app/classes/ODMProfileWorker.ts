@@ -125,8 +125,11 @@ export class ODMProfileWorker extends DaemonWorker {
     }
 
     public static getDefaultODMPerformanceProfile(dev: TUXEDODevice): string {
-        if (this.tuxedoPlatformProfile.isAvailable() && this.tuxedoPlatformProfileChoices.isAvailable()) {
-            const availableProfiles: string[] = this.tuxedoPlatformProfileChoices.readValueNT();
+        if (
+            ODMProfileWorker.tuxedoPlatformProfile.isAvailable() &&
+            ODMProfileWorker.tuxedoPlatformProfileChoices.isAvailable()
+        ) {
+            const availableProfiles: string[] = ODMProfileWorker.tuxedoPlatformProfileChoices.readValueNT();
             if (availableProfiles !== undefined && availableProfiles?.length > 0) {
                 return availableProfiles[availableProfiles?.length - 1];
             }
@@ -135,7 +138,7 @@ export class ODMProfileWorker extends DaemonWorker {
             ODMProfileWorker.platformProfile.isAvailable() &&
             ODMProfileWorker.platformProfileChoices.isAvailable()
         ) {
-            const availableProfiles: string[] = this.platformProfileChoices.readValueNT();
+            const availableProfiles: string[] = ODMProfileWorker.platformProfileChoices.readValueNT();
             if (availableProfiles !== undefined && availableProfiles?.length > 0) {
                 return availableProfiles[availableProfiles?.length - 1];
             }
@@ -148,8 +151,11 @@ export class ODMProfileWorker extends DaemonWorker {
     }
 
     public static getAvailableODMPerformanceProfiles(dev: TUXEDODevice): string[] {
-        if (this.tuxedoPlatformProfile.isAvailable() && this.tuxedoPlatformProfileChoices.isAvailable()) {
-            const availableProfiles: string[] = this.tuxedoPlatformProfileChoices.readValueNT();
+        if (
+            ODMProfileWorker.tuxedoPlatformProfile.isAvailable() &&
+            ODMProfileWorker.tuxedoPlatformProfileChoices.isAvailable()
+        ) {
+            const availableProfiles: string[] = ODMProfileWorker.tuxedoPlatformProfileChoices.readValueNT();
             if (availableProfiles !== undefined) {
                 return availableProfiles;
             }
@@ -158,7 +164,7 @@ export class ODMProfileWorker extends DaemonWorker {
             ODMProfileWorker.platformProfile.isAvailable() &&
             ODMProfileWorker.platformProfileChoices.isAvailable()
         ) {
-            const availableProfiles: string[] = this.platformProfileChoices.readValueNT();
+            const availableProfiles: string[] = ODMProfileWorker.platformProfileChoices.readValueNT();
             if (availableProfiles !== undefined) {
                 return availableProfiles;
             }
