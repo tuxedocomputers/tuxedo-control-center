@@ -117,7 +117,7 @@ export class KeyboardBacklightComponent implements OnInit {
         hasChosenColor: boolean,
         hasNoPickerInUsage: boolean,
     ): void {
-        if (keyboardBacklightStates && keyboardBacklightStates[0]) {
+        if (keyboardBacklightStates?.[0]) {
             const { brightness, red, green, blue } = keyboardBacklightStates[0];
 
             if (hasChosenColor && hasNoPickerInUsage) {

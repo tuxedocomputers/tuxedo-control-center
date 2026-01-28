@@ -185,7 +185,7 @@ export class XDisplayRefreshRateController {
             }
             currLine = lineIter.next().value;
         }
-        while (currLine && currLine.match(fullLineRegex)) {
+        while (currLine?.match(fullLineRegex)) {
             this.createDisplayMode(currLine, resolutionRegex, freqRegex, newDisplayModes);
             currLine = lineIter.next().value;
         }

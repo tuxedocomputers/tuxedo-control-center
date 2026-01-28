@@ -152,7 +152,7 @@ export class KeyboardBacklightListener {
                                             .toString()
                                             .split(' ')
                                             .map(Number);
-                                        if (keyboardBacklightStatesNew && keyboardBacklightStatesNew[i] && colors) {
+                                        if (keyboardBacklightStatesNew?.[i] && colors) {
                                             keyboardBacklightStatesNew[i].red = colors[0];
                                             keyboardBacklightStatesNew[i].green = colors[1];
                                             keyboardBacklightStatesNew[i].blue = colors[2];
@@ -328,7 +328,7 @@ export class KeyboardBacklightListener {
             for (let i: number = 0; i < this.ledsRGBZones?.length; ++i) {
                 if (this.ledsRGBZones[i]) {
                     if (await fileOKAsync(`${this.ledsRGBZones[i]}/multi_intensity`)) {
-                        if (keyboardBacklightStatesNew && keyboardBacklightStatesNew[i]) {
+                        if (keyboardBacklightStatesNew?.[i]) {
                             const red: string = keyboardBacklightStatesNew[i].red.toString();
                             const green: string = keyboardBacklightStatesNew[i].green.toString();
                             const blue: string = keyboardBacklightStatesNew[i].blue.toString();

@@ -560,9 +560,9 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         let showAquarisMenu: boolean;
 
         const isTuxedo: boolean =
-            (boardVendor !== undefined && boardVendor.toLowerCase().includes('tuxedo')) ||
-            (chassisVendor !== undefined && chassisVendor.toLowerCase().includes('tuxedo')) ||
-            (sysVendor !== undefined && sysVendor.toLowerCase().includes('tuxedo'));
+            boardVendor?.toLowerCase().includes('tuxedo') ||
+            chassisVendor?.toLowerCase().includes('tuxedo') ||
+            sysVendor?.toLowerCase().includes('tuxedo');
 
         if (isTuxedo) {
             if (
