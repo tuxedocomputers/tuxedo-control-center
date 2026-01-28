@@ -19,21 +19,22 @@
 
 import { Injectable, type OnDestroy } from '@angular/core';
 import { BehaviorSubject, Subject } from 'rxjs';
+import type { TUXEDODevice } from '../../common/models/DefaultProfiles';
+import type { IDisplayFreqRes } from '../../common/models/DisplayFreqRes';
+import type { DbusFunctionEntry } from '../../common/models/IDbus';
 import { FanData, type IDBusFanData } from '../../common/models/IFanData';
+import type { IdGpuInfo, IiGpuInfo } from '../../common/models/TccGpuValues';
+import type { ICpuPower } from '../../common/models/TccPowerSettings';
 import type { ITccProfile, TccProfile } from '../../common/models/TccProfile';
-import { UtilsService } from './utils.service';
 import type {
     ITccSettings,
     KeyboardBacklightCapabilitiesInterface,
     KeyboardBacklightStateInterface,
 } from '../../common/models/TccSettings';
-import type { TDPInfo } from '../../native-lib/TuxedoIOAPI';
-import type { ICpuPower } from '../../common/models/TccPowerSettings';
-import type { IdGpuInfo, IiGpuInfo } from '../../common/models/TccGpuValues';
-import type { IDisplayFreqRes } from '../../common/models/DisplayFreqRes';
-import type { TUXEDODevice } from '../../common/models/DefaultProfiles';
 import type { IDbusClientAPI } from '../../e-app/preloadAPIs/DbusClientAPI';
-import type { DbusFunctionEntry } from '../../common/models/IDbus';
+import type { TDPInfo } from '../../native-lib/TuxedoIOAPI';
+// biome-ignore lint: deb does build with type, but creates constructor dependency injection error
+import { UtilsService } from './utils.service';
 
 @Injectable({
     providedIn: 'root',

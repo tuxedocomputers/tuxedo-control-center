@@ -19,7 +19,7 @@
 
 import { Injectable } from '@angular/core';
 import type { Resolve } from '@angular/router';
-import { type Observable, from } from 'rxjs';
+import { from, type Observable } from 'rxjs';
 import { filter, first } from 'rxjs/operators';
 
 @Injectable({

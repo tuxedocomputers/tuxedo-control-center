@@ -18,13 +18,16 @@
  */
 
 import { Component, type OnInit } from '@angular/core';
-import { ConfigService } from '../config.service';
-import { UtilsService } from '../utils.service';
-import { TccDBusClientService } from '../tcc-dbus-client.service';
+import { Mutex } from 'async-mutex';
 import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
+// biome-ignore lint: injection token
+import { ConfigService } from '../config.service';
 import type { ConfirmChoiceResult } from '../dialog-choice/dialog-choice.component';
-import { Mutex } from 'async-mutex';
+// biome-ignore lint: injection token
+import { TccDBusClientService } from '../tcc-dbus-client.service';
+// biome-ignore lint: injection token
+import { UtilsService } from '../utils.service';
 
 @Component({
     selector: 'app-prime-select',

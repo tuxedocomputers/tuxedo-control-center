@@ -18,11 +18,14 @@
  */
 
 import { Injectable, type OnDestroy } from '@angular/core';
-import { ProfileStates, type ITccSettings } from '../../common/models/TccSettings';
 import { type BehaviorSubject, type Observable, Subject, Subscription } from 'rxjs';
 import type { ITccProfile } from '../../common/models/TccProfile';
+import { type ITccSettings, ProfileStates } from '../../common/models/TccSettings';
+// biome-ignore lint: deb does build with type, but creates constructor dependency injection error
 import { ConfigService } from './config.service';
+// biome-ignore lint: deb does build with type, but creates constructor dependency injection error
 import { TccDBusClientService } from './tcc-dbus-client.service';
+// biome-ignore lint: deb does build with type, but creates constructor dependency injection error
 import { UtilsService } from './utils.service';
 
 export interface IStateInfo {

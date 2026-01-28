@@ -18,7 +18,9 @@
  */
 
 import { Component, type OnInit } from '@angular/core';
+// biome-ignore lint: injection token
 import { ActivatedRoute, Router } from '@angular/router';
+// biome-ignore lint: injection token
 import { CompatibilityService } from '../compatibility.service';
 
 @Component({

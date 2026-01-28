@@ -20,8 +20,9 @@
 import { Injectable } from '@angular/core';
 import type { Resolve } from '@angular/router';
 import type { Observable } from 'rxjs';
-import { TccDBusClientService } from './tcc-dbus-client.service';
 import { filter, first } from 'rxjs/operators';
+// biome-ignore lint: deb does build with type, but creates constructor dependency injection error
+import { TccDBusClientService } from './tcc-dbus-client.service';
 
 @Injectable({
     providedIn: 'root',

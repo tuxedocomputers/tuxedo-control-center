@@ -17,13 +17,15 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, type OnInit } from '@angular/core';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { UtilsService } from '../utils.service';
-import type { MatStepper } from '@angular/material/stepper';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { Component, type OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import type { MatInput } from '@angular/material/input';
+import type { MatStepper } from '@angular/material/stepper';
+// biome-ignore lint: injection token
 import { ActivatedRoute } from '@angular/router';
+// biome-ignore lint: injection token
+import { UtilsService } from '../utils.service';
 
 @Component({
     selector: 'app-support',

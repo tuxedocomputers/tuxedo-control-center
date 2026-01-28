@@ -18,14 +18,19 @@
  */
 
 import { Component, type OnDestroy, type OnInit } from '@angular/core';
-import type { ITccProfile } from '../../../common/models/TccProfile';
-import { ProfileStates } from '../../../common/models/TccSettings';
-import { CompatibilityService } from '../compatibility.service';
-import { type IStateInfo, StateService } from '../state.service';
-import { UtilsService } from '../utils.service';
+// biome-ignore lint: injection token
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
+import type { ITccProfile } from '../../../common/models/TccProfile';
+import { ProfileStates } from '../../../common/models/TccSettings';
+// biome-ignore lint: injection token
+import { CompatibilityService } from '../compatibility.service';
+// biome-ignore lint: injection token
+import { type IStateInfo, StateService } from '../state.service';
+// biome-ignore lint: injection token
 import { TccDBusClientService } from '../tcc-dbus-client.service';
+// biome-ignore lint: injection token
+import { UtilsService } from '../utils.service';
 
 @Component({
     selector: 'app-main-gui',

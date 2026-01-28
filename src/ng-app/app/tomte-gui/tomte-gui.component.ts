@@ -17,12 +17,14 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, type OnInit } from '@angular/core';
-import { UtilsService } from '../utils.service';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { Component, type OnInit } from '@angular/core';
+// biome-ignore lint: injection token
+import { ActivatedRoute } from '@angular/router';
 import type { ITomteInformation, ITomteModule } from '../../../common/models/ITomteAPI';
 import type { ConfirmDialogResult } from '../dialog-confirm/dialog-confirm.component';
-import { ActivatedRoute } from '@angular/router';
+// biome-ignore lint: injection token
+import { UtilsService } from '../utils.service';
 
 @Component({
     selector: 'app-tomte-gui',

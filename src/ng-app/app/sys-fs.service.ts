@@ -18,13 +18,13 @@
  */
 
 import { Injectable, type OnDestroy } from '@angular/core';
+import { BehaviorSubject } from 'rxjs';
 import type {
+    IDisplayBrightnessInfo,
     IGeneralCPUInfo,
     ILogicalCoreInfo,
     IPstateInfo,
-    IDisplayBrightnessInfo,
 } from '../../common/models/ICpuInfos';
-import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
     providedIn: 'root',

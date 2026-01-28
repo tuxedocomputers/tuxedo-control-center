@@ -18,6 +18,7 @@
  */
 
 import { Component, type OnInit } from '@angular/core';
+// biome-ignore lint: injection token
 import { UtilsService } from '../utils.service';
 
 @Component({

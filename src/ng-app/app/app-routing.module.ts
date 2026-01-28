@@ -18,29 +18,10 @@
  */
 
 import { NgModule } from '@angular/core';
-import { type Routes, RouterModule } from '@angular/router';
-
-import { LoaderResolver } from './loader.resolver';
-import {
-    ChargingProfilesAvailableResolver,
-    ForceYUV420OutputSwitchResolver,
-    PrimeSelectAvailableResolver,
-} from './settings.resolver';
-
-import { ProfileManagerComponent } from './profile-manager/profile-manager.component';
-import { SupportComponent } from './support/support.component';
-import { InfoComponent } from './info/info.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
-import { KeyboardBacklightComponent } from './keyboard-backlight/keyboard-backlight.component';
-import { ToolsComponent } from './tools/tool.component';
-import { GlobalSettingsComponent } from './global-settings/global-settings.component';
-import { MainGuiComponent } from './main-gui/main-gui.component';
+import { RouterModule, type Routes } from '@angular/router';
+import { AptInstalledResolver } from './apt.resolver';
 import { AquarisControlComponent } from './aquaris-control/aquaris-control.component';
-import { WebcamSettingsComponent } from './webcam-settings/webcam-settings.component';
-import { WebcamPreviewComponent } from './webcam-preview/webcam-preview.component';
-import { WebcamSettingsGuard } from './webcam.guard';
-import { TomteGuiComponent } from './tomte-gui/tomte-gui.component';
-import { PrimeDialogComponent } from './prime-dialog/prime-dialog.component';
+import { DashboardComponent } from './dashboard/dashboard.component';
 import {
     AmdGpuCountResolver,
     CpuVendorResolver,
@@ -48,10 +29,27 @@ import {
     IGpuStatusResolver,
     PowerStateStatusResolver,
 } from './dashboard.resolver';
-import { X11StatusResolver } from './x11.resolver';
-import { AptInstalledResolver } from './apt.resolver';
+import { GlobalSettingsComponent } from './global-settings/global-settings.component';
+import { InfoComponent } from './info/info.component';
+import { KeyboardBacklightComponent } from './keyboard-backlight/keyboard-backlight.component';
+import { LoaderResolver } from './loader.resolver';
+import { MainGuiComponent } from './main-gui/main-gui.component';
+import { PrimeDialogComponent } from './prime-dialog/prime-dialog.component';
+import { ProfileManagerComponent } from './profile-manager/profile-manager.component';
+import {
+    ChargingProfilesAvailableResolver,
+    ForceYUV420OutputSwitchResolver,
+    PrimeSelectAvailableResolver,
+} from './settings.resolver';
+import { SupportComponent } from './support/support.component';
 import { TomteInstalledResolver } from './tomte.resolver';
+import { TomteGuiComponent } from './tomte-gui/tomte-gui.component';
+import { ToolsComponent } from './tools/tool.component';
+import { WebcamSettingsGuard } from './webcam.guard';
+import { WebcamPreviewComponent } from './webcam-preview/webcam-preview.component';
+import { WebcamSettingsComponent } from './webcam-settings/webcam-settings.component';
 import { WebfaiCreatorInstalledResolver } from './webfaiCreator.resolver';
+import { X11StatusResolver } from './x11.resolver';
 
 const routes: Routes = [
     { path: '', redirectTo: '/main-gui/cpu-dashboard', pathMatch: 'full' },
