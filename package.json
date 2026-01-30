@@ -36,7 +36,7 @@
         "esbuild-service-debug": "run-s copy-native-lib-debug && esbuild ./dist/tuxedo-control-center/service-app/service-app/main.js --tree-shaking=true --bundle --define:DEBUG=true --platform=node --loader:.node=copy --asset-names=[name] --outfile=./dist/tuxedo-control-center/service-app/service-app/esbuild.js",
         "copy-files": "run-s copy-package-json copy-dist-files copy-cameractls copy-udev-rule",
         "copy-package-json": "cp ./src/package.json ./dist/tuxedo-control-center/package.json",
-        "copy-dist-files": "cp -r ./src/dist-data ./dist/tuxedo-control-center/data && mkdir -p ./usr/share/metainfo && cp ./src/dist-data/com.tuxedocomputers.tcc.metainfo.xml ./usr/share/metainfo",
+        "copy-dist-files": "cp -r ./src/dist-data ./dist/tuxedo-control-center/data",
         "copy-changelog": "cp CHANGELOG.md ./src/ng-app/assets/",
         "copy-cameractls": "mkdir -p ./dist/tuxedo-control-center/data/camera && cp ./src/cameractrls/cameractrls.py ./src/cameractrls/v4l2_kernel_names.json ./dist/tuxedo-control-center/data/camera",
         "copy-udev-rule": "cp ./src/udev/99-webcam.rules ./dist/tuxedo-control-center/data/dist-data",
