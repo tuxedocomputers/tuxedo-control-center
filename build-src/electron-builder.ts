@@ -26,6 +26,19 @@ const buildSteps: Array<(filenameAddition: string) => Promise<void>> = [];
 
 const distSrc = './dist/tuxedo-control-center';
 
+const linuxDesktopFile = {
+    entry: {
+        Name: 'TUXEDO Control Center',
+        Comment: 'An application helping you to tune your TUXEDO',
+        Terminal: 'false',
+        Type: 'Application',
+        Icon: '/opt/tuxedo-control-center/resources/dist/tuxedo-control-center/data/dist-data/tuxedo-control-center_256.svg',
+        StartupWMClass: 'tuxedo-control-center',
+        Categories: 'System;TUXEDO;',
+        Keywords: 'TCC',
+    },
+};
+
 /**
  * Parse command line parameter and set up the build
  */
@@ -77,7 +90,6 @@ async function buildDeb(filenameAddition: string): Promise<void> {
             `${distSrc}/data/dist-data/tccd.service`,
             `${distSrc}/data/dist-data/tccd-sleep.service`,
             `${distSrc}/data/dist-data/tuxedo-control-center_256.svg`,
-            `${distSrc}/data/dist-data/tuxedo-control-center.desktop`,
             `${distSrc}/data/dist-data/tuxedo-control-center-tray.desktop`,
             `${distSrc}/data/dist-data/com.tuxedocomputers.tccd.policy`,
             `${distSrc}/data/dist-data/com.tuxedocomputers.tccd.conf`,
@@ -90,6 +102,7 @@ async function buildDeb(filenameAddition: string): Promise<void> {
             target: ['deb'],
             category: 'System',
             icon: `${distSrc}/data/dist-data/tuxedo-control-center_256.svg`,
+            desktop: linuxDesktopFile,
         },
         deb: {
             compression: 'xz',
@@ -141,7 +154,6 @@ async function buildRpm(filenameAddition: string): Promise<void> {
             `${distSrc}/data/dist-data/tccd.service`,
             `${distSrc}/data/dist-data/tccd-sleep.service`,
             `${distSrc}/data/dist-data/tuxedo-control-center_256.svg`,
-            `${distSrc}/data/dist-data/tuxedo-control-center.desktop`,
             `${distSrc}/data/dist-data/tuxedo-control-center-tray.desktop`,
             `${distSrc}/data/dist-data/com.tuxedocomputers.tccd.policy`,
             `${distSrc}/data/dist-data/com.tuxedocomputers.tccd.conf`,
@@ -153,6 +165,7 @@ async function buildRpm(filenameAddition: string): Promise<void> {
             target: ['rpm'],
             category: 'System',
             icon: `${distSrc}/data/dist-data/tuxedo-control-center_256.svg`,
+            desktop: linuxDesktopFile,
         },
         rpm: {
             compression: 'xz',

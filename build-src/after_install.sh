@@ -6,9 +6,6 @@ systemctl disable tuxedofancontrol > /dev/null 2>&1 || true
 
 DIST_DATA=/opt/tuxedo-control-center/resources/dist/tuxedo-control-center/data/dist-data
 
-rm /usr/share/applications/tuxedo-control-center.desktop || true
-cp ${DIST_DATA}/tuxedo-control-center.desktop /usr/share/applications/tuxedo-control-center.desktop || true
-
 mkdir -p /etc/skel/.config/autostart || true
 cp ${DIST_DATA}/tuxedo-control-center-tray.desktop /etc/skel/.config/autostart/tuxedo-control-center-tray.desktop || true
 
