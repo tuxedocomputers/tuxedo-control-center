@@ -125,7 +125,7 @@ export async function createPrimeWindow(langId: string, primeSelectMode: string)
     });
 
     // Workaround to set window title
-    primeWindow.on('page-title-updated', function (event: Event): void {
+    primeWindow.on('page-title-updated', (event: Event): void => {
         event.preventDefault();
     });
 
@@ -143,7 +143,7 @@ export async function createPrimeWindow(langId: string, primeSelectMode: string)
         primeWindow.webContents.send('set-prime-select-mode', primeSelectMode);
     });
 
-    primeWindow.on('close', async function (): Promise<void> {
+    primeWindow.on('close', async (): Promise<void> => {
         primeWindow = null;
     });
 }
@@ -186,7 +186,7 @@ async function createTccWindow(langId: string, module?: string): Promise<void> {
         tccWindow = null;
     });
 
-    tccWindow.on('close', async function (_event: Event): Promise<void> {
+    tccWindow.on('close', async (_event: Event): Promise<void> => {
         await tccDBus.setSensorDataCollectionStatus(false);
 
         let collectionStatus: boolean = undefined;
@@ -237,7 +237,7 @@ export async function createWebcamPreview(langId: string, arg: WebcamConstraints
     });
 
     // Workaround to set window title
-    webcamWindow.on('page-title-updated', function (event: Event): void {
+    webcamWindow.on('page-title-updated', (event: Event): void => {
         event.preventDefault();
     });
 
@@ -254,7 +254,7 @@ export async function createWebcamPreview(langId: string, arg: WebcamConstraints
         webcamWindow.webContents.send('setting-webcam-with-loading', arg);
     });
 
-    webcamWindow.on('close', function (): void {
+    webcamWindow.on('close', (): void => {
         tccWindow.webContents.send('external-webcam-preview-closed');
         webcamWindow = null;
     });
