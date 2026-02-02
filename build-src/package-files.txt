@@ -1,2 +1,5 @@
 src/dist-data/com.tuxedocomputers.tcc.metainfo.xml=/usr/share/metainfo/com.tuxedocomputers.tcc.metainfo.xml
 src/dist-data/tuxedo-control-center-tray.desktop=/etc/skel/.config/autostart/tuxedo-control-center-tray.desktop
+src/dist-data/com.tuxedocomputers.tccd.policy=/usr/share/polkit-1/actions/com.tuxedocomputers.tccd.policy
+src/dist-data/com.tuxedocomputers.tomte.policy=/usr/share/polkit-1/actions/com.tuxedocomputers.tomte.policy
+src/dist-data/com.tuxedocomputers.tccd.conf=/usr/share/dbus-1/system.d/com.tuxedocomputers.tccd.conf
