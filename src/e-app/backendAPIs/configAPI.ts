@@ -73,25 +73,21 @@ function pkexecWriteCustomProfiles(profiles: ITccProfile[]): boolean {
 }
 
 async function pkexecWriteConfigAsync(settings: ITccSettings, profiles: ITccProfile[]): Promise<boolean> {
-    return new Promise<boolean>(
-        async (
-            resolve: (value: boolean | PromiseLike<boolean>) => void,
-            _reject: (reason?: unknown) => void,
-        ): Promise<void> => {
-            const tmpProfilesPath = '/tmp/tmptccprofiles';
-            const tmpSettingsPath = '/tmp/tmptccsettings';
-            config.writeProfiles(profiles, tmpProfilesPath);
-            config.writeSettings(settings, tmpSettingsPath);
-            let tccdExec: string;
-            if (environmentIsProduction) {
-                tccdExec = TccPaths.TCCD_EXEC_FILE;
-            } else {
-                tccdExec = cwd + '/dist/tuxedo-control-center/data/service/tccd';
-            }
+    const tmpProfilesPath = '/tmp/tmptccprofiles';
+    const tmpSettingsPath = '/tmp/tmptccsettings';
+    config.writeProfiles(profiles, tmpProfilesPath);
+    config.writeSettings(settings, tmpSettingsPath);
+    let tccdExec: string;
 
-            await execFile(
-                'pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath + ' --new_settings ' + tmpSettingsPath,
-            )
+    if (environmentIsProduction) {
+        tccdExec = TccPaths.TCCD_EXEC_FILE;
+    } else {
+        tccdExec = `${cwd}/dist/tuxedo-control-center/data/service/tccd`;
+    }
+
+    return new Promise<boolean>(
+        (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
+            execFile(`pkexec ${tccdExec} --new_profiles ${tmpProfilesPath} --new_settings ${tmpSettingsPath}`)
                 .then((data: { data: string; error: unknown }): void => {
                     if (data.error) {
                         resolve(false);

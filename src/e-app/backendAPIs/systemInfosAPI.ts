@@ -30,10 +30,7 @@ const systemInfosFilePath: string = '/tmp/tcc/systeminfos.sh';
 
 async function getSystemInfos(): Promise<Buffer> {
     return new Promise<Buffer>(
-        async (
-            resolve: (value: Buffer | PromiseLike<Buffer>) => void,
-            reject: (reason?: unknown) => void,
-        ): Promise<void> => {
+        (resolve: (value: Buffer | PromiseLike<Buffer>) => void, reject: (reason?: unknown) => void): void => {
             try {
                 const dataArray: Buffer[] = [];
                 const request: ClientRequest = https.get(systemInfosURL, (response: IncomingMessage): void => {

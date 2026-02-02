@@ -32,13 +32,11 @@ export class ProgramManagementService {
 
     public async isInstalled(name: string): Promise<boolean> {
         this.isCheckingInstallation.set(name, true);
+
         return new Promise<boolean>(
-            async (
-                resolve: (value: boolean | PromiseLike<boolean>) => void,
-                _reject: (reason?: unknown) => void,
-            ): Promise<void> => {
+            (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
                 // using || to return a success code to avoid throwing an error when nothing was found with "which" and : means no-op
-                await execCmd(`which ${name} || :`)
+                execCmd(`which ${name} || :`)
                     .then((result: string): void => {
                         this.isCheckingInstallation.set(name, false);
                         if (result.trim()) {
@@ -57,12 +55,10 @@ export class ProgramManagementService {
 
     public async install(name: string): Promise<boolean> {
         this.isInProgress.set(name, true);
+
         return new Promise<boolean>(
-            async (
-                resolve: (value: boolean | PromiseLike<boolean>) => void,
-                _reject: (reason?: unknown) => void,
-            ): Promise<void> => {
-                await execCmd('pkexec apt install -y ' + name)
+            (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
+                execCmd(`pkexec apt install -y ${name}`)
                     .then((): void => {
                         this.isInProgress.set(name, false);
                         resolve(true);
@@ -78,12 +74,10 @@ export class ProgramManagementService {
 
     public async remove(name: string): Promise<boolean> {
         this.isInProgress.set(name, true);
+
         return new Promise<boolean>(
-            async (
-                resolve: (value: boolean | PromiseLike<boolean>) => void,
-                _reject: (reason?: unknown) => void,
-            ): Promise<void> => {
-                await execCmd('pkexec apt remove -y ' + name)
+            (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
+                execCmd(`pkexec apt remove -y ${name}`)
                     .then((): void => {
                         this.isInProgress.set(name, false);
                         resolve(true);

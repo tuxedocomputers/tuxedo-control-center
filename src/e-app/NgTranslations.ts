@@ -81,22 +81,22 @@ export class NgTranslations {
     }
 
     private loadFile(fileName: string, target?: string): Promise<Map<string, string>> {
+        const xlfPath: string = path.join(
+            __dirname,
+            '..',
+            '..',
+            'ng-app',
+            'browser',
+            'en-US',
+            'assets',
+            'locale',
+            fileName,
+        );
         return new Promise<Map<string, string>>(
-            async (
+            (
                 resolve: (value: Map<string, string> | PromiseLike<Map<string, string>>) => void,
                 reject: (reason?: unknown) => void,
-            ): Promise<void> => {
-                const xlfPath: string = path.join(
-                    __dirname,
-                    '..',
-                    '..',
-                    'ng-app',
-                    'browser',
-                    'en-US',
-                    'assets',
-                    'locale',
-                    fileName,
-                );
+            ): void => {
                 fs.readFile(xlfPath, (err: unknown, xmlBuffer: Buffer): void => {
                     if (err) {
                         reject(`NgTranslations: loadFile readFile failed => ${err}`);

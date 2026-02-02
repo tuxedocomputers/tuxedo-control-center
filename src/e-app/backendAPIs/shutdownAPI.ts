@@ -26,11 +26,8 @@ ipcMain.handle(
     'set-shutdown-time',
     async (_event: IpcMainInvokeEvent, selectedHour: number, selectedMinute: number): Promise<string> => {
         return new Promise<string>(
-            async (
-                resolve: (value: string | PromiseLike<string>) => void,
-                reject: (reason?: unknown) => void,
-            ): Promise<void> => {
-                await execCmd(`pkexec shutdown -h ${selectedHour}:${selectedMinute}`)
+            (resolve: (value: string | PromiseLike<string>) => void, _reject: (reason?: unknown) => void): void => {
+                execCmd(`pkexec shutdown -h ${selectedHour}:${selectedMinute}`)
                     .then((results: string) => {
                         resolve(results);
                     })
@@ -44,11 +41,8 @@ ipcMain.handle(
 
 ipcMain.handle('cancel-shutdown', async (_event: IpcMainInvokeEvent): Promise<string> => {
     return new Promise<string>(
-        async (
-            resolve: (value: string | PromiseLike<string>) => void,
-            reject: (reason?: unknown) => void,
-        ): Promise<void> => {
-            await execCmd('pkexec shutdown -c')
+        (resolve: (value: string | PromiseLike<string>) => void, _reject: (reason?: unknown) => void): void => {
+            execCmd('pkexec shutdown -c')
                 .then((results: string): void => {
                     resolve(results);
                 })
@@ -61,13 +55,10 @@ ipcMain.handle('cancel-shutdown', async (_event: IpcMainInvokeEvent): Promise<st
 
 ipcMain.handle('get-scheduled-shutdown', async (_event: IpcMainInvokeEvent): Promise<string> => {
     return new Promise<string>(
-        async (
-            resolve: (value: string | PromiseLike<string>) => void,
-            reject: (reason?: unknown) => void,
-        ): Promise<void> => {
+        (resolve: (value: string | PromiseLike<string>) => void, _reject: (reason?: unknown) => void): void => {
             const available: boolean = fs.existsSync('/run/systemd/shutdown/scheduled');
             if (available) {
-                await execCmd('cat /run/systemd/shutdown/scheduled')
+                execCmd('cat /run/systemd/shutdown/scheduled')
                     .then((results: string): void => {
                         resolve(results);
                     })
@@ -84,11 +75,8 @@ ipcMain.handle('get-scheduled-shutdown', async (_event: IpcMainInvokeEvent): Pro
 
 ipcMain.handle('issue-reboot', async (_event: IpcMainInvokeEvent): Promise<string> => {
     return new Promise<string>(
-        async (
-            resolve: (value: string | PromiseLike<string>) => void,
-            reject: (reason?: unknown) => void,
-        ): Promise<void> => {
-            await execCmd('reboot')
+        (resolve: (value: string | PromiseLike<string>) => void, _reject: (reason?: unknown) => void): void => {
+            execCmd('reboot')
                 .then((results: string): void => {
                     resolve(results);
                 })

@@ -82,22 +82,15 @@ export class SysFsService implements OnDestroy {
     }
 
     public async getPstateInfo(): Promise<IPstateInfo> {
-        return new Promise<IPstateInfo>(
-            async (
-                resolve: (value: IPstateInfo | PromiseLike<IPstateInfo>) => void,
-                reject: (reason?: unknown) => void,
-            ): Promise<void> => {
-                try {
-                    const pstateInfo: IPstateInfo = {
-                        noTurbo: await window.cpu.getIntelPstateTurboValueAsync(),
-                    };
-                    resolve(pstateInfo);
-                } catch (err: unknown) {
-                    console.error(`sys-fs.service: getPstateInfo failed => ${err}`);
-                    reject(err);
-                }
-            },
-        );
+        try {
+            const pstateInfo: IPstateInfo = {
+                noTurbo: await window.cpu.getIntelPstateTurboValueAsync(),
+            };
+            return pstateInfo;
+        } catch (err: unknown) {
+            console.error(`sys-fs.service: getPstateInfo failed => ${err}`);
+            return undefined;
+        }
     }
 
     public getDisplayBrightnessInfo(): IDisplayBrightnessInfo[] {
