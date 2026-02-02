@@ -14,8 +14,5 @@ if [ "$1" = "remove" ] || [ "$1" = "purge" ] || [ "$1" = "0" ]; then
     rm -rf /etc/tcc/ || true
 fi
 
-# remove udev rule
-rm /etc/udev/rules.d/99-webcam.rules || true
-
 # Delete the link to the binary
 rm -f '/usr/bin/tuxedo-control-center'

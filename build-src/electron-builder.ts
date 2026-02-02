@@ -92,7 +92,6 @@ async function buildDeb(filenameAddition: string): Promise<void> {
             `${distSrc}/data/dist-data/tuxedo-control-center_256.svg`,
             `${distSrc}/data/dist-data/tuxedo-control-center-tray.desktop`,
             `${distSrc}/data/camera/cameractrls.py`,
-            `${distSrc}/data/dist-data/99-webcam.rules`,
             `${distSrc}/data/camera/v4l2_kernel_names.json`,
         ],
         linux: {
@@ -154,7 +153,6 @@ async function buildRpm(filenameAddition: string): Promise<void> {
             `${distSrc}/data/dist-data/tuxedo-control-center-tray.desktop`,
             `${distSrc}/data/camera/cameractrls.py`,
             `${distSrc}/data/camera/v4l2_kernel_names.json`,
-            `${distSrc}/data/dist-data/99-webcam.rules`,
         ],
         linux: {
             target: ['rpm'],

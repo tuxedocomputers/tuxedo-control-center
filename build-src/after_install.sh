@@ -14,7 +14,6 @@ systemctl enable tccd tccd-sleep
 systemctl restart tccd
 
 # set up udev rules
-mv ${DIST_DATA}/99-webcam.rules /etc/udev/rules.d/99-webcam.rules
 udevadm control --reload-rules && udevadm trigger
 
 # ---
