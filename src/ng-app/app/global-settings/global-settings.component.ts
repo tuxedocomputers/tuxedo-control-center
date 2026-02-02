@@ -23,7 +23,7 @@ import type { MatCheckboxChange } from '@angular/material/checkbox';
 // biome-ignore lint: injection token
 import { ActivatedRoute, Router } from '@angular/router';
 import { Mutex } from 'async-mutex';
-import { filter, firstValueFrom, Subscription } from 'rxjs';
+import { firstValueFrom, Subscription } from 'rxjs';
 import { GridParamsSettings, type IGridParams } from '../../../common/models/IGridParams';
 import type { BrightnessModeString } from '../../../e-app/backendAPIs/brightnessAPI';
 // biome-ignore lint: injection token

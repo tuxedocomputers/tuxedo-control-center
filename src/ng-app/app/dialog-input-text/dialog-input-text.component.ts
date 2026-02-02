@@ -18,6 +18,7 @@
  */
 
 import { Component, inject } from '@angular/core';
+// biome-ignore lint: injection token
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 export interface InputDialogData {

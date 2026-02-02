@@ -17,8 +17,9 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, type OnInit, type OnDestroy } from '@angular/core';
+import { Component, type OnDestroy, type OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+// biome-ignore lint: injection token
 import { UtilsService } from './utils.service';
 
 @Component({
