@@ -22,7 +22,7 @@ import type * as fs from 'node:fs';
 import { OverlayContainer } from '@angular/cdk/overlay';
 // biome-ignore lint: deb does build with type, but creates constructor dependency injection error
 import { DecimalPipe } from '@angular/common';
-import { Inject, Injectable, LOCALE_ID } from '@angular/core';
+import { Injectable, inject, LOCALE_ID } from '@angular/core';
 // biome-ignore lint: deb does build with type, but creates constructor dependency injection error
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import type { OpenDialogReturnValue, SaveDialogReturnValue } from 'electron';
@@ -85,9 +85,8 @@ export class UtilsService {
         private decimalPipe: DecimalPipe,
         public overlayContainer: OverlayContainer,
         public dialog: MatDialog,
-        @Inject(LOCALE_ID) localeId: string,
     ) {
-        this.localeId = localeId;
+        this.localeId = inject(LOCALE_ID);
         this.languageMap = new Map();
         for (const lang of this.getLanguagesMenuArray()) {
             this.languageMap[lang.id] = lang;

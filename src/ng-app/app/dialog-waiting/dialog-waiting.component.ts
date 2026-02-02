@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormControl } from '@angular/forms';
 // biome-ignore lint: injection token
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -31,11 +31,11 @@ import type { DialogChoiceComponent, WaitingDialogData } from '../dialog-choice/
 })
 export class DialogWaitingComponent {
     public ctrlCheckboxNoBother: FormControl;
+    public data: WaitingDialogData;
 
-    constructor(
-        public dialogRef: MatDialogRef<DialogChoiceComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: WaitingDialogData,
-    ) {
+    constructor(public dialogRef: MatDialogRef<DialogChoiceComponent>) {
+        this.data = inject(MAT_DIALOG_DATA);
+
         this.ctrlCheckboxNoBother = new FormControl(false);
     }
 }

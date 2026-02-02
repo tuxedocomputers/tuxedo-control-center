@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormControl } from '@angular/forms';
 // biome-ignore lint: injection token
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -47,17 +47,18 @@ export interface ConfirmDialogResult {
 })
 export class DialogConfirmComponent {
     public ctrlCheckboxNoBother: FormControl;
+    public data: ConfirmDialogData;
 
-    constructor(
-        public dialogRef: MatDialogRef<DialogConfirmComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: ConfirmDialogData,
-    ) {
-        if (data.checkboxNoBotherLabel === undefined) {
-            data.checkboxNoBotherLabel = '';
+    constructor(public dialogRef: MatDialogRef<DialogConfirmComponent>) {
+        this.data = inject(MAT_DIALOG_DATA);
+
+        if (this.data.checkboxNoBotherLabel === undefined) {
+            this.data.checkboxNoBotherLabel = '';
         }
-        if (data.showCheckboxNoBother === undefined) {
-            data.showCheckboxNoBother = false;
+        if (this.data.showCheckboxNoBother === undefined) {
+            this.data.showCheckboxNoBother = false;
         }
+
         this.ctrlCheckboxNoBother = new FormControl(false);
     }
 

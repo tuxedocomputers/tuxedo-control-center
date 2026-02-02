@@ -17,8 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, Inject } from '@angular/core';
-// biome-ignore lint: injection token
+import { Component, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 export interface InputDialogData {
@@ -37,10 +36,11 @@ export interface InputDialogData {
     standalone: false,
 })
 export class DialogInputTextComponent {
-    constructor(
-        public dialogRef: MatDialogRef<DialogInputTextComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: InputDialogData,
-    ) {}
+    public data: InputDialogData;
+
+    constructor(public dialogRef: MatDialogRef<DialogInputTextComponent>) {
+        this.data = inject(MAT_DIALOG_DATA);
+    }
 
     public closeDialog(result?: string): void {
         this.dialogRef.close(result);

@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, HostListener, Inject, type OnDestroy, type OnInit } from '@angular/core';
+import { Component, HostListener, inject, type OnDestroy, type OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 // biome-ignore lint: injection token
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -52,17 +52,20 @@ export class ProfileConflictComponent implements OnInit, OnDestroy {
 
     public cpuInfo: IGeneralCPUInfo;
     private subscriptions: Subscription = new Subscription();
+
+    public data: {
+        oldProfile: ITccProfile;
+        newProfile: ITccProfile;
+    };
+
     constructor(
-        @Inject(MAT_DIALOG_DATA)
-        public data: {
-            oldProfile: ITccProfile;
-            newProfile: ITccProfile;
-        },
         private mdDialogRef: MatDialogRef<ProfileConflictComponent>,
         public compat: CompatibilityService,
         private utils: UtilsService,
         private sysfs: SysFsService,
     ) {
+        this.data = inject(MAT_DIALOG_DATA);
+
         mdDialogRef.disableClose = true;
     }
 
