@@ -1,1 +1,2 @@
 src/dist-data/com.tuxedocomputers.tcc.metainfo.xml=/usr/share/metainfo/com.tuxedocomputers.tcc.metainfo.xml
+src/dist-data/tuxedo-control-center-tray.desktop=/etc/skel/.config/autostart/tuxedo-control-center-tray.desktop
