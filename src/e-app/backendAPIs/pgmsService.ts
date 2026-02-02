@@ -35,7 +35,7 @@ export class ProgramManagementService {
         return new Promise<boolean>(
             async (
                 resolve: (value: boolean | PromiseLike<boolean>) => void,
-                reject: (reason?: unknown) => void,
+                _reject: (reason?: unknown) => void,
             ): Promise<void> => {
                 // using || to return a success code to avoid throwing an error when nothing was found with "which" and : means no-op
                 await execCmd(`which ${name} || :`)
@@ -60,7 +60,7 @@ export class ProgramManagementService {
         return new Promise<boolean>(
             async (
                 resolve: (value: boolean | PromiseLike<boolean>) => void,
-                reject: (reason?: unknown) => void,
+                _reject: (reason?: unknown) => void,
             ): Promise<void> => {
                 await execCmd('pkexec apt install -y ' + name)
                     .then((): void => {
@@ -81,7 +81,7 @@ export class ProgramManagementService {
         return new Promise<boolean>(
             async (
                 resolve: (value: boolean | PromiseLike<boolean>) => void,
-                reject: (reason?: unknown) => void,
+                _reject: (reason?: unknown) => void,
             ): Promise<void> => {
                 await execCmd('pkexec apt remove -y ' + name)
                     .then((): void => {
@@ -98,7 +98,7 @@ export class ProgramManagementService {
     }
 
     public run(name: string): void {
-        child_process.spawn(name, { detached: true, stdio: 'ignore' }).on('error', (err: Error): void => {
+        child_process.spawn(name, { detached: true, stdio: 'ignore' }).on('error', (_err: Error): void => {
             console.log(`"${name}" could not be executed.`);
             dialog.showMessageBox({ title: 'Notice', buttons: ['OK'], message: `"${name}" could not be executed.` });
         });

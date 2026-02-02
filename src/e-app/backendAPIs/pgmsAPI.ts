@@ -26,95 +26,95 @@ const aptName = 'apt';
 const tomteName = 'tuxedo-tomte';
 const webfaiCreatorProgramName = 'tuxedo-webfai-creator';
 
-ipcMain.handle('pgms-is-in-progress', (event: IpcMainInvokeEvent): Promise<Map<string, boolean>> => {
+ipcMain.handle('pgms-is-in-progress', (_event: IpcMainInvokeEvent): Promise<Map<string, boolean>> => {
     return new Promise<Map<string, boolean>>(
         (
             resolve: (value: Map<string, boolean> | PromiseLike<Map<string, boolean>>) => void,
-            reject: (reason?: unknown) => void,
+            _reject: (reason?: unknown) => void,
         ): void => {
             resolve(pgms.isInProgress);
         },
     );
 });
 
-ipcMain.handle('pgms-apt-installed', (event: IpcMainInvokeEvent): Promise<boolean> => {
+ipcMain.handle('pgms-apt-installed', (_event: IpcMainInvokeEvent): Promise<boolean> => {
     return new Promise<boolean>(
-        (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+        (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
             resolve(pgms.isInstalled(aptName));
         },
     );
 });
 
-ipcMain.handle('pgms-is-checking-installation', (event: IpcMainInvokeEvent): Promise<Map<string, boolean>> => {
+ipcMain.handle('pgms-is-checking-installation', (_event: IpcMainInvokeEvent): Promise<Map<string, boolean>> => {
     return new Promise<Map<string, boolean>>(
         (
             resolve: (value: Map<string, boolean> | PromiseLike<Map<string, boolean>>) => void,
-            reject: (reason?: unknown) => void,
+            _reject: (reason?: unknown) => void,
         ): void => {
             resolve(pgms.isCheckingInstallation);
         },
     );
 });
 
-ipcMain.handle('pgms-tomte-installed', (event: IpcMainInvokeEvent): Promise<boolean> => {
+ipcMain.handle('pgms-tomte-installed', (_event: IpcMainInvokeEvent): Promise<boolean> => {
     return new Promise<boolean>(
-        (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+        (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
             resolve(pgms.isInstalled(tomteName));
         },
     );
 });
 
-ipcMain.handle('pgms-install-tomte', (event: IpcMainInvokeEvent): Promise<boolean> => {
+ipcMain.handle('pgms-install-tomte', (_event: IpcMainInvokeEvent): Promise<boolean> => {
     return new Promise<boolean>(
-        (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+        (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
             resolve(pgms.install(tomteName));
         },
     );
 });
 
-ipcMain.handle('pgms-uninstall-tomte', (event: IpcMainInvokeEvent): Promise<boolean> => {
+ipcMain.handle('pgms-uninstall-tomte', (_event: IpcMainInvokeEvent): Promise<boolean> => {
     return new Promise<boolean>(
-        (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+        (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
             resolve(pgms.remove(tomteName));
         },
     );
 });
 
-ipcMain.handle('pgms-start-tomte', (event: IpcMainInvokeEvent): Promise<void> => {
+ipcMain.handle('pgms-start-tomte', (_event: IpcMainInvokeEvent): Promise<void> => {
     return new Promise<void>(
-        (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): void => {
+        (resolve: (value: void | PromiseLike<void>) => void, _reject: (reason?: unknown) => void): void => {
             resolve(pgms.run(tomteName));
         },
     );
 });
 
-ipcMain.handle('pgms-webfai-creator-installed', (event: IpcMainInvokeEvent): Promise<boolean> => {
+ipcMain.handle('pgms-webfai-creator-installed', (_event: IpcMainInvokeEvent): Promise<boolean> => {
     return new Promise<boolean>(
-        (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+        (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
             resolve(pgms.isInstalled(webfaiCreatorProgramName));
         },
     );
 });
 
-ipcMain.handle('pgms-install-webfai-creator', (event: IpcMainInvokeEvent): Promise<boolean> => {
+ipcMain.handle('pgms-install-webfai-creator', (_event: IpcMainInvokeEvent): Promise<boolean> => {
     return new Promise<boolean>(
-        (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+        (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
             resolve(pgms.install(webfaiCreatorProgramName));
         },
     );
 });
 
-ipcMain.handle('pgms-uninstall-webfai-creator', (event: IpcMainInvokeEvent): Promise<boolean> => {
+ipcMain.handle('pgms-uninstall-webfai-creator', (_event: IpcMainInvokeEvent): Promise<boolean> => {
     return new Promise<boolean>(
-        (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+        (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
             resolve(pgms.remove(webfaiCreatorProgramName));
         },
     );
 });
 
-ipcMain.handle('pgms-start-webfai-creator', (event: IpcMainInvokeEvent): Promise<void> => {
+ipcMain.handle('pgms-start-webfai-creator', (_event: IpcMainInvokeEvent): Promise<void> => {
     return new Promise<void>(
-        (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): void => {
+        (resolve: (value: void | PromiseLike<void>) => void, _reject: (reason?: unknown) => void): void => {
             resolve(pgms.run(webfaiCreatorProgramName));
         },
     );

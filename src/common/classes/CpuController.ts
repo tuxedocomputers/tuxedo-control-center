@@ -326,7 +326,7 @@ export class CpuController {
             if (core.energyPerformanceAvailablePreferences.readValue().includes(performancePreference)) {
                 try {
                     core.energyPerformancePreference.writeValue(performancePreference);
-                } catch (err: unknown) {
+                } catch (_err: unknown) {
                     console.error(
                         `CpuController: setEnergyPerformancePreference: ${performancePreference} is not supported.`,
                     );

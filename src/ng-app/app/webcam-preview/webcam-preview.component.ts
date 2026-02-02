@@ -38,7 +38,7 @@ export class WebcamPreviewComponent implements OnInit {
 
     public async ngOnInit(): Promise<void> {
         window.webcam.onSettingWebcamWithLoading(
-            async (event: IpcRendererEvent, config: WebcamConstraints): Promise<void> => {
+            async (_event: IpcRendererEvent, config: WebcamConstraints): Promise<void> => {
                 this.spinnerActive = true;
                 this.cdRef.detectChanges();
                 document.getElementById('video').style.visibility = 'hidden';

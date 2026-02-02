@@ -131,6 +131,6 @@ async function runSystemInfos(ticketNumber: string): Promise<void> {
     );
 }
 
-ipcMain.handle('run-systeminfos', async (event: IpcMainInvokeEvent, ticketNumber: string): Promise<void> => {
+ipcMain.handle('run-systeminfos', async (_event: IpcMainInvokeEvent, ticketNumber: string): Promise<void> => {
     return runSystemInfos(ticketNumber);
 });

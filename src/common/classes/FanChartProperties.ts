@@ -113,7 +113,7 @@ export function createLineChartScales(
             ticks: {
                 color: textColor,
 
-                callback: (value: number, index: number, ticks: Tick[]): string => {
+                callback: (value: number, _index: number, _ticks: Tick[]): string => {
                     return formatTemp(value, fahrenheit);
                 },
             },
@@ -124,7 +124,7 @@ export function createLineChartScales(
             ticks: {
                 color: textColor,
 
-                callback: (value: number, index: number, ticks: Tick[]): string => {
+                callback: (value: number, _index: number, _ticks: Tick[]): string => {
                     return `${value} %`;
                 },
             },

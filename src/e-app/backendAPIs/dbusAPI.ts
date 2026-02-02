@@ -26,7 +26,7 @@ export const tccDBus = new TccDBusController();
 export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string, (...args: any[]) => any>()
     .set(DbusAPIFunctions.getVersion, (): Promise<string> => {
         return new Promise<string>(
-            (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: string | PromiseLike<string>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.tccdVersion());
                 } catch (err: unknown) {
@@ -38,7 +38,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.tuxedoWmiAvailable, (): Promise<boolean> => {
         return new Promise<boolean>(
-            (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.tuxedoWmiAvailable());
                 } catch (err: unknown) {
@@ -50,7 +50,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.getFanData, (): Promise<string> => {
         return new Promise<string>(
-            (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: string | PromiseLike<string>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.getFanDataJSON());
                 } catch (err: unknown) {
@@ -62,7 +62,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.webcamSWAvailable, (): Promise<boolean> => {
         return new Promise<boolean>(
-            (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.webcamSWAvailable());
                 } catch (err: unknown) {
@@ -74,7 +74,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.getForceYUV420OutputSwitchAvailable, (): Promise<boolean> => {
         return new Promise<boolean>(
-            (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.getForceYUV420OutputSwitchAvailable());
                 } catch (err: unknown) {
@@ -86,7 +86,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.consumeModeReapplyPending, (): Promise<boolean> => {
         return new Promise<boolean>(
-            (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.consumeModeReapplyPending());
                 } catch (err: unknown) {
@@ -98,7 +98,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.getActiveProfileJSON, (): Promise<string> => {
         return new Promise<string>(
-            (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: string | PromiseLike<string>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.getActiveProfileJSON());
                 } catch (err: unknown) {
@@ -110,7 +110,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.setTempProfileById, (profileId: string): Promise<boolean> => {
         return new Promise<boolean>(
-            (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.setTempProfileById(profileId));
                 } catch (err: unknown) {
@@ -122,7 +122,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.getProfilesJSON, (): Promise<string> => {
         return new Promise<string>(
-            (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: string | PromiseLike<string>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.getProfilesJSON());
                 } catch (err: unknown) {
@@ -134,7 +134,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.getCustomProfilesJSON, (): Promise<string> => {
         return new Promise<string>(
-            (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: string | PromiseLike<string>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.getCustomProfilesJSON());
                 } catch (err: unknown) {
@@ -146,7 +146,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.getDefaultProfilesJSON, (): Promise<string> => {
         return new Promise<string>(
-            (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: string | PromiseLike<string>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.getDefaultProfilesJSON());
                 } catch (err: unknown) {
@@ -158,7 +158,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.getDefaultValuesProfileJSON, (): Promise<string> => {
         return new Promise<string>(
-            (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: string | PromiseLike<string>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.getDefaultValuesProfileJSON());
                 } catch (err: unknown) {
@@ -170,7 +170,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.getSettingsJSON, (): Promise<string> => {
         return new Promise<string>(
-            (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: string | PromiseLike<string>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.getSettingsJSON());
                 } catch (err: unknown) {
@@ -182,7 +182,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.odmProfilesAvailable, (): Promise<string[]> => {
         return new Promise<string[]>(
-            (resolve: (value: string[] | PromiseLike<string[]>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: string[] | PromiseLike<string[]>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.odmProfilesAvailable());
                 } catch (err: unknown) {
@@ -194,7 +194,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.odmPowerLimitsJSON, (): Promise<string> => {
         return new Promise<string>(
-            (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: string | PromiseLike<string>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.odmPowerLimitsJSON());
                 } catch (err: unknown) {
@@ -206,7 +206,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.getKeyboardBacklightCapabilitiesJSON, (): Promise<string> => {
         return new Promise<string>(
-            (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: string | PromiseLike<string>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.getKeyboardBacklightCapabilitiesJSON());
                 } catch (err: unknown) {
@@ -218,7 +218,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.getKeyboardBacklightStatesJSON, (): Promise<string> => {
         return new Promise<string>(
-            (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: string | PromiseLike<string>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.getKeyboardBacklightStatesJSON());
                 } catch (err: unknown) {
@@ -230,7 +230,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.setKeyboardBacklightStatesJSON, (keyboardBacklightStatesJSON: string): Promise<boolean> => {
         return new Promise<boolean>(
-            (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.setKeyboardBacklightStatesJSON(keyboardBacklightStatesJSON));
                 } catch (err: unknown) {
@@ -242,7 +242,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.getFansMinSpeed, (): Promise<number> => {
         return new Promise<number>(
-            (resolve: (value: number | PromiseLike<number>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: number | PromiseLike<number>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.getFansMinSpeed());
                 } catch (err: unknown) {
@@ -254,7 +254,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.getFansOffAvailable, (): Promise<boolean> => {
         return new Promise<boolean>(
-            (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.getFansOffAvailable());
                 } catch (err: unknown) {
@@ -266,7 +266,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.getChargingProfilesAvailable, (): Promise<string[]> => {
         return new Promise<string[]>(
-            (resolve: (value: string[] | PromiseLike<string[]>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: string[] | PromiseLike<string[]>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.getChargingProfilesAvailable());
                 } catch (err: unknown) {
@@ -278,7 +278,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.getCurrentChargingProfile, (): Promise<string> => {
         return new Promise<string>(
-            (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: string | PromiseLike<string>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.getCurrentChargingProfile());
                 } catch (err: unknown) {
@@ -290,7 +290,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.setChargingProfile, (profileDescriptor): Promise<boolean> => {
         return new Promise<boolean>(
-            (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.setChargingProfile(profileDescriptor));
                 } catch (err: unknown) {
@@ -302,7 +302,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.getChargingPrioritiesAvailable, (): Promise<string[]> => {
         return new Promise<string[]>(
-            (resolve: (value: string[] | PromiseLike<string[]>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: string[] | PromiseLike<string[]>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.getChargingPrioritiesAvailable());
                 } catch (err: unknown) {
@@ -314,7 +314,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.getCurrentChargingPriority, (): Promise<string> => {
         return new Promise<string>(
-            (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: string | PromiseLike<string>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.getCurrentChargingPriority());
                 } catch (err: unknown) {
@@ -326,7 +326,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.setChargingPriority, (priorityDescriptor): Promise<boolean> => {
         return new Promise<boolean>(
-            (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.setChargingPriority(priorityDescriptor));
                 } catch (err: unknown) {
@@ -338,7 +338,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.getIGpuInfoValuesJSON, (): Promise<string> => {
         return new Promise<string>(
-            (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: string | PromiseLike<string>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.getIGpuInfoValuesJSON());
                 } catch (err: unknown) {
@@ -350,7 +350,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.getDGpuInfoValuesJSON, (): Promise<string> => {
         return new Promise<string>(
-            (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: string | PromiseLike<string>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.getDGpuInfoValuesJSON());
                 } catch (err: unknown) {
@@ -362,7 +362,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.getIGpuAvailable, (): Promise<number> => {
         return new Promise<number>(
-            (resolve: (value: number | PromiseLike<number>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: number | PromiseLike<number>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.getIGpuAvailable());
                 } catch (err: unknown) {
@@ -374,7 +374,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.getDGpuAvailable, (): Promise<number> => {
         return new Promise<number>(
-            (resolve: (value: number | PromiseLike<number>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: number | PromiseLike<number>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.getDGpuAvailable());
                 } catch (err: unknown) {
@@ -386,7 +386,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.getSensorDataCollectionStatus, (): Promise<boolean> => {
         return new Promise<boolean>(
-            (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.getSensorDataCollectionStatus());
                 } catch (err: unknown) {
@@ -398,7 +398,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.getPrimeState, (): Promise<string> => {
         return new Promise<string>(
-            (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: string | PromiseLike<string>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.getPrimeState());
                 } catch (err: unknown) {
@@ -410,7 +410,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.getCpuPowerValuesJSON, (): Promise<string> => {
         return new Promise<string>(
-            (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: string | PromiseLike<string>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.getCpuPowerValuesJSON());
                 } catch (err: unknown) {
@@ -422,7 +422,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.getDisplayModesJSON, (): Promise<string> => {
         return new Promise<string>(
-            (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: string | PromiseLike<string>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.getDisplayModesJSON());
                 } catch (err: unknown) {
@@ -434,7 +434,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.getIsX11, (): Promise<number> => {
         return new Promise<number>(
-            (resolve: (value: number | PromiseLike<number>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: number | PromiseLike<number>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.getIsX11());
                 } catch (err: unknown) {
@@ -446,7 +446,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.setSensorDataCollectionStatus, (status: boolean): Promise<boolean> => {
         return new Promise<boolean>(
-            (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.setSensorDataCollectionStatus(status));
                 } catch (err: unknown) {
@@ -458,7 +458,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.setDGpuD0Metrics, (status: boolean): Promise<boolean> => {
         return new Promise<boolean>(
-            (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.setDGpuD0Metrics(status));
                 } catch (err: unknown) {
@@ -470,7 +470,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.getChargeStartAvailableThresholds, (): Promise<number[]> => {
         return new Promise<number[]>(
-            (resolve: (value: number[] | PromiseLike<number[]>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: number[] | PromiseLike<number[]>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.getChargeStartAvailableThresholds());
                 } catch (err: unknown) {
@@ -482,7 +482,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.getChargeEndAvailableThresholds, (): Promise<number[]> => {
         return new Promise<number[]>(
-            (resolve: (value: number[] | PromiseLike<number[]>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: number[] | PromiseLike<number[]>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.getChargeEndAvailableThresholds());
                 } catch (err: unknown) {
@@ -494,7 +494,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.getChargeStartThreshold, (): Promise<number> => {
         return new Promise<number>(
-            (resolve: (value: number | PromiseLike<number>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: number | PromiseLike<number>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.getChargeStartThreshold());
                 } catch (err: unknown) {
@@ -506,7 +506,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.getChargeEndThreshold, (): Promise<number> => {
         return new Promise<number>(
-            (resolve: (value: number | PromiseLike<number>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: number | PromiseLike<number>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.getChargeEndThreshold());
                 } catch (err: unknown) {
@@ -518,7 +518,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.getChargeType, (): Promise<string> => {
         return new Promise<string>(
-            (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: string | PromiseLike<string>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.getChargeType());
                 } catch (err: unknown) {
@@ -530,7 +530,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.setChargeStartThreshold, (newValue: number): Promise<boolean> => {
         return new Promise<boolean>(
-            (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.setChargeStartThreshold(newValue));
                 } catch (err: unknown) {
@@ -542,7 +542,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.setChargeEndThreshold, (newValue: number): Promise<boolean> => {
         return new Promise<boolean>(
-            (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.setChargeEndThreshold(newValue));
                 } catch (err: unknown) {
@@ -555,7 +555,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.setChargeType, (chargeType: ChargeType): Promise<boolean> => {
         return new Promise<boolean>(
-            (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.setChargeType(chargeType));
                 } catch (err: unknown) {
@@ -567,7 +567,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.dbusAvailable, (): Promise<boolean> => {
         return new Promise<boolean>(
-            (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.dbusAvailable());
                 } catch (err: unknown) {
@@ -579,7 +579,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.fanHwmonAvailable, (): Promise<boolean> => {
         return new Promise<boolean>(
-            (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.fanHwmonAvailable());
                 } catch (err: unknown) {
@@ -591,7 +591,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.getWebcamSWStatus, (): Promise<boolean> => {
         return new Promise<boolean>(
-            (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.getWebcamSWStatus());
                 } catch (err: unknown) {
@@ -603,7 +603,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.getDeviceJSON, async (): Promise<string> => {
         return new Promise<string>(
-            (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: string | PromiseLike<string>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.getDeviceJSON());
                 } catch (err: unknown) {
@@ -615,7 +615,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.getNVIDIAPowerCTRLDefaultPowerLimit, async (): Promise<number> => {
         return new Promise<number>(
-            (resolve: (value: number | PromiseLike<number>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: number | PromiseLike<number>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.getNVIDIAPowerCTRLDefaultPowerLimit());
                 } catch (err: unknown) {
@@ -627,7 +627,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.getNVIDIAPowerCTRLMaxPowerLimit, async (): Promise<number> => {
         return new Promise<number>(
-            (resolve: (value: number | PromiseLike<number>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: number | PromiseLike<number>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.getNVIDIAPowerCTRLMaxPowerLimit());
                 } catch (err: unknown) {
@@ -639,7 +639,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.getIsUnsupportedConfigurableTGPDevice, async (): Promise<boolean> => {
         return new Promise<boolean>(
-            (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.getIsUnsupportedConfigurableTGPDevice());
                 } catch (err: unknown) {
@@ -651,7 +651,7 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
 
     .set(DbusAPIFunctions.getNVIDIAPowerCTRLAvailable, async (): Promise<boolean> => {
         return new Promise<boolean>(
-            (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
                     resolve(tccDBus.getNVIDIAPowerCTRLAvailable());
                 } catch (err: unknown) {

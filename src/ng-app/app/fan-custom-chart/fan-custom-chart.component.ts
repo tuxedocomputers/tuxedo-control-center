@@ -154,7 +154,7 @@ export class FanCustomChartComponent implements OnInit {
     public async updateFanChartDataset(): Promise<void> {
         const { tableCPU, tableGPU } = this.getFanFormGroupValues();
 
-        const [interpolatedTableCpu, interpolatedTableGpu] = await Promise.all([
+        const [interpolatedTableCpu, _interpolatedTableGpu] = await Promise.all([
             interpolatePointsArray(tableCPU),
             interpolatePointsArray(tableGPU),
         ]);
@@ -208,9 +208,9 @@ export class FanCustomChartComponent implements OnInit {
                         dragX: false,
                         dragY: true,
                         onDrag: (
-                            e: MouseEvent,
-                            datasetIndex: number,
-                            index: number,
+                            _event: MouseEvent,
+                            _datasetIndex: number,
+                            _index: number,
                             value: { x: number; y: number },
                         ): void => {
                             value.y = Math.round(value.y);
@@ -226,9 +226,9 @@ export class FanCustomChartComponent implements OnInit {
                             this.setFormValue(value.x, value.y);
                         },
                         onDragEnd: (
-                            e: MouseEvent,
-                            datasetIndex: number,
-                            index: number,
+                            _event: MouseEvent,
+                            _datasetIndex: number,
+                            _index: number,
                             value: { x: number; y: number },
                         ): void => {
                             this.setCustomChartDirty();
@@ -272,6 +272,7 @@ export class FanCustomChartComponent implements OnInit {
 
         this.chart = new Chart(ctx, chartConfiguration);
     }
+
     private setFormValue(temp: number, sliderValue: number): void {
         this.fanFormGroup.patchValue({
             [`${temp}`]: sliderValue,

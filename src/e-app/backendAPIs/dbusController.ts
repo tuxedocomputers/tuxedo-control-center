@@ -68,7 +68,7 @@ export class TccDBusController {
                 }
                 return false;
             });
-        } catch (err: unknown) {
+        } catch (_err: unknown) {
             console.error('dbusController: dbusAvailable: dbus not available');
             this.dbusStatus = false;
             this.dbusTimeout = true;

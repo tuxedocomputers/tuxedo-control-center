@@ -237,7 +237,7 @@ export class XDisplayRefreshRateController {
                     `XAUTHORITY=${this.xAuthorityFile} xrandr -display ${this.display} --output ${this.displayName} --mode ${xRes}x${yRes} -r ${rate}`,
                 );
                 return true;
-            } catch (err: unknown) {
+            } catch (_err: unknown) {
                 return false;
             }
         }

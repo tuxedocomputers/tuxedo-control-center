@@ -468,7 +468,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             if (missingSetting) {
                 throw Error('TuxedoControlCenterDaemon: Missing setting');
             }
-        } catch (dummy: unknown) {
+        } catch (_err: unknown) {
             // No settings available, create default settings
             try {
                 if (this.settings === undefined) {
@@ -488,7 +488,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
         try {
             this.customProfiles = this.config.readProfiles(device);
-        } catch (err: unknown) {
+        } catch (_err: unknown) {
             this.customProfiles = this.config.getDefaultCustomProfiles(device);
             try {
                 this.config.writeProfiles(this.customProfiles);
@@ -586,7 +586,6 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     public identifyDevice(): TUXEDODevice {
         const dmi = new DMIController('/sys/class/dmi/id');
         const productSKU: string = dmi.productSKU.readValueNT();
-        const boardName: string = dmi.boardName.readValueNT();
         const modInfo = new ModuleInfo();
         TuxedoIOAPI.getModuleInfo(modInfo);
 

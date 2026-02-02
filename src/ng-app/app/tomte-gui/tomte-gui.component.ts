@@ -172,7 +172,7 @@ export class TomteGuiComponent implements OnInit {
     */
     private async throwErrorMessage(err: string | undefined): Promise<void> {
         console.error(`tomte-gui: throwErrorMessage => ${err}`);
-        const askToClose: ConfirmDialogResult = await this.utils.confirmDialog({
+        await this.utils.confirmDialog({
             title: $localize`:@@tomteGuiDialogErrorTitle:An Error occured!`,
             description: err,
             linkLabel: ``,

@@ -47,7 +47,7 @@ export class NVIDIAPowerCTRLListener extends DaemonListener {
         }
 
         this.ctgpOffsetSysfsProp.setFSWatchListener(
-            function (event: 'rename' | 'change', filename: string): void {
+            function (event: 'rename' | 'change', _filename: string): void {
                 const ctgpOffset: number =
                     this.tccd.activeProfile.nvidiaPowerCTRLProfile !== undefined &&
                     this.tccd.activeProfile.nvidiaPowerCTRLProfile.cTGPOffset !== undefined

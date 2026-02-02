@@ -84,7 +84,7 @@ export const webcamHandlers: Map<string, (...args: any[]) => any> = new Map<stri
         return new Promise<string[][]>(
             (
                 resolve: (value: string[][] | PromiseLike<string[][]>) => void,
-                reject: (reason?: unknown) => void,
+                _reject: (reason?: unknown) => void,
             ): void => {
                 let res: string[][];
                 if (path) {
@@ -158,7 +158,7 @@ export const webcamHandlers: Map<string, (...args: any[]) => any> = new Map<stri
             }
             child_process.exec(
                 `pkexec ${tccdExec} --new_webcam ${tmpWebcamPath}`,
-                (err: unknown, stdout: string, stderr: string): void => {
+                (err: unknown, _stdout: string, _stderr: string): void => {
                     if (err) {
                         resolve(false);
                     } else {

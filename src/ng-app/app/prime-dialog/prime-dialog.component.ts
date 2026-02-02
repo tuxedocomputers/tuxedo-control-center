@@ -42,7 +42,7 @@ export class PrimeDialogComponent implements OnInit {
     ) {}
 
     public ngOnInit(): void {
-        window.ipc.onSetPrimeSelectMode(async (event: IpcRendererEvent, primeSelectMode: string): Promise<void> => {
+        window.ipc.onSetPrimeSelectMode(async (_event: IpcRendererEvent, primeSelectMode: string): Promise<void> => {
             this.primeSelectMode = primeSelectMode;
 
             // small delay required to avoid flickering ui since html does not instantly update

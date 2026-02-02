@@ -118,7 +118,7 @@ export class UtilsService {
 
     public async openFileDialog(properties: Electron.OpenDialogOptions): Promise<string[]> {
         return new Promise<string[]>(
-            (resolve: (value: string[] | PromiseLike<string[]>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: string[] | PromiseLike<string[]>) => void, _reject: (reason?: unknown) => void): void => {
                 window.ipc.openFileDialog(properties).then((result: OpenDialogReturnValue): void => {
                     if (result.canceled) {
                         console.log('utils: openFileDialog canceled');
@@ -133,7 +133,7 @@ export class UtilsService {
 
     public async saveFileDialog(properties: Electron.OpenDialogOptions): Promise<string> {
         return new Promise<string>(
-            (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: string | PromiseLike<string>) => void, _reject: (reason?: unknown) => void): void => {
                 window.ipc.saveFileDialog(properties).then((result: SaveDialogReturnValue): void => {
                     if (result.canceled) {
                         console.log('utils: saveFileDialog canceled');

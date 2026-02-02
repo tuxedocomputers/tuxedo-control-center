@@ -28,7 +28,7 @@ const cpu: CpuController = new CpuController('/sys/devices/system/cpu');
 // todo: values can most likely be gathered in the cpu worker via onWork() instead to avoid unnecessary duplicated file access
 // there already is core.scalingAvailableFrequencies.readValueNT() and this.cpuCtrl.cores[0].cpuinfoMinFreq.readValueNT() for example
 // todo: readValueNT() is sync and thus it is an async function which runs sync code
-ipcMain.handle('get-general-cpu-info-async', (event: IpcMainInvokeEvent): Promise<IGeneralCPUInfo> => {
+ipcMain.handle('get-general-cpu-info-async', (_event: IpcMainInvokeEvent): Promise<IGeneralCPUInfo> => {
     return new Promise<IGeneralCPUInfo>(
         (
             resolve: (value: IGeneralCPUInfo | PromiseLike<IGeneralCPUInfo>) => void,
@@ -111,7 +111,7 @@ ipcMain.handle('get-general-cpu-info-async', (event: IpcMainInvokeEvent): Promis
 });
 
 // todo: same todos as above
-ipcMain.handle('get-logical-core-info-async', (event: IpcMainInvokeEvent): Promise<ILogicalCoreInfo[]> => {
+ipcMain.handle('get-logical-core-info-async', (_event: IpcMainInvokeEvent): Promise<ILogicalCoreInfo[]> => {
     return new Promise<ILogicalCoreInfo[]>(
         (
             resolve: (value: ILogicalCoreInfo[] | PromiseLike<ILogicalCoreInfo[]>) => void,
@@ -250,7 +250,7 @@ ipcMain.handle('get-logical-core-info-async', (event: IpcMainInvokeEvent): Promi
     );
 });
 
-ipcMain.handle('get-intel-pstate-turbo-value-async', (event: IpcMainInvokeEvent): Promise<boolean> => {
+ipcMain.handle('get-intel-pstate-turbo-value-async', (_event: IpcMainInvokeEvent): Promise<boolean> => {
     return new Promise<boolean>(
         (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
             try {
@@ -266,7 +266,7 @@ ipcMain.handle('get-intel-pstate-turbo-value-async', (event: IpcMainInvokeEvent)
     );
 });
 
-ipcMain.on('comp-get-scaling-driver-acpi-cpu-freq-sync', (event: IpcMainEvent): string => {
+ipcMain.on('comp-get-scaling-driver-acpi-cpu-freq-sync', (_event: IpcMainEvent): string => {
     try {
         const scalingDriver: string = ScalingDriver.acpi_cpufreq;
         return scalingDriver;

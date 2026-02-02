@@ -76,7 +76,7 @@ async function pkexecWriteConfigAsync(settings: ITccSettings, profiles: ITccProf
     return new Promise<boolean>(
         async (
             resolve: (value: boolean | PromiseLike<boolean>) => void,
-            reject: (reason?: unknown) => void,
+            _reject: (reason?: unknown) => void,
         ): Promise<void> => {
             const tmpProfilesPath = '/tmp/tmptccprofiles';
             const tmpSettingsPath = '/tmp/tmptccsettings';
@@ -109,7 +109,7 @@ async function pkexecWriteConfigAsync(settings: ITccSettings, profiles: ITccProf
 
 ipcMain.on(
     'config-set-active-profile',
-    (event: IpcMainEvent, profileId: string, stateId: string, settings: ITccSettings): void => {
+    (_event: IpcMainEvent, profileId: string, stateId: string, settings: ITccSettings): void => {
         // Copy existing current settings and set id of new profile
         const newSettings: ITccSettings = config.copyConfig<ITccSettings>(settings);
 
@@ -134,14 +134,14 @@ ipcMain.on('config-pkexec-write-custom-profiles', (event: IpcMainEvent, customPr
 
 ipcMain.handle(
     'config-pkexec-write-custom-profiles-async',
-    (event: IpcMainInvokeEvent, customProfiles: ITccProfile[]): Promise<boolean> => {
+    (_event: IpcMainInvokeEvent, customProfiles: ITccProfile[]): Promise<boolean> => {
         return pkexecWriteCustomProfilesAsync(customProfiles);
     },
 );
 
 ipcMain.handle(
     'config-pkexec-write-config-async',
-    (event: IpcMainInvokeEvent, settings: ITccSettings, customProfiles: ITccProfile[]): Promise<boolean> => {
+    (_event: IpcMainInvokeEvent, settings: ITccSettings, customProfiles: ITccProfile[]): Promise<boolean> => {
         return pkexecWriteConfigAsync(settings, customProfiles);
     },
 );

@@ -181,7 +181,7 @@ export class WebcamSettingsComponent implements OnInit {
         return new Promise<WebcamPath>(
             (
                 resolve: (value: WebcamPath | PromiseLike<WebcamPath>) => void,
-                reject: (reason?: unknown) => void,
+                _reject: (reason?: unknown) => void,
             ): void => {
                 window.webcamAPI
                     .getWebcamPaths()
@@ -202,7 +202,7 @@ export class WebcamSettingsComponent implements OnInit {
                 resolve: (
                     value: (InputDeviceInfo | MediaDeviceInfo)[] | PromiseLike<(InputDeviceInfo | MediaDeviceInfo)[]>,
                 ) => void,
-                reject: (reason?: unknown) => void,
+                _reject: (reason?: unknown) => void,
             ): void => {
                 navigator.mediaDevices
                     .enumerateDevices()

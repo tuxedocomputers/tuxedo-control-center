@@ -35,8 +35,6 @@ let displayBrightnessNotSupported: boolean = false;
 
 let displayBrightnessGnome: DBusDisplayBrightnessGnome;
 
-let dbusDriverNames: string[] = [];
-
 try {
     sessionBus = dbus.sessionBus();
 } catch (err: unknown) {
@@ -49,7 +47,6 @@ initDbusDisplayBrightness().then((): void => {
     if (displayBrightnessNotSupported === false) {
         driversList.push(displayBrightnessGnome.getDescriptiveString());
     }
-    dbusDriverNames = driversList;
 });
 
 export async function displayBrightnessGnomeCleanup(): Promise<void> {
@@ -89,9 +86,9 @@ async function setDisplayBrightness(valuePercent: number): Promise<void> {
     });
 }
 
-ipcMain.handle('set-display-brightness-gnome', (event: IpcMainInvokeEvent, valuePercent: number): Promise<void> => {
+ipcMain.handle('set-display-brightness-gnome', (_event: IpcMainInvokeEvent, valuePercent: number): Promise<void> => {
     return new Promise<void>(
-        (resolve: (value: void | PromiseLike<void>) => void, reject: (reason?: unknown) => void): void => {
+        (resolve: (value: void | PromiseLike<void>) => void, _reject: (reason?: unknown) => void): void => {
             resolve(setDisplayBrightness(valuePercent));
         },
     );
@@ -103,7 +100,7 @@ ipcMain.on('get-display-brightness-not-supported-sync', (event: IpcMainEvent): v
 
 ipcMain.handle(
     'set-brightness-mode',
-    (event: IpcMainInvokeEvent, mode: BrightnessModeString): Promise<void> => setBrightnessMode(mode),
+    (_event: IpcMainInvokeEvent, mode: BrightnessModeString): Promise<void> => setBrightnessMode(mode),
 );
 ipcMain.handle('get-brightness-mode', (): Promise<BrightnessModeString> => getBrightnessMode());
 ipcMain.handle('get-should-use-dark-colors', (): boolean => {

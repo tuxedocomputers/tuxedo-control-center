@@ -166,7 +166,7 @@ async function getTomteInformation(): Promise<ITomteInformation> {
 export const tomteHandlers: Map<string, (...args: any[]) => any> = new Map<string, (...args: any[]) => any>()
     .set(TomteAPIFunctions.resetToDefaults, (): Promise<boolean> => {
         return new Promise<boolean>(
-            (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
                 resolve(resetToDefaults());
             },
         );
@@ -174,7 +174,7 @@ export const tomteHandlers: Map<string, (...args: any[]) => any> = new Map<strin
 
     .set(TomteAPIFunctions.getModuleDescription, (moduleName: string, langId: string): Promise<string> => {
         return new Promise<string>(
-            (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: string | PromiseLike<string>) => void, _reject: (reason?: unknown) => void): void => {
                 resolve(getModuleDescription(moduleName, langId));
             },
         );
@@ -184,7 +184,7 @@ export const tomteHandlers: Map<string, (...args: any[]) => any> = new Map<strin
         return new Promise<ITomteInformation>(
             (
                 resolve: (value: ITomteInformation | PromiseLike<ITomteInformation>) => void,
-                reject: (reason?: unknown) => void,
+                _reject: (reason?: unknown) => void,
             ): void => {
                 resolve(getTomteInformation());
             },
@@ -193,7 +193,7 @@ export const tomteHandlers: Map<string, (...args: any[]) => any> = new Map<strin
 
     .set(TomteAPIFunctions.removeModule, (moduleName: string): Promise<boolean> => {
         return new Promise<boolean>(
-            (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
                 removeModule(moduleName)
                     .then((): void => {
                         resolve(true);
@@ -208,7 +208,7 @@ export const tomteHandlers: Map<string, (...args: any[]) => any> = new Map<strin
 
     .set(TomteAPIFunctions.installModule, (moduleName: string): Promise<boolean> => {
         return new Promise<boolean>(
-            (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
                 installModule(moduleName)
                     .then((): void => {
                         resolve(true);
@@ -223,7 +223,7 @@ export const tomteHandlers: Map<string, (...args: any[]) => any> = new Map<strin
 
     .set(TomteAPIFunctions.unBlockModue, (moduleName: string): Promise<boolean> => {
         return new Promise<boolean>(
-            (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
                 unBlockModule(moduleName)
                     .then((): void => {
                         resolve(true);
@@ -238,7 +238,7 @@ export const tomteHandlers: Map<string, (...args: any[]) => any> = new Map<strin
 
     .set(TomteAPIFunctions.blockModule, (moduleName: string): Promise<boolean> => {
         return new Promise<boolean>(
-            (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
                 blockModule(moduleName)
                     .then((): void => {
                         resolve(true);
@@ -253,7 +253,7 @@ export const tomteHandlers: Map<string, (...args: any[]) => any> = new Map<strin
 
     .set(TomteAPIFunctions.setMode, (mode: string): Promise<boolean> => {
         return new Promise<boolean>(
-            (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
                 setMode(mode)
                     .then((): void => {
                         resolve(true);

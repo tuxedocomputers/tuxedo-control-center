@@ -44,7 +44,7 @@ export class DBusDisplayBrightnessGnome {
                     }
                     this.eventEmitter = iface.on(
                         'PropertiesChanged',
-                        (interfaceString: string, changed: any, invalidated: any): void => {
+                        (interfaceString: string, changed: any, _invalidated: any): void => {
                             const changedValueExists: boolean =
                                 changed.hasOwnProperty('Brightness') && changed.Brightness.hasOwnProperty('value');
                             const interfaceMatch: boolean = interfaceString === this.propertyInterface;

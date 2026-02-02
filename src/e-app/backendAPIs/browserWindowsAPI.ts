@@ -31,7 +31,7 @@ export let tccWindow: Electron.BrowserWindow;
 export let webcamWindow: Electron.BrowserWindow;
 let primeWindow: Electron.BrowserWindow;
 
-app.on('second-instance', (event: Event, cmdLine: string[], workingDir: string): void => {
+app.on('second-instance', (_event: Event, _cmdLine: string[], _workingDir: string): void => {
     // If triggered by a second instance, find/show/start GUI
     activateTccGui();
 });
@@ -125,8 +125,8 @@ export async function createPrimeWindow(langId: string, primeSelectMode: string)
     });
 
     // Workaround to set window title
-    primeWindow.on('page-title-updated', function (e: Event): void {
-        e.preventDefault();
+    primeWindow.on('page-title-updated', function (event: Event): void {
+        event.preventDefault();
     });
 
     primeWindow.setMenuBarVisibility(false);
@@ -186,7 +186,7 @@ async function createTccWindow(langId: string, module?: string): Promise<void> {
         tccWindow = null;
     });
 
-    tccWindow.on('close', async function (e: Event): Promise<void> {
+    tccWindow.on('close', async function (_event: Event): Promise<void> {
         await tccDBus.setSensorDataCollectionStatus(false);
 
         let collectionStatus: boolean = undefined;
@@ -237,8 +237,8 @@ export async function createWebcamPreview(langId: string, arg: WebcamConstraints
     });
 
     // Workaround to set window title
-    webcamWindow.on('page-title-updated', function (e: Event): void {
-        e.preventDefault();
+    webcamWindow.on('page-title-updated', function (event: Event): void {
+        event.preventDefault();
     });
 
     // Hide menu bar

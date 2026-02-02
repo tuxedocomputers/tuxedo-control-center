@@ -106,7 +106,7 @@ export class LCT21001 {
 
         try {
             deviceName = await this.device.getName();
-        } catch (err: unknown) {
+        } catch (_err: unknown) {
             throw Error('connect(): failed reading name');
         }
 
@@ -198,7 +198,7 @@ export class LCT21001 {
             // Sort out devices that are not accessible with the expected parameters
             try {
                 blDevice = await this.adapter.getDevice(deviceId);
-            } catch (dummy: unknown) {
+            } catch (_err: unknown) {
                 await blDevice.cleanup();
                 continue;
             }
@@ -207,14 +207,14 @@ export class LCT21001 {
 
             try {
                 info.rssi = Number.parseInt(await blDevice.getRSSI());
-            } catch (dummy: unknown) {
+            } catch (_err: unknown) {
                 await blDevice.cleanup();
                 continue;
             }
 
             try {
                 info.name = await blDevice.getName();
-            } catch (dummy: unknown) {
+            } catch (_err: unknown) {
                 info.name = '';
             }
 

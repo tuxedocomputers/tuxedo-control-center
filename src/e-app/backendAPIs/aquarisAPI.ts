@@ -318,7 +318,7 @@ export const aquarisHandlers: Map<string, (...args: any[]) => any> = new Map<str
         await userConfig.set('aquarisSaveState', JSON.stringify(aquarisStateCurrent));
     });
 
-ipcMain.handle('comp-get-has-aquaris', (event: IpcMainInvokeEvent): Promise<boolean> => {
+ipcMain.handle('comp-get-has-aquaris', (_event: IpcMainInvokeEvent): Promise<boolean> => {
     return new Promise<boolean>(
         (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
             try {

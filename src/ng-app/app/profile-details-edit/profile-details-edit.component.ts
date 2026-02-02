@@ -122,7 +122,6 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     private subscriptions: Subscription = new Subscription();
     private fansMinSpeedSubscription: Subscription = new Subscription();
-    private fansMaxSpeedSubscription: Subscription = new Subscription();
 
     private fansOffAvailableSubscription: Subscription = new Subscription();
 
@@ -417,8 +416,6 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         this.profileFormProgress = true;
         this.utils.pageDisabled = true;
 
-        const defaultProfile: ITccProfile = this.config.getDefaultValuesProfile();
-
         if (this.profileFormGroup.valid) {
             const formProfileData: ITccProfile = this.profileFormGroup.value;
             // Note: state selection disabled on profile edit for now
@@ -608,20 +605,12 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     }
 
     public sliderODMPowerLimitMinValue(sliderIndex: number): number {
-        const odmPowerLimits: FormGroup = this.profileFormGroup.controls.odmPowerLimits as FormGroup;
-        const tdpValues: FormArray = odmPowerLimits.controls.tdpValues as FormArray;
-
         const minValue: number = this.odmPowerLimitInfos[sliderIndex].min;
-
         return minValue;
     }
 
     public sliderODMPowerLimitMaxValue(sliderIndex: number): number {
-        const odmPowerLimits: FormGroup = this.profileFormGroup.controls.odmPowerLimits as FormGroup;
-        const tdpValues: FormArray = odmPowerLimits.controls.tdpValues as FormArray;
-
         const maxValue: number = this.odmPowerLimitInfos[sliderIndex].max;
-
         return maxValue;
     }
 

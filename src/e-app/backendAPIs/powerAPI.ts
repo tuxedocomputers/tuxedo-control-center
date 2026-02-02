@@ -40,7 +40,7 @@ ipcMain.on('get-is-igpu-available-power', (event: IpcMainEvent): void => {
     event.returnValue = availabilityService.isIGpuAvailable();
 });
 
-ipcMain.handle('get-dgpu-power-state-power', async (event: IpcMainEvent, arg: string): Promise<string> => {
+ipcMain.handle('get-dgpu-power-state-power', async (_event: IpcMainEvent, arg: string): Promise<string> => {
     return getDGpuPowerState(arg);
 });
 
@@ -80,7 +80,7 @@ function getBusPath(driver: string): string {
 
 ipcMain.handle(
     'prime-select',
-    async (event: IpcMainInvokeEvent, selectedState: string): Promise<{ data: string; error: unknown }> => {
+    async (_event: IpcMainInvokeEvent, selectedState: string): Promise<{ data: string; error: unknown }> => {
         return new Promise<{ data: string; error: unknown }>(
             (
                 resolve: (

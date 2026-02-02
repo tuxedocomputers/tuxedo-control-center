@@ -58,7 +58,7 @@ export class KeyboardBacklightComponent implements OnInit {
     private keyboardBacklightStatesSubscription: Subscription = new Subscription();
 
     constructor(
-        private config: ConfigService,
+        public config: ConfigService,
         private tccdbus: TccDBusClientService,
     ) {}
 
@@ -118,7 +118,7 @@ export class KeyboardBacklightComponent implements OnInit {
         hasNoPickerInUsage: boolean,
     ): void {
         if (keyboardBacklightStates?.[0]) {
-            const { brightness, red, green, blue } = keyboardBacklightStates[0];
+            const { brightness } = keyboardBacklightStates[0];
 
             if (hasChosenColor && hasNoPickerInUsage) {
                 this.chosenBrightness = brightness;

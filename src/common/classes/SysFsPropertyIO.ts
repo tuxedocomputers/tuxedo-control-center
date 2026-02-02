@@ -85,7 +85,7 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
         try {
             const readValue: string = fs.readFileSync(this.readPath, { flag: 'r' }).toString();
             return this.convertStringToType(readValue);
-        } catch (dummy: unknown) {
+        } catch (_err: unknown) {
             return undefined;
         }
     }
@@ -96,7 +96,7 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
     public async readValueNTA(): Promise<T> {
         try {
             return await this.readValueA();
-        } catch (dummy: unknown) {
+        } catch (_err: unknown) {
             return undefined;
         }
     }
@@ -143,7 +143,7 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
             } else {
                 return false;
             }
-        } catch (dummy: unknown) {
+        } catch (_err: unknown) {
             return false;
         }
     }
@@ -156,7 +156,7 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
             // file access implementation requires an error to be thrown if check resulted in flag mismatch
             fs.accessSync(this.writePath, fs.constants.W_OK);
             return true;
-        } catch (dummy: unknown) {
+        } catch (_err: unknown) {
             return false;
         }
     }
@@ -169,7 +169,7 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
             // file access implementation requires an error to be thrown if check resulted in flag mismatch
             fs.accessSync(this.readPath, fs.constants.R_OK);
             return true;
-        } catch (dummy: unknown) {
+        } catch (_err: unknown) {
             return false;
         }
     }

@@ -33,7 +33,7 @@ export const environmentIsProduction: boolean = app.isPackaged;
 ipcMain.handle(
     'fs-write-text-file',
     async (
-        event: IpcMainInvokeEvent,
+        _event: IpcMainInvokeEvent,
         filePath: string,
         fileData: string | Buffer,
         writeFileOptions?: fs.WriteFileOptions,
@@ -42,7 +42,7 @@ ipcMain.handle(
     },
 );
 
-ipcMain.handle('fs-read-text-file', async (event: IpcMainInvokeEvent, filePath: string): Promise<string> => {
+ipcMain.handle('fs-read-text-file', async (_event: IpcMainInvokeEvent, filePath: string): Promise<string> => {
     return readTextFile(filePath);
 });
 
@@ -50,29 +50,29 @@ ipcMain.on('get-cwd-sync', (event: IpcMainEvent): void => {
     event.returnValue = { data: process.cwd() };
 });
 
-ipcMain.handle('get-app-version', (event: IpcMainInvokeEvent): Promise<string> => {
+ipcMain.handle('get-app-version', (_event: IpcMainInvokeEvent): Promise<string> => {
     return new Promise<string>(
-        (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
+        (resolve: (value: string | PromiseLike<string>) => void, _reject: (reason?: unknown) => void): void => {
             const requestedInfo: string = app.getVersion();
             resolve(requestedInfo);
         },
     );
 });
 
-ipcMain.handle('get-cwd', (event: IpcMainInvokeEvent): Promise<string> => {
+ipcMain.handle('get-cwd', (_event: IpcMainInvokeEvent): Promise<string> => {
     return new Promise<string>(
-        (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
+        (resolve: (value: string | PromiseLike<string>) => void, _reject: (reason?: unknown) => void): void => {
             const requestedInfo: string = process.cwd();
             resolve(requestedInfo);
         },
     );
 });
 
-ipcMain.handle('get-process-versions', (event: IpcMainInvokeEvent): Promise<NodeJS.ProcessVersions> => {
+ipcMain.handle('get-process-versions', (_event: IpcMainInvokeEvent): Promise<NodeJS.ProcessVersions> => {
     return new Promise<NodeJS.ProcessVersions>(
         (
             resolve: (value: NodeJS.ProcessVersions | PromiseLike<NodeJS.ProcessVersions>) => void,
-            reject: (reason?: unknown) => void,
+            _reject: (reason?: unknown) => void,
         ): void => {
             const requestedInfo: NodeJS.ProcessVersions = process.versions;
             resolve(requestedInfo);
@@ -82,11 +82,11 @@ ipcMain.handle('get-process-versions', (event: IpcMainInvokeEvent): Promise<Node
 
 ipcMain.handle(
     'show-save-dialog',
-    async (event: IpcMainInvokeEvent, arg: Electron.SaveDialogOptions): Promise<SaveDialogReturnValue> => {
+    async (_event: IpcMainInvokeEvent, arg: Electron.SaveDialogOptions): Promise<SaveDialogReturnValue> => {
         return new Promise<SaveDialogReturnValue>(
             (
                 resolve: (value: SaveDialogReturnValue | PromiseLike<SaveDialogReturnValue>) => void,
-                reject: (reason?: unknown) => void,
+                _reject: (reason?: unknown) => void,
             ): void => {
                 const results: Promise<SaveDialogReturnValue> = dialog.showSaveDialog(arg);
                 resolve(results);
@@ -97,21 +97,21 @@ ipcMain.handle(
 
 ipcMain.handle(
     'show-open-dialog',
-    async (event: IpcMainInvokeEvent, arg: Electron.OpenDialogOptions): Promise<OpenDialogReturnValue> => {
+    async (_event: IpcMainInvokeEvent, arg: Electron.OpenDialogOptions): Promise<OpenDialogReturnValue> => {
         return dialog.showOpenDialog(arg);
     },
 );
 
-ipcMain.handle('get-path', (event: IpcMainInvokeEvent, arg: 'documents'): Promise<string> => {
+ipcMain.handle('get-path', (_event: IpcMainInvokeEvent, arg: 'documents'): Promise<string> => {
     return new Promise<string>(
-        (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
+        (resolve: (value: string | PromiseLike<string>) => void, _reject: (reason?: unknown) => void): void => {
             const requestedPath: string = app.getPath(arg);
             resolve(requestedPath);
         },
     );
 });
 
-ipcMain.on('show-tcc-window', (event: IpcMainEvent): void => {
+ipcMain.on('show-tcc-window', (_event: IpcMainEvent): void => {
     if (!tccWindow.isVisible()) {
         tccWindow.show();
     }
@@ -142,7 +142,7 @@ async function changeLanguage(newLangId: string): Promise<void> {
     }
 }
 
-ipcMain.on('open-external', (event: IpcMainEvent, url: string): void => {
+ipcMain.on('open-external', (_event: IpcMainEvent, url: string): void => {
     if (url.startsWith('http://') || url.startsWith('https://')) {
         shell.openExternal(url);
     } else {
@@ -199,7 +199,7 @@ ipcMain.on('fs-file-exists-sync', (event: IpcMainEvent, filePath: string): void 
     event.returnValue = fs.existsSync(filePath);
 });
 
-ipcMain.on('trigger-language-change', (event: IpcMainEvent, arg: string): void => {
+ipcMain.on('trigger-language-change', (_event: IpcMainEvent, arg: string): void => {
     const langId: string = arg;
     changeLanguage(langId);
 });

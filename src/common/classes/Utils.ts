@@ -119,8 +119,8 @@ export function delay(ms: number): Promise<void> {
 
 export async function execCommandAsync(command: string, logging?: boolean): Promise<string> {
     return new Promise(
-        (resolve: (value: string | PromiseLike<string>) => void, reject: (reason?: unknown) => void): void => {
-            child_process.exec(command, (err: unknown, stdout: string, stderr: string): void => {
+        (resolve: (value: string | PromiseLike<string>) => void, _reject: (reason?: unknown) => void): void => {
+            child_process.exec(command, (err: unknown, stdout: string, _stderr: string): void => {
                 if (err) {
                     if (logging ?? true) {
                         console.error(`Utils: execCommandAsync failed => ${err}`);

@@ -238,7 +238,7 @@ export class ConfigService implements OnDestroy {
 
     public async writeProfile(currentProfileId: string, profile: ITccProfile, states?: string[]): Promise<boolean> {
         return new Promise<boolean>(
-            (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
                 const profileIndex: number = this.customProfiles.findIndex(
                     (p: ITccProfile): boolean => p.id === currentProfileId,
                 );
@@ -275,7 +275,7 @@ export class ConfigService implements OnDestroy {
 
     public async saveSettings(): Promise<boolean> {
         return new Promise<boolean>(
-            (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
                 const customProfilesCopy: ITccProfile[] = this.copyConfig<ITccProfile[]>(this.customProfiles);
                 const newSettings: ITccSettings = this.copyConfig<ITccSettings>(this.getSettings());
                 window.config.pkexecWriteConfigAsync(newSettings, customProfilesCopy).then((success: boolean): void => {
@@ -303,7 +303,7 @@ export class ConfigService implements OnDestroy {
 
     public async pkexecSetPrimeSelectAsync(selectedState: string): Promise<boolean> {
         return new Promise<boolean>(
-            (resolve: (value: boolean | PromiseLike<boolean>) => void, reject: (reason?: unknown) => void): void => {
+            (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
                 window.ipc
                     .primeSelect(this.transformPrimeStatus(selectedState))
                     .then((): void => {

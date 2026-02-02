@@ -21,7 +21,7 @@ import type { FormControl, FormGroupDirective, NgForm } from '@angular/forms';
 import type { ErrorStateMatcher } from '@angular/material/core';
 
 export class FormErrorStateMatcher implements ErrorStateMatcher {
-    isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    isErrorState(control: FormControl | null, _form: FormGroupDirective | NgForm | null): boolean {
         const invalidCtrl: boolean = !!(control?.invalid && control.parent.dirty);
         const invalidParent: boolean = !!(control?.parent?.invalid && control.parent.dirty);
 

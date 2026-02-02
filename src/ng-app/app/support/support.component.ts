@@ -64,7 +64,7 @@ export class SupportComponent implements OnInit {
             inputTicketNumber: new FormControl('', [Validators.required, Validators.pattern('^(99)([0-9]){7}')]),
         });
 
-        window.ipc.onUpdateSystemInfosLabel((event: any, text: string): void => {
+        window.ipc.onUpdateSystemInfosLabel((_event: any, text: string): void => {
             this.systeminfoOutput(text);
         });
     }

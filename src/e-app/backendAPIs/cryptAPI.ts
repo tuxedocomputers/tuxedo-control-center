@@ -41,7 +41,7 @@ async function changeCryptPassword(newPassword: string, oldPassword: string, con
 ipcMain.handle(
     'change-crypt-password',
     async (
-        event: IpcMainInvokeEvent,
+        _event: IpcMainInvokeEvent,
         newPassword: string,
         oldPassword: string,
         confirmPassword: string,
@@ -50,7 +50,7 @@ ipcMain.handle(
     },
 );
 
-ipcMain.handle('drive-controller-get-drives', (event: IpcMainInvokeEvent): Promise<IDrive[]> => {
+ipcMain.handle('drive-controller-get-drives', (_event: IpcMainInvokeEvent): Promise<IDrive[]> => {
     try {
         return DriveController.getDrives();
     } catch (err: unknown) {

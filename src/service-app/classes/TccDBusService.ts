@@ -56,7 +56,7 @@ export class TccDBusService extends DaemonWorker {
         if (!this.started) {
             this.bus
                 .requestName('com.tuxedocomputers.tccd', 0)
-                .then((name: number): void => {
+                .then((_name: number): void => {
                     try {
                         this.bus.export(this.path, this.interface);
                         this.started = true;

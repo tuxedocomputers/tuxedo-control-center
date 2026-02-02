@@ -24,7 +24,7 @@ import { execCmd } from './utilsAPI';
 
 ipcMain.handle(
     'set-shutdown-time',
-    async (event: IpcMainInvokeEvent, selectedHour: number, selectedMinute: number): Promise<string> => {
+    async (_event: IpcMainInvokeEvent, selectedHour: number, selectedMinute: number): Promise<string> => {
         return new Promise<string>(
             async (
                 resolve: (value: string | PromiseLike<string>) => void,
@@ -42,7 +42,7 @@ ipcMain.handle(
     },
 );
 
-ipcMain.handle('cancel-shutdown', async (event: IpcMainInvokeEvent): Promise<string> => {
+ipcMain.handle('cancel-shutdown', async (_event: IpcMainInvokeEvent): Promise<string> => {
     return new Promise<string>(
         async (
             resolve: (value: string | PromiseLike<string>) => void,
@@ -59,7 +59,7 @@ ipcMain.handle('cancel-shutdown', async (event: IpcMainInvokeEvent): Promise<str
     );
 });
 
-ipcMain.handle('get-scheduled-shutdown', async (event: IpcMainInvokeEvent): Promise<string> => {
+ipcMain.handle('get-scheduled-shutdown', async (_event: IpcMainInvokeEvent): Promise<string> => {
     return new Promise<string>(
         async (
             resolve: (value: string | PromiseLike<string>) => void,
@@ -82,7 +82,7 @@ ipcMain.handle('get-scheduled-shutdown', async (event: IpcMainInvokeEvent): Prom
     );
 });
 
-ipcMain.handle('issue-reboot', async (event: IpcMainInvokeEvent): Promise<string> => {
+ipcMain.handle('issue-reboot', async (_event: IpcMainInvokeEvent): Promise<string> => {
     return new Promise<string>(
         async (
             resolve: (value: string | PromiseLike<string>) => void,
