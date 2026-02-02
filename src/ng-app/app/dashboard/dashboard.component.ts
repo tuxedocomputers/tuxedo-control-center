@@ -102,8 +102,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private dashboardVisibility: boolean;
     public d0MetricsUsage: boolean;
 
-    public isX11: number = -1;
-
     public amdGpuCount: number;
     public dGpuAvailable: boolean;
     public iGpuAvailable: boolean;
@@ -139,7 +137,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
     private setValuesFromRoute(): void {
         const data = this.route.snapshot.data;
         this.powerState = data.powerStateStatus;
-        this.isX11 = data.x11Status;
         this.dGpuAvailable = data.dGpuAvailable;
         this.iGpuAvailable = data.iGpuAvailable;
         this.primeState = data.primeStatus;
@@ -180,7 +177,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
 
     private initializeSubscriptions(): void {
         this.subscribeToPstate();
-        this.subscribeIsX11();
         this.subscribeToDGpuInfo();
         this.subscribeToIGpuInfo();
         this.subscribeToCpuInfo();
@@ -199,16 +195,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
                 )
                 .subscribe((state: string): void => {
                     this.primeState = state;
-                }),
-        );
-    }
-
-    private subscribeIsX11(): void {
-        this.subscriptions.add(
-            this.tccdbus.isX11
-                .pipe(filter((value: number): boolean => value !== undefined && value !== -1))
-                .subscribe((isX11: number): void => {
-                    this.isX11 = isX11;
                 }),
         );
     }

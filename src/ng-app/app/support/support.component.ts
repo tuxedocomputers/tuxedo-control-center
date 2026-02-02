@@ -42,7 +42,6 @@ import { UtilsService } from '../utils.service';
 export class SupportComponent implements OnInit {
     public aptInstalled: boolean = false;
     public webfaiCreatorInstalled: boolean;
-    public isX11: number = -1;
     public formTicketNumber: FormGroup;
     public systeminfoRunOutput: string = '';
     public systeminfoRunProgress: boolean = false;
@@ -74,7 +73,6 @@ export class SupportComponent implements OnInit {
 
         this.aptInstalled = data.aptInstalled;
         this.webfaiCreatorInstalled = data.webfaiCreatorInstalled;
-        this.isX11 = data.x11Status;
     }
 
     public focusControl(control: MatInput): void {

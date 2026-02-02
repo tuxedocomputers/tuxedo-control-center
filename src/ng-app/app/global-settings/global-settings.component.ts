@@ -58,7 +58,6 @@ export class GlobalSettingsComponent implements OnInit {
 
     public primeState: string = 'iGPU';
     public expandPrimeSelect: boolean = false;
-    public isX11: number = -1;
     public aptInstalled: boolean = false;
 
     public chargingProfilesUrlHref: string = $localize`:@@chargingProfilesInfoLinkHref:https\://www.tuxedocomputers.com/en/Battery-charging-profiles-inside-the-TUXEDO-Control-Center.tuxedo`;
@@ -105,7 +104,6 @@ export class GlobalSettingsComponent implements OnInit {
         this.utils.getBrightnessMode().then((mode: BrightnessModeString): void => {
             this.ctrlBrightnessMode.setValue(mode);
         });
-        this.subscribeIsX11();
     }
 
     private setVariablesWithRouteSnapshot(): void {
@@ -121,19 +119,8 @@ export class GlobalSettingsComponent implements OnInit {
             Array.isArray(data.chargingProfilesAvailable) && data.chargingProfilesAvailable?.length > 0;
 
         this.primeState = data.primeSelectAvailable;
-        this.isX11 = data.x11Status;
 
         this.aptInstalled = data.aptInstalled;
-    }
-
-    private subscribeIsX11(): void {
-        this.subscriptions.add(
-            this.tccdbus.isX11
-                .pipe(filter((value: number): boolean => value !== undefined && value !== -1))
-                .subscribe((isX11: number): void => {
-                    this.isX11 = isX11;
-                }),
-        );
     }
 
     public async onCPUSettingsEnabledChanged(event: MatCheckboxChange): Promise<void> {

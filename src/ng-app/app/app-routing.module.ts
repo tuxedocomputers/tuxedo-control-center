@@ -49,7 +49,6 @@ import { WebcamSettingsGuard } from './webcam.guard';
 import { WebcamPreviewComponent } from './webcam-preview/webcam-preview.component';
 import { WebcamSettingsComponent } from './webcam-settings/webcam-settings.component';
 import { WebfaiCreatorInstalledResolver } from './webfaiCreator.resolver';
-import { X11StatusResolver } from './x11.resolver';
 
 const routes: Routes = [
     { path: '', redirectTo: '/main-gui/cpu-dashboard', pathMatch: 'full' },
@@ -69,7 +68,6 @@ const routes: Routes = [
                 resolve: {
                     aptInstalled: AptInstalledResolver,
                     webfaiCreatorInstalled: WebfaiCreatorInstalledResolver,
-                    x11Status: X11StatusResolver,
                 },
             },
             { path: 'info', component: InfoComponent },
@@ -78,7 +76,6 @@ const routes: Routes = [
                 component: DashboardComponent,
                 resolve: {
                     powerStateStatus: PowerStateStatusResolver,
-                    x11Status: X11StatusResolver,
                     dGpuAvailable: DGpuStatusResolver,
                     iGpuAvailable: IGpuStatusResolver,
                     primeStatus: PrimeSelectAvailableResolver,
@@ -102,7 +99,6 @@ const routes: Routes = [
                     forceYUV420OutputSwitchAvailable: ForceYUV420OutputSwitchResolver,
                     chargingProfilesAvailable: ChargingProfilesAvailableResolver,
                     primeSelectAvailable: PrimeSelectAvailableResolver,
-                    x11Status: X11StatusResolver,
                     aptInstalled: AptInstalledResolver,
                 },
                 component: GlobalSettingsComponent,
@@ -113,7 +109,6 @@ const routes: Routes = [
                     forceYUV420OutputSwitchAvailable: ForceYUV420OutputSwitchResolver,
                     chargingProfilesAvailable: ChargingProfilesAvailableResolver,
                     primeSelectAvailable: PrimeSelectAvailableResolver,
-                    x11Status: X11StatusResolver,
                     aptInstalled: AptInstalledResolver,
                 },
                 component: GlobalSettingsComponent,
