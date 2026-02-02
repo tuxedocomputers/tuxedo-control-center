@@ -1,8 +1,8 @@
-src/dist-data/com.tuxedocomputers.tcc.metainfo.xml=/usr/share/metainfo/com.tuxedocomputers.tcc.metainfo.xml
+src/dist-data/com.tuxedocomputers.tcc-gui.metainfo.xml=/usr/share/metainfo/com.tuxedocomputers.tcc-gui.metainfo.xml
 src/dist-data/tuxedo-control-center-tray.desktop=/etc/skel/.config/autostart/tuxedo-control-center-tray.desktop
-src/dist-data/com.tuxedocomputers.tccd.policy=/usr/share/polkit-1/actions/com.tuxedocomputers.tccd.policy
-src/dist-data/com.tuxedocomputers.tomte.policy=/usr/share/polkit-1/actions/com.tuxedocomputers.tomte.policy
-src/dist-data/com.tuxedocomputers.tccd.conf=/usr/share/dbus-1/system.d/com.tuxedocomputers.tccd.conf
+src/dist-data/com.tuxedocomputers.tccd-service.policy=/usr/share/polkit-1/actions/com.tuxedocomputers.tccd-service.policy
+src/dist-data/com.tuxedocomputers.tomte-access.policy=/usr/share/polkit-1/actions/com.tuxedocomputers.tomte-access.policy
+src/dist-data/com.tuxedocomputers.tccd-dbus.conf=/usr/share/dbus-1/system.d/com.tuxedocomputers.tccd-dbus.conf
 src/dist-data/99-webcam.rules=/usr/lib/udev/rules.d/99-webcam.rules
 src/dist-data/tccd.service=/usr/lib/systemd/system/tccd.service
 src/dist-data/tccd-sleep.service=/usr/lib/systemd/system/tccd-sleep.service
