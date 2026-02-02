@@ -4,3 +4,5 @@ src/dist-data/com.tuxedocomputers.tccd.policy=/usr/share/polkit-1/actions/com.tu
 src/dist-data/com.tuxedocomputers.tomte.policy=/usr/share/polkit-1/actions/com.tuxedocomputers.tomte.policy
 src/dist-data/com.tuxedocomputers.tccd.conf=/usr/share/dbus-1/system.d/com.tuxedocomputers.tccd.conf
 src/dist-data/99-webcam.rules=/usr/lib/udev/rules.d/99-webcam.rules
+src/dist-data/tccd.service=/usr/lib/systemd/system/tccd.service
+src/dist-data/tccd-sleep.service=/usr/lib/systemd/system/tccd-sleep.service

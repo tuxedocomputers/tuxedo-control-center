@@ -87,8 +87,6 @@ async function buildDeb(filenameAddition: string): Promise<void> {
             `${distSrc}/data/service/tccd`,
             `${distSrc}/data/service/TuxedoIOAPI.node`,
             `${distSrc}/data/CHANGELOG.md`,
-            `${distSrc}/data/dist-data/tccd.service`,
-            `${distSrc}/data/dist-data/tccd-sleep.service`,
             `${distSrc}/data/dist-data/tuxedo-control-center_256.svg`,
             `${distSrc}/data/dist-data/tuxedo-control-center-tray.desktop`,
             `${distSrc}/data/camera/cameractrls.py`,

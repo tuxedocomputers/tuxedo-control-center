@@ -6,9 +6,7 @@ systemctl disable tuxedofancontrol > /dev/null 2>&1 || true
 
 DIST_DATA=/opt/tuxedo-control-center/resources/dist/tuxedo-control-center/data/dist-data
 
-# Copy and enable services
-cp ${DIST_DATA}/tccd.service /etc/systemd/system/tccd.service || true
-cp ${DIST_DATA}/tccd-sleep.service /etc/systemd/system/tccd-sleep.service || true
+# Enable services
 systemctl daemon-reload
 systemctl enable tccd tccd-sleep
 systemctl restart tccd
