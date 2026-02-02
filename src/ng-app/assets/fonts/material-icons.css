@@ -8,6 +8,7 @@
 }
 
 .material-icons {
+    /* biome-ignore lint: there is no fallback font for an icon font */
     font-family: 'Material Icons';
     font-weight: normal;
     font-style: normal;
