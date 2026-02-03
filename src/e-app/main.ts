@@ -585,7 +585,7 @@ async function createTccWindow(langId: string, module?: string) {
         }
     });
 
-    const indexPath = path.join(__dirname, '..', '..', 'ng-app', langId, 'index.html');
+    const indexPath = path.join(__dirname, '..', '..', 'ng-app', 'index.html');
     if (module !== undefined) {
         await tccWindow.loadFile(indexPath, { hash: '/' + module });
     } else {
@@ -1188,41 +1188,4 @@ const aquarisHandlers = new Map<string, (...args: any[]) => any>()
 
 registerAPI(ipcMain, aquarisAPIHandle, aquarisHandlers);
 
-// Angular 12 / Electron 25 Shim Handlers
-ipcMain.on('get-app-version', (event) => {
-    event.returnValue = app.getVersion();
-});
 
-ipcMain.on('get-process-versions', (event) => {
-    event.returnValue = process.versions;
-});
-
-ipcMain.on('get-cwd', (event) => {
-    event.returnValue = process.cwd();
-});
-
-ipcMain.handle('dialog-show-message-box', async (event, options) => {
-    const win = BrowserWindow.fromWebContents(event.sender);
-    return await dialog.showMessageBox(win, options);
-});
-
-ipcMain.on('window-close', (event) => {
-    const win = BrowserWindow.fromWebContents(event.sender);
-    if (win) win.close();
-});
-
-ipcMain.on('window-minimize', (event) => {
-    const win = BrowserWindow.fromWebContents(event.sender);
-    if (win) win.minimize();
-});
-
-ipcMain.on('window-maximize', (event) => {
-    const win = BrowserWindow.fromWebContents(event.sender);
-    if (win) {
-        if (win.isMaximized()) {
-            win.unmaximize();
-        } else {
-            win.maximize();
-        }
-    }
-});
