@@ -30,7 +30,7 @@
                     "builder": "@angular-builders/custom-webpack:browser",
                     "options": {
                         "customWebpackConfig": {
-                            "path": "./extra-webpack.config.js" 
+                            "path": "./extra-webpack.config.js"
                         },
                         "outputPath": "dist/tuxedo-control-center/ng-app",
                         "index": "src/ng-app/index.html",
@@ -50,7 +50,6 @@
                             "node_modules/marked/lib/marked.umd.js"
                         ],
                         "allowedCommonJsDependencies": [
-
                             "node-ble"
                         ]
                     },
@@ -132,5 +131,8 @@
                 }
             }
         }
+    },
+    "cli": {
+        "analytics": "229c6157-8b24-4cb8-9f14-0e28239c4233"
     }
 }
