@@ -276,6 +276,7 @@ let tccWindowLoading = false;
 
 async function activateTccGui(module?: string) {
     if (tccWindow) {
+        if (!tccWindow.isVisible()) { tccWindow.show(); }
         if (tccWindow.isMinimized()) { tccWindow.restore(); }
         tccWindow.focus();
         const baseURL = tccWindow.webContents.getURL().split("#")[0];
