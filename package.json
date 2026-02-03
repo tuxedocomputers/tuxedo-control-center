@@ -77,11 +77,11 @@
   "devDependencies": {
     "@angular-devkit/build-angular": "~0.1102.19",
     "@angular/animations": "^11.2.14",
-    "@angular/cdk": "^10.2.7",
+    "@angular/cdk": "^11.2.13",
     "@angular/cli": "~11.2.19",
     "@angular/compiler-cli": "~11.2.14",
     "@angular/language-service": "~11.2.14",
-    "@angular/material": "^10.2.7",
+    "@angular/material": "^11.2.13",
     "@types/jasmine": "^3.10.5",
     "@types/jasminewd2": "^2.0.10",
     "@types/node": "^14.18.37",
