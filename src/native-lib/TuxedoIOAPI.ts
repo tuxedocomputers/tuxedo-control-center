@@ -116,7 +116,7 @@ interface ITuxedoIOAPI {
      *  in range as listed by a call to TDPInfo
      *  @returns True if call succeeded, false otherwise
      */
-    setTDPValues(tdpValues: Number[]): boolean;
+    setTDPValues(tdpValues: number[]): boolean;
 }
 
 export class ModuleInfo {

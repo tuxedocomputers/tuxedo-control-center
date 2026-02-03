@@ -189,7 +189,7 @@ async function createTccWindow(langId: string, module?: string): Promise<void> {
     tccWindow.on('close', async (_event: Event): Promise<void> => {
         await tccDBus.setSensorDataCollectionStatus(false);
 
-        let collectionStatus: boolean = undefined;
+        let collectionStatus: boolean;
         let retryCount: number = 0;
         const maxRetries = 5;
 

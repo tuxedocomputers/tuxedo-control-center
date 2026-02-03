@@ -59,7 +59,7 @@ export class NgTranslations {
             throw new Error('No original loaded');
         }
 
-        let translation: string = undefined;
+        let translation: string;
         const chosenLangLookup: string = this.translationMap.get(id);
         const originalLangLookup: string = this.translationMapOriginal.get(id);
 

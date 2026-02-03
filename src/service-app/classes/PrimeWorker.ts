@@ -79,9 +79,9 @@ export class PrimeWorker extends DaemonWorker {
     }
 
     // official prime-select has no dGPU mode in wayland
-    private async isTuxPrime() {
+    private async isTuxPrime(): Promise<boolean> {
         // biome-ignore lint: ${Version} is not a typescript variable here
-        const primeSelectVersion = (await execCommandAsync("dpkg-query -W -f='${Version}\n' nvidia-prime"))
+        const primeSelectVersion: string = (await execCommandAsync("dpkg-query -W -f='${Version}\n' nvidia-prime"))
             .toString()
             .trim();
 
@@ -119,7 +119,7 @@ export class PrimeWorker extends DaemonWorker {
     }
 
     private async checkPrimeAvailable(): Promise<boolean> {
-        const primeAvailable = !!(await execCommandAsync('which prime-select')).toString().trim();
+        const primeAvailable: boolean = !!(await execCommandAsync('which prime-select')).toString().trim();
 
         if (primeAvailable) {
             const isTuxPrime: boolean = await this.isTuxPrime();

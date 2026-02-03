@@ -99,7 +99,7 @@ describe('ConfigHandler file IO', (): void => {
     });
 
     it('should write to a profiles file with mode 644', (): void => {
-        const profiles: ITccProfile[] = new Array();
+        const profiles: ITccProfile[] = [];
         expect((): void => {
             config.writeProfiles(profiles, '/etc/test.conf');
         }).not.toThrow();
@@ -109,7 +109,7 @@ describe('ConfigHandler file IO', (): void => {
     });
 
     it('should write and read multiple profiles', (): void => {
-        const profiles: ITccProfile[] = new Array();
+        const profiles: ITccProfile[] = [];
         const profile1: ITccProfile = JSON.parse(JSON.stringify(defaultProfiles[0]));
         profile1.name = 'some profile';
         profile1.display.brightness = 12;

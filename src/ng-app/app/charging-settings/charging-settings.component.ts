@@ -74,7 +74,7 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
     public ctrlEnableThresholds: FormControl = new FormControl(null);
     public ctrlChargingThresholdGroup: FormControl = new FormControl(null);
     public chargingThresholdsProgress: boolean = false;
-    public thresholdPresets: Map<String, ThresholdPresets> = new Map<String, ThresholdPresets>();
+    public thresholdPresets: Map<string, ThresholdPresets> = new Map<string, ThresholdPresets>();
 
     private timeout;
 

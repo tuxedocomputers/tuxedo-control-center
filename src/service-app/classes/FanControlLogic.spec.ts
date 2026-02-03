@@ -128,7 +128,7 @@ class OriginalValueBuffer {
     private bufferMaxSize: number = 13; // Buffer max size
 
     constructor() {
-        this.bufferData = new Array();
+        this.bufferData = [];
     }
 
     public addValue(value: number): void {

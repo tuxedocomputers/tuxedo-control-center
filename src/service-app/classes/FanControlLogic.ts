@@ -38,7 +38,7 @@ export class ValueBuffer implements ValueBufferI {
     private bufferMaxSize: number = 13;
 
     constructor() {
-        this.bufferData = new Array();
+        this.bufferData = [];
     }
 
     public addValue(value: number): void {

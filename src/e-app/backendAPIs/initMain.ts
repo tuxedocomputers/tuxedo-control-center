@@ -38,7 +38,7 @@ const trayOnlyOption: boolean = process.argv.includes('--tray');
 const noTccdVersionCheck: boolean = process.argv.includes('--no-tccd-version-check');
 export const watchOption: boolean = process.argv.includes('--watch');
 const availableLanguages: string[] = ['en', 'de'];
-let powersaveBlockerId: number = undefined;
+let powersaveBlockerId: number;
 let startTCCAccelerator: string;
 startTCCAccelerator = app.commandLine.getSwitchValue('start-tcc-accelerator');
 if (startTCCAccelerator === '') {
@@ -106,11 +106,11 @@ app.whenReady().then(async (): Promise<void> => {
 
 function exitIfProcessExists(): void {
     if (applicationLock) {
-        let singletonLock: string = undefined;
+        let singletonLock: string;
 
         try {
             const userDataDir: string = app.commandLine.getSwitchValue('user-data-dir');
-            let singletonLockPath: string = undefined;
+            let singletonLockPath: string;
 
             if (userDataDir) {
                 singletonLockPath = path.join(userDataDir, 'SingletonLock');

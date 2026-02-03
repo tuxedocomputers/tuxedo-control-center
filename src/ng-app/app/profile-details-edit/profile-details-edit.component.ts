@@ -824,7 +824,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public modifyDeviceSpecificODMSlider(offset: number): () => void {
         return (): void => {
             const profileName = this.deviceSystemProfileInfo.pl[this.powerLimitSliderIndex].odmName;
-            let newIndex: number = undefined;
+            let newIndex: number;
 
             for (let i: number = 0; i < this.deviceSystemProfileInfo.pl?.length; i++) {
                 if (this.deviceSystemProfileInfo.pl[i].odmName === profileName) {
