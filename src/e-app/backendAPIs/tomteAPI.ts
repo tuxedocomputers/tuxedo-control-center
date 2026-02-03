@@ -121,9 +121,11 @@ function parseTomteListJson(rawTomteListOutput: string | undefined): ITomteInfor
         jsonError: true,
         rebootRequired: false,
     };
+
     if (!rawTomteListOutput) {
         return;
     }
+
     try {
         const givenobject: any = JSON.parse(rawTomteListOutput);
         tomteInformation.jsonError = false;
@@ -145,24 +147,28 @@ function parseTomteListJson(rawTomteListOutput: string | undefined): ITomteInfor
     } catch (err: unknown) {
         console.error(`tomteAPI: parseTomteListJson failed => ${err}`);
         tomteInformation.jsonError = true;
-    } finally {
-        return tomteInformation;
     }
+
+    return tomteInformation;
 }
 
 async function getTomteInformation(): Promise<ITomteInformation> {
     const command: string = 'tuxedo-tomte listjson';
+    let tomteInformation: ITomteInformation;
     let results: string;
+
     try {
         results = await execCmd(`${command}`);
         results = results.replace(/^[^\{]*\{/, '{'); // delete everything up to the first occurance of {
     } catch {
         results = '';
     } finally {
-        const tomteInformation: ITomteInformation = parseTomteListJson(results);
-        return tomteInformation;
+        tomteInformation = parseTomteListJson(results);
     }
+
+    return tomteInformation;
 }
+
 export const tomteHandlers: Map<string, (...args: any[]) => any> = new Map<string, (...args: any[]) => any>()
     .set(TomteAPIFunctions.resetToDefaults, (): Promise<boolean> => {
         return new Promise<boolean>(
