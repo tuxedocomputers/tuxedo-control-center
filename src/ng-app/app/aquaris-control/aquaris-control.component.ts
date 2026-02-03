@@ -19,7 +19,7 @@
 import { AfterContentInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ElectronService } from '../electron.service';
 import { aquarisAPIHandle, ClientAPI } from '../../../e-app/AquarisAPI';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { DeviceInfo as AquarisDeviceInfo, RGBState } from '../../../e-app/LCT21001';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogInputTextComponent } from '../dialog-input-text/dialog-input-text.component';
@@ -46,29 +46,29 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
 
     public stateInitialized = false;
 
-    public ctrlDeviceList = new FormControl();
+    public ctrlDeviceList = new UntypedFormControl();
     public selectedDeviceUUID: string;
 
-    public ctrlLedToggle = new FormControl();
-    public ctrlLedRed = new FormControl();
-    public ctrlLedGreen = new FormControl;
-    public ctrlLedBlue = new FormControl();
+    public ctrlLedToggle = new UntypedFormControl();
+    public ctrlLedRed = new UntypedFormControl();
+    public ctrlLedGreen = new UntypedFormControl;
+    public ctrlLedBlue = new UntypedFormControl();
 
     public selectedLedTab = 0;
-    public ctrlLedBreathe = new FormControl();
-    public ctrlLedStaticOrRainbow = new FormControl();
+    public ctrlLedBreathe = new UntypedFormControl();
+    public ctrlLedStaticOrRainbow = new UntypedFormControl();
 
     public chosenColorHex;
 
-    public ctrlFanToggle = new FormControl();
-    public ctrlFanDutyCycle = new FormControl();
-    public ctrlFanDutyCycleTextInput = new FormControl();
+    public ctrlFanToggle = new UntypedFormControl();
+    public ctrlFanDutyCycle = new UntypedFormControl();
+    public ctrlFanDutyCycleTextInput = new UntypedFormControl();
 
     public fanPresets: Map<string, FanPreset> = new Map();
 
-    public ctrlPumpToggle = new FormControl();
-    public ctrlPumpDutyCycle = new FormControl();
-    public ctrlPumpVoltage = new FormControl();
+    public ctrlPumpToggle = new UntypedFormControl();
+    public ctrlPumpDutyCycle = new UntypedFormControl();
+    public ctrlPumpVoltage = new UntypedFormControl();
 
     public fwVersion: string = '';
 

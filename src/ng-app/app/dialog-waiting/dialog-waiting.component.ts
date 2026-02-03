@@ -18,7 +18,7 @@
  */
 
 import { Component, Inject, OnInit } from "@angular/core";
-import { FormControl } from "@angular/forms";
+import { UntypedFormControl } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import {
     DialogChoiceComponent,
@@ -31,12 +31,12 @@ import {
     styleUrls: ["./dialog-waiting.component.scss"],
 })
 export class DialogWaitingComponent {
-    public ctrlCheckboxNoBother: FormControl;
+    public ctrlCheckboxNoBother: UntypedFormControl;
 
     constructor(
         public dialogRef: MatDialogRef<DialogChoiceComponent>,
         @Inject(MAT_DIALOG_DATA) public data: WaitingDialogData
     ) {
-        this.ctrlCheckboxNoBother = new FormControl(false);
+        this.ctrlCheckboxNoBother = new UntypedFormControl(false);
     }
 }

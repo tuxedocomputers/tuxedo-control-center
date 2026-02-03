@@ -24,7 +24,7 @@ import { ConfigService } from '../config.service';
 import { StateService, IStateInfo } from '../state.service';
 import { SysFsService, IGeneralCPUInfo } from '../sys-fs.service';
 import { Subscription, fromEvent } from 'rxjs';
-import { FormGroup, FormBuilder, Validators, FormControl, ValidatorFn, AbstractControl, FormArray } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormBuilder, Validators, UntypedFormControl, ValidatorFn, AbstractControl, UntypedFormArray } from '@angular/forms';
 import { DBusService } from '../dbus.service';
 import { MatInput } from '@angular/material/input';
 import { CompatibilityService } from '../compatibility.service';
@@ -79,7 +79,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         }
 
         if (this.selectStateControl === undefined) {
-            this.selectStateControl = new FormControl(this.state.getProfileStates(this.viewProfile.id));
+            this.selectStateControl = new UntypedFormControl(this.state.getProfileStates(this.viewProfile.id));
         } else {
             this.selectStateControl.reset(this.state.getProfileStates(this.viewProfile.id));
         }
@@ -106,8 +106,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         inputSpan: 5
     };
 
-    public selectStateControl: FormControl;
-    public profileFormGroup: FormGroup;
+    public selectStateControl: UntypedFormControl;
+    public profileFormGroup: UntypedFormGroup;
     public profileFormProgress = false;
 
     private subscriptions: Subscription = new Subscription();
@@ -164,7 +164,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         private config: ConfigService,
         private state: StateService,
         private sysfs: SysFsService,
-        private fb: FormBuilder,
+        private fb: UntypedFormBuilder,
         private dbus: DBusService,
         private tccDBus: TccDBusClientService,
         public compat: CompatibilityService,
@@ -425,18 +425,18 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     private createProfileFormGroup(profile: ITccProfile) {
 
-        const displayGroup: FormGroup = this.fb.group(profile.display);
-        const cpuGroup: FormGroup = this.fb.group(profile.cpu);
-        const webcamGroup: FormGroup = this.fb.group(profile.webcam);
-        const fanControlGroup: FormGroup = this.fb.group(profile.fan);
-        const odmProfileGroup: FormGroup = this.fb.group(profile.odmProfile);
+        const displayGroup: UntypedFormGroup = this.fb.group(profile.display);
+        const cpuGroup: UntypedFormGroup = this.fb.group(profile.cpu);
+        const webcamGroup: UntypedFormGroup = this.fb.group(profile.webcam);
+        const fanControlGroup: UntypedFormGroup = this.fb.group(profile.fan);
+        const odmProfileGroup: UntypedFormGroup = this.fb.group(profile.odmProfile);
 
-        const odmTDPValuesArray: FormArray = this.fb.array(profile.odmPowerLimits.tdpValues.map(e => this.fb.control(e)));
-        const odmPowerLimits: FormGroup = this.fb.group({
+        const odmTDPValuesArray: UntypedFormArray = this.fb.array(profile.odmPowerLimits.tdpValues.map(e => this.fb.control(e)));
+        const odmPowerLimits: UntypedFormGroup = this.fb.group({
             tdpValues: odmTDPValuesArray
         });
 
-        const nvidiaPowerCTRLProfileGroup: FormGroup = this.fb.group(profile.nvidiaPowerCTRLProfile);
+        const nvidiaPowerCTRLProfileGroup: UntypedFormGroup = this.fb.group(profile.nvidiaPowerCTRLProfile);
 
         cpuGroup.controls.scalingMinFrequency.setValidators([maxControlValidator(cpuGroup.controls.scalingMaxFrequency)]);
         cpuGroup.controls.scalingMaxFrequency.setValidators([minControlValidator(cpuGroup.controls.scalingMinFrequency)]);
@@ -482,7 +482,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     }
 
     public sliderMinFreqChange() {
-        const cpuGroup: FormGroup = this.profileFormGroup.controls.cpu as FormGroup;
+        const cpuGroup: UntypedFormGroup = this.profileFormGroup.controls.cpu as UntypedFormGroup;
         let newValue: number = cpuGroup.controls.scalingMinFrequency.value;
 
         // Ensure it's below chosen max value
@@ -502,7 +502,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     }
 
     public sliderMaxFreqChange() {
-        const cpuGroup: FormGroup = this.profileFormGroup.controls.cpu as FormGroup;
+        const cpuGroup: UntypedFormGroup = this.profileFormGroup.controls.cpu as UntypedFormGroup;
         let newValue: number = cpuGroup.controls.scalingMaxFrequency.value;
 
         // Ensure it's above chosen min value
@@ -544,14 +544,14 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     }
       
     get getODMTDPControls() {
-        const odmPowerLimits: FormGroup = this.profileFormGroup.controls.odmPowerLimits as FormGroup;
-        const tdpValues: FormArray = odmPowerLimits.controls.tdpValues as FormArray;
+        const odmPowerLimits: UntypedFormGroup = this.profileFormGroup.controls.odmPowerLimits as UntypedFormGroup;
+        const tdpValues: UntypedFormArray = odmPowerLimits.controls.tdpValues as UntypedFormArray;
         return tdpValues.controls;
     }
 
     public sliderODMPowerLimitMinValue(sliderIndex: number): number {
-        const odmPowerLimits: FormGroup = this.profileFormGroup.controls.odmPowerLimits as FormGroup;
-        const tdpValues: FormArray = odmPowerLimits.controls.tdpValues as FormArray;
+        const odmPowerLimits: UntypedFormGroup = this.profileFormGroup.controls.odmPowerLimits as UntypedFormGroup;
+        const tdpValues: UntypedFormArray = odmPowerLimits.controls.tdpValues as UntypedFormArray;
 
         // Find largest allowed min value
         let minValue = this.odmPowerLimitInfos[sliderIndex].min;
@@ -566,8 +566,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     }
 
     public sliderODMPowerLimitMaxValue(sliderIndex: number): number {
-        const odmPowerLimits: FormGroup = this.profileFormGroup.controls.odmPowerLimits as FormGroup;
-        const tdpValues: FormArray = odmPowerLimits.controls.tdpValues as FormArray;
+        const odmPowerLimits: UntypedFormGroup = this.profileFormGroup.controls.odmPowerLimits as UntypedFormGroup;
+        const tdpValues: UntypedFormArray = odmPowerLimits.controls.tdpValues as UntypedFormArray;
 
         // Find smallest allowed max value
         let maxValue = this.odmPowerLimitInfos[sliderIndex].max;
@@ -582,8 +582,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     }
 
     public sliderODMPowerLimitChange(movedSliderIndex: number) {
-        const odmPowerLimits: FormGroup = this.profileFormGroup.controls.odmPowerLimits as FormGroup;
-        const tdpValues: FormArray = odmPowerLimits.controls.tdpValues as FormArray;
+        const odmPowerLimits: UntypedFormGroup = this.profileFormGroup.controls.odmPowerLimits as UntypedFormGroup;
+        const tdpValues: UntypedFormArray = odmPowerLimits.controls.tdpValues as UntypedFormArray;
         let newValue: number = tdpValues.controls[movedSliderIndex].value;
 
 
@@ -629,8 +629,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
                 const sliderMax = this.odmPowerLimitInfos[movedSliderIndex].max;
                 const sliderMin = this.odmPowerLimitInfos[movedSliderIndex].min;
                 const tdpPercentage = Math.round((newValue - sliderMin) / (sliderMax - sliderMin) * 100);
-                const odmProfileGroup: FormGroup = this.profileFormGroup.controls.odmProfile as FormGroup;
-                const profileNameControl: FormControl = odmProfileGroup.controls.name as FormControl;
+                const odmProfileGroup: UntypedFormGroup = this.profileFormGroup.controls.odmProfile as UntypedFormGroup;
+                const profileNameControl: UntypedFormControl = odmProfileGroup.controls.name as UntypedFormControl;
                 if (tdpPercentage < 25) {
                     profileNameControl.setValue(this.odmProfileNames[0]);
                 } else if ( tdpPercentage < 75) {
@@ -776,7 +776,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public governorSelectionChange() {
         // Energy performance preference setting chosen based on governor
-        const cpuGroup: FormGroup = this.profileFormGroup.controls.cpu as FormGroup;
+        const cpuGroup: UntypedFormGroup = this.profileFormGroup.controls.cpu as UntypedFormGroup;
         if (cpuGroup.controls.governor.value === 'performance') {
             cpuGroup.controls.energyPerformancePreference.setValue('performance');
         } else {
@@ -858,8 +858,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     }
 
     public buttonODMPowerLimitUndo(sliderIndex: number) {
-        const odmPowerLimits: FormGroup = this.profileFormGroup.controls.odmPowerLimits as FormGroup;
-        const tdpValues: FormArray = odmPowerLimits.controls.tdpValues as FormArray;
+        const odmPowerLimits: UntypedFormGroup = this.profileFormGroup.controls.odmPowerLimits as UntypedFormGroup;
+        const tdpValues: UntypedFormArray = odmPowerLimits.controls.tdpValues as UntypedFormArray;
         tdpValues.controls[sliderIndex].reset(this.viewProfile.odmPowerLimits.tdpValues[sliderIndex]);
         const wantedValue = tdpValues.controls[sliderIndex].value;
         this.sliderODMPowerLimitChange(sliderIndex);

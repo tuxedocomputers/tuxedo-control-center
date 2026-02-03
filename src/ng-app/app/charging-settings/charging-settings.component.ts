@@ -19,7 +19,7 @@
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from "@angular/core";
 import { TccDBusClientService } from "../tcc-dbus-client.service";
 import { ElectronService } from "../electron.service";
-import { FormControl } from "@angular/forms";
+import { UntypedFormControl } from "@angular/forms";
 import { MatSliderChange } from "@angular/material/slider";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { ChargeType } from "src/common/classes/PowerSupplyController";
@@ -64,10 +64,10 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
     public chargeType: string;
     public chargeThresholdsEnabled = false;
 
-    public ctrlChargeStartThreshold = new FormControl(null);
-    public ctrlChargeEndThreshold = new FormControl(null);
-    public ctrlEnableThresholds = new FormControl(null);
-    public ctrlChargingThresholdGroup = new FormControl(null);
+    public ctrlChargeStartThreshold = new UntypedFormControl(null);
+    public ctrlChargeEndThreshold = new UntypedFormControl(null);
+    public ctrlEnableThresholds = new UntypedFormControl(null);
+    public ctrlChargingThresholdGroup = new UntypedFormControl(null);
     public chargingThresholdsProgress = false;
 
     public chargingThresholdGroupValue = null;

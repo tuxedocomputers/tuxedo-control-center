@@ -21,7 +21,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ConfigService } from '../config.service';
 import { ITccProfile } from '../../../common/models/TccProfile';
 import { UtilsService } from '../utils.service';
-import { FormControl, Validators } from '@angular/forms';
+import { UntypedFormControl, Validators } from '@angular/forms';
 import { MatInput } from '@angular/material/input';
 import { ElectronService } from '../electron.service';
 import { StateService, IStateInfo } from '../state.service';
@@ -55,7 +55,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy {
 
     public inputActive = false;
     public currentInputMode: InputMode;
-    public inputProfileName: FormControl = new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(50)]);
+    public inputProfileName: UntypedFormControl = new UntypedFormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(50)]);
     public inputProfileNameLabel: string;
     private subscriptions: Subscription = new Subscription();
 

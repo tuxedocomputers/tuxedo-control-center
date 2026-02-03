@@ -23,7 +23,7 @@ import { StateService, IStateInfo } from '../state.service';
 import { ITccSettings } from '../../../common/models/TccSettings';
 import { ConfigService } from '../config.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { CompatibilityService } from '../compatibility.service';
 import { IGeneralCPUInfo, SysFsService } from '../sys-fs.service';
 import { Subscription } from 'rxjs';
@@ -56,7 +56,7 @@ export class ProfileOverviewTileComponent implements OnInit {
 
     @Output() copyClick = new EventEmitter<string>();
 
-    public selectStateControl: FormControl;
+    public selectStateControl: UntypedFormControl;
     public stateInputArray: IStateInfo[];
 
     public isCustomProfile = true;
@@ -89,7 +89,7 @@ export class ProfileOverviewTileComponent implements OnInit {
 
         if (!this.addProfileTile) {
             if (this.selectStateControl === undefined) {
-                this.selectStateControl = new FormControl(this.state.getProfileStates(this.profile.id));
+                this.selectStateControl = new UntypedFormControl(this.state.getProfileStates(this.profile.id));
             } else {
                 this.selectStateControl.reset(this.state.getProfileStates(this.profile.id));
             }

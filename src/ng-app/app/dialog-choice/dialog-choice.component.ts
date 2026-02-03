@@ -18,7 +18,7 @@
  */
 
 import { Component, Inject } from "@angular/core";
-import { FormControl } from "@angular/forms";
+import { UntypedFormControl } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { ElectronService } from "../electron.service";
 
@@ -54,7 +54,7 @@ export interface ConfirmChoiceResult {
     styleUrls: ["./dialog-choice.component.scss"],
 })
 export class DialogChoiceComponent {
-    public ctrlCheckboxNoBother: FormControl;
+    public ctrlCheckboxNoBother: UntypedFormControl;
 
     constructor(
         private electron: ElectronService,
@@ -67,7 +67,7 @@ export class DialogChoiceComponent {
         if (data.showCheckboxNoBother === undefined) {
             data.showCheckboxNoBother = false;
         }
-        this.ctrlCheckboxNoBother = new FormControl(false);
+        this.ctrlCheckboxNoBother = new UntypedFormControl(false);
     }
 
     closeDialog(result?: string) {

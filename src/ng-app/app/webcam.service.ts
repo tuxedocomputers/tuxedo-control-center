@@ -1,10 +1,10 @@
 import { Injectable } from "@angular/core";
-import { FormGroup } from "@angular/forms";
+import { UntypedFormGroup } from "@angular/forms";
 import { CanDeactivate } from "@angular/router";
 import { UtilsService } from "./utils.service";
 
 export interface CanComponentDeactivate {
-    webcamFormGroup: FormGroup;
+    webcamFormGroup: UntypedFormGroup;
 }
 
 @Injectable({

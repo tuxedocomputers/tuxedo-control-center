@@ -19,8 +19,8 @@
 import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
 import {
     AbstractControl,
-    FormBuilder,
-    FormGroup,
+    UntypedFormBuilder,
+    UntypedFormGroup,
     Validators,
 } from "@angular/forms";
 import { Mutex } from "async-mutex";
@@ -67,7 +67,7 @@ export class FanSliderComponent implements OnInit {
     @Input()
     public tempCustomFanCurve: ITccFanProfile;
 
-    public fanFormGroup: FormGroup;
+    public fanFormGroup: UntypedFormGroup;
 
     @Input()
     public showFanGraphs: boolean = false;
@@ -82,7 +82,7 @@ export class FanSliderComponent implements OnInit {
     public graphType = "line";
 
     constructor(
-        private fb: FormBuilder,       
+        private fb: UntypedFormBuilder,       
         private config: ConfigService, 
         private utils: UtilsService,
         ) {}

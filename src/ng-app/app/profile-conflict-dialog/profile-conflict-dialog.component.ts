@@ -19,7 +19,7 @@
 import { ChangeDetectionStrategy, Component, HostListener, Inject, Output, OnInit, OnDestroy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { ITccProfile } from 'src/common/models/TccProfile';
-import { FormControl, Validators } from '@angular/forms';
+import { UntypedFormControl, Validators } from '@angular/forms';
 import { UtilsService } from '../utils.service';
 import { IGeneralCPUInfo , SysFsService } from '../sys-fs.service';
 import { Subscription } from 'rxjs';
@@ -39,7 +39,7 @@ export class ProfileConflictComponent implements OnInit, OnDestroy {
 
     public variable;
     public rename = false;
-    public inputNewProfileName: FormControl = new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(50)]);
+    public inputNewProfileName: UntypedFormControl = new UntypedFormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(50)]);
     
     public cpuInfo: IGeneralCPUInfo;
     private subscriptions: Subscription = new Subscription();

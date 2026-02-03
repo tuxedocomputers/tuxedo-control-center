@@ -15,11 +15,11 @@ import { WebcamSettingsGuard } from "../webcam.service";
 import { setInterval, clearInterval } from "timers";
 import {
     AbstractControl,
-    FormControl,
+    UntypedFormControl,
     ValidationErrors,
     ValidatorFn,
 } from "@angular/forms";
-import { FormGroup } from "@angular/forms";
+import { UntypedFormGroup } from "@angular/forms";
 import { ConfigHandler } from "src/common/classes/ConfigHandler";
 import { TccPaths } from "src/common/classes/TccPaths";
 import { MatOptionSelectionChange } from "@angular/material/core";
@@ -57,7 +57,7 @@ export class WebcamSettingsComponent implements OnInit {
     webcamInitComplete: boolean = false;
     webcamPresetsOtherDevices: WebcamPreset[] = [];
     webcamPresetsCurrentDevice: WebcamPreset[] = [];
-    webcamFormGroup: FormGroup = new FormGroup({});
+    webcamFormGroup: UntypedFormGroup = new UntypedFormGroup({});
     webcamCategories: string[] = [];
 
     allPresetData: WebcamPreset[] = [];
@@ -525,12 +525,12 @@ export class WebcamSettingsComponent implements OnInit {
 
     private convertSettingsToFormGroup(
         settings: WebcamDeviceInformation[]
-    ): FormGroup {
+    ): UntypedFormGroup {
         this.presetSettings = settings;
         let group = {};
         let categories = [];
         settings.forEach((setting) => {
-            group[setting.name] = new FormControl(
+            group[setting.name] = new UntypedFormControl(
                 {
                     value: setting.current,
                     disabled: !setting.active,
@@ -540,7 +540,7 @@ export class WebcamSettingsComponent implements OnInit {
             categories.push(setting.category);
         });
         this.webcamCategories = [...new Set(categories)];
-        return new FormGroup(group);
+        return new UntypedFormGroup(group);
     }
 
     private async webcamNotAvailableOtherAccessDialog(): Promise<void> {

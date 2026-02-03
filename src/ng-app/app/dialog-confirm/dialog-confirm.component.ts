@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Component, Inject } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ElectronService } from '../electron.service';
 
@@ -45,7 +45,7 @@ export interface ConfirmDialogResult {
 })
 export class DialogConfirmComponent {
 
-    public ctrlCheckboxNoBother: FormControl;
+    public ctrlCheckboxNoBother: UntypedFormControl;
 
     constructor(
         private electron: ElectronService,
@@ -58,7 +58,7 @@ export class DialogConfirmComponent {
             if (data.showCheckboxNoBother === undefined) {
                 data.showCheckboxNoBother = false;
             }
-            this.ctrlCheckboxNoBother = new FormControl(false);
+            this.ctrlCheckboxNoBother = new UntypedFormControl(false);
         }
 
     closeDialog(result?: boolean) {

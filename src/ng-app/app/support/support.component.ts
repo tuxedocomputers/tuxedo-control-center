@@ -19,7 +19,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ElectronService } from '../electron.service';
 import { ProgramManagementService } from '../program-management.service';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
 import { UtilsService } from '../utils.service';
 import { MatStepper } from '@angular/material/stepper';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
@@ -39,7 +39,7 @@ export class SupportComponent implements OnInit {
   public webFAICreatorProgramName = 'tuxedo-webfai-creator';
   public webFAICreatorInstalled: boolean;
 
-  public formTicketNumber: FormGroup;
+  public formTicketNumber: UntypedFormGroup;
   public systeminfoRunOutput = '';
   public systeminfoRunProgress = false;
   public systeminfoFilePath = '/tmp/tcc/systeminfos.sh';
@@ -54,8 +54,8 @@ export class SupportComponent implements OnInit {
 
   ngOnInit() {
     this.updateWebFAICreatorInstallStatus();
-    this.formTicketNumber = new FormGroup({
-      inputTicketNumber: new FormControl('', [Validators.required, Validators.pattern('^(99)([0-9]){7}')])
+    this.formTicketNumber = new UntypedFormGroup({
+      inputTicketNumber: new UntypedFormControl('', [Validators.required, Validators.pattern('^(99)([0-9]){7}')])
     });
   }
 

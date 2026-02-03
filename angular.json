@@ -132,6 +132,5 @@
                 }
             }
         }
-    },
-    "defaultProject": "tuxedo-control-center"
+    }
 }

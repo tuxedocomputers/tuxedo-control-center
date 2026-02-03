@@ -22,7 +22,7 @@ import { ConfigService } from '../config.service';
 import { UtilsService } from '../utils.service';
 import { Subscription } from 'rxjs';
 import { TccDBusClientService } from '../tcc-dbus-client.service';
-import { FormControl } from '@angular/forms';
+import { UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AvailabilityService } from "../../../common/classes/availability.service";
 
@@ -47,7 +47,7 @@ export class GlobalSettingsComponent implements OnInit {
     public forceYUV420OutputSwitchAvailable: boolean = false;
     public ycbcr420Workaround: Array<Object> = [];
     public temperatureDisplayFahrenheit: boolean;
-    public ctrlBrightnessMode = new FormControl();
+    public ctrlBrightnessMode = new UntypedFormControl();
 
     public hasChargingSettings = false;
 

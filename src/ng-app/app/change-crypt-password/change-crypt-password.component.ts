@@ -16,7 +16,7 @@
 // along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { FormErrorStateMatcher } from 'src/ng-app/common/formErrorStateMatcher';
 import { UtilsService } from '../utils.service';
 import { DriveController } from "../../../common/classes/DriveController";
@@ -36,17 +36,17 @@ export class ChangeCryptPasswordComponent implements OnInit {
     minLength = 1;
     maxLength = 512;
 
-    passwordFormGroup: FormGroup;
+    passwordFormGroup: UntypedFormGroup;
 
     constructor(
         private utils: UtilsService
     ) { }
 
     async ngOnInit(): Promise<void> {
-        this.passwordFormGroup = new FormGroup({
-            cryptPassword: new FormControl('', [Validators.required, Validators.minLength(this.minLength), Validators.maxLength(this.maxLength)]),
-            newPassword: new FormControl('', [Validators.required, Validators.minLength(this.minLength), Validators.maxLength(this.maxLength)]),
-            confirmPassword: new FormControl('', [Validators.required, Validators.minLength(this.minLength), Validators.maxLength(this.maxLength)])
+        this.passwordFormGroup = new UntypedFormGroup({
+            cryptPassword: new UntypedFormControl('', [Validators.required, Validators.minLength(this.minLength), Validators.maxLength(this.maxLength)]),
+            newPassword: new UntypedFormControl('', [Validators.required, Validators.minLength(this.minLength), Validators.maxLength(this.maxLength)]),
+            confirmPassword: new UntypedFormControl('', [Validators.required, Validators.minLength(this.minLength), Validators.maxLength(this.maxLength)])
         }, { validators: [this.confirmValidation] })
 
         this.crypt_drives = (await DriveController.getDrives()).filter(x => x.crypt);
@@ -116,7 +116,7 @@ export class ChangeCryptPasswordComponent implements OnInit {
         });
     }
 
-    confirmValidation(group: FormGroup) {
+    confirmValidation(group: UntypedFormGroup) {
         let pass = group.get("newPassword").value;
         let confirmPass = group.get("confirmPassword").value;
 
