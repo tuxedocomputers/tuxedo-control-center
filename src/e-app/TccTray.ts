@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Menu, Tray } from 'electron';
+import { Menu, type MenuItemConstructorOptions, Tray } from 'electron';
 import type { TccProfile } from '../common/models/TccProfile';
 
 export class TccTray {
@@ -43,10 +43,15 @@ export class TccTray {
             this.tray.setToolTip('TUXEDO Control Center');
         }
 
-        // todo: add type, don't use Object as type
-        const profilesSubmenu: Object[] = this.state.profiles.map(
-            (profile: TccProfile): { label: string; click: () => void; type: string; checked: boolean } => {
-                // Creation of each profile selection submenu item
+        const profilesSubmenu: MenuItemConstructorOptions[] = this.state.profiles.map(
+            (
+                profile: TccProfile,
+            ): {
+                label: string;
+                click: () => void;
+                type: 'radio' | 'separator' | 'normal' | 'submenu' | 'checkbox' | 'header' | 'palette';
+                checked: boolean;
+            } => {
                 return {
                     label: profile.name,
                     click: (): void => this.events.profileClick(profile?.id),

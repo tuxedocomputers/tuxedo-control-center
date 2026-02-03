@@ -25,7 +25,7 @@ import type { Dirent } from 'node:fs';
 export abstract class SysFsController {
     public static getDeviceList(sourceDir: string): string[] {
         try {
-            return fs.readdirSync(sourceDir, { withFileTypes: true }).map((dirent: Dirent): any => dirent.name);
+            return fs.readdirSync(sourceDir, { withFileTypes: true }).map((dirent: Dirent): string => dirent.name);
         } catch (err: unknown) {
             console.error(`SysFsController: getDeviceList failed => ${err}`);
             return [];

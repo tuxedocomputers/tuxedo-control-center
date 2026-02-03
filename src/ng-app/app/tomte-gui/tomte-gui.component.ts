@@ -80,7 +80,6 @@ export class TomteGuiComponent implements OnInit {
     }
 
     private async tomtelist(): Promise<void> {
-        // todo: only check version once and then store it?
         this.showRetryButton = false;
         this.loadingInformation = true;
 
@@ -91,7 +90,13 @@ export class TomteGuiComponent implements OnInit {
 
             for (let i: number = 0; i < 30; i++) {
                 tomteInformation = await window.tomteAPI.getTomteInformation();
-                if (tomteInformation && !tomteInformation.jsonError) {
+
+                if (!tomteInformation) {
+                    this.jsonError = true;
+                }
+
+                if (tomteInformation) {
+                    this.jsonError = false;
                     this.getModuleDescriptions();
                     break;
                 } else {
@@ -100,7 +105,9 @@ export class TomteGuiComponent implements OnInit {
                             $localize`:@@tomteGuiTomteListErrorPopup:Information from command 'tomte list' could not be obtained. Is tomte already running?`,
                         );
                     }
+
                     await new Promise((resolve) => setTimeout(resolve, 1000));
+
                     if (i === 29) {
                         this.showRetryButton = true;
                     }
@@ -108,7 +115,7 @@ export class TomteGuiComponent implements OnInit {
             }
 
             this.tomteListArray = tomteInformation?.modules ?? [];
-            this.tomteMode = tomteInformation?.tomteMode ?? '';
+            this.tomteMode = tomteInformation?.mode ?? '';
         }
 
         this.getModuleDescriptions();
@@ -122,7 +129,8 @@ export class TomteGuiComponent implements OnInit {
     private async getModuleDescriptions(): Promise<void> {
         if (this.moduleToolTips.size < this.tomteListArray?.length) {
             for (let i: number = 0; i < this.tomteListArray?.length; i++) {
-                const moduleName: string = this.tomteListArray[i].moduleName;
+                const moduleName: string = this.tomteListArray[i]?.name;
+
                 if (this.moduleToolTips.has(moduleName)) {
                     continue;
                 }
@@ -145,25 +153,26 @@ export class TomteGuiComponent implements OnInit {
         Returns properly translated tooltip for the sliders in each of their proper conditions
     */
     // todo: maybe refactor
-    public getSliderToolTip(whichButton: string, prerequisite: string, blocked: boolean, installed: boolean): string {
+    public getSliderToolTip(whichButton: string, required: string, blocked: string, installed: string): string {
         if (whichButton === 'blocked') {
-            if (prerequisite === 'prerequisite') {
+            if (required === 'prerequisite') {
                 return $localize`:@@tomteGuiSliderToolTipBlockRequisite:This module is essential for the proper operation of your TUXEDO and cannot be deactivated`;
             }
-            if (blocked) {
+            if (blocked === 'yes') {
                 return $localize`:@@tomteGuiSliderToolTipUnblock:Activate module`;
             } else {
                 return $localize`:@@tomteGuiSliderToolTipBlock:Deactivate module`;
             }
         }
+
         if (whichButton === 'installed') {
-            if (prerequisite === 'prerequisite') {
+            if (required === 'prerequisite') {
                 return $localize`:@@tomteGuiSliderToolTipUninstallRequisite:This module is essential for the proper operation of your TUXEDO and cannot be uninstalled`;
             }
-            if (blocked) {
+            if (blocked === 'yes') {
                 return $localize`:@@tomteGuiSliderToolTipUnInstallBlocked:Cannot install or uninstall a module that is blocked`;
             }
-            if (installed) {
+            if (installed === 'yes') {
                 return $localize`:@@tomteGuiSliderToolTipBlockUninstall:Uninstall this module`;
             } else {
                 return $localize`:@@tomteGuiSliderToolTipInstall:Install this module`;
@@ -207,9 +216,11 @@ export class TomteGuiComponent implements OnInit {
                 checkboxNoBotherLabel: $localize`:@@tomteDialogCheckboxNoBotherLabel:Don't ask again`,
                 showCheckboxNoBother: true,
             });
+
             if (askToClose.noBother) {
                 localStorage.setItem('tomteGuiNoticeDisable', 'true');
             }
+
             if (!askToClose.confirm) {
                 return false;
             }
@@ -232,9 +243,11 @@ export class TomteGuiComponent implements OnInit {
             checkboxNoBotherLabel: '',
             showCheckboxNoBother: false,
         });
+
         if (askToClose.confirm) {
             return true;
         }
+
         if (!askToClose.confirm) {
             return false;
         }
@@ -271,7 +284,7 @@ export class TomteGuiComponent implements OnInit {
         Tries to either install or uninstall a given module, depending on if the module is already installed or not
         Not to be confused with the installTomteButton() function that instead tries to install tomte
     */
-    public async tomteModuleInstallButton(name: string, isInstalled: boolean, isBlocked: boolean) {
+    public async tomteModuleInstallButton(name: string, installed: string, blocked: string) {
         this.utils.pageDisabled = true;
         const confirmed: boolean = await this.confirmChangesDialog();
 
@@ -280,11 +293,13 @@ export class TomteGuiComponent implements OnInit {
             this.utils.pageDisabled = false;
             return;
         }
-        if (isBlocked) {
+
+        if (blocked === 'yes') {
             this.utils.pageDisabled = false;
             return;
         }
-        if (isInstalled) {
+
+        if (installed === 'yes') {
             await window.tomteAPI.removeModule(name).catch((err: unknown): void => {
                 console.error(`tomote-gui: tomteModuleInstallButton removeModule failed => ${err}`);
                 this.utils.pageDisabled = false;
@@ -307,8 +322,9 @@ export class TomteGuiComponent implements OnInit {
     /*
         Tries to either block or unblock a given module, depending on if the module is already blocked or not
     */
-    public async tomteBlockButton(name: string, isBlocked: boolean): Promise<void> {
+    public async tomteBlockButton(name: string, blocked: string): Promise<void> {
         const confirmed: boolean = await this.confirmChangesDialog();
+
         if (!confirmed) {
             this.tomtelist();
             this.utils.pageDisabled = false;
@@ -317,7 +333,7 @@ export class TomteGuiComponent implements OnInit {
 
         this.utils.pageDisabled = true;
 
-        if (isBlocked) {
+        if (blocked === 'yes') {
             await window.tomteAPI.unBlockModule(name).catch((err: unknown): void => {
                 console.error(`tomote-gui: tomteBlockButton unBlockModule failed => ${err}`);
                 this.utils.pageDisabled = false;

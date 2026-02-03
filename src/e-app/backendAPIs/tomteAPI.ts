@@ -114,59 +114,19 @@ async function setMode(mode: string): Promise<void> {
         });
 }
 
-function parseTomteListJson(rawTomteListOutput: string | undefined): ITomteInformation {
-    const tomteInformation: ITomteInformation = {
-        modules: [],
-        tomteMode: '',
-        jsonError: true,
-        rebootRequired: false,
-    };
-
-    if (!rawTomteListOutput) {
-        return;
-    }
-
-    try {
-        const givenobject: any = JSON.parse(rawTomteListOutput);
-        tomteInformation.jsonError = false;
-
-        tomteInformation.tomteMode = givenobject.mode;
-        tomteInformation.modules = [];
-        tomteInformation.rebootRequired = givenobject.restart === 'yes';
-        for (let i: number = 0; i < givenobject.modules?.length; i++) {
-            const module: any = givenobject.modules[i];
-            tomteInformation.modules.push({
-                moduleName: module.name,
-                version: module.version,
-                installed: module.installed === 'yes',
-                blocked: module.blocked === 'yes',
-                prerequisite: module.required,
-            });
-        }
-    } catch (err: unknown) {
-        console.error(`tomteAPI: parseTomteListJson failed => ${err}`);
-        tomteInformation.jsonError = true;
-    }
-
-    return tomteInformation;
-}
-
 async function getTomteInformation(): Promise<ITomteInformation> {
     const command: string = 'tuxedo-tomte listjson';
-    let tomteInformation: ITomteInformation;
-    let results: string;
 
     try {
-        results = await execCmd(`${command}`);
         // delete everything up to the first occurance of {
-        results = results.replace(/^[^\{]*\{/, '{');
-    } catch {
-        results = '';
-    } finally {
-        tomteInformation = parseTomteListJson(results);
-    }
+        const output = (await execCmd(`${command}`)).replace(/^[^{]*\{/, '{');
 
-    return tomteInformation;
+        if (output) {
+            return JSON.parse(output);
+        }
+    } catch (err: unknown) {
+        console.error(`tomteAPI: getTomteInformation failed => ${err}`);
+    }
 }
 
 export const tomteHandlers: Map<string, (...args: any[]) => any> = new Map<string, (...args: any[]) => any>()

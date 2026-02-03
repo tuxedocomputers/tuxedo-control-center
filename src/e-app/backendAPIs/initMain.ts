@@ -432,7 +432,8 @@ async function setTempProfileById(profileId: string): Promise<boolean> {
 }
 
 async function getActiveProfile(): Promise<TccProfile> {
-    let result: TccProfile = undefined;
+    let result: TccProfile;
+
     if (!(await tccDBus.dbusAvailable())) return undefined;
     try {
         const activeProfileJSON: string = await tccDBus.getActiveProfileJSON();

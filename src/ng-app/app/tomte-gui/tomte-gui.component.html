@@ -148,7 +148,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <div matColumnDef="moduleName">
                             <th mat-header-cell *matHeaderCellDef i18n="@@cTomteGuiTomteConfigurationTableColumnHeaderModuleName">Module name</th>
                             <td mat-cell *matCellDef="let line">
-                                {{ line.moduleName }}
+                                {{ line.name }}
                             </td>
                         </div>
 
@@ -164,10 +164,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             <td mat-cell *matCellDef="let line">
                                 <mat-slide-toggle
                                     class="green-slide-toggle"
-                                    [disabled]="line.prerequisite === 'prerequisite' || line.blocked"
-                                    [checked]="line.installed"
-                                    (change)="tomteModuleInstallButton(line.moduleName, line.installed, line.blocked)"
-                                    [matTooltip]="getSliderToolTip('installed', line.prerequisite, line.blocked, line.installed)">
+                                    [disabled]="line.required === 'prerequisite' || line.blocked === 'yes'"
+                                    [checked]="line.installed === 'yes'"
+                                    (change)="tomteModuleInstallButton(line.name, line.installed, line.blocked)"
+                                    [matTooltip]="getSliderToolTip('installed', line.required, line.blocked, line.installed)">
                                 </mat-slide-toggle>
                             </td>
                         </div>
@@ -177,10 +177,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             <td mat-cell *matCellDef="let line">
                                 <mat-slide-toggle
                                     class="green-slide-toggle"
-                                    [disabled]="line.prerequisite === 'prerequisite'"
-                                    [checked]="!line.blocked"
-                                    (change)="tomteBlockButton(line.moduleName, line.blocked)"
-                                    [matTooltip]="getSliderToolTip('blocked', line.prerequisite, line.blocked, line.installed)">
+                                    [disabled]="line.required === 'prerequisite'"
+                                    [checked]="line.blocked === 'no'"
+                                    (change)="tomteBlockButton(line.name, line.blocked)"
+                                    [matTooltip]="getSliderToolTip('blocked', line.required, line.blocked, line.installed)">
                                 </mat-slide-toggle>
                             </td>
                         </div>
@@ -188,14 +188,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <div matColumnDef="moduleRequired">
                             <th mat-header-cell *matHeaderCellDef i18n="@@cTomteGuiTomteConfigurationTableColumnHeaderModuleRequired">Required</th>
                             <td mat-cell *matCellDef="let line">
-                                {{ line.prerequisite }}
+                                {{ line.required }}
                             </td>
                         </div>
 
                         <div matColumnDef="moduleDescription">
                             <th mat-header-cell *matHeaderCellDef i18n="@@cTomteGuiTomteConfigurationTableColumnHeaderModuleInfo">Info</th>
                             <td mat-cell *matCellDef="let line">
-                                <mat-icon class="info-icon" [matTooltip]="moduleToolTips.get(line.moduleName)" [matTooltipShowDelay]="infoTooltipShowDelay">
+                                <mat-icon class="info-icon" [matTooltip]="moduleToolTips.get(line.name)" [matTooltipShowDelay]="infoTooltipShowDelay">
                                     <svg viewBox="0 0 512 512">
                                         <use href="./assets/images/icon_info.svg#Icon"></use>
                                     </svg>

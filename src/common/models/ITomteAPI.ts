@@ -30,17 +30,18 @@ export enum TomteAPIFunctions {
     setMode = 'setMode',
 }
 
+// todo: version should not be string
 export interface ITomteModule {
-    moduleName: string;
+    name: string;
     version: string;
-    installed: boolean;
-    blocked: boolean;
-    prerequisite: string;
+    required: string;
+    blocked: string;
+    installed: string;
 }
 
 export interface ITomteInformation {
-    tomteMode: string;
+    restart: string;
+    version: string;
+    mode: string;
     modules: ITomteModule[];
-    jsonError: boolean;
-    rebootRequired: boolean;
 }
