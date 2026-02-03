@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Resolve } from '@angular/router';
+
 
 import { Observable, of, from } from 'rxjs';
 import { TccDBusClientService } from './tcc-dbus-client.service';
@@ -7,7 +7,7 @@ import { TccDBusClientService } from './tcc-dbus-client.service';
 @Injectable({
     providedIn: 'root'
 })
-export class LoaderResolver implements Resolve<Observable<string>> {
+export class LoaderResolver  {
     constructor(private dbus: TccDBusClientService) {}
 
     resolve(): Observable<any> {

@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Resolve } from "@angular/router";
+
 import { Observable } from "rxjs";
 import { TccDBusClientService } from "./tcc-dbus-client.service";
 import { filter, first } from "rxjs/operators";
@@ -7,7 +7,7 @@ import { filter, first } from "rxjs/operators";
 @Injectable({
     providedIn: "root",
 })
-export class ForceYUV420OutputSwitchResolver implements Resolve<boolean> {
+export class ForceYUV420OutputSwitchResolver  {
     constructor(private tccdbus: TccDBusClientService) {}
 
     resolve(): Observable<boolean> {
@@ -23,7 +23,7 @@ export class ForceYUV420OutputSwitchResolver implements Resolve<boolean> {
 @Injectable({
     providedIn: "root",
 })
-export class ChargingProfilesAvailableResolver implements Resolve<string[]> {
+export class ChargingProfilesAvailableResolver  {
     constructor(private tccdbus: TccDBusClientService) {}
 
     resolve(): Observable<string[]> {
@@ -37,7 +37,7 @@ export class ChargingProfilesAvailableResolver implements Resolve<string[]> {
 @Injectable({
     providedIn: "root",
 })
-export class PrimeSelectAvailableResolver implements Resolve<string> {
+export class PrimeSelectAvailableResolver  {
     constructor(private tccdbus: TccDBusClientService) {}
 
     resolve(): Observable<string> {

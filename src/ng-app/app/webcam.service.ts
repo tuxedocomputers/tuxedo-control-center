@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
 import { UntypedFormGroup } from "@angular/forms";
-import { CanDeactivate } from "@angular/router";
+
 import { UtilsService } from "./utils.service";
 
 export interface CanComponentDeactivate {
@@ -11,7 +11,7 @@ export interface CanComponentDeactivate {
     providedIn: "root",
 })
 export class WebcamSettingsGuard
-    implements CanDeactivate<CanComponentDeactivate>
+    
 {
     constructor(private utils: UtilsService) {}
     loading: boolean = false;
