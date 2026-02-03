@@ -838,7 +838,10 @@ export class WebcamSettingsComponent implements OnInit {
             webcamConfigs = webcamConfigs.concat(this.webcamPresetsOtherDevices);
         }
         if (!overwrite) {
-            webcamConfigs.forEach((preset: WebcamPreset): boolean => (preset.active = false));
+            webcamConfigs.forEach((preset: WebcamPreset): void => {
+                preset.active = false;
+            });
+
             webcamConfigs = webcamConfigs.concat(currentPreset, this.webcamPresetsOtherDevices);
         }
 

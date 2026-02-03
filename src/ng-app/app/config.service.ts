@@ -399,10 +399,11 @@ export class ConfigService implements OnDestroy {
             this.editingProfileSubject.next(undefined);
             this.editingProfile.next(undefined);
         }
-        // todo: why is the variable called e
-        const index: number = (this.currentProfileEditIndex = this.customProfiles.findIndex(
-            (e: ITccProfile): boolean => e.id === customProfileId,
-        ));
+
+        const index: number = this.customProfiles.findIndex(
+            (profile: ITccProfile): boolean => profile.id === customProfileId,
+        );
+
         if (index === -1) {
             return false;
         } else {
