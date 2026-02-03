@@ -18,14 +18,15 @@
  */
 import { Injectable, Inject, LOCALE_ID } from '@angular/core';
 import { SysFsService } from './sys-fs.service';
-import { ElectronService } from 'ngx-electron';
+// import { ElectronService } from 'ngx-electron';
+import { ElectronService } from './electron.service';
 import { DecimalPipe } from '@angular/common';
 import * as https from 'https';
 import * as fs from 'fs';
 import * as path from 'path';
 
 import { OverlayContainer } from '@angular/cdk/overlay';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, lastValueFrom } from 'rxjs';
 import { ConfirmDialogData, ConfirmDialogResult, DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
 import { ChoiceDialogData, ConfirmChoiceResult, DialogChoiceComponent, WaitingDialogData } from './dialog-choice/dialog-choice.component';
 
@@ -193,7 +194,28 @@ export class UtilsService {
     });
   }
 
-  public async writeTextFile(filePath: string, fileData: string | Buffer, writeFileOptions?: fs.WriteFileOptions): Promise<void> {
+  public async writeTextFile(filePath: string, fileData: string | Buffer, writeFileOptions?: any): Promise<void> {
+    // Modern implementation using ContextBridge
+    const electron = (window as any).electron;
+    if (electron && electron.fs) {
+        const dir = path.dirname(filePath);
+        // Check dir exists
+        const dirExists = await electron.fs.exists(dir);
+        if (!dirExists) {
+            await electron.fs.mkdir(dir, { mode: 0o755, recursive: true });
+        }
+        
+        // Convert buffer to string if necessary, or handle it. 
+        // For simplicity assuming string or compatible data for now.
+        const dataToWrite = fileData; 
+        
+        const result = await electron.fs.writeFile(filePath, dataToWrite, writeFileOptions);
+        if (result.error) {
+            throw result.error;
+        }
+        return;
+    }
+
     return new Promise<void>((resolve, reject) => {
       try {
         if (!fs.existsSync(path.dirname(filePath))) {
@@ -214,6 +236,15 @@ export class UtilsService {
 
 
   public async readTextFile(filePath: string, ): Promise<string> {
+    const electron = (window as any).electron;
+    if (electron && electron.fs) {
+        const result = await electron.fs.readFile(filePath);
+        if (result.error) {
+            throw result.error;
+        }
+        return result.data + "";
+    }
+
     return new Promise<string>((resolve, reject) => {
       try {
         fs.readFile(filePath,(err, data) => {
@@ -230,6 +261,13 @@ export class UtilsService {
   }
 
   public async modFile(filePath: string, mode: number): Promise<void> {
+    const electron = (window as any).electron;
+    if (electron && electron.fs) {
+        const result = await electron.fs.chmod(filePath, mode);
+        if (result.error) throw result.error;
+        return;
+    }
+
     return new Promise<void>((resolve, reject) => {
       fs.chmod(filePath, mode, err => {
         if (err) {
@@ -325,7 +363,7 @@ export class UtilsService {
       maxWidth: 550,
       data: config
     });
-    let result: ConfirmDialogResult =  await dialogRef.afterClosed().toPromise();
+    let result: ConfirmDialogResult =  await lastValueFrom(dialogRef.afterClosed());
     if (result === undefined) {
       result = {
         confirm: false,
@@ -343,7 +381,7 @@ export class UtilsService {
       autoFocus: false,
       disableClose: disableClose
     });
-    let result: ConfirmChoiceResult =  await dialogRef.afterClosed().toPromise();
+    let result: ConfirmChoiceResult =  await lastValueFrom(dialogRef.afterClosed());
     if (result === undefined) {
       result = {
         value: undefined,
@@ -374,7 +412,7 @@ export class UtilsService {
       minWidth: 350,
       data: config,
     });
-    return dialogRef.afterClosed().toPromise();
+    return lastValueFrom(dialogRef.afterClosed());
   }
   
   private defaultProfileInfos = new Map<string, IProfileTextMappings>();

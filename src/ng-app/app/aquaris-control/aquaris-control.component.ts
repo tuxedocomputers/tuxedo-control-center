@@ -562,7 +562,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
                 prefill: hasName ? chosenName : ''
             }
         });
-        return dialogRef.afterClosed().toPromise().then(async chosenName => {
+        return lastValueFrom(dialogRef.afterClosed()).then(async chosenName => {
             if (chosenName !== undefined) {
                 const deviceNames = await this.getUserDeviceNames();
                 if (chosenName.trim() === '') {
