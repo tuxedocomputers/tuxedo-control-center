@@ -80,15 +80,15 @@ export class TomteGuiComponent implements OnInit {
     }
 
     private async tomtelist(): Promise<void> {
-        // check for tomte version and then either use oldTomteList or tomteListJSON
-        // only check version once and then store it?
+        // todo: only check version once and then store it?
         this.showRetryButton = false;
         this.loadingInformation = true;
 
         this.tomteInstalled = await window.pgms.tomteInstalled();
+
         if (this.tomteInstalled) {
             let tomteInformation: ITomteInformation;
-            // check for information a few times, if it keeps failing, show retry button
+
             for (let i: number = 0; i < 30; i++) {
                 tomteInformation = await window.tomteAPI.getTomteInformation();
                 if (tomteInformation && !tomteInformation.jsonError) {
@@ -106,9 +106,11 @@ export class TomteGuiComponent implements OnInit {
                     }
                 }
             }
+
             this.tomteListArray = tomteInformation?.modules ?? [];
             this.tomteMode = tomteInformation?.tomteMode ?? '';
         }
+
         this.getModuleDescriptions();
         this.loadingInformation = false;
     }
@@ -124,13 +126,16 @@ export class TomteGuiComponent implements OnInit {
                 if (this.moduleToolTips.has(moduleName)) {
                     continue;
                 }
+
                 const results: string = await window.tomteAPI.getModuleDescription(
                     moduleName,
                     this.utils.getCurrentLanguageId(),
                 );
+
                 if (!results) {
                     continue;
                 }
+
                 this.moduleToolTips.set(moduleName, results);
             }
         }
@@ -138,7 +143,7 @@ export class TomteGuiComponent implements OnInit {
 
     /*
         Returns properly translated tooltip for the sliders in each of their proper conditions
-*/
+    */
     // todo: maybe refactor
     public getSliderToolTip(whichButton: string, prerequisite: string, blocked: boolean, installed: boolean): string {
         if (whichButton === 'blocked') {
@@ -172,6 +177,7 @@ export class TomteGuiComponent implements OnInit {
     */
     private async throwErrorMessage(err: string | undefined): Promise<void> {
         console.error(`tomte-gui: throwErrorMessage => ${err}`);
+
         await this.utils.confirmDialog({
             title: $localize`:@@tomteGuiDialogErrorTitle:An Error occured!`,
             description: err,
@@ -189,6 +195,7 @@ export class TomteGuiComponent implements OnInit {
     */
     private async confirmChangesDialog(): Promise<boolean> {
         const tomteGuiNoticeDisable: string = localStorage.getItem('tomteGuiNoticeDisable');
+
         if (tomteGuiNoticeDisable === null || tomteGuiNoticeDisable === 'false') {
             const askToClose: ConfirmDialogResult = await this.utils.confirmDialog({
                 title: $localize`:@@tomteBreakingChangesTitle:Authentication is required to run TUXEDO Tomte`,
@@ -207,6 +214,7 @@ export class TomteGuiComponent implements OnInit {
                 return false;
             }
         }
+
         return true;
     }
 
@@ -239,12 +247,15 @@ export class TomteGuiComponent implements OnInit {
     public async tomteResetToDefaults(): Promise<void> {
         this.utils.pageDisabled = true;
         const confirmed: boolean = await this.confirmResetDialog();
+
         if (!confirmed) {
             this.tomtelist();
             this.utils.pageDisabled = false;
             return;
         }
+
         const success: string = await window.tomteAPI.resetToDefaults();
+
         if (success) {
             this.tomtelist();
         } else {
@@ -252,6 +263,7 @@ export class TomteGuiComponent implements OnInit {
                 $localize`:@@tomteGuiResetFailedPopup:Reset failed. Maybe Tomte is already running? If that is the case simply try again later.`,
             );
         }
+
         this.utils.pageDisabled = false;
     }
 
@@ -262,6 +274,7 @@ export class TomteGuiComponent implements OnInit {
     public async tomteModuleInstallButton(name: string, isInstalled: boolean, isBlocked: boolean) {
         this.utils.pageDisabled = true;
         const confirmed: boolean = await this.confirmChangesDialog();
+
         if (!confirmed) {
             this.tomtelist();
             this.utils.pageDisabled = false;
@@ -286,6 +299,7 @@ export class TomteGuiComponent implements OnInit {
                 return;
             });
         }
+
         this.tomtelist();
         this.utils.pageDisabled = false;
     }
@@ -300,7 +314,9 @@ export class TomteGuiComponent implements OnInit {
             this.utils.pageDisabled = false;
             return;
         }
+
         this.utils.pageDisabled = true;
+
         if (isBlocked) {
             await window.tomteAPI.unBlockModule(name).catch((err: unknown): void => {
                 console.error(`tomote-gui: tomteBlockButton unBlockModule failed => ${err}`);
@@ -324,17 +340,21 @@ export class TomteGuiComponent implements OnInit {
     */
     public async tomteModeButton(mode: { value: ['AUTOMATIC', 'UPDATES_ONLY', 'DONT_CONFIGURE'] }): Promise<void> {
         const confirmed: boolean = await this.confirmChangesDialog();
+
         if (!confirmed) {
             this.tomtelist();
             this.utils.pageDisabled = false;
             return;
         }
+
         this.utils.pageDisabled = true;
+
         await window.tomteAPI.setMode(mode.value).catch((err: unknown): void => {
             console.error(`tomote-gui: tomteModeButton failed => ${err}`);
             this.utils.pageDisabled = false;
             return;
         });
+
         this.tomtelist();
         this.utils.pageDisabled = false;
     }
@@ -346,11 +366,13 @@ export class TomteGuiComponent implements OnInit {
     public async installTomteButton(): Promise<void> {
         this.utils.pageDisabled = true;
         const tomteInstalled: boolean = await window.pgms.installTomte();
+
         if (!tomteInstalled) {
             this.throwErrorMessage(
                 $localize`:@@tomteGuiInstallErrorMessagePopup:Tomte failed to install. Do you use a tuxedo device and are using the tuxedo repos?`,
             );
         }
+
         this.utils.pageDisabled = false;
         this.tomtelist();
     }

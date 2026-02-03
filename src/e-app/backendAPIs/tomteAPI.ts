@@ -130,7 +130,6 @@ function parseTomteListJson(rawTomteListOutput: string | undefined): ITomteInfor
         const givenobject: any = JSON.parse(rawTomteListOutput);
         tomteInformation.jsonError = false;
 
-        // now let's get the mode, modules etc out of it
         tomteInformation.tomteMode = givenobject.mode;
         tomteInformation.modules = [];
         tomteInformation.rebootRequired = givenobject.restart === 'yes';
@@ -159,7 +158,8 @@ async function getTomteInformation(): Promise<ITomteInformation> {
 
     try {
         results = await execCmd(`${command}`);
-        results = results.replace(/^[^\{]*\{/, '{'); // delete everything up to the first occurance of {
+        // delete everything up to the first occurance of {
+        results = results.replace(/^[^\{]*\{/, '{');
     } catch {
         results = '';
     } finally {

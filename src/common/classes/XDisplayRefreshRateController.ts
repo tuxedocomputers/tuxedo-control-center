@@ -86,8 +86,8 @@ export class XDisplayRefreshRateController {
             : '';
 
         this.isX11 = sessionType === 'x11' ? 1 : 0;
-        this.isWayland = sessionType === 'wayland' ? true : false;
-        this.isTTY = sessionType === 'tty' ? true : false;
+        this.isWayland = sessionType === 'wayland';
+        this.isTTY = sessionType === 'tty';
     }
 
     public getIsX11(): number {
