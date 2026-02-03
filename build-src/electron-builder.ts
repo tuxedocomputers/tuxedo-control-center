@@ -106,6 +106,7 @@ async function buildDeb(filenameAddition: string): Promise<void> {
             afterInstall: './build-src/after_install.sh',
             afterRemove: './build-src/after_remove.sh',
             fpm: [
+                '--before-remove=./build-src/before_remove.sh',
                 '--conflicts=tuxedofancontrol',
                 '--replaces=tuxedofancontrol',
                 '--inputs=build-src/package-files.txt',
@@ -168,6 +169,7 @@ async function buildRpm(filenameAddition: string): Promise<void> {
             afterRemove: './build-src/after_remove.sh',
             fpm: [
                 '--replaces=tuxedofancontrol <= 0.1.9',
+                '--before-remove=./build-src/before_remove.sh',
                 '--rpm-posttrans=./build-src/after_install.sh',
                 '--inputs=build-src/package-files.txt',
                 '--rpm-tag=%define _build_id_links none',

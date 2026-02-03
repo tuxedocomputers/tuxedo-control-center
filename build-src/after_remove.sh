@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Stop, disable and remove services
-systemctl disable tccd tccd-sleep || true
-systemctl stop tccd || true
 systemctl daemon-reload || true
 
 # Remove log and config files if pure uninstall
