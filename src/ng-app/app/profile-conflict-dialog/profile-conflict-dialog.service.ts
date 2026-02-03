@@ -21,7 +21,7 @@
 
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog, MatLegacyDialogRef as MatDialogRef, MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA } from '@angular/material/legacy-dialog';
 import { ProfileConflictComponent, IProfileConflictDialogResult } from "./profile-conflict-dialog.component";
 import { map, max, take } from 'rxjs/operators';
 import { ITccProfile } from 'src/common/models/TccProfile';

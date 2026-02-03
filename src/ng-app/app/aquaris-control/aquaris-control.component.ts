@@ -21,7 +21,7 @@ import { ElectronService } from '../electron.service';
 import { aquarisAPIHandle, ClientAPI } from '../../../e-app/AquarisAPI';
 import { UntypedFormControl } from '@angular/forms';
 import { DeviceInfo as AquarisDeviceInfo, RGBState } from '../../../e-app/LCT21001';
-import { MatDialog } from '@angular/material/dialog';
+import { MatLegacyDialog as MatDialog } from '@angular/material/legacy-dialog';
 import { DialogInputTextComponent } from '../dialog-input-text/dialog-input-text.component';
 import { UtilsService } from '../utils.service';
 

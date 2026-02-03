@@ -20,10 +20,10 @@ import { Component, EventEmitter, OnDestroy, OnInit, Output } from "@angular/cor
 import { TccDBusClientService } from "../tcc-dbus-client.service";
 import { ElectronService } from "../electron.service";
 import { UntypedFormControl } from "@angular/forms";
-import { MatSliderChange } from "@angular/material/slider";
-import { MatCheckboxChange } from "@angular/material/checkbox";
+import { MatLegacySliderChange as MatSliderChange } from "@angular/material/legacy-slider";
+import { MatLegacyCheckboxChange as MatCheckboxChange } from "@angular/material/legacy-checkbox";
 import { ChargeType } from "src/common/classes/PowerSupplyController";
-import { MatRadioChange } from "@angular/material/radio";
+import { MatLegacyRadioChange as MatRadioChange } from "@angular/material/legacy-radio";
 
 class ThresholdPresets {
     constructor(

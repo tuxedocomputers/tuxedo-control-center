@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { ChangeDetectionStrategy, Component, HostListener, Inject, Output, OnInit, OnDestroy } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { MAT_LEGACY_DIALOG_DATA as MAT_DIALOG_DATA, MatLegacyDialogRef as MatDialogRef } from "@angular/material/legacy-dialog";
 import { ITccProfile } from 'src/common/models/TccProfile';
 import { UntypedFormControl, Validators } from '@angular/forms';
 import { UtilsService } from '../utils.service';
