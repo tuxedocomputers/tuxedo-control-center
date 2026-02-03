@@ -169,7 +169,7 @@ export class SysFsPropertyNumListExplicit extends SysFsPropertyIO<number[]> {
         } else {
             const trimmedList: number[] = value
                 .split(this.listSeparator)
-                .map((element: string): number => Number.parseInt(element.trim()));
+                .map((element: string): number => Number.parseInt(element.trim(), 10));
             // Finally filter all empty strings
             return trimmedList.filter((e: number): boolean => !Number.isNaN(e));
         }

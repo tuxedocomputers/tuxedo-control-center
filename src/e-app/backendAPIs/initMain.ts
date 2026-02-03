@@ -124,7 +124,7 @@ function exitIfProcessExists(): void {
         }
 
         if (singletonLock) {
-            const singletonLockId: number = Number.parseInt(singletonLock.match(/(?<=-)(?!.*-).*/)[0]);
+            const singletonLockId: number = Number.parseInt(singletonLock.match(/(?<=-)(?!.*-).*/)[0], 10);
 
             if (singletonLockId !== process.pid) {
                 console.log(`initMain: SingletonLock check failed ("${singletonLockId}" !== "${process.pid}")`);

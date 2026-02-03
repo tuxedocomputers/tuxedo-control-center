@@ -203,8 +203,8 @@ export class XDisplayRefreshRateController {
         const refreshrates: RegExpMatchArray = line.match(freqRegex);
         const newMode: IDisplayMode = {
             refreshRates: [],
-            xResolution: Number.parseInt(resolution[0]),
-            yResolution: Number.parseInt(resolution[1]),
+            xResolution: Number.parseInt(resolution[0], 10),
+            yResolution: Number.parseInt(resolution[1], 10),
         };
         for (const rate of refreshrates) {
             const num: number = Number.parseFloat(rate.replace(/[^0-9.]/g, ''));

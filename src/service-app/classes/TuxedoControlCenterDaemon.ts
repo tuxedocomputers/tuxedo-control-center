@@ -636,7 +636,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         uwidDeviceMap.set(0x14, TUXEDODevice.IBP14G6_TQF);
         uwidDeviceMap.set(0x17, TUXEDODevice.IBP14G7_AQF_ARX);
 
-        const uwidMatch: TUXEDODevice = uwidDeviceMap.get(Number.parseInt(modInfo.model));
+        const uwidMatch: TUXEDODevice = uwidDeviceMap.get(Number.parseInt(modInfo.model, 10));
         if (uwidMatch !== undefined) {
             return uwidMatch;
         }

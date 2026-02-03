@@ -206,7 +206,7 @@ export class LCT21001 {
             info.uuid = deviceId;
 
             try {
-                info.rssi = Number.parseInt(await blDevice.getRSSI());
+                info.rssi = Number.parseInt(await blDevice.getRSSI(), 10);
             } catch (_err: unknown) {
                 await blDevice.cleanup();
                 continue;

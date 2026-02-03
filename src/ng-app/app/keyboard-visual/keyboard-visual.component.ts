@@ -126,7 +126,7 @@ export class KeyboardVisualComponent implements OnInit {
         this.selectedZonesChange.emit(this.addOrRemoveSelectedZones(zone));
         const gElements: NodeListOf<Element> = document.querySelectorAll('g.key-group');
         gElements.forEach((g: SVGGraphicsElement): void => {
-            const isSelected: boolean = this.selectedZones.includes(Number.parseInt(g.dataset.zone));
+            const isSelected: boolean = this.selectedZones.includes(Number.parseInt(g.dataset.zone, 10));
             if (isSelected) {
                 g.classList.remove('unselected');
                 g.classList.add('selected');

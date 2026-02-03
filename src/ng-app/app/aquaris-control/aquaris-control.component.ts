@@ -335,7 +335,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
     }
 
     public async fanSpeedTextInput(): Promise<void> {
-        const textSpeed: number = Number.parseInt(this.ctrlFanDutyCycleTextInput.value);
+        const textSpeed: number = Number.parseInt(this.ctrlFanDutyCycleTextInput.value, 10);
         if (!Number.isNaN(textSpeed) && textSpeed >= 0 && textSpeed <= 100) {
             await this.setCustomFanSpeed(textSpeed);
             this.ctrlFanDutyCycleTextInput.reset();
@@ -344,8 +344,8 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
 
     public async pumpInput(): Promise<void> {
         const pumpToggle: boolean = this.ctrlPumpToggle.value;
-        const dutyCycle: number = Number.parseInt(this.ctrlPumpDutyCycle.value);
-        const voltage: number = Number.parseInt(this.ctrlPumpVoltage.value);
+        const dutyCycle: number = Number.parseInt(this.ctrlPumpDutyCycle.value, 10);
+        const voltage: number = Number.parseInt(this.ctrlPumpVoltage.value, 10);
 
         if (this.isConnected) {
             try {

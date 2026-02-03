@@ -170,7 +170,7 @@ export class GpuInfoWorker extends DaemonWorker {
     }
 
     private parseMaxAmdFreq(s: string): number {
-        const mhzNumbers: number[] = s.match(/\d+Mhz/g).map((str: string): number => Number.parseInt(str));
+        const mhzNumbers: number[] = s.match(/\d+Mhz/g).map((str: string): number => Number.parseInt(str, 10));
         return Math.max(...mhzNumbers);
     }
 
