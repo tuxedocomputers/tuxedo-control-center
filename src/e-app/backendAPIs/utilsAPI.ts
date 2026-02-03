@@ -184,7 +184,7 @@ export async function readTextFile(filePath: string): Promise<string> {
                     if (err) {
                         reject(err);
                     } else {
-                        resolve(data + '');
+                        resolve(`${data}`);
                     }
                 });
             } catch (err: unknown) {

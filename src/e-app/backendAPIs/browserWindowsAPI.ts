@@ -204,7 +204,7 @@ async function createTccWindow(langId: string, module?: string): Promise<void> {
     });
     const indexPath: string = path.join(__dirname, '..', '..', '..', 'ng-app', 'browser', langId, 'index.html');
     if (module !== undefined) {
-        await tccWindow.loadFile(indexPath, { hash: '/' + module });
+        await tccWindow.loadFile(indexPath, { hash: `/${module}` });
     } else {
         await tccWindow.loadFile(indexPath);
     }

@@ -50,7 +50,7 @@ async function getModuleDescription(moduleName: string, langId: string): Promise
 }
 
 async function removeModule(moduleName: string): Promise<void> {
-    const command: string = 'yes | pkexec tuxedo-tomte remove ' + moduleName;
+    const command: string = `yes | pkexec tuxedo-tomte remove ${moduleName}`;
 
     await execCmd(command)
         .then((): void => {
@@ -63,7 +63,7 @@ async function removeModule(moduleName: string): Promise<void> {
 }
 
 async function installModule(moduleName: string): Promise<void> {
-    const command: string = 'pkexec tuxedo-tomte configure ' + moduleName;
+    const command: string = `pkexec tuxedo-tomte configure ${moduleName}`;
 
     await execCmd(command)
         .then((): void => {
@@ -76,7 +76,7 @@ async function installModule(moduleName: string): Promise<void> {
 }
 
 async function unBlockModule(moduleName: string): Promise<void> {
-    const command: string = 'pkexec tuxedo-tomte unblock ' + moduleName;
+    const command: string = `pkexec tuxedo-tomte unblock ${moduleName}`;
 
     await execCmd(command)
         .then((): void => {
