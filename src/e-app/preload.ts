@@ -8,12 +8,16 @@ contextBridge.exposeInMainWorld('electron', {
       // but for migration mapping we pass it through or wrapper
       ipcRenderer.on(channel, (event, ...args) => listener(event, ...args));
     },
+    addListener: (channel: string, listener: (event: any, ...args: any[]) => void) => {
+        ipcRenderer.on(channel, (event, ...args) => listener(event, ...args));
+    },
     once: (channel: string, listener: (event: any, ...args: any[]) => void) => {
         ipcRenderer.once(channel, (event, ...args) => listener(event, ...args));
     },
     invoke: (channel: string, ...args: any[]) => ipcRenderer.invoke(channel, ...args),
     sendSync: (channel: string, ...args: any[]) => ipcRenderer.sendSync(channel, ...args),
     removeListener: (channel: string, listener: any) => ipcRenderer.removeListener(channel, listener),
+    off: (channel: string, listener: any) => ipcRenderer.removeListener(channel, listener),
     removeAllListeners: (channel: string) => ipcRenderer.removeAllListeners(channel)
   },
   shell: {

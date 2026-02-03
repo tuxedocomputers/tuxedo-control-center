@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { AfterContentInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ElectronService } from 'ngx-electron';
+import { ElectronService } from '../electron.service';
 import { aquarisAPIHandle, ClientAPI } from '../../../e-app/AquarisAPI';
 import { FormControl } from '@angular/forms';
 import { DeviceInfo as AquarisDeviceInfo, RGBState } from '../../../e-app/LCT21001';
@@ -562,7 +562,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
                 prefill: hasName ? chosenName : ''
             }
         });
-        return lastValueFrom(dialogRef.afterClosed()).then(async chosenName => {
+        return dialogRef.afterClosed().toPromise().then(async chosenName => {
             if (chosenName !== undefined) {
                 const deviceNames = await this.getUserDeviceNames();
                 if (chosenName.trim() === '') {

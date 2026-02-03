@@ -17,6 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { DeviceInfo, PumpVoltage, RGBState } from "./LCT21001";
+import type { IpcRenderer } from "electron";
 
 const debugAquarisAPICalls = false;
 
@@ -38,7 +39,7 @@ export const aquarisAPIHandle = 'aquarisAPIHandle';
 
 export class ClientAPI {
 
-    constructor(private ipc: Electron.IpcRenderer, private apiHandle: string) {}
+    constructor(private ipc: IpcRenderer, private apiHandle: string) {}
 
     public connect(deviceUUID: string) { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.connect.name, deviceUUID]); }
     public disconnect() { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.disconnect.name]); }

@@ -19,7 +19,7 @@
 
 import { Component, OnInit } from "@angular/core";
 import { UtilsService } from "../utils.service";
-import { ElectronService } from "ngx-electron";
+import { ElectronService } from "../electron.service";
 import { ConfigService } from "../config.service";
 
 @Component({

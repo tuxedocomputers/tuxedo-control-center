@@ -39,7 +39,7 @@ import { TDPInfo } from "src/native-lib/TuxedoIOAPI";
 import { VendorService } from "../../../common/classes/Vendor.service";
 import { PowerStateService } from "../power-state.service";
 import { AvailabilityService } from "../../../common/classes/availability.service";
-import { ElectronService } from "ngx-electron";
+import { ElectronService } from "../electron.service";
 
 @Component({
     selector: "app-cpu-dashboard",

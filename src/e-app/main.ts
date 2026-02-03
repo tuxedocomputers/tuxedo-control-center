@@ -28,6 +28,7 @@ import { UserConfig } from './UserConfig';
 import { aquarisAPIHandle, AquarisState, ClientAPI, registerAPI } from './AquarisAPI';
 import { DeviceInfo, LCT21001, LCTDeviceModel, PumpVoltage, RGBState } from './LCT21001';
 import { NgTranslations, profileIdToI18nId } from './NgTranslations';
+import { registerLegacyHandlers } from './legacy-handlers';
 import { OpenDialogReturnValue, SaveDialogReturnValue } from 'electron/main';
 import electron = require("electron");
 
@@ -101,6 +102,7 @@ app.on("ready", () => {
 });
 
 app.whenReady().then( async () => {
+    registerLegacyHandlers();
     try {
         const systemLanguageId = app.getLocale().substring(0, 2);
         if (await userConfig.get('langId') === undefined) {

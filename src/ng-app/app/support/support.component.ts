@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { Component, OnInit } from '@angular/core';
-import { ElectronService } from 'ngx-electron';
+import { ElectronService } from '../electron.service';
 import { ProgramManagementService } from '../program-management.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UtilsService } from '../utils.service';

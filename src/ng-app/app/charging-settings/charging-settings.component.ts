@@ -18,7 +18,7 @@
  */
 import { Component, EventEmitter, OnDestroy, OnInit, Output } from "@angular/core";
 import { TccDBusClientService } from "../tcc-dbus-client.service";
-import { ElectronService } from "ngx-electron";
+import { ElectronService } from "../electron.service";
 import { FormControl } from "@angular/forms";
 import { MatSliderChange } from "@angular/material/slider";
 import { MatCheckboxChange } from "@angular/material/checkbox";

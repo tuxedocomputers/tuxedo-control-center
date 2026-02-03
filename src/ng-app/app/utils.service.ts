@@ -26,7 +26,7 @@ import * as fs from 'fs';
 import * as path from 'path';
 
 import { OverlayContainer } from '@angular/cdk/overlay';
-import { BehaviorSubject, lastValueFrom } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { ConfirmDialogData, ConfirmDialogResult, DialogConfirmComponent } from './dialog-confirm/dialog-confirm.component';
 import { ChoiceDialogData, ConfirmChoiceResult, DialogChoiceComponent, WaitingDialogData } from './dialog-choice/dialog-choice.component';
 
@@ -363,7 +363,7 @@ export class UtilsService {
       maxWidth: 550,
       data: config
     });
-    let result: ConfirmDialogResult =  await lastValueFrom(dialogRef.afterClosed());
+    let result: ConfirmDialogResult =  await dialogRef.afterClosed().toPromise();
     if (result === undefined) {
       result = {
         confirm: false,
@@ -381,7 +381,7 @@ export class UtilsService {
       autoFocus: false,
       disableClose: disableClose
     });
-    let result: ConfirmChoiceResult =  await lastValueFrom(dialogRef.afterClosed());
+    let result: ConfirmChoiceResult =  await dialogRef.afterClosed().toPromise();
     if (result === undefined) {
       result = {
         value: undefined,
@@ -412,7 +412,7 @@ export class UtilsService {
       minWidth: 350,
       data: config,
     });
-    return lastValueFrom(dialogRef.afterClosed());
+    return dialogRef.afterClosed().toPromise();
   }
   
   private defaultProfileInfos = new Map<string, IProfileTextMappings>();

@@ -33,7 +33,7 @@ import { TDPInfo } from '../../../native-lib/TuxedoIOAPI';
 import { IDisplayFreqRes, IDisplayMode } from 'src/common/models/DisplayFreqRes';
 import { FanSliderComponent } from '../fan-slider/fan-slider.component';
 import { ITccFanProfile } from 'src/common/models/TccFanTable';
-import { ElectronService } from 'ngx-electron';
+import { ElectronService } from '../electron.service';
 import { SystemProfileInfo } from 'src/common/models/ISystemProfileInfo';
 
 function minControlValidator(comparisonControl: AbstractControl): ValidatorFn {
