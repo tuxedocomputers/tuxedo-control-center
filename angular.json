@@ -38,7 +38,7 @@
               "src/ng-app/styles.scss"
             ],
             "scripts": [
-              "node_modules/marked/lib/marked.js"
+              "node_modules/marked/lib/marked.umd.js"
             ],
             "allowedCommonJsDependencies": [
               "dbus-next",
