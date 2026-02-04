@@ -22,5 +22,11 @@
   "include": [
     "src/ng-app/**/*.ts",
     "src/**/*.d.ts"
+  ],
+  "exclude": [
+    "src/ng-app/**/*.spec.ts",
+    "src/ng-app/test.ts",
+    "src/ng-app/app/node.service.ts",
+    "src/ng-app/environments/environment.prod.ts"
   ]
 }

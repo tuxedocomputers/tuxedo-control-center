@@ -50,7 +50,12 @@
               "node_modules/marked/lib/marked.umd.js"
             ],
             "allowedCommonJsDependencies": [
-              "node-ble"
+              "node-ble",
+              "child_process",
+              "fs",
+              "https",
+              "path",
+              "timers"
             ]
           },
           "configurations": {

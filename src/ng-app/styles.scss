@@ -17,32 +17,12 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 @use '@angular/material' as mat;
+@use './themes/tuxedo-light-theme.scss';
+@use './themes/tuxedo-dark-theme.scss';
+@use './global-styles.scss';
+
 @include mat.elevation-classes();
 @include mat.app-background();
-
-@import './app/profile-overview-tile/profile-overview-tile.component-theme.scss';
-@import './app/profile-details-edit/profile-details-edit.component-theme.scss';
-@import './tcc-general-defs-theme.scss';
-@import './tcc-gauge-theme.scss';
-@import './tcc-changelog-theme.scss';
-@import './tcc-charts-theme.scss';
-@import './tcc-color-picker-theme.scss';
-
-@mixin component-themes($theme) {
-    // Angular components
-    @include profile-overview-tile-theme($theme);
-    @include profile-details-edit-theme($theme);
-
-    // Other components
-    @include tcc-general-defs-theme($theme);
-    @include tcc-gauge-theme($theme);
-    @include tcc-changelog-theme($theme);
-    @include tcc-charts-theme($theme);
-    @include tcc-color-picker-theme($theme);
-}
-
-@import './themes/tuxedo-light-theme.scss';
-@import './themes/tuxedo-dark-theme.scss';
 
 [hidden] {
     visibility: hidden !important;
@@ -68,8 +48,6 @@ body {
     font-size: 8rem;
     color: rgb(133, 133, 133);
 }
-
-@import './global-styles.scss';
 
 /* latin-ext */
 @font-face {

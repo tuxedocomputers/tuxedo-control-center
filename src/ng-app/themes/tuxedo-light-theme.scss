@@ -18,6 +18,7 @@
  */
 @use '@angular/material' as mat;
 @use 'sass:map';
+@use '../theme-mixin.scss' as theme-ops;
 
 $tuxedo-light-theme-primary: mat.m2-define-palette(mat.$m2-grey-palette, 600, 400, 900);
 $tuxedo-light-theme-accent: mat.m2-define-palette(mat.$m2-yellow-palette);
@@ -38,7 +39,7 @@ $tuxedo-control-center-light-theme: map.merge($light-theme-base, (color: $update
 
 .light-theme {
     @include mat.all-component-themes($tuxedo-control-center-light-theme);
-    @include component-themes($tuxedo-control-center-light-theme);
+    @include theme-ops.component-themes($tuxedo-control-center-light-theme);
 
     --icon-main: currentColor;
     --icon-detail: #e30016;

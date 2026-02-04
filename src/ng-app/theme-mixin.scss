@@ -1,0 +1,20 @@
+@use './app/profile-overview-tile/profile-overview-tile.component-theme.scss' as *;
+@use './app/profile-details-edit/profile-details-edit.component-theme.scss' as *;
+@use './tcc-general-defs-theme.scss' as *;
+@use './tcc-gauge-theme.scss' as *;
+@use './tcc-changelog-theme.scss' as *;
+@use './tcc-charts-theme.scss' as *;
+@use './tcc-color-picker-theme.scss' as *;
+
+@mixin component-themes($theme) {
+    // Angular components
+    @include profile-overview-tile-theme($theme);
+    @include profile-details-edit-theme($theme);
+
+    // Other components
+    @include tcc-general-defs-theme($theme);
+    @include tcc-gauge-theme($theme);
+    @include tcc-changelog-theme($theme);
+    @include tcc-charts-theme($theme);
+    @include tcc-color-picker-theme($theme);
+}

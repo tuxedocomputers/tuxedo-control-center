@@ -36,11 +36,11 @@
             border-style: none;
 
             .type-policy {
-                filter: invert(map-get($theme, --icon-invert));
+                filter: invert(map.get($theme, --icon-invert));
             }
 
             .cursor {
-                filter: invert(map-get($theme, --icon-invert));
+                filter: invert(map.get($theme, --icon-invert));
             }
 
             .saturation-lightness {
