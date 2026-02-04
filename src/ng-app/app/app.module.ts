@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, provideZoneChangeDetection } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -137,6 +137,7 @@ declare const require;
         MatMenuModule,
         MatRadioModule
     ], providers: [
+        provideZoneChangeDetection(),
         DecimalPipe,
         ProfileConflictDialogService,
         provideHttpClient(withInterceptorsFromDi())
