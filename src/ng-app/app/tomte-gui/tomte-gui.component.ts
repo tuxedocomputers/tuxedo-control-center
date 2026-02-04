@@ -22,7 +22,7 @@ import { UtilsService } from '../utils.service';
 import { ProgramManagementService } from '../program-management.service';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 // import { translate } from '@angular/localize/src/utils';
-import { __core_private_testing_placeholder__ } from '@angular/core/testing';
+// import { __core_private_testing_placeholder__ } from '@angular/core/testing';
 import { SharedModule } from '../shared/shared.module';
 
 interface ITomteModule {
