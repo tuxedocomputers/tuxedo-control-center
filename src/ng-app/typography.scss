@@ -1,0 +1,5 @@
+@use '@angular/material' as mat;
+
+$custom-typography: mat.m2-define-typography-config(
+    $font-family: 'Titillium Web'
+);

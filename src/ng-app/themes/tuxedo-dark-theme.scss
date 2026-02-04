@@ -19,14 +19,20 @@
 @use '@angular/material' as mat;
 @use 'sass:map';
 @use '../theme-mixin.scss' as theme-ops;
+@use '../typography.scss';
 
 $tuxedo-dark-theme-primary: mat.m2-define-palette(mat.$m2-grey-palette, 400, 50, 600);
 $tuxedo-dark-theme-accent: mat.m2-define-palette(mat.$m2-yellow-palette);
 $tuxedo-dark-theme-warn: mat.m2-define-palette(mat.$m2-red-palette);
 
-$dark-theme-base: mat.m2-define-dark-theme((color: (primary: $tuxedo-dark-theme-primary,
-                accent: $tuxedo-dark-theme-accent,
-                warn: $tuxedo-dark-theme-warn )));
+$dark-theme-base: mat.m2-define-dark-theme((
+    color: (
+        primary: $tuxedo-dark-theme-primary,
+        accent: $tuxedo-dark-theme-accent,
+        warn: $tuxedo-dark-theme-warn
+    ),
+    typography: typography.$custom-typography
+));
 
 $color-config: mat.m2-get-color-config($dark-theme-base);
 $default-background: map.get($color-config, background);
