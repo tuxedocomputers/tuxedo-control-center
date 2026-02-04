@@ -27,7 +27,7 @@
 
     .webcam-settings-edit {
         .webcam-title {
-            background-color: mat.get-color-from-palette($background, card);
+            background-color: mat.m2-get-color-from-palette($background, card);
         }
     }
 }

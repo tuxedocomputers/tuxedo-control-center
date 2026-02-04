@@ -21,7 +21,7 @@
 
 @mixin profile-details-edit-theme($theme) {
 
-    $color-config: mat.get-color-config($theme);
+    $color-config: mat.m2-get-color-config($theme);
     $primary: map.get($color-config, primary);
     $accent: map.get($color-config, accent);
     $warn: map.get($color-config, warn);
@@ -30,7 +30,7 @@
     .profile-details-edit {
 
         .profile-title {
-            background-color: mat.get-color-from-palette($background, card);
+            background-color: mat.m2-get-color-from-palette($background, card);
         }
 
         /*.mat-button-toggle {

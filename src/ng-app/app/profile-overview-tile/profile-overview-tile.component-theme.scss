@@ -23,7 +23,7 @@
 
 @mixin profile-overview-tile-theme($theme) {
     // Extract the palettes you need from the theme definition.
-    $color-config: mat.get-color-config($theme);
+    $color-config: mat.m2-get-color-config($theme);
     $primary: map.get($color-config, primary);
     $accent: map.get($color-config, accent);
     $warn: map.get($color-config, warn);
@@ -37,30 +37,30 @@
         }
 
         &.hover-effect:hover {
-            background-color: mat.get-color-from-palette($background, hover);
+            background-color: mat.m2-get-color-from-palette($background, hover);
         }
 
         &.selected {
-            background-color: mat.get-color-from-palette($primary, lighter);
+            background-color: mat.m2-get-color-from-palette($primary, lighter);
         }
 
         .overlay {
-            color: mat.get-color-from-palette($primary, default-contrast);
-            background-color: mat.get-color-from-palette($primary, darker);
+            color: mat.m2-get-color-from-palette($primary, default-contrast);
+            background-color: mat.m2-get-color-from-palette($primary, darker);
 
             mat-button-toggle-group {
                 mat-button-toggle {
-                    color: mat.get-color-from-palette($primary, default-contrast);
-                    background-color: mat.get-color-from-palette($primary, darker);
+                    color: mat.m2-get-color-from-palette($primary, default-contrast);
+                    background-color: mat.m2-get-color-from-palette($primary, darker);
 
                     &.mat-button-toggle-disabled,
                     &.mat-button-toggle-checked {
-                        background-color: mat.get-color-from-palette($foreground, text);
+                        background-color: mat.m2-get-color-from-palette($foreground, text);
                     }
 
                     .mat-button-toggle-focus-overlay {
                         border-width: 0px;
-                        background-color: mat.get-color-from-palette($primary, darker-contrast);
+                        background-color: mat.m2-get-color-from-palette($primary, darker-contrast);
                     }
                 }
             }
@@ -71,9 +71,9 @@
 @mixin profile-overview-tile-typography($config) {
     .profile-overview-tile {
         font: {
-            family: mat.font-family($config, body-1);
-            size: mat.font-size($config, body-1);
-            weight: mat.font-weight($config, body-1);
+            family: mat.m2-font-family($config, body-1);
+            size: mat.m2-font-size($config, body-1);
+            weight: mat.m2-font-weight($config, body-1);
         }
     }
 }

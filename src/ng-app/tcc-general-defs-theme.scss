@@ -20,7 +20,7 @@
 @use 'sass:map';
 
 @mixin tcc-general-defs-theme($theme) {
-    $color-config: mat.get-color-config($theme);
+    $color-config: mat.m2-get-color-config($theme);
     $primary: map.get($color-config, primary);
     $accent: map.get($color-config, accent);
     $warn: map.get($color-config, warn);
@@ -32,14 +32,14 @@
      * Definitions for general use of theme colors not warranting their own file
      */
     .color-primary {
-        color: mat.get-color-from-palette($primary) !important;
+        color: mat.m2-get-color-from-palette($primary) !important;
     }
 
     .color-accent {
-        color: mat.get-color-from-palette($accent) !important;
+        color: mat.m2-get-color-from-palette($accent) !important;
     }
 
     .color-warn {
-        color: mat.get-color-from-palette($warn) !important;
+        color: mat.m2-get-color-from-palette($warn) !important;
     }
 }

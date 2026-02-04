@@ -20,19 +20,19 @@
 @use 'sass:map';
 
 @mixin tcc-gauge-theme($theme) {
-    $color-config: mat.get-color-config($theme);
+    $color-config: mat.m2-get-color-config($theme);
     $primary: map.get($color-config, primary);
     $accent: map.get($color-config, accent);
     $warn: map.get($color-config, warn);
     $foreground: map.get($color-config, foreground);
     $background: map.get($color-config, background);
 
-    $gauge-value-text-color: mat.get-color-from-palette($foreground, text);
-    $gauge-unit-text-color: mat.get-color-from-palette($foreground, disabled-text);
-    $gauge-legend-text-color: mat.get-color-from-palette($foreground, disabled-text);
+    $gauge-value-text-color: mat.m2-get-color-from-palette($foreground, text);
+    $gauge-unit-text-color: mat.m2-get-color-from-palette($foreground, disabled-text);
+    $gauge-legend-text-color: mat.m2-get-color-from-palette($foreground, disabled-text);
 
-    $gauge-icon-color: mat.get-color-from-palette($foreground, disabled-text);
-    $gauge-background-color: mat.get-color-from-palette($background, status-bar);
+    $gauge-icon-color: mat.m2-get-color-from-palette($foreground, disabled-text);
+    $gauge-background-color: mat.m2-get-color-from-palette($background, status-bar);
 
     .tcc-gauge {
         position: relative;
@@ -137,7 +137,7 @@
 
             border-width: 5px;
             border-style: solid;
-            border-color: mat.get-color-from-palette($background, card);
+            border-color: mat.m2-get-color-from-palette($background, card);
 
             .text {
                 white-space: nowrap;
@@ -159,7 +159,7 @@
 
     $tcc-info-bar-border-color: $gauge-background-color;
     $tcc-info-bar-background-color: $gauge-background-color;
-    $tcc-info-bar-color-disabled: mat.get-color-from-palette($foreground, disabled-text);
+    $tcc-info-bar-color-disabled: mat.m2-get-color-from-palette($foreground, disabled-text);
     $tcc-info-bar-width: 270px;
     $tcc-info-bar-height: 30px;
 

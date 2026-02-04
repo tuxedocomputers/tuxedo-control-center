@@ -1,4 +1,4 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { FanGraphComponent } from './fan-graph.component';
 
@@ -6,7 +6,7 @@ describe('FanGraphComponent', () => {
   let component: FanGraphComponent;
   let fixture: ComponentFixture<FanGraphComponent>;
 
-  beforeEach(async(() => {
+  beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ FanGraphComponent ]
     })
