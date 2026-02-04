@@ -1,3 +1,5 @@
+import { ChangeCryptPasswordComponent } from '../change-crypt-password/change-crypt-password.component';
+import { ShutdownTimerComponent } from '../shutdown-timer/shutdown-timer.component';
 /*!
  * Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
@@ -20,11 +22,15 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CompatibilityService } from '../compatibility.service';
+import { SharedModule } from '../shared/shared.module';
 
 @Component({
+  standalone: true,
+  imports: [SharedModule, ChangeCryptPasswordComponent, ShutdownTimerComponent], 
     selector: 'app-tools',
     templateUrl: './tools.component.html',
-    styleUrls: ['./tools.component.scss']
+    styleUrls: ['./tools.component.scss'],
+    
 })
 export class ToolsComponent implements OnInit {
     constructor(

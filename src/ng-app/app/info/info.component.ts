@@ -18,11 +18,15 @@
  */
 import { Component, OnInit, VERSION } from '@angular/core';
 import { UtilsService } from '../utils.service';
+import { SharedModule } from '../shared/shared.module';
 
 @Component({
-  selector: 'app-info',
-  templateUrl: './info.component.html',
-  styleUrls: ['./info.component.scss']
+  standalone: true,
+  imports: [SharedModule], 
+    selector: 'app-info',
+    templateUrl: './info.component.html',
+    styleUrls: ['./info.component.scss'],
+    
 })
 export class InfoComponent implements OnInit {
 

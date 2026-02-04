@@ -97,12 +97,15 @@
                 "extract-i18n": {
                     "builder": "@angular-devkit/build-angular:extract-i18n",
                     "options": {
-                      "buildTarget": "tuxedo-control-center:build"
+                        "buildTarget": "tuxedo-control-center:build"
                     }
                 },
                 "test": {
-                    "builder": "@angular-devkit/build-angular:karma",
+                    "builder": "@angular-builders/custom-webpack:karma",
                     "options": {
+                        "customWebpackConfig": {
+                            "path": "./test-webpack.config.js"
+                        },
                         "main": "src/ng-app/test.ts",
                         "polyfills": "src/ng-app/polyfills.ts",
                         "tsConfig": "tsconfig.spec.json",

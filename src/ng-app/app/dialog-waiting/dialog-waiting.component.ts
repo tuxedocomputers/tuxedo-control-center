@@ -24,11 +24,15 @@ import {
     DialogChoiceComponent,
     WaitingDialogData,
 } from "../dialog-choice/dialog-choice.component";
+import { SharedModule } from '../shared/shared.module';
 
 @Component({
+  standalone: true,
+  imports: [SharedModule], 
     selector: "app-dialog-waiting",
     templateUrl: "./dialog-waiting.component.html",
     styleUrls: ["./dialog-waiting.component.scss"],
+    
 })
 export class DialogWaitingComponent {
     public ctrlCheckboxNoBother: UntypedFormControl;

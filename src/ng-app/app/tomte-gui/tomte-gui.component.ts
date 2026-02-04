@@ -23,6 +23,7 @@ import { ProgramManagementService } from '../program-management.service';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
 // import { translate } from '@angular/localize/src/utils';
 import { __core_private_testing_placeholder__ } from '@angular/core/testing';
+import { SharedModule } from '../shared/shared.module';
 
 interface ITomteModule {
     moduleName: string,
@@ -33,15 +34,18 @@ interface ITomteModule {
 }
 
 @Component({
-  selector: 'app-tomte-gui',
-  templateUrl: './tomte-gui.component.html',
-  styleUrls: ['./tomte-gui.component.scss'],
-  providers: [
-    {
-      provide: STEPPER_GLOBAL_OPTIONS,
-      useValue: { displayDefaultIndicatorType: false }
-    }
-  ]
+  standalone: true,
+  imports: [SharedModule], 
+    selector: 'app-tomte-gui',
+    templateUrl: './tomte-gui.component.html',
+    styleUrls: ['./tomte-gui.component.scss'],
+    providers: [
+        {
+            provide: STEPPER_GLOBAL_OPTIONS,
+            useValue: { displayDefaultIndicatorType: false }
+        }
+    ],
+    
 })
 export class TomteGuiComponent implements OnInit {
     tomteIsInstalled = false;
@@ -69,10 +73,10 @@ export class TomteGuiComponent implements OnInit {
 
 
     ngOnInit() {
+        this.tomtelist();
     }
 
     ngAfterViewInit() {
-        this.tomtelist();
     }
 
     public focusControl(control): void {

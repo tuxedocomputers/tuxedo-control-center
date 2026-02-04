@@ -26,11 +26,15 @@ import {
     Output,
 } from "@angular/core";
 import { KeyboardBacklightCapabilitiesInterface } from "src/common/models/TccSettings";
+import { SharedModule } from '../shared/shared.module';
 
 @Component({
+  standalone: true,
+  imports: [SharedModule], 
     selector: "app-keyboard-visual",
     templateUrl: "./keyboard-visual.component.html",
     styleUrls: ["./keyboard-visual.component.scss"],
+    
 })
 export class KeyboardVisualComponent implements OnInit {
     @Input()
@@ -38,7 +42,7 @@ export class KeyboardVisualComponent implements OnInit {
     @Input() chosenColorHex: Array<string>;
     @Output() selectedZonesChange = new EventEmitter<number[]>();
     public selectedZones: Array<number> = [];
-    public divHeight: number;
+    public divHeight: number = 0;
     private viewInitialized = false;
 
     constructor() {}

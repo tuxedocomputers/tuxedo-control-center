@@ -38,11 +38,15 @@ import { manageCriticalTemperature } from "src/common/classes/FanUtils";
 import { formatTemp } from "../../../common/classes/FanUtils";
 import { ConfigService } from "../config.service";
 import { UtilsService } from "../utils.service";
+import { SharedModule } from '../shared/shared.module';
 
 @Component({
+  standalone: true,
+  imports: [SharedModule], 
     selector: "app-fan-graph",
     templateUrl: "./fan-graph.component.html",
     styleUrls: ["./fan-graph.component.scss"],
+    
 })
 export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
     // Graph data

@@ -24,6 +24,7 @@ import { DeviceInfo as AquarisDeviceInfo, RGBState } from '../../../e-app/LCT210
 import { MatDialog } from '@angular/material/dialog';
 import { DialogInputTextComponent } from '../dialog-input-text/dialog-input-text.component';
 import { UtilsService } from '../utils.service';
+import { SharedModule } from '../shared/shared.module';
 
 interface FanPreset {
     name: string;
@@ -31,9 +32,12 @@ interface FanPreset {
 }
 
 @Component({
+  standalone: true,
+  imports: [SharedModule], 
     selector: 'app-aquaris-control',
     templateUrl: './aquaris-control.component.html',
-    styleUrls: ['./aquaris-control.component.scss']
+    styleUrls: ['./aquaris-control.component.scss'],
+    
 })
 export class AquarisControlComponent implements OnInit, AfterContentInit, OnDestroy {
 

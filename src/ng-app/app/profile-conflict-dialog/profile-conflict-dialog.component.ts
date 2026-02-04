@@ -24,14 +24,18 @@ import { UtilsService } from '../utils.service';
 import { IGeneralCPUInfo , SysFsService } from '../sys-fs.service';
 import { Subscription } from 'rxjs';
 import { CompatibilityService } from '../compatibility.service';
+import { SharedModule } from '../shared/shared.module';
 export interface IProfileConflictDialogResult {
     action: string;
     newName: string;
 }
 @Component({
+  standalone: true,
+  imports: [SharedModule], 
     selector: 'profile-conflict-dialog',
     templateUrl: './profile-conflict-dialog.component.html',
-    styleUrls: ['./profile-conflict-dialog.component.scss']
+    styleUrls: ['./profile-conflict-dialog.component.scss'],
+    
 })
 
 

@@ -21,13 +21,13 @@ import 'jasmine';
 const mockfs = require('mock-fs');
 
 import { DriveController } from "./DriveController";
-import * as child_process from 'child_process';
+const child_process = require('child_process');
 
 const sizeDriveSda: number = 488397168;
 const sizeDriveSda1: number = 162799056;
 const sizeDriveSda2: number = 162799056;
 
-describe('DriveController', async () => {
+describe('DriveController', () => {
     beforeEach(() => {
         mockfs({
             '/sys/class/block/': {

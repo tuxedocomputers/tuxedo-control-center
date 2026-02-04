@@ -28,11 +28,15 @@ import {
 import { filter, take } from "rxjs/operators";
 import { MatSlider } from "@angular/material/slider";
 import { interval, Subscription } from "rxjs";
+import { SharedModule } from '../shared/shared.module';
 
 @Component({
+  standalone: true,
+  imports: [SharedModule], 
     selector: "app-keyboard-backlight",
     templateUrl: "./keyboard-backlight.component.html",
     styleUrls: ["./keyboard-backlight.component.scss"],
+    
 })
 export class KeyboardBacklightComponent implements OnInit {
     public keyboardBacklightCapabilities: KeyboardBacklightCapabilitiesInterface;

@@ -20,6 +20,7 @@ import { Component, Inject } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ElectronService } from '../electron.service';
+import { SharedModule } from '../shared/shared.module';
 
 export interface ConfirmDialogData {
     title: string,
@@ -39,9 +40,12 @@ export interface ConfirmDialogResult {
 }
 
 @Component({
+  standalone: true,
+  imports: [SharedModule], 
     selector: 'app-dialog-confirm',
     templateUrl: './dialog-confirm.component.html',
-    styleUrls: ['./dialog-confirm.component.scss']
+    styleUrls: ['./dialog-confirm.component.scss'],
+    
 })
 export class DialogConfirmComponent {
 

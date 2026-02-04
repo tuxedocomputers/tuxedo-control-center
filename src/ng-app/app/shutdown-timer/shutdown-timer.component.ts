@@ -19,11 +19,15 @@
 
 import { Component, OnInit } from '@angular/core';
 import { UtilsService } from '../utils.service';
+import { SharedModule } from '../shared/shared.module';
 
 @Component({
+  standalone: true,
+  imports: [SharedModule], 
     selector: 'app-shutdown-timer',
     templateUrl: './shutdown-timer.component.html',
-    styleUrls: ['./shutdown-timer.component.scss']
+    styleUrls: ['./shutdown-timer.component.scss'],
+    
 })
 export class ShutdownTimerComponent implements OnInit {
     public hours: Array<number> = [...Array(24).keys()];

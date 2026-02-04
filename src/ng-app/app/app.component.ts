@@ -21,11 +21,15 @@ import { ElectronService } from './electron.service';
 import { fromEvent, Subscription } from 'rxjs';
 import { UtilsService } from './utils.service';
 import { ActivatedRoute } from '@angular/router';
+import { SharedModule } from './shared/shared.module';
 
 @Component({
+  standalone: true,
+  imports: [SharedModule], 
     selector: 'app-root',
     templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss']
+    styleUrls: ['./app.component.scss'],
+    
 })
 export class AppComponent implements OnInit, OnDestroy {
 

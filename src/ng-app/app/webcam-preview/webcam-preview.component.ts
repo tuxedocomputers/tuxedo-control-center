@@ -7,11 +7,15 @@ import {
 } from "@angular/core";
 import { ElectronService } from "../electron.service";
 import { WebcamConstraints } from "src/common/models/TccWebcamSettings";
+import { SharedModule } from '../shared/shared.module';
 
 @Component({
+  standalone: true,
+  imports: [SharedModule], 
     selector: "app-webcam-preview",
     templateUrl: "./webcam-preview.component.html",
     styleUrls: ["./webcam-preview.component.scss"],
+    
 })
 export class WebcamPreviewComponent implements OnInit {
     constructor(

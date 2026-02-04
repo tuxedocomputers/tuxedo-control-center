@@ -20,11 +20,15 @@ import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms
 import { FormErrorStateMatcher } from 'src/ng-app/common/formErrorStateMatcher';
 import { UtilsService } from '../utils.service';
 import { DriveController } from "../../../common/classes/DriveController";
+import { SharedModule } from '../shared/shared.module';
 
 @Component({
+  standalone: true,
+  imports: [SharedModule], 
     selector: 'app-change-crypt-password',
     templateUrl: './change-crypt-password.component.html',
-    styleUrls: ['./change-crypt-password.component.scss']
+    styleUrls: ['./change-crypt-password.component.scss'],
+    
 })
 export class ChangeCryptPasswordComponent implements OnInit {
     matcher = new FormErrorStateMatcher();

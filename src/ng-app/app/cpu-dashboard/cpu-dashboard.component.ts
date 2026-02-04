@@ -40,11 +40,15 @@ import { VendorService } from "../../../common/classes/Vendor.service";
 import { PowerStateService } from "../power-state.service";
 import { AvailabilityService } from "../../../common/classes/availability.service";
 import { ElectronService } from "../electron.service";
+import { SharedModule } from '../shared/shared.module';
 
 @Component({
+  standalone: true,
+  imports: [SharedModule], 
     selector: "app-cpu-dashboard",
     templateUrl: "./cpu-dashboard.component.html",
     styleUrls: ["./cpu-dashboard.component.scss"],
+    
 })
 export class CpuDashboardComponent implements OnInit, OnDestroy {
     public cpuCoreInfo: ILogicalCoreInfo[];

@@ -1,4 +1,8 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { RouterTestingModule } from '@angular/router/testing';
+import { MatDialogModule } from '@angular/material/dialog';
+import { DecimalPipe } from '@angular/common';
 
 import { ShutdownTimerComponent } from './shutdown-timer.component';
 
@@ -8,7 +12,8 @@ describe('ShutdownTimerComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ShutdownTimerComponent ]
+      imports: [ShutdownTimerComponent, HttpClientTestingModule, RouterTestingModule, MatDialogModule],
+      providers: [DecimalPipe]
     })
     .compileComponents();
   }));

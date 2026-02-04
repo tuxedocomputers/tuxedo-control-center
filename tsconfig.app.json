@@ -16,6 +16,9 @@
       "https": [ "./src/ng-app/native/https.js" ]
     }
   },
+  "angularCompilerOptions": {
+    "strictTemplates": false
+  },
   "include": [
     "src/ng-app/**/*.ts",
     "src/**/*.d.ts"

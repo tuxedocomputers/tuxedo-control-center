@@ -23,17 +23,21 @@ import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms
 import { UtilsService } from '../utils.service';
 import { MatStepper } from '@angular/material/stepper';
 import { STEPPER_GLOBAL_OPTIONS } from '@angular/cdk/stepper';
+import { SharedModule } from '../shared/shared.module';
 
 @Component({
-  selector: 'app-support',
-  templateUrl: './support.component.html',
-  styleUrls: ['./support.component.scss'],
-  providers: [
-    {
-      provide: STEPPER_GLOBAL_OPTIONS,
-      useValue: { displayDefaultIndicatorType: false }
-    }
-  ]
+  standalone: true,
+  imports: [SharedModule], 
+    selector: 'app-support',
+    templateUrl: './support.component.html',
+    styleUrls: ['./support.component.scss'],
+    providers: [
+        {
+            provide: STEPPER_GLOBAL_OPTIONS,
+            useValue: { displayDefaultIndicatorType: false }
+        }
+    ],
+    
 })
 export class SupportComponent implements OnInit {
   public webFAICreatorProgramName = 'tuxedo-webfai-creator';

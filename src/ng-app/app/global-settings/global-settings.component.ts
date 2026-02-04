@@ -1,3 +1,4 @@
+import { ChargingSettingsComponent } from '../charging-settings/charging-settings.component';
 /*!
  * Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
@@ -25,11 +26,15 @@ import { TccDBusClientService } from '../tcc-dbus-client.service';
 import { UntypedFormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AvailabilityService } from "../../../common/classes/availability.service";
+import { SharedModule } from '../shared/shared.module';
 
 @Component({
+  standalone: true,
+  imports: [SharedModule, ChargingSettingsComponent], 
     selector: 'app-global-settings',
     templateUrl: './global-settings.component.html',
-    styleUrls: ['./global-settings.component.scss']
+    styleUrls: ['./global-settings.component.scss'],
+    
 })
 export class GlobalSettingsComponent implements OnInit {
     Object = Object;

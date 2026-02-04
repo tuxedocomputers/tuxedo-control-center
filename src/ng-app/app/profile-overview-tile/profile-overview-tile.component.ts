@@ -29,11 +29,15 @@ import { IGeneralCPUInfo, SysFsService } from '../sys-fs.service';
 import { Subscription } from 'rxjs';
 import { TccDBusClientService } from '../tcc-dbus-client.service';
 import { TDPInfo } from '../../../native-lib/TuxedoIOAPI';
+import { SharedModule } from '../shared/shared.module';
 
 @Component({
+  standalone: true,
+  imports: [SharedModule], 
     selector: 'app-profile-overview-tile',
     templateUrl: './profile-overview-tile.component.html',
-    styleUrls: ['./profile-overview-tile.component.scss']
+    styleUrls: ['./profile-overview-tile.component.scss'],
+    
 })
 export class ProfileOverviewTileComponent implements OnInit {
 

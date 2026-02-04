@@ -35,6 +35,7 @@ import { FanSliderComponent } from '../fan-slider/fan-slider.component';
 import { ITccFanProfile } from 'src/common/models/TccFanTable';
 import { ElectronService } from '../electron.service';
 import { SystemProfileInfo } from 'src/common/models/ISystemProfileInfo';
+import { SharedModule } from '../shared/shared.module';
 
 function minControlValidator(comparisonControl: AbstractControl): ValidatorFn {
     return (thisControl: AbstractControl): { [key: string]: any } | null => {
@@ -57,9 +58,12 @@ function maxControlValidator(comparisonControl: AbstractControl): ValidatorFn {
 }
 
 @Component({
+  standalone: true,
+  imports: [SharedModule], 
     selector: 'app-profile-details-edit',
     templateUrl: './profile-details-edit.component.html',
-    styleUrls: ['./profile-details-edit.component.scss']
+    styleUrls: ['./profile-details-edit.component.scss'],
+    
 })
 export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 

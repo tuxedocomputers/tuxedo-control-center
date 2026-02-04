@@ -5,7 +5,21 @@
     "types": [
       "jasmine",
       "node"
-    ]
+    ],
+    "paths": {
+      "fs": [ "./src/ng-app/native-mock/fs.js" ],
+      "path": [ "./src/ng-app/native-mock/path.js" ],
+      "os": [ "./src/ng-app/native-mock/os.js" ],
+      "child_process": [ "./src/ng-app/native-mock/child_process.js" ],
+      "crypto": [ "./src/ng-app/native-mock/empty.js" ],
+      "net": [ "./src/ng-app/native-mock/empty.js" ],
+      "stream": [ "./src/ng-app/native-mock/empty.js" ],
+      "timers": [ "./src/ng-app/native-mock/empty.js" ],
+      "x11": [ "./src/ng-app/native-mock/empty.js" ],
+      "http": [ "./src/ng-app/native-mock/empty.js" ],
+      "https": [ "./src/ng-app/native-mock/empty.js" ],
+      "dbus-next": [ "./src/ng-app/native-mock/dbus-next" ]
+    }
   },
   "files": [
     "src/ng-app/test.ts",

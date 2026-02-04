@@ -24,6 +24,7 @@ import { MatSliderChange } from "@angular/material/slider";
 import { MatCheckboxChange } from "@angular/material/checkbox";
 import { ChargeType } from "src/common/classes/PowerSupplyController";
 import { MatRadioChange } from "@angular/material/radio";
+import { SharedModule } from '../shared/shared.module';
 
 class ThresholdPresets {
     constructor(
@@ -40,9 +41,12 @@ enum BatteryThresholdOptions {
 }
 
 @Component({
+  standalone: true,
+  imports: [SharedModule], 
     selector: 'app-charging-settings',
     templateUrl: './charging-settings.component.html',
-    styleUrls: ['./charging-settings.component.scss']
+    styleUrls: ['./charging-settings.component.scss'],
+    
 })
 export class ChargingSettingsComponent implements OnInit, OnDestroy {
 

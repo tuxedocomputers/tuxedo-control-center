@@ -42,10 +42,14 @@ import { delay } from "src/common/classes/Utils";
 import { formatTemp } from "../../../common/classes/FanUtils";
 import { ConfigService } from "../config.service";
 import { UtilsService } from "../utils.service";
+import { SharedModule } from '../shared/shared.module';
 @Component({
+  standalone: true,
+  imports: [SharedModule], 
     selector: "app-fan-slider",
     templateUrl: "./fan-slider.component.html",
     styleUrls: ["./fan-slider.component.scss"],
+    
 })
 export class FanSliderComponent implements OnInit {
     public customFanPreset = customFanPreset;

@@ -21,6 +21,7 @@ import { Component, Inject } from "@angular/core";
 import { UntypedFormControl } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { ElectronService } from "../electron.service";
+import { SharedModule } from '../shared/shared.module';
 
 export interface ChoiceDialogData {
     title: string;
@@ -49,9 +50,12 @@ export interface ConfirmChoiceResult {
 }
 
 @Component({
+  standalone: true,
+  imports: [SharedModule], 
     selector: "app-dialog-choice",
     templateUrl: "./dialog-choice.component.html",
     styleUrls: ["./dialog-choice.component.scss"],
+    
 })
 export class DialogChoiceComponent {
     public ctrlCheckboxNoBother: UntypedFormControl;

@@ -21,11 +21,15 @@ import { Component, OnInit } from "@angular/core";
 import { UtilsService } from "../utils.service";
 import { ElectronService } from "../electron.service";
 import { ConfigService } from "../config.service";
+import { SharedModule } from '../shared/shared.module';
 
 @Component({
+  standalone: true,
+  imports: [SharedModule], 
     selector: "app-prime-dialog",
     templateUrl: "./prime-dialog.component.html",
     styleUrls: ["./prime-dialog.component.scss"],
+    
 })
 export class PrimeDialogComponent implements OnInit {
     primeSelectMode: string;

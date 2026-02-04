@@ -1,6 +1,8 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { DecimalPipe } from '@angular/common';
 
 import { PrimeDialogComponent } from "./prime-dialog.component";
+import { ElectronService } from '../electron.service';
 
 describe("PrimeDialogComponent", () => {
     let component: PrimeDialogComponent;
@@ -8,8 +10,9 @@ describe("PrimeDialogComponent", () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [PrimeDialogComponent],
-        }).compileComponents();
+    imports: [PrimeDialogComponent],
+    providers: [DecimalPipe, { provide: ElectronService, useValue: { ipcRenderer: { on: () => {} } } }]
+}).compileComponents();
     });
 
     beforeEach(() => {

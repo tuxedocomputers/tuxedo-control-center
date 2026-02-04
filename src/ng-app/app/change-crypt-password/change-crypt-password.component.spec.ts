@@ -1,4 +1,5 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
+import { DecimalPipe } from '@angular/common';
 
 import { ChangeCryptPasswordComponent } from './change-crypt-password.component';
 
@@ -8,8 +9,9 @@ describe('ChangeCryptPasswordComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ ChangeCryptPasswordComponent ]
-    })
+    imports: [ChangeCryptPasswordComponent],
+    providers: [DecimalPipe]
+})
     .compileComponents();
   }));
 

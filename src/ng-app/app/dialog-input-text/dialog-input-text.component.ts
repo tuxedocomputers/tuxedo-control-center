@@ -18,6 +18,7 @@
  */
 import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { SharedModule } from '../shared/shared.module';
 
 export interface InputDialogData {
     title: string,
@@ -29,9 +30,12 @@ export interface InputDialogData {
 }
 
 @Component({
+  standalone: true,
+  imports: [SharedModule], 
     selector: 'app-dialog-input-text',
     templateUrl: './dialog-input-text.component.html',
-    styleUrls: ['./dialog-input-text.component.scss']
+    styleUrls: ['./dialog-input-text.component.scss'],
+    
 })
 export class DialogInputTextComponent {
 

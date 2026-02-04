@@ -17,14 +17,20 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+import { CommonModule } from '@angular/common';
+import { MatRadioModule } from '@angular/material/radio';
+import { FormsModule } from '@angular/forms';
 import { Component, OnInit } from "@angular/core";
 import { ConfigService } from "../config.service";
 import { UtilsService } from "../utils.service";
 import { TccDBusClientService } from "../tcc-dbus-client.service";
 import { Subscription } from "rxjs";
 import { first } from "rxjs/operators";
+import { SharedModule } from '../shared/shared.module';
 
 @Component({
+  standalone: true,
+  imports: [CommonModule, MatRadioModule, FormsModule],
     selector: "app-prime-select",
     templateUrl: "./prime-select.component.html",
     styleUrls: ["./prime-select.component.scss"],

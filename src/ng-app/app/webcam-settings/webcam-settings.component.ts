@@ -28,11 +28,15 @@ import * as fs from "fs";
 import { ConfigService } from "../config.service";
 import { environment } from "../../environments/environment";
 import { MatTab } from "@angular/material/tabs";
+import { SharedModule } from '../shared/shared.module';
 
 @Component({
+  standalone: true,
+  imports: [SharedModule], 
     selector: "app-webcam-settings",
     templateUrl: "./webcam-settings.component.html",
     styleUrls: ["./webcam-settings.component.scss"],
+    
 })
 export class WebcamSettingsComponent implements OnInit {
     gridParams = {

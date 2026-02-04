@@ -29,6 +29,7 @@ import { Subscription } from 'rxjs';
 import { ITccSettings } from '../../../common/models/TccSettings';
 import { ChangeDetectorRef } from '@angular/core';
 import { ProfileConflictDialogService } from "../profile-conflict-dialog/profile-conflict-dialog.service";
+import { SharedModule } from '../shared/shared.module';
 
 
 enum InputMode {
@@ -45,9 +46,12 @@ class ProfileManagerButton {
 }
 
 @Component({
+  standalone: true,
+  imports: [SharedModule], 
     selector: 'app-profile-manager',
     templateUrl: './profile-manager.component.html',
-    styleUrls: ['./profile-manager.component.scss']
+    styleUrls: ['./profile-manager.component.scss'],
+    
 })
 export class ProfileManagerComponent implements OnInit, OnDestroy {
 

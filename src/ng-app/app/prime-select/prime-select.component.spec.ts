@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from "@angular/core/testing";
+import { DecimalPipe } from '@angular/common';
 
 import { PrimeSelectComponent } from "./prime-select.component";
 
@@ -8,8 +9,9 @@ describe("PrimeSelectComponent", () => {
 
     beforeEach(async () => {
         await TestBed.configureTestingModule({
-            declarations: [PrimeSelectComponent],
-        }).compileComponents();
+    imports: [PrimeSelectComponent],
+    providers: [DecimalPipe]
+}).compileComponents();
     });
 
     beforeEach(() => {

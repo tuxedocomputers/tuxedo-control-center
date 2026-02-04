@@ -26,11 +26,15 @@ import { ConfigService } from '../config.service';
 import { IStateInfo, StateService } from '../state.service';
 import { UtilsService } from '../utils.service';
 import { ActivatedRoute } from '@angular/router';
+import { SharedModule } from '../shared/shared.module';
 
 @Component({
-  selector: 'app-main-gui',
-  templateUrl: './main-gui.component.html',
-  styleUrls: ['./main-gui.component.scss']
+  standalone: true,
+  imports: [SharedModule], 
+    selector: 'app-main-gui',
+    templateUrl: './main-gui.component.html',
+    styleUrls: ['./main-gui.component.scss'],
+    
 })
 export class MainGuiComponent implements OnInit, OnDestroy {
 

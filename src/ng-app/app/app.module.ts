@@ -78,8 +78,6 @@ import { KeyboardBacklightComponent } from "./keyboard-backlight/keyboard-backli
 import { ChangeCryptPasswordComponent } from './change-crypt-password/change-crypt-password.component';
 import { FanGraphComponent } from './fan-graph/fan-graph.component';
 
-import { NgChartsModule } from 'ng2-charts';
-import { ColorPickerModule } from 'ngx-color-picker';
 import { MainGuiComponent } from './main-gui/main-gui.component';
 import { AquarisControlComponent } from './aquaris-control/aquaris-control.component';
 import { DialogInputTextComponent } from './dialog-input-text/dialog-input-text.component';
@@ -101,37 +99,8 @@ registerLocaleData(localeDe, 'de', localeDeExtra);
 
 declare const require;
 
-@NgModule({ declarations: [
-        AppComponent,
-        ProfileManagerComponent,
-        SupportComponent,
-        ProfileOverviewTileComponent,
-        ProfileDetailsEditComponent,
-        InfoComponent,
-        CpuDashboardComponent,
-        GlobalSettingsComponent,
-        ShutdownTimerComponent,
-        ToolsComponent,
-        KeyboardBacklightComponent,
-        ChangeCryptPasswordComponent,
-        FanGraphComponent,
-        MainGuiComponent,
-        AquarisControlComponent,
-        DialogInputTextComponent,
-        DialogConfirmComponent,
-        DialogChoiceComponent,
-        ChargingSettingsComponent,
-        WebcamSettingsComponent,
-        WebcamPreviewComponent,
-        TomteGuiComponent,
-        ProfileConflictComponent,
-        KeyboardVisualComponent,
-        DialogWaitingComponent,
-        PrimeSelectComponent,
-        PrimeDialogComponent,
-        FanSliderComponent,
-    ],
-    bootstrap: [AppComponent], imports: [BrowserModule,
+@NgModule({ declarations: [],
+    bootstrap: [AppComponent], imports: [BrowserModule, AppComponent,
         AppRoutingModule,
         // NgxElectronModule,
         BrowserAnimationsModule,
@@ -165,10 +134,9 @@ declare const require;
         MarkdownModule.forRoot(),
         OverlayModule,
         GaugeModule.forRoot(),
-        NgChartsModule,
-        ColorPickerModule,
         MatMenuModule,
-        MatRadioModule], providers: [
+        MatRadioModule
+    ], providers: [
         DecimalPipe,
         ProfileConflictDialogService,
         provideHttpClient(withInterceptorsFromDi())
