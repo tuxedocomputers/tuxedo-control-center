@@ -16,20 +16,22 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-@import '@angular/material/theming';
+@use '@angular/material' as mat;
+@use 'sass:map';
 
 @mixin tcc-charts-theme($theme) {
-    $primary: map-get($theme, primary);
-    $accent: map-get($theme, accent);
-    $warn: map-get($theme, warn);
-    $foreground: map-get($theme, foreground);
-    $background: map-get($theme, background);
+    $color-config: mat.get-color-config($theme);
+    $primary: map.get($color-config, primary);
+    $accent: map.get($color-config, accent);
+    $warn: map.get($color-config, warn);
+    $foreground: map.get($color-config, foreground);
+    $background: map.get($color-config, background);
 
     canvas.tcc-charts {
-        background-color: mat-color($background, card);
+        background-color: mat.get-color-from-palette($background, card);
     }
 
     .tcc-charts-text {
-        color: mat-color($primary);
+        color: mat.get-color-from-palette($primary);
     }
 }

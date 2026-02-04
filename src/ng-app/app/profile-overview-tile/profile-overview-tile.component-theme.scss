@@ -18,46 +18,49 @@
  */
 
 // Import library functions for theme creation.
-@import '@angular/material/theming';
+@use '@angular/material' as mat;
+@use 'sass:map';
 
 @mixin profile-overview-tile-theme($theme) {
-  // Extract the palettes you need from the theme definition.
-  $primary: map-get($theme, primary);
-  $accent: map-get($theme, accent);
-  $warn: map-get($theme, warn);
-  $foreground: map-get($theme, foreground);
-  $background: map-get($theme, background);
+    // Extract the palettes you need from the theme definition.
+    $color-config: mat.get-color-config($theme);
+    $primary: map.get($color-config, primary);
+    $accent: map.get($color-config, accent);
+    $warn: map.get($color-config, warn);
+    $foreground: map.get($color-config, foreground);
+    $background: map.get($color-config, background);
 
-  // Define any styles affected by the theme.
+    // Define any styles affected by the theme.
     .profile-overview-tile {
         &.tile-active {
-            //color: mat-color($accent);
+            //color: mat.get-color-from-palette($accent);
         }
 
         &.hover-effect:hover {
-            background-color: mat-color($background, hover);
+            background-color: mat.get-color-from-palette($background, hover);
         }
 
         &.selected {
-            background-color: mat-color($primary, lighter);
+            background-color: mat.get-color-from-palette($primary, lighter);
         }
 
         .overlay {
-            color: mat-color($primary, default-contrast);
-            background-color: mat-color($primary, darker);
+            color: mat.get-color-from-palette($primary, default-contrast);
+            background-color: mat.get-color-from-palette($primary, darker);
 
             mat-button-toggle-group {
                 mat-button-toggle {
-                    color: mat-color($primary, default-contrast);
-                    background-color: mat-color($primary, darker);
+                    color: mat.get-color-from-palette($primary, default-contrast);
+                    background-color: mat.get-color-from-palette($primary, darker);
 
-                    &.mat-button-toggle-disabled, &.mat-button-toggle-checked {
-                        background-color: mat-color($foreground, text);
+                    &.mat-button-toggle-disabled,
+                    &.mat-button-toggle-checked {
+                        background-color: mat.get-color-from-palette($foreground, text);
                     }
 
                     .mat-button-toggle-focus-overlay {
                         border-width: 0px;
-                        background-color: mat-color($primary, darker-contrast);
+                        background-color: mat.get-color-from-palette($primary, darker-contrast);
                     }
                 }
             }
@@ -66,11 +69,11 @@
 }
 
 @mixin profile-overview-tile-typography($config) {
-  .profile-overview-tile {
-      font: {
-          family: mat-font-family($config, body-1);
-          size: mat-font-size($config, body-1);
-          weight: mat-font-weight($config, body-1);
-      }
-  }
+    .profile-overview-tile {
+        font: {
+            family: mat.font-family($config, body-1);
+            size: mat.font-size($config, body-1);
+            weight: mat.font-weight($config, body-1);
+        }
+    }
 }

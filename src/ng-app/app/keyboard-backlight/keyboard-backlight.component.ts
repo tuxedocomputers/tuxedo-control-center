@@ -26,7 +26,7 @@ import {
     KeyboardBacklightStateInterface,
 } from "../../../common/models/TccSettings";
 import { filter, take } from "rxjs/operators";
-import { MatLegacySlider as MatSlider } from "@angular/material/legacy-slider";
+import { MatSlider } from "@angular/material/slider";
 import { interval, Subscription } from "rxjs";
 
 @Component({
@@ -262,17 +262,16 @@ export class KeyboardBacklightComponent implements OnInit {
     }
 
     public startPress(
-        slider: MatSlider,
         offset: number,
         min: number,
         max: number
     ): void {
         this.pressTimer = setTimeout(() => {
             this.pressInterval = interval(200).subscribe(() => {
-                this.modifySliderInput(slider, offset, min, max);
+                this.modifySliderInput(offset, min, max);
             });
         }, 500);
-        this.modifySliderInput(slider, offset, min, max);
+        this.modifySliderInput(offset, min, max);
     }
 
     public stopPress(): void {
@@ -283,13 +282,12 @@ export class KeyboardBacklightComponent implements OnInit {
     }
 
     public modifySliderInput(
-        slider: MatSlider,
         offset: number,
         min: number,
         max: number
     ): void {
         this.onBrightnessSliderInput(
-            this.clamp(slider.value + offset, min, max)
+            this.clamp(this.chosenBrightness + offset, min, max)
         );
     }
 

@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,22 +16,31 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-$tuxedo-dark-theme-primary: mat-palette($mat-grey, 400, 50, 600);
-$tuxedo-dark-theme-accent: mat-palette($mat-yellow);
-$tuxedo-dark-theme-warn: mat-palette($mat-red);
+@use '@angular/material' as mat;
+@use 'sass:map';
 
-$tuxedo-control-center-dark-theme: map-merge(mat-dark-theme($tuxedo-dark-theme-primary, $tuxedo-dark-theme-accent, $tuxedo-dark-theme-warn), (
-    background: map-merge($mat-dark-theme-background, (
-        dialog: #252525,
-        card: #252525,
-        status-bar: #151515,
-    )),
-    
-    --icon-invert: 100%
-));
+$tuxedo-dark-theme-primary: mat.define-palette(mat.$grey-palette, 400, 50, 600);
+$tuxedo-dark-theme-accent: mat.define-palette(mat.$yellow-palette);
+$tuxedo-dark-theme-warn: mat.define-palette(mat.$red-palette);
+
+$dark-theme-base: mat.define-dark-theme((color: (primary: $tuxedo-dark-theme-primary,
+                accent: $tuxedo-dark-theme-accent,
+                warn: $tuxedo-dark-theme-warn )));
+
+$color-config: mat.get-color-config($dark-theme-base);
+$default-background: map.get($color-config, background);
+$custom-background: map.merge($default-background, (dialog: #252525,
+            card: #252525,
+            status-bar: #151515,
+        ));
+
+$updated-color-config: map.merge($color-config, (background: $custom-background));
+
+$tuxedo-control-center-dark-theme: map.merge($dark-theme-base, (color: $updated-color-config,
+            --icon-invert: 100%));
 
 .dark-theme {
-    @include angular-material-theme($tuxedo-control-center-dark-theme);
+    @include mat.all-component-themes($tuxedo-control-center-dark-theme);
     @include component-themes($tuxedo-control-center-dark-theme);
 
     --icon-main: currentColor;
@@ -41,5 +50,4 @@ $tuxedo-control-center-dark-theme: map-merge(mat-dark-theme($tuxedo-dark-theme-p
         opacity: 0.7;
         font-weight: 600;
     }
-
 }

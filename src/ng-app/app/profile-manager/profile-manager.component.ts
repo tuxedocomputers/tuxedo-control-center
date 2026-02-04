@@ -22,7 +22,7 @@ import { ConfigService } from '../config.service';
 import { ITccProfile } from '../../../common/models/TccProfile';
 import { UtilsService } from '../utils.service';
 import { UntypedFormControl, Validators } from '@angular/forms';
-import { MatLegacyInput as MatInput } from '@angular/material/legacy-input';
+import { MatInput } from '@angular/material/input';
 import { ElectronService } from '../electron.service';
 import { StateService, IStateInfo } from '../state.service';
 import { Subscription } from 'rxjs';

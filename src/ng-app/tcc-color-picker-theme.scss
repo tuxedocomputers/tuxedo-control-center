@@ -16,18 +16,20 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-@import '@angular/material/theming';
+@use '@angular/material' as mat;
+@use 'sass:map';
 
 @mixin tcc-color-picker-theme($theme) {
-    $primary: map-get($theme, primary);
-    $accent: map-get($theme, accent);
-    $warn: map-get($theme, warn);
-    $foreground: map-get($theme, foreground);
-    $background: map-get($theme, background);
+    $color-config: mat.get-color-config($theme);
+    $primary: map.get($color-config, primary);
+    $accent: map.get($color-config, accent);
+    $warn: map.get($color-config, warn);
+    $foreground: map.get($color-config, foreground);
+    $background: map.get($color-config, background);
 
     .tcc-color-picker+color-picker>.color-picker {
         box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
-        background-color: mat-color($background, card);
+        background-color: mat.get-color-from-palette($background, card);
 
         &.open {
             margin: 0 auto;
@@ -40,29 +42,29 @@
             .cursor {
                 filter: invert(map-get($theme, --icon-invert));
             }
-            
+
             .saturation-lightness {
                 border-radius: 4px;
             }
-    
+
             .hue {
                 border-radius: 8px;
             }
 
             .hex-text * {
-                color: mat-color($foreground, text);
+                color: mat.get-color-from-palette($foreground, text);
             }
 
             .hsla-text * {
-                color: mat-color($foreground, text);
+                color: mat.get-color-from-palette($foreground, text);
             }
 
             .rgba-text * {
-                color: mat-color($foreground, text);
+                color: mat.get-color-from-palette($foreground, text);
             }
 
             .box div {
-                color: mat-color($foreground, text-disabled);
+                color: mat.get-color-from-palette($foreground, text-disabled);
             }
         }
     }

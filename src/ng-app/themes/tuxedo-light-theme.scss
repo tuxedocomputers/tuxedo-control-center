@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,26 +16,28 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-$tuxedo-light-theme-primary: mat-palette($mat-grey, 600, 400, 900);
-$tuxedo-light-theme-accent: mat-palette($mat-yellow);
-$tuxedo-light-theme-warn: mat-palette($mat-red);
+@use '@angular/material' as mat;
+@use 'sass:map';
 
-//$tuxedo-control-center-light-theme: mat-light-theme($tuxedo-light-theme-primary, $tuxedo-light-theme-accent, $tuxedo-light-theme-warn);
+$tuxedo-light-theme-primary: mat.define-palette(mat.$grey-palette, 600, 400, 900);
+$tuxedo-light-theme-accent: mat.define-palette(mat.$yellow-palette);
+$tuxedo-light-theme-warn: mat.define-palette(mat.$red-palette);
 
-$tuxedo-control-center-light-theme: map-merge(mat-light-theme($tuxedo-light-theme-primary, $tuxedo-light-theme-accent, $tuxedo-light-theme-warn), (
-    background: map-merge($mat-light-theme-background, (
-    )),
+$light-theme-base: mat.define-light-theme((color: (primary: $tuxedo-light-theme-primary,
+                accent: $tuxedo-light-theme-accent,
+                warn: $tuxedo-light-theme-warn )));
 
-    foreground: map-merge($mat-light-theme-foreground, (
-        mat-toolbar-text: #F5F5F5
-    )),
+$color-config: mat.get-color-config($light-theme-base);
+$default-foreground: map.get($color-config, foreground);
+$custom-foreground: map.merge($default-foreground, (mat-toolbar-text: #F5F5F5));
 
-    --icon-invert: 0%
-));
+$updated-color-config: map.merge($color-config, (foreground: $custom-foreground));
 
+$tuxedo-control-center-light-theme: map.merge($light-theme-base, (color: $updated-color-config,
+            --icon-invert: 0%));
 
 .light-theme {
-    @include angular-material-theme($tuxedo-control-center-light-theme);
+    @include mat.all-component-themes($tuxedo-control-center-light-theme);
     @include component-themes($tuxedo-control-center-light-theme);
 
     --icon-main: currentColor;

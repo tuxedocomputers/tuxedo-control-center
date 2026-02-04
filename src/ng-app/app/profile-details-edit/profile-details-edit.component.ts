@@ -26,7 +26,7 @@ import { SysFsService, IGeneralCPUInfo } from '../sys-fs.service';
 import { Subscription, fromEvent } from 'rxjs';
 import { UntypedFormGroup, UntypedFormBuilder, Validators, UntypedFormControl, ValidatorFn, AbstractControl, UntypedFormArray } from '@angular/forms';
 import { DBusService } from '../dbus.service';
-import { MatLegacyInput as MatInput } from '@angular/material/legacy-input';
+import { MatInput } from '@angular/material/input';
 import { CompatibilityService } from '../compatibility.service';
 import { TccDBusClientService } from '../tcc-dbus-client.service';
 import { TDPInfo } from '../../../native-lib/TuxedoIOAPI';

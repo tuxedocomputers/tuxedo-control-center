@@ -45,7 +45,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         <div class="keyboard-backlight-content content" *ngIf="keyboardBacklightCapabilities === undefined"
             class="resize-text">
             <p i18n="@@cKeyboardBacklightNotSupported">Your device is not (yet) supported by
-                this control interface, or the driver is too old. At least tuxedo-drivers 4.0.0 and Linux kernel 5.15 are required for most devices (some devices need newer
+                this control interface, or the driver is too old. At least tuxedo-drivers 4.0.0 and Linux kernel 5.15
+                are required for most devices (some devices need newer
                 versions).</p>
         </div>
 
@@ -101,26 +102,28 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <header i18n="@@cKeyboardBacklightBrightnessLabel">Backlight Brightness</header>
                 </mat-grid-tile>
                 <mat-grid-tile [colspan]="2">
-                    <content class="value" style="text-align: center">{{ brightnessSlider.percent * 100 | number:
+                    <content class="value" style="text-align: center">{{ (chosenBrightness /
+                        keyboardBacklightCapabilities.maxBrightness) * 100 | number:
                         '1.1-1'}}%
                     </content>
                 </mat-grid-tile>
                 <mat-grid-tile [colspan]="6" style="overflow: visible">
                     <div class="align-slider-components">
                         <button mat-icon-button color="primary"
-                            (mousedown)="startPress(brightnessSlider, -1, brightnessSlider.min, brightnessSlider.max)"
+                            (mousedown)="startPress(-1, brightnessSlider.min, brightnessSlider.max)"
                             (mouseup)="stopPress()" (mouseleave)="stopPress()">
                             <mat-icon>remove</mat-icon>
                         </button>
                         <button mat-icon-button color="primary"
-                            (mousedown)="startPress(brightnessSlider, +1, brightnessSlider.min, brightnessSlider.max)"
+                            (mousedown)="startPress(+1, brightnessSlider.min, brightnessSlider.max)"
                             (mouseup)="stopPress()" (mouseleave)="stopPress()">
                             <mat-icon>add</mat-icon>
                         </button>
-                        <mat-slider class="brightness-slider" #brightnessSlider min="0" [(ngModel)]="chosenBrightness"
-                            [max]="keyboardBacklightCapabilities.maxBrightness" step="1" color="primary"
-                            (input)="onBrightnessSliderInput($event.value)"
-                            (onTouched)="onBrightnessSliderTouched($event)" (change)="onBrightnessSliderChange()">
+                        <mat-slider class="brightness-slider" #brightnessSlider min="0"
+                            [max]="keyboardBacklightCapabilities.maxBrightness" step="1" color="primary">
+                            <input matSliderThumb [(ngModel)]="chosenBrightness"
+                                (input)="onBrightnessSliderInput($any($event).target.value)"
+                                (change)="onBrightnessSliderChange()">
                         </mat-slider>
                     </div>
                 </mat-grid-tile>

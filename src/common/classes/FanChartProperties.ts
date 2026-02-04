@@ -17,8 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ChartDataSets, ChartOptions } from "chart.js";
-import { Color } from "ng2-charts";
+import { ChartDataset, ChartOptions } from "chart.js";
 import "@angular/localize/init";
 
 const graphOptions: ChartOptions = {
@@ -27,56 +26,52 @@ const graphOptions: ChartOptions = {
     },
     responsive: true,
     maintainAspectRatio: false,
-    tooltips: {
-        callbacks: {
-            label: (item, data) => {
-                return (
-                    data.datasets[item.datasetIndex].label + " " + item.yLabel
-                );
+    plugins: {
+        tooltip: {
+            callbacks: {
+                label: (item) => {
+                    return item.dataset.label + " " + item.formattedValue;
+                },
             },
         },
     },
     scales: {
-        yAxes: [
-            {
-                ticks: {
-                    beginAtZero: true,
-                    suggestedMax: 100,
-                    callback: (value: number) => {
-                        if (value % 20 === 0) {
-                            return value;
-                        } else {
-                            return null;
-                        }
-                    },
+        y: {
+            min: 0,
+            suggestedMax: 100,
+            ticks: {
+                callback: (value) => {
+                    if (typeof value === 'number' && value % 20 === 0) {
+                        return value;
+                    } 
+                    return null;
                 },
             },
-        ],
-        xAxes: [
-            {
-                ticks: {
-                    beginAtZero: true,
-                    autoSkip: false,
-                    callback: (value, index) => {
-                        if (index % 5 === 0) {
-                            return value;
-                        } else {
-                            return null;
-                        }
-                    },
+        },
+        x: {
+            ticks: {
+                autoSkip: false,
+                callback: (value, index) => {
+                    if (index % 5 === 0) {
+                         // In Chart.js 4, value might be label if category scale, or number if linear.
+                         // But for tick callback 'value' is strictly the value. 
+                         // Check type or index usage. Index is simpler for skipping.
+                        return value; 
+                    }
+                    return null;
                 },
             },
-        ],
+        },
     },
 };
 
-const fantableDatasets: ChartDataSets[] = [
+const fantableDatasets: ChartDataset[] = [
     {
         label: $localize`:@@cProfMgrDetailsFanChartCPULabel:CPU Fan`,
         data: [],
         spanGaps: true,
-        lineTension: 0.1,
-        steppedLine: true,
+        tension: 0.1,
+        stepped: true,
         showLine: true,
         pointRadius: 2,
     },
@@ -84,14 +79,14 @@ const fantableDatasets: ChartDataSets[] = [
         label: $localize`:@@cProfMgrDetailsFanChartGPULabel:GPU Fan`,
         data: [],
         spanGaps: true,
-        lineTension: 0.1,
-        steppedLine: true,
+        tension: 0.1,
+        stepped: true,
         showLine: true,
         pointRadius: 2,
     },
 ];
 
-const graphColors: Color[] = [
+const graphColors: any[] = [
     {
         borderColor: "rgba(120, 120, 120, 0.4)",
         backgroundColor: "rgba(10, 10, 10, 0.4)",
@@ -101,4 +96,5 @@ const graphColors: Color[] = [
         backgroundColor: "rgba(227, 0, 22, 0.3)",
     },
 ];
-export { graphOptions, fantableDatasets, graphColors };
+
+export { graphColors, graphOptions, fantableDatasets };

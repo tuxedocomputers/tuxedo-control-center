@@ -20,9 +20,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 <div *ngIf="customFanPreset?.tableCPU">
     <mat-grid-list [cols]="customFanPreset.tableCPU.length" rowHeight="150px">
         <mat-grid-tile *ngFor="let fanTableEntry of customFanPreset.tableCPU" [colspan]="1">
-            <mat-slider vertical="true" thumbLabel color="primary"
-                [formControl]="fanFormGroup.controls[fanTableEntry.temp+'c']" (change)="dirtyFanFormGroup()"
-                (change)="updateComponents($event.value, fanTableEntry.temp)">
+            <mat-slider vertical discrete color="primary">
+                <input matSliderThumb #sliderThumb="matSliderThumb"
+                    [formControl]="fanFormGroup.controls[fanTableEntry.temp+'c']"
+                    (change)="dirtyFanFormGroup(); updateComponents(sliderThumb.value, fanTableEntry.temp)">
             </mat-slider>
         </mat-grid-tile>
     </mat-grid-list>
@@ -41,8 +42,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     </div>
 
     <div *ngIf="showFanGraphs" style="display: block; height: 200px">
-        <canvas id="hidden" baseChart class="tcc-charts" [chartType]="graphType" [datasets]="fantableDatasets"
-            [colors]="graphColors" [labels]="tempsLabels" [options]="graphOptions">
+        <canvas id="hidden" baseChart class="tcc-charts" [type]="graphType" [datasets]="fantableDatasets"
+            [labels]="tempsLabels" [options]="graphOptions">
         </canvas>
     </div>
 </div>

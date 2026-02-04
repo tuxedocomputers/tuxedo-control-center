@@ -173,9 +173,9 @@
                                                         <mat-slider [max]="getOptionValue(webcamConfig, 'max')"
                                                             [min]="getOptionValue(webcamConfig, 'min')"
                                                             [step]="getOptionValue(webcamConfig, 'step')"
-                                                            formControlName="{{webcamConfig}}"
-                                                            (change)="setSliderValue($event.value, webcamConfig)"
-                                                            color="primary">
+                                                            color="primary" discrete>
+                                                            <input matSliderThumb formControlName="{{webcamConfig}}"
+                                                                (change)="setSliderValue($event.target.value, webcamConfig)">
                                                         </mat-slider>
                                                         <button mat-icon-button color="primary"
                                                             (click)="webcamFormGroup.controls[webcamConfig].setValue(viewWebcam[webcamConfig]); 
@@ -344,10 +344,10 @@
                                             <content class="input">
                                                 <mat-slider [max]="getOptionValue(webcamConfig, 'max')"
                                                     [min]="getOptionValue(webcamConfig, 'min')"
-                                                    [step]="getOptionValue(webcamConfig, 'step')"
-                                                    formControlName="{{webcamConfig}}"
-                                                    (change)="setSliderValue($event.value, webcamConfig)"
-                                                    color="primary">
+                                                    [step]="getOptionValue(webcamConfig, 'step')" color="primary"
+                                                    discrete>
+                                                    <input matSliderThumb formControlName="{{webcamConfig}}"
+                                                        (change)="setSliderValue($event.target.value, webcamConfig)">
                                                 </mat-slider>
                                                 <button mat-icon-button color="primary"
                                                     (click)="webcamFormGroup.controls[webcamConfig].setValue(viewWebcam[webcamConfig]); 

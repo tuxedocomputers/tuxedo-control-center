@@ -97,7 +97,7 @@
                 "extract-i18n": {
                     "builder": "@angular-devkit/build-angular:extract-i18n",
                     "options": {
-                        "browserTarget": "tuxedo-control-center:build"
+                      "buildTarget": "tuxedo-control-center:build"
                     }
                 },
                 "test": {

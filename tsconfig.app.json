@@ -16,11 +16,8 @@
       "https": [ "./src/ng-app/native/https.js" ]
     }
   },
-  "files": [
-    "src/ng-app/main.ts",
-    "src/ng-app/polyfills.ts"
-  ],
   "include": [
+    "src/ng-app/**/*.ts",
     "src/**/*.d.ts"
   ]
 }

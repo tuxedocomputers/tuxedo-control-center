@@ -22,12 +22,12 @@ import {
 import { UntypedFormGroup } from "@angular/forms";
 import { ConfigHandler } from "src/common/classes/ConfigHandler";
 import { TccPaths } from "src/common/classes/TccPaths";
-import { MatLegacyOptionSelectionChange as MatOptionSelectionChange } from "@angular/material/legacy-core";
+import { MatOptionSelectionChange } from "@angular/material/core";
 import { Mutex } from "async-mutex";
 import * as fs from "fs";
 import { ConfigService } from "../config.service";
 import { environment } from "../../environments/environment";
-import { MatLegacyTab as MatTab } from "@angular/material/legacy-tabs";
+import { MatTab } from "@angular/material/tabs";
 
 @Component({
     selector: "app-webcam-settings",

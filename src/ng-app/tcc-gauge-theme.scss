@@ -16,21 +16,23 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-@import '@angular/material/theming';
+@use '@angular/material' as mat;
+@use 'sass:map';
 
 @mixin tcc-gauge-theme($theme) {
-    $primary: map-get($theme, primary);
-    $accent: map-get($theme, accent);
-    $warn: map-get($theme, warn);
-    $foreground: map-get($theme, foreground);
-    $background: map-get($theme, background);
+    $color-config: mat.get-color-config($theme);
+    $primary: map.get($color-config, primary);
+    $accent: map.get($color-config, accent);
+    $warn: map.get($color-config, warn);
+    $foreground: map.get($color-config, foreground);
+    $background: map.get($color-config, background);
 
-    $gauge-value-text-color: mat-color($foreground, text);
-    $gauge-unit-text-color: mat-color($foreground, disabled-text);
-    $gauge-legend-text-color: mat-color($foreground, disabled-text);
+    $gauge-value-text-color: mat.get-color-from-palette($foreground, text);
+    $gauge-unit-text-color: mat.get-color-from-palette($foreground, disabled-text);
+    $gauge-legend-text-color: mat.get-color-from-palette($foreground, disabled-text);
 
-    $gauge-icon-color: mat-color($foreground, disabled-text);
-    $gauge-background-color: mat-color($background, status-bar);
+    $gauge-icon-color: mat.get-color-from-palette($foreground, disabled-text);
+    $gauge-background-color: mat.get-color-from-palette($background, status-bar);
 
     .tcc-gauge {
         position: relative;
@@ -135,13 +137,13 @@
 
             border-width: 5px;
             border-style: solid;
-            border-color: mat-color($background, card);
+            border-color: mat.get-color-from-palette($background, card);
 
             .text {
                 white-space: nowrap;
                 overflow: hidden;
                 text-overflow: ellipsis;
-                
+
                 margin-left: 10px;
                 margin-right: 10px;
 
@@ -149,7 +151,7 @@
                 font-weight: bold;
 
                 &.small {
-                    transform:scale(1.2);
+                    transform: scale(1.2);
                 }
             }
         }
@@ -157,7 +159,7 @@
 
     $tcc-info-bar-border-color: $gauge-background-color;
     $tcc-info-bar-background-color: $gauge-background-color;
-    $tcc-info-bar-color-disabled: mat-color($foreground, disabled-text);
+    $tcc-info-bar-color-disabled: mat.get-color-from-palette($foreground, disabled-text);
     $tcc-info-bar-width: 270px;
     $tcc-info-bar-height: 30px;
 
@@ -217,7 +219,7 @@
         .label-text {
             position: absolute;
             top: 5px;
-            
+
             width: 100%;
 
             text-align: center;

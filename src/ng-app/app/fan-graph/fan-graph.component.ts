@@ -24,8 +24,7 @@ import {
     OnDestroy,
     OnInit,
 } from "@angular/core";
-import { ChartDataSets, ChartOptions } from "chart.js";
-import { Color, Label } from "ng2-charts";
+import { ChartConfiguration, ChartDataset, ChartOptions } from "chart.js";
 import {
     defaultFanProfiles,
     ITccFanProfile,
@@ -33,7 +32,6 @@ import {
 } from "src/common/models/TccFanTable";
 import {
     fantableDatasets,
-    graphColors,
     graphOptions,
 } from "src/common/classes/FanChartProperties";
 import { manageCriticalTemperature } from "src/common/classes/FanUtils";
@@ -48,13 +46,12 @@ import { UtilsService } from "../utils.service";
 })
 export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
     // Graph data
-    public tempsLabels: Label[] = Array.from(Array(100).keys())
+    public tempsLabels: string[] = Array.from(Array(100).keys())
     .concat(100)
     .map((e) => formatTemp(e, this.config.getSettings().fahrenheit));;
     public graphOptions: ChartOptions = graphOptions;
-    public fantableDatasets: ChartDataSets[] = fantableDatasets;
-    public graphColors: Color[] = graphColors;
-    public graphType = "line";
+    public fantableDatasets: ChartDataset[] = fantableDatasets;
+    public graphType: ChartConfiguration['type'] = "line";
 
     // Inputs
     private _fanProfile: ITccFanProfile;

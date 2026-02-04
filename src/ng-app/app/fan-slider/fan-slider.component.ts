@@ -31,11 +31,9 @@ import {
 } from "src/common/models/TccFanTable";
 import {
     fantableDatasets,
-    graphColors,
     graphOptions,
 } from "src/common/classes/FanChartProperties";
-import { Color, Label } from "ng2-charts";
-import { ChartDataSets, ChartOptions } from "chart.js";
+import { ChartConfiguration, ChartDataset, ChartOptions } from "chart.js";
 import {
     interpolatePointsArray,
     manageCriticalTemperature,
@@ -73,13 +71,12 @@ export class FanSliderComponent implements OnInit {
     public showFanGraphs: boolean = false;
 
     private mutex = new Mutex();
-    public tempsLabels: Label[] = Array.from(Array(100).keys())
+    public tempsLabels: string[] = Array.from(Array(100).keys())
     .concat(100)
     .map((e) => formatTemp(e, this.config.getSettings().fahrenheit));;
     public graphOptions: ChartOptions = graphOptions;
-    public fantableDatasets: ChartDataSets[] = fantableDatasets;
-    public graphColors: Color[] = graphColors;
-    public graphType = "line";
+    public fantableDatasets: ChartDataset[] = fantableDatasets;
+    public graphType: ChartConfiguration['type'] = "line";
 
     constructor(
         private fb: UntypedFormBuilder,       

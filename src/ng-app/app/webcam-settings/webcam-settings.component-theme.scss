@@ -16,18 +16,18 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
- @import '@angular/material/theming';
+@use '@angular/material' as mat;
 
- @mixin profile-details-edit-theme($theme) {
- 
-   $primary: map-get($theme, primary);
-   $accent: map-get($theme, accent);
-   $warn: map-get($theme, warn);
-   $background: map-get($theme, background);
-   
-   .webcam-settings-edit {
-     .webcam-title {
-       background-color: mat-color($background, card);
-     }
-   }
- }
+@mixin profile-details-edit-theme($theme) {
+
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $warn: map-get($theme, warn);
+    $background: map-get($theme, background);
+
+    .webcam-settings-edit {
+        .webcam-title {
+            background-color: mat.get-color-from-palette($background, card);
+        }
+    }
+}
