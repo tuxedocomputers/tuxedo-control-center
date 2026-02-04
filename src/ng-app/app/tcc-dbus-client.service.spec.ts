@@ -9,7 +9,7 @@ describe('TccDbusClientService', () => {
   }));
 
   it('should be created', () => {
-    const service: TccDBusClientService = TestBed.get(TccDBusClientService);
+    const service: TccDBusClientService = TestBed.inject(TccDBusClientService);
     expect(service).toBeTruthy();
   });
 });

@@ -6,7 +6,7 @@ describe('SysFsService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: SysFsService = TestBed.get(SysFsService);
+    const service: SysFsService = TestBed.inject(SysFsService);
     expect(service).toBeTruthy();
   });
 });

@@ -9,7 +9,7 @@ describe('ProgramManagementService', () => {
   }));
 
   it('should be created', () => {
-    const service: ProgramManagementService = TestBed.get(ProgramManagementService);
+    const service: ProgramManagementService = TestBed.inject(ProgramManagementService);
     expect(service).toBeTruthy();
   });
 });

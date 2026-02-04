@@ -6,7 +6,7 @@ describe('DbusService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
 
   it('should be created', () => {
-    const service: DBusService = TestBed.get(DBusService);
+    const service: DBusService = TestBed.inject(DBusService);
     expect(service).toBeTruthy();
   });
 });

@@ -9,7 +9,7 @@ describe('CompatibilityService', () => {
   }));
 
   it('should be created', () => {
-    const service: CompatibilityService = TestBed.get(CompatibilityService);
+    const service: CompatibilityService = TestBed.inject(CompatibilityService);
     expect(service).toBeTruthy();
   });
 });
