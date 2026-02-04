@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Component, EventEmitter, OnDestroy, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, OnDestroy, OnInit, Output, inject } from "@angular/core";
 import { TccDBusClientService } from "../tcc-dbus-client.service";
 import { ElectronService } from "../electron.service";
 import { UntypedFormControl } from "@angular/forms";
@@ -49,6 +49,9 @@ enum BatteryThresholdOptions {
     
 })
 export class ChargingSettingsComponent implements OnInit, OnDestroy {
+    private tccdbus = inject(TccDBusClientService);
+    private electron = inject(ElectronService);
+
 
     @Output() hasFeature = new EventEmitter<boolean>();
 
@@ -75,7 +78,7 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
     public chargingThresholdsProgress = false;
 
     public chargingThresholdGroupValue = null;
-    public thresholdPresets = new Map<String, ThresholdPresets>();
+    public thresholdPresets = new Map<string, ThresholdPresets>();
 
     private updateInterval = 1000;
     private timeout;
@@ -87,17 +90,15 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
         inputSpan: 3
     };
 
-    public chargingProfileLabels: Map<string, string> = new Map();
-    public chargingProfileDescriptions: Map<string, string> = new Map();
-    public chargingPriorityLabels: Map<string, string> = new Map();
-    public chargingPriorityDescriptions: Map<string, string> = new Map();
+    public chargingProfileLabels = new Map<string, string>();
+    public chargingProfileDescriptions = new Map<string, string>();
+    public chargingPriorityLabels = new Map<string, string>();
+    public chargingPriorityDescriptions = new Map<string, string>();
 
     public chargingProfilesUrlHref = $localize `:@@chargingProfilesInfoLinkHref:https\://www.tuxedocomputers.com/en/Battery-charging-profiles-inside-the-TUXEDO-Control-Center.tuxedo`;
 
-    constructor(
-        private tccdbus: TccDBusClientService,
-        private electron: ElectronService
-    ) {
+
+    constructor() {
         this.chargingProfileLabels.set('high_capacity', $localize `:@@chargingProfileHighCapacityLabel:Full capacity`);
         this.chargingProfileLabels.set('balanced', $localize `:@@chargingProfileBalancedLabel:Reduced capacity`);
         this.chargingProfileLabels.set('stationary', $localize `:@@chargingProfileStationaryLabel:Stationary use`);
@@ -140,7 +141,7 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
         }
     }
 
-    public async readAvailableSettings(resetControls: boolean = false) {
+    public async readAvailableSettings(resetControls = false) {
         const dbus = this.tccdbus.getInterface();
         if (dbus === undefined) {
             return false;
@@ -240,7 +241,7 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
         const dbus = this.tccdbus.getInterface();
 
         let newValue = changeEvent.value;
-        let validValues = this.chargeStartAvailableThresholds.filter(
+        const validValues = this.chargeStartAvailableThresholds.filter(
             value => value < this.ctrlChargeEndThreshold.value
         );
         newValue = this.findClosest(newValue, validValues);
@@ -258,7 +259,7 @@ export class ChargingSettingsComponent implements OnInit, OnDestroy {
         const dbus = this.tccdbus.getInterface();
 
         let newValue = changeEvent.value;
-        let validValues = this.chargeEndAvailableThresholds.filter(
+        const validValues = this.chargeEndAvailableThresholds.filter(
             value => value > this.ctrlChargeStartThreshold.value
         );
         newValue = this.findClosest(newValue, validValues);

@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Component, OnInit, VERSION } from '@angular/core';
+import { Component, OnInit, VERSION, inject } from '@angular/core';
 import { UtilsService } from '../utils.service';
 import { SharedModule } from '../shared/shared.module';
 
@@ -29,6 +29,8 @@ import { SharedModule } from '../shared/shared.module';
     
 })
 export class InfoComponent implements OnInit {
+  private utils = inject(UtilsService);
+
 
   public appVersion = this.utils.getAppVersion();
   public nodeVersion = this.utils.getProcessVersions().node;
@@ -36,9 +38,7 @@ export class InfoComponent implements OnInit {
   public chromeVersion = this.utils.getProcessVersions().chrome;
   public angularVersion = VERSION.full;
 
-  constructor(
-    private utils: UtilsService
-  ) { }
+
 
   ngOnInit() {
   }

@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 
 import { Observable, from } from "rxjs";
 import { filter, first } from "rxjs/operators";
@@ -8,7 +8,9 @@ import { TccDBusClientService } from "./tcc-dbus-client.service";
     providedIn: "root",
 })
 export class X11StatusResolver  {
-    constructor(private tccdbus: TccDBusClientService) {}
+    private tccdbus = inject(TccDBusClientService);
+
+
 
     resolve(): Observable<boolean> {
         return from(this.tccdbus.isX11.asObservable()).pipe(

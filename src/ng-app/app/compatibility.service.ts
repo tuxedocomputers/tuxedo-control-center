@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { ScalingDriver } from "../../common/classes/LogicalCpuController";
 import { DMIController } from "../../common/classes/DMIController";
 import { SysFsService } from "./sys-fs.service";
@@ -30,13 +30,14 @@ import { TUXEDODevice } from "src/common/models/DefaultProfiles";
     providedIn: "root",
 })
 export class CompatibilityService {
+    private tccDbus = inject(TccDBusClientService);
+    private sysfs = inject(SysFsService);
+
     private hasAquarisValue: boolean;
     private hideCTGPValue: boolean;
 
-    constructor(
-        private tccDbus: TccDBusClientService,
-        private sysfs: SysFsService,
-    ) {
+
+    constructor() {
         // TODO: Manual read until general device id get merged
         const dmi = new DMIController("/sys/class/dmi/id");
         const deviceName = dmi.productSKU.readValueNT();

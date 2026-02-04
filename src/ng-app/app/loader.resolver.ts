@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 
 
 import { Observable, of, from } from 'rxjs';
@@ -8,7 +8,9 @@ import { TccDBusClientService } from './tcc-dbus-client.service';
     providedIn: 'root'
 })
 export class LoaderResolver  {
-    constructor(private dbus: TccDBusClientService) {}
+    private dbus = inject(TccDBusClientService);
+
+
 
     resolve(): Observable<any> {
         return from(this.waitForLoading());

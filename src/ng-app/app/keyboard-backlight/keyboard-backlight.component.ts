@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { TccDBusClientService } from "../tcc-dbus-client.service";
 import { ConfigService } from '../config.service';
 import {
@@ -39,24 +39,24 @@ import { SharedModule } from '../shared/shared.module';
     
 })
 export class KeyboardBacklightComponent implements OnInit {
+    private config = inject(ConfigService);
+    private tccdbus = inject(TccDBusClientService);
+
     public keyboardBacklightCapabilities: KeyboardBacklightCapabilitiesInterface;
     public chosenBrightness: number;
     public chosenBrightnessPending: number = undefined;
-    public chosenColorHex: Array<string>;
-    public chosenColorHexPending: Array<string> = undefined;
-    public selectedZones: Array<number>;
+    public chosenColorHex: string[];
+    public chosenColorHexPending: string[] = undefined;
+    public selectedZones: number[];
     private pressTimer: NodeJS.Timeout;
     private pressInterval: Subscription;
-    private colorPickerInUsage: Array<boolean> = [];
+    private colorPickerInUsage: boolean[] = [];
     private colorPickerTimeout: NodeJS.Timeout;
     private brightnessSliderInUsage: boolean;
     private brightnessSliderTimeout: number | null = null;
-    private timeoutDuration: number = 1000;
+    private timeoutDuration = 1000;
 
-    constructor(
-        private config: ConfigService,
-        private tccdbus: TccDBusClientService
-    ) {}
+
 
     public ngOnInit() {
         this.subscribeKeyboardBacklightCapabilities();
@@ -201,8 +201,8 @@ export class KeyboardBacklightComponent implements OnInit {
     public onColorPickerInput(color: string, selectedZones: number[]): void {
         this.triggerColorPickerTimeout(selectedZones);
 
-        let colorHex = this.chosenColorHex;
-        for (let zone of selectedZones) {
+        const colorHex = this.chosenColorHex;
+        for (const zone of selectedZones) {
             colorHex[zone] = color;
         }
 

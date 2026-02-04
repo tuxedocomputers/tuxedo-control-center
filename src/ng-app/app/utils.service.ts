@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Injectable, Inject, LOCALE_ID } from '@angular/core';
+import { Injectable, LOCALE_ID, inject } from '@angular/core';
 import { SysFsService } from './sys-fs.service';
 // import { ElectronService } from 'ngx-electron';
 import { ElectronService } from './electron.service';
@@ -40,6 +40,12 @@ import { DialogWaitingComponent } from './dialog-waiting/dialog-waiting.componen
   providedIn: 'root'
 })
 export class UtilsService {
+  private sysfs = inject(SysFsService);
+  private electron = inject(ElectronService);
+  private decimalPipe = inject(DecimalPipe);
+  overlayContainer = inject(OverlayContainer);
+  dialog = inject(MatDialog);
+
 
   private blurNoInput = false;
   get pageDisabled(): boolean { return this.blurNoInput; }
@@ -55,13 +61,10 @@ export class UtilsService {
 
   private localeId: string;
 
-  constructor(
-    private sysfs: SysFsService,
-    private electron: ElectronService,
-    private decimalPipe: DecimalPipe,
-    public overlayContainer: OverlayContainer,
-    public dialog: MatDialog,
-    @Inject(LOCALE_ID) localeId) {
+
+  constructor() {
+      const localeId = inject(LOCALE_ID);
+
       this.localeId = localeId;
       this.languageMap = {};
       for (const lang of this.getLanguagesMenuArray()) {
@@ -373,7 +376,7 @@ export class UtilsService {
     return result;
   }
 
-  public async choiceDialog(config: ChoiceDialogData, disableClose: boolean = false): Promise<ConfirmChoiceResult> {
+  public async choiceDialog(config: ChoiceDialogData, disableClose = false): Promise<ConfirmChoiceResult> {
     const dialogRef = this.dialog.open(DialogChoiceComponent, {
       minWidth: 350,
       maxWidth: 550,
@@ -393,8 +396,8 @@ export class UtilsService {
 
   public async waitingDialog(
     config: WaitingDialogData,
-    pkexecSetPrimeSelectAsync: Promise<Boolean>
-  ): Promise<Boolean> {
+    pkexecSetPrimeSelectAsync: Promise<boolean>
+  ): Promise<boolean> {
     const dialogRef = this.dialog.open(DialogWaitingComponent, {
       minWidth: 350,
       maxWidth: 550,

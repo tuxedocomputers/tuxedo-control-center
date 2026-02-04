@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Component, OnInit, Input, OnDestroy, ViewChild, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, OnDestroy, ViewChild, Output, EventEmitter, inject } from '@angular/core';
 import { ITccProfile } from '../../../common/models/TccProfile';
 import { UtilsService } from '../utils.service';
 import { ITccSettings } from '../../../common/models/TccSettings';
@@ -38,7 +38,7 @@ import { SystemProfileInfo } from 'src/common/models/ISystemProfileInfo';
 import { SharedModule } from '../shared/shared.module';
 
 function minControlValidator(comparisonControl: AbstractControl): ValidatorFn {
-    return (thisControl: AbstractControl): { [key: string]: any } | null => {
+    return (thisControl: AbstractControl): Record<string, any> | null => {
         let errors = null;
         if (thisControl.value < comparisonControl.value) {
             errors = { min: comparisonControl.value, actual: thisControl.value };
@@ -48,7 +48,7 @@ function minControlValidator(comparisonControl: AbstractControl): ValidatorFn {
 }
 
 function maxControlValidator(comparisonControl: AbstractControl): ValidatorFn {
-    return (thisControl: AbstractControl): { [key: string]: any } | null => {
+    return (thisControl: AbstractControl): Record<string, any> | null => {
         let errors = null;
         if (thisControl.value > comparisonControl.value) {
             errors = { max: comparisonControl.value, actual: thisControl.value };
@@ -66,6 +66,16 @@ function maxControlValidator(comparisonControl: AbstractControl): ValidatorFn {
     
 })
 export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
+    private utils = inject(UtilsService);
+    private config = inject(ConfigService);
+    private state = inject(StateService);
+    private sysfs = inject(SysFsService);
+    private fb = inject(UntypedFormBuilder);
+    private dbus = inject(DBusService);
+    private tccDBus = inject(TccDBusClientService);
+    compat = inject(CompatibilityService);
+    private electron = inject(ElectronService);
+
 
     public viewProfile: ITccProfile;
 
@@ -127,7 +137,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public selectableFrequencies;
 
     public odmProfileNames: string[] = [];
-    public odmProfileToName: Map<string, string> = new Map();
+    public odmProfileToName = new Map<string, string>();
     public hasDeviceSystemProfileInfo: boolean;
     public deviceSystemProfileInfo: SystemProfileInfo;
 
@@ -148,9 +158,9 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public fansOffAvailable = true;
 
-    public nvidiaPowerCTRLDefaultPowerLimit: number = 0;
-    public nvidiaPowerCTRLMaxPowerLimit: number = 1000;
-    public nvidiaPowerCTRLAvailable: boolean = false;
+    public nvidiaPowerCTRLDefaultPowerLimit = 0;
+    public nvidiaPowerCTRLMaxPowerLimit = 1000;
+    public nvidiaPowerCTRLAvailable = false;
 
     public tempCustomFanCurve: ITccFanProfile = undefined;
 
@@ -162,18 +172,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     @ViewChild(FanSliderComponent)
     private sliderComponent: FanSliderComponent;
+
     
-    constructor(
-        private utils: UtilsService,
-        private config: ConfigService,
-        private state: StateService,
-        private sysfs: SysFsService,
-        private fb: UntypedFormBuilder,
-        private dbus: DBusService,
-        private tccDBus: TccDBusClientService,
-        public compat: CompatibilityService,
-        private electron: ElectronService
-    ) {}
 
     ngOnInit() {
         if (this.viewProfile === undefined) { return; }
@@ -184,7 +184,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
         this.stateInputArray = this.state.getStateInputs();
 
-        const odmProfileLEDNames: Map<string, string> = new Map();
+        const odmProfileLEDNames = new Map<string, string>();
         odmProfileLEDNames.set('power_save', $localize `:@@odmLEDNone:all LEDs off`);
         odmProfileLEDNames.set('enthusiast', $localize `:@@odmLEDOne:one LED on`);
         odmProfileLEDNames.set('overboost', $localize `:@@odmLEDTwo:two LEDs on`);
@@ -316,7 +316,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     }
 
     public sliderODMProfileChange(index: number) {
-        let profileInfo = this.deviceSystemProfileInfo.pl[index].odmName;
+        const profileInfo = this.deviceSystemProfileInfo.pl[index].odmName;
         this.profileFormGroup.patchValue({
             odmProfile: { name: profileInfo },
         });
@@ -324,7 +324,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     }
 
     private overwriteDefaultRefreshRateValue() {
-        let displayFormGroupValue = this.profileFormGroup.get("display").value;
+        const displayFormGroupValue = this.profileFormGroup.get("display").value;
 
         if (displayFormGroupValue.refreshRate === -1) {
             const refreshRate = this.displayModes.activeMode.refreshRates[0];
@@ -340,7 +340,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     private clampCurrentMinimumFanSpeedToHWCapabilities() {
         if (!this.fansOffAvailable) {
-            let minimumFanspeedValue = this.profileFormGroup.get('fan.minimumFanspeed').value
+            const minimumFanspeedValue = this.profileFormGroup.get('fan.minimumFanspeed').value
             this.profileFormGroup.patchValue({fan: {minimumFanspeed: minimumFanspeedValue < this.fansMinSpeed ? this.fansMinSpeed : minimumFanspeedValue}});
             this.viewProfile.fan.minimumFanspeed = this.viewProfile.fan.minimumFanspeed < this.fansMinSpeed ? this.fansMinSpeed : this.viewProfile.fan.minimumFanspeed;
         }
@@ -558,7 +558,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         const tdpValues: UntypedFormArray = odmPowerLimits.controls.tdpValues as UntypedFormArray;
 
         // Find largest allowed min value
-        let minValue = this.odmPowerLimitInfos[sliderIndex].min;
+        const minValue = this.odmPowerLimitInfos[sliderIndex].min;
 
         /*for (let i = 0; i < sliderIndex; ++i) {
             if (minValue === undefined || tdpValues.controls[i].value > minValue) {
@@ -574,7 +574,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         const tdpValues: UntypedFormArray = odmPowerLimits.controls.tdpValues as UntypedFormArray;
 
         // Find smallest allowed max value
-        let maxValue = this.odmPowerLimitInfos[sliderIndex].max;
+        const maxValue = this.odmPowerLimitInfos[sliderIndex].max;
 
         /*for (let i = sliderIndex + 1; i < tdpValues.controls.length; ++i) {
             if (maxValue === undefined || tdpValues.controls[i].value < maxValue) {
@@ -591,8 +591,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         let newValue: number = tdpValues.controls[movedSliderIndex].value;
 
 
-        let minValue = this.sliderODMPowerLimitMinValue(movedSliderIndex);
-        let maxValue = this.sliderODMPowerLimitMaxValue(movedSliderIndex);
+        const minValue = this.sliderODMPowerLimitMinValue(movedSliderIndex);
+        const maxValue = this.sliderODMPowerLimitMaxValue(movedSliderIndex);
 
         // Ensure new value is above chosen min value
         if (newValue < minValue) {

@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { ChangeDetectionStrategy, Component, HostListener, Inject, Output, OnInit, OnDestroy } from '@angular/core';
+import { ChangeDetectionStrategy, Component, HostListener, Output, OnInit, OnDestroy, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { ITccProfile } from 'src/common/models/TccProfile';
 import { UntypedFormControl, Validators } from '@angular/forms';
@@ -40,6 +40,15 @@ export interface IProfileConflictDialogResult {
 
 
 export class ProfileConflictComponent implements OnInit, OnDestroy {
+    data = inject<{
+    oldProfile: ITccProfile;
+    newProfile: ITccProfile;
+}>(MAT_DIALOG_DATA);
+    private mdDialogRef = inject<MatDialogRef<ProfileConflictComponent>>(MatDialogRef);
+    compat = inject(CompatibilityService);
+    private utils = inject(UtilsService);
+    private sysfs = inject(SysFsService);
+
 
     public variable;
     public rename = false;
@@ -47,15 +56,11 @@ export class ProfileConflictComponent implements OnInit, OnDestroy {
     
     public cpuInfo: IGeneralCPUInfo;
     private subscriptions: Subscription = new Subscription();
-    constructor(@Inject(MAT_DIALOG_DATA) public data: {
-        oldProfile: ITccProfile,
-        newProfile: ITccProfile
-    },  private mdDialogRef: MatDialogRef<ProfileConflictComponent>, 
-        public compat: CompatibilityService,
-        private utils: UtilsService,
-        private sysfs: SysFsService
-        ) 
-    { 
+
+    constructor() 
+    {
+        const mdDialogRef = this.mdDialogRef;
+ 
         mdDialogRef.disableClose = true;
     }
 
@@ -87,7 +92,7 @@ export class ProfileConflictComponent implements OnInit, OnDestroy {
 
     public action(action: string)
     {
-        let newname = this.inputNewProfileName.value; 
+        const newname = this.inputNewProfileName.value; 
         this.close({action: action, newName: newname});
     }
 

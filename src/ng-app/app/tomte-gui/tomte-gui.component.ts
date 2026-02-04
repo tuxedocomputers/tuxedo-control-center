@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, inject } from '@angular/core';
 import { ElectronService } from '../electron.service';
 import { UtilsService } from '../utils.service';
 import { ProgramManagementService } from '../program-management.service';
@@ -47,7 +47,11 @@ interface ITomteModule {
     ],
     
 })
-export class TomteGuiComponent implements OnInit {
+export class TomteGuiComponent implements OnInit, AfterViewInit {
+    private electron = inject(ElectronService);
+    private utils = inject(UtilsService);
+    private pmgs = inject(ProgramManagementService);
+
     tomteIsInstalled = false;
     jsonError = false;
     rebootRequired = false;
@@ -63,11 +67,7 @@ export class TomteGuiComponent implements OnInit {
     // TODO when installing tomte on a non tuxedo device grab the error message in the tomte-list function and
     // set this variable to false to output the correct error message in the control center
     isTuxedoDevice = true;
-    constructor(
-        private electron: ElectronService,
-        private utils: UtilsService,
-        private pmgs: ProgramManagementService
-    ) { }
+
 
 
 
@@ -107,7 +107,7 @@ export class TomteGuiComponent implements OnInit {
         // retries to list the information a couple of times, this is only triggered if tomte is already running.
         for (let i = 0; i < 30; i++)
         {
-            let command = "tuxedo-tomte listjson"
+            const command = "tuxedo-tomte listjson"
             let results
             try
             {
@@ -141,7 +141,7 @@ export class TomteGuiComponent implements OnInit {
         }
         try
         {
-            let givenobject = JSON.parse(rawTomteListOutput);
+            const givenobject = JSON.parse(rawTomteListOutput);
             this.jsonError = false;
 
         // now let's get the mode, modules etc out of it
@@ -150,7 +150,7 @@ export class TomteGuiComponent implements OnInit {
         this.rebootRequired = givenobject.restart === "yes";
         for (let i = 0; i < givenobject.modules.length; i++)
         {
-            let module = givenobject.modules[i];
+            const module = givenobject.modules[i];
             this.tomteListArray.push({moduleName: module.name, version: module.version, installed: module.installed === "yes", blocked: module.blocked === "yes", prerequisite: module.required});
         }
         }
@@ -172,15 +172,15 @@ export class TomteGuiComponent implements OnInit {
         {
         for (let i = 0; i < this.tomteListArray.length; i++)
             {
-                let modulename = this.tomteListArray[i].moduleName;
+                const modulename = this.tomteListArray[i].moduleName;
                 if(this.moduleToolTips.has(modulename))
                 {
                     continue;
                 }
-                let command = "LANGUAGE=" + this.utils.getCurrentLanguageId() + " tuxedo-tomte description " + modulename;
+                const command = "LANGUAGE=" + this.utils.getCurrentLanguageId() + " tuxedo-tomte description " + modulename;
                 try
                 {
-                    let results = await this.utils.execCmdAsync(command);
+                    const results = await this.utils.execCmdAsync(command);
                     this.moduleToolTips.set(modulename, results);
                 }
                 catch (err)
@@ -329,16 +329,16 @@ export class TomteGuiComponent implements OnInit {
     public async tomteResetToDefaults()
     {
         this.utils.pageDisabled = true;
-        let dialogueYes = await this.confirmResetDialogue();
+        const dialogueYes = await this.confirmResetDialogue();
         if (!dialogueYes)
         {
             this.tomtelist();
             this.utils.pageDisabled = false;
             return;
         }
-        let command1 = "pkexec tuxedo-tomte AUTOMATIC";
-        let command2 = "pkexec tuxedo-tomte unblock all";
-        let command3 = "pkexec tuxedo-tomte reconfigure all";
+        const command1 = "pkexec tuxedo-tomte AUTOMATIC";
+        const command2 = "pkexec tuxedo-tomte unblock all";
+        const command3 = "pkexec tuxedo-tomte reconfigure all";
         let res1;
         let res2;
         let res3;
@@ -370,7 +370,7 @@ export class TomteGuiComponent implements OnInit {
     public async tomteUn_InstallButton(name: string, isInstalled: boolean, isBlocked: boolean)
     {
         this.utils.pageDisabled = true;
-        let dialogueYes = await this.confirmChangesDialogue();
+        const dialogueYes = await this.confirmChangesDialogue();
         if (!dialogueYes)
         {
             this.tomtelist();
@@ -384,9 +384,9 @@ export class TomteGuiComponent implements OnInit {
         }
         if (isInstalled)
         {
-            let command = "yes | pkexec tuxedo-tomte remove " + name;
+            const command = "yes | pkexec tuxedo-tomte remove " + name;
 
-            let results = await this.utils.execCmdAsync(command).catch((err) => {
+            const results = await this.utils.execCmdAsync(command).catch((err) => {
                 console.error(err);
                 this.utils.pageDisabled = false;
                 this.tomtelist();
@@ -396,9 +396,9 @@ export class TomteGuiComponent implements OnInit {
         else
         {
 
-            let command = "pkexec tuxedo-tomte configure " + name;
+            const command = "pkexec tuxedo-tomte configure " + name;
 
-            let results = await this.utils.execFile(command).catch((err) => {
+            const results = await this.utils.execFile(command).catch((err) => {
                 console.error(err);
                 this.utils.pageDisabled = false;
                 this.tomtelist();
@@ -415,7 +415,7 @@ export class TomteGuiComponent implements OnInit {
     */
     public async tomteBlockButton(name: string, isBlocked: boolean)
     {
-        let dialogueYes = await this.confirmChangesDialogue();
+        const dialogueYes = await this.confirmChangesDialogue();
         if (!dialogueYes)
         {
             this.tomtelist();
@@ -428,7 +428,7 @@ export class TomteGuiComponent implements OnInit {
         {
             command = "pkexec tuxedo-tomte unblock " + name ;
         }
-        let results = await this.utils.execFile(command).catch((err) => {
+        const results = await this.utils.execFile(command).catch((err) => {
             console.error(err);
             this.utils.pageDisabled = false;
             return;
@@ -444,7 +444,7 @@ export class TomteGuiComponent implements OnInit {
     public async tomteModeButton(mode)
     {
         console.log(mode);
-        let dialogueYes = await this.confirmChangesDialogue();
+        const dialogueYes = await this.confirmChangesDialogue();
         if (!dialogueYes)
         {
             this.tomtelist();
@@ -452,8 +452,8 @@ export class TomteGuiComponent implements OnInit {
             return;
         }
         this.utils.pageDisabled = true;
-        let command = "pkexec tuxedo-tomte " + mode.value ;
-        let results = await this.utils.execFile(command).catch((err) => {
+        const command = "pkexec tuxedo-tomte " + mode.value ;
+        const results = await this.utils.execFile(command).catch((err) => {
             console.error(err);
             this.utils.pageDisabled = false;
             return;
@@ -470,7 +470,7 @@ export class TomteGuiComponent implements OnInit {
     public async installTomteButton()
     {
         this.utils.pageDisabled = true;
-        let gotInstalled = await this.pmgs.install("tuxedo-tomte");
+        const gotInstalled = await this.pmgs.install("tuxedo-tomte");
         if (!gotInstalled)
         {
             this.throwErrorMessage($localize `:@@tomteGuiInstallErrorMessagePopup:Tomte failed to install. Do you use a tuxedo device and are using the tuxedo repos?`);

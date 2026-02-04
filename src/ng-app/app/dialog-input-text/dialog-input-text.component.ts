@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { SharedModule } from '../shared/shared.module';
 
@@ -38,10 +38,11 @@ export interface InputDialogData {
     
 })
 export class DialogInputTextComponent {
+    dialogRef = inject<MatDialogRef<DialogInputTextComponent>>(MatDialogRef);
+    data = inject<InputDialogData>(MAT_DIALOG_DATA);
 
-    constructor(
-        public dialogRef: MatDialogRef<DialogInputTextComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: InputDialogData) {}
+
+
 
     closeDialog(result?: string) {
         this.dialogRef.close(result);

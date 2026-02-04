@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Component, Inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ElectronService } from '../electron.service';
@@ -48,13 +48,17 @@ export interface ConfirmDialogResult {
     
 })
 export class DialogConfirmComponent {
+    private electron = inject(ElectronService);
+    dialogRef = inject<MatDialogRef<DialogConfirmComponent>>(MatDialogRef);
+    data = inject<ConfirmDialogData>(MAT_DIALOG_DATA);
+
 
     public ctrlCheckboxNoBother: UntypedFormControl;
 
-    constructor(
-        private electron: ElectronService,
-        public dialogRef: MatDialogRef<DialogConfirmComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: ConfirmDialogData) {
+
+    constructor() {
+            const data = this.data;
+
 
             if (data.checkboxNoBotherLabel === undefined) {
                 data.checkboxNoBotherLabel = '';

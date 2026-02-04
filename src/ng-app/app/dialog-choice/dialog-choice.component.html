@@ -19,14 +19,22 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
 <h2 mat-dialog-title>{{ data.title }}</h2>
 <mat-dialog-content class="mat-typography">
-    <h3 *ngIf="data.heading">{{ data.heading }}</h3>
-    <p>{{ data.description }}</p>
-    <p *ngIf="data.linkHref"><a (click)="openExternalUrl(data.linkHref)" class="link-style">{{ data.linkHref }}</a></p>
+  @if (data.heading) {
+    <h3>{{ data.heading }}</h3>
+  }
+  <p>{{ data.description }}</p>
+  @if (data.linkHref) {
+    <p><a (click)="openExternalUrl(data.linkHref)" class="link-style">{{ data.linkHref }}</a></p>
+  }
 </mat-dialog-content>
 <mat-dialog-actions align="end">
-    <mat-checkbox [formControl]="ctrlCheckboxNoBother" *ngIf="data.showCheckboxNoBother" color="primary">{{
-        data.checkboxNoBotherLabel }}</mat-checkbox>
-    <div class="bx--row" *ngFor="let label of data.labelData; let i = index;">
-        <button mat-button (click)="closeDialog(label.value)">{{ label.label }}</button>
+  @if (data.showCheckboxNoBother) {
+    <mat-checkbox [formControl]="ctrlCheckboxNoBother" color="primary">{{
+    data.checkboxNoBotherLabel }}</mat-checkbox>
+  }
+  @for (label of data.labelData; track label; let i = $index) {
+    <div class="bx--row">
+      <button mat-button (click)="closeDialog(label.value)">{{ label.label }}</button>
     </div>
+  }
 </mat-dialog-actions>

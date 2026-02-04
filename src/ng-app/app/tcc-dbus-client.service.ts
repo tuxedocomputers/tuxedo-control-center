@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, inject } from '@angular/core';
 import { TccDBusController } from '../../common/classes/TccDBusController';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { FanData } from '../../service-app/classes/TccDBusInterface';
@@ -39,6 +39,8 @@ export interface IDBusFanData {
   providedIn: 'root'
 })
 export class TccDBusClientService implements OnDestroy {
+  private utils = inject(UtilsService);
+
 
   private tccDBusInterface: TccDBusController;
   private isAvailable: boolean;
@@ -74,7 +76,7 @@ export class TccDBusClientService implements OnDestroy {
   private previousSettingsJSON = '';
 
   public keyboardBacklightCapabilities = new BehaviorSubject<KeyboardBacklightCapabilitiesInterface>(undefined);
-  public keyboardBacklightStates = new BehaviorSubject<Array<KeyboardBacklightStateInterface>>(undefined);
+  public keyboardBacklightStates = new BehaviorSubject<KeyboardBacklightStateInterface[]>(undefined);
 
   public fansMinSpeed = new BehaviorSubject<number>(undefined);
   public fansOffAvailable = new BehaviorSubject<boolean>(undefined);
@@ -95,7 +97,8 @@ export class TccDBusClientService implements OnDestroy {
   public nvidiaPowerCTRLMaxPowerLimit = new BehaviorSubject<number>(undefined);
   public nvidiaPowerCTRLAvailable = new BehaviorSubject<boolean>(undefined);
 
-  constructor(private utils: UtilsService) {
+
+  constructor() {
     this.tccDBusInterface = new TccDBusController();
     this.periodicUpdate();
     this.timeout = setInterval(() => { this.periodicUpdate(); }, this.updateInterval);
@@ -268,7 +271,7 @@ export class TccDBusClientService implements OnDestroy {
     this.nvidiaPowerCTRLAvailable.next(await this.tccDBusInterface.getNVIDIAPowerCTRLAvailable());
   }
 
-  public setKeyboardBacklightStates(keyboardBacklightStates: Array<KeyboardBacklightStateInterface>) {
+  public setKeyboardBacklightStates(keyboardBacklightStates: KeyboardBacklightStateInterface[]) {
     this.tccDBusInterface.setKeyboardBacklightStatesJSON(JSON.stringify(keyboardBacklightStates));
   }
 

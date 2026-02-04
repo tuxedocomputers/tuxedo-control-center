@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { AvailabilityService } from "src/common/classes/availability.service";
 import * as path from "path";
 import { amdDGpuDeviceIdString } from "src/common/classes/DeviceIDs";
@@ -8,12 +8,13 @@ import { UtilsService } from "./utils.service";
     providedIn: "root",
 })
 export class PowerStateService {
+    availability = inject(AvailabilityService);
+    private utils = inject(UtilsService);
+
     private busPath: string;
 
-    constructor(
-        public availability: AvailabilityService,
-        private utils: UtilsService
-    ) {
+
+    constructor() {
         if (this.availability.getNvidiaDGpuCount() === 1) {
             this.busPath = this.getBusPath("nvidia");
         } else if (this.availability.getAmdDGpuCount() === 1) {

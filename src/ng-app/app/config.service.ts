@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, inject } from '@angular/core';
 
 import { TccPaths } from '../../common/classes/TccPaths';
 import { ITccSettings } from '../../common/models/TccSettings';
@@ -35,6 +35,10 @@ import { WebcamPreset } from 'src/common/models/TccWebcamSettings';
     providedIn: 'root'
 })
 export class ConfigService implements OnDestroy {
+    private electron = inject(ElectronService);
+    private utils = inject(UtilsService);
+    private dbus = inject(TccDBusClientService);
+
 
     private config: ConfigHandler;
 
@@ -55,14 +59,12 @@ export class ConfigService implements OnDestroy {
 
     private subscriptions: Subscription = new Subscription();
 
+
     // Exporting of relevant functions from ConfigHandler
     // public copyConfig = ConfigHandler.prototype.copyConfig;
     // public writeSettings = ConfigHandler.prototype.writeSettings;
 
-    constructor(
-        private electron: ElectronService,
-        private utils: UtilsService,
-        private dbus: TccDBusClientService) {
+    constructor() {
         this.settingsSubject = new Subject<ITccSettings>();
         this.observeSettings = this.settingsSubject.asObservable();
 
@@ -207,7 +209,7 @@ export class ConfigService implements OnDestroy {
         for (let i = 0; i < newProfiles.length; i++)
         {
             // https://stackoverflow.com/questions/7364150/find-object-by-id-in-an-array-of-javascript-objects
-            let oldProfileIndex = newProfileList.findIndex(x => x.id === newProfiles[i].id);
+            const oldProfileIndex = newProfileList.findIndex(x => x.id === newProfiles[i].id);
             if(oldProfileIndex !== -1)
             {
                 newProfileList[oldProfileIndex] = newProfiles[i];
@@ -216,7 +218,7 @@ export class ConfigService implements OnDestroy {
             {
                 // when we want to override the old profile or there is no conflict we want to keep the
                 // original ID
-                let newProfile = newProfiles[i];
+                const newProfile = newProfiles[i];
                 if (newProfile.id === "generateNewID")
                 {
                     newProfile.id = generateProfileId();

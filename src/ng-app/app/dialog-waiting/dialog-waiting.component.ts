@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, Inject, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { UntypedFormControl } from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import {
@@ -35,12 +35,13 @@ import { SharedModule } from '../shared/shared.module';
     
 })
 export class DialogWaitingComponent {
+    dialogRef = inject<MatDialogRef<DialogChoiceComponent>>(MatDialogRef);
+    data = inject<WaitingDialogData>(MAT_DIALOG_DATA);
+
     public ctrlCheckboxNoBother: UntypedFormControl;
 
-    constructor(
-        public dialogRef: MatDialogRef<DialogChoiceComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: WaitingDialogData
-    ) {
+
+    constructor() {
         this.ctrlCheckboxNoBother = new UntypedFormControl(false);
     }
 }

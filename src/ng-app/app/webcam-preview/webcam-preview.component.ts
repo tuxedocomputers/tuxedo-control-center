@@ -1,10 +1,4 @@
-import {
-    ChangeDetectorRef,
-    Component,
-    ElementRef,
-    OnInit,
-    ViewChild,
-} from "@angular/core";
+import { ChangeDetectorRef, Component, ElementRef, OnInit, ViewChild, OnDestroy, inject } from "@angular/core";
 import { ElectronService } from "../electron.service";
 import { WebcamConstraints } from "src/common/models/TccWebcamSettings";
 import { SharedModule } from '../shared/shared.module';
@@ -17,16 +11,16 @@ import { SharedModule } from '../shared/shared.module';
     styleUrls: ["./webcam-preview.component.scss"],
     
 })
-export class WebcamPreviewComponent implements OnInit {
-    constructor(
-        private electron: ElectronService,
-        private cdref: ChangeDetectorRef
-    ) {}
+export class WebcamPreviewComponent implements OnInit, OnDestroy {
+    private electron = inject(ElectronService);
+    private cdref = inject(ChangeDetectorRef);
+
+
 
     @ViewChild("video", { static: true })
     public video: ElementRef;
     mediaDeviceStream: any;
-    spinnerActive: boolean = false;
+    spinnerActive = false;
 
     ngOnInit(): void {
         this.electron.ipcRenderer.on(

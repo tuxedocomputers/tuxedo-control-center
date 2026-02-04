@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ElectronService } from '../electron.service';
 import { ProgramManagementService } from '../program-management.service';
 import { UntypedFormGroup, UntypedFormControl, Validators } from '@angular/forms';
@@ -40,6 +40,10 @@ import { SharedModule } from '../shared/shared.module';
     
 })
 export class SupportComponent implements OnInit {
+  private electron = inject(ElectronService);
+  private program = inject(ProgramManagementService);
+  private utils = inject(UtilsService);
+
   public webFAICreatorProgramName = 'tuxedo-webfai-creator';
   public webFAICreatorInstalled: boolean;
 
@@ -50,11 +54,7 @@ export class SupportComponent implements OnInit {
   public systeminfosURL = 'https://mytuxedo.de/public.php/dav/files/DcAeZk4TbBTTjRq/?accept=zip';
   public systeminfosCompleted = false;
 
-  constructor(
-    private electron: ElectronService,
-    private program: ProgramManagementService,
-    private utils: UtilsService
-  ) { }
+
 
   ngOnInit() {
     this.updateWebFAICreatorInstallStatus();

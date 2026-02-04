@@ -16,18 +16,21 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { UtilsService } from './utils.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProgramManagementService {
+  private utils = inject(UtilsService);
+
 
   public isInProgress: Map<string, boolean>;
   public isCheckingInstallation: Map<string, boolean>;
 
-  constructor(private utils: UtilsService) {
+
+  constructor() {
     this.isInProgress = new Map();
     this.isCheckingInstallation = new Map();
   }

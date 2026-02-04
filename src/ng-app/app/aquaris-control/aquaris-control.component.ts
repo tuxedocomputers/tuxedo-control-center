@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { AfterContentInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, Component, ElementRef, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
 import { ElectronService } from '../electron.service';
 import { aquarisAPIHandle, ClientAPI } from '../../../e-app/AquarisAPI';
 import { UntypedFormControl } from '@angular/forms';
@@ -40,6 +40,10 @@ interface FanPreset {
     
 })
 export class AquarisControlComponent implements OnInit, AfterContentInit, OnDestroy {
+    private electron = inject(ElectronService);
+    dialog = inject(MatDialog);
+    private utils = inject(UtilsService);
+
 
     private aquaris: ClientAPI;
 
@@ -68,13 +72,13 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
     public ctrlFanDutyCycle = new UntypedFormControl();
     public ctrlFanDutyCycleTextInput = new UntypedFormControl();
 
-    public fanPresets: Map<string, FanPreset> = new Map();
+    public fanPresets = new Map<string, FanPreset>();
 
     public ctrlPumpToggle = new UntypedFormControl();
     public ctrlPumpDutyCycle = new UntypedFormControl();
     public ctrlPumpVoltage = new UntypedFormControl();
 
-    public fwVersion: string = '';
+    public fwVersion = '';
 
     public showPumpControls = false;
 
@@ -82,11 +86,9 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
     public readonly TAB_ANIMATION = 1;
 
     public hasBluetooth = true;
+
     
-    constructor(
-        private electron: ElectronService,
-        public dialog: MatDialog,
-        private utils: UtilsService) {
+    constructor() {
         this.fanPresets.set('slow', {
             name: $localize `:@@aqFanPresetSlowLabel:Slow`,
             value: 50
@@ -149,7 +151,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
 
         // First default list selection: first device with an assigned name
         let uuidWithAssignedName;
-        for (let device of this.deviceList) {
+        for (const device of this.deviceList) {
             if (this.deviceNameMap.get(device.uuid) !== undefined) {
                 uuidWithAssignedName = device.uuid;
                 break;
@@ -161,9 +163,9 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
 
         // Second default list selection: last connected device
         if (defaultDeviceUUID === undefined) {
-            let lastConnectedUUID = localStorage.getItem('aquarisLastConnected');
+            const lastConnectedUUID = localStorage.getItem('aquarisLastConnected');
             if (lastConnectedUUID !== null) {
-                for (let device of this.deviceList) {
+                for (const device of this.deviceList) {
                     if (device.uuid === lastConnectedUUID) {
                         defaultDeviceUUID = lastConnectedUUID;
                         break;
@@ -537,7 +539,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
     }
 
     public async getUserDeviceNames() {
-        let deviceNamesSerialized = localStorage.getItem('aquarisUserDeviceNames');
+        const deviceNamesSerialized = localStorage.getItem('aquarisUserDeviceNames');
         let deviceNames: Map<string, string>;
         if (deviceNamesSerialized === null) {
             deviceNames = new Map<string, string>();

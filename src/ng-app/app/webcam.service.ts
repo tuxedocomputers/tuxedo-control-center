@@ -1,4 +1,4 @@
-import { Injectable } from "@angular/core";
+import { Injectable, inject } from "@angular/core";
 import { UntypedFormGroup } from "@angular/forms";
 
 import { UtilsService } from "./utils.service";
@@ -13,11 +13,13 @@ export interface CanComponentDeactivate {
 export class WebcamSettingsGuard
     
 {
-    constructor(private utils: UtilsService) {}
-    loading: boolean = false;
+    private utils = inject(UtilsService);
+
+
+    loading = false;
 
     askUnsavedPreset() {
-        let config = {
+        const config = {
             title: $localize`:@@webcamDialogUnsavedChangesTitle:Unsaved changes`,
             description: $localize`:@@webcamDialogUnsavedChangesDescription:Changes were not saved. Are you sure that you want to leave before saving?`,
             buttonAbortLabel: $localize`:@@dialogReturn:Go back`,

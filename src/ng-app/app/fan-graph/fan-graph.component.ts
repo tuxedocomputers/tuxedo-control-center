@@ -16,14 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import {
-    AfterViewInit,
-    ChangeDetectorRef,
-    Component,
-    Input,
-    OnDestroy,
-    OnInit,
-} from "@angular/core";
+import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, inject } from "@angular/core";
 import { ChartConfiguration, ChartDataset, ChartOptions } from "chart.js";
 import {
     defaultFanProfiles,
@@ -49,6 +42,9 @@ import { SharedModule } from '../shared/shared.module';
     
 })
 export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
+    private cdref = inject(ChangeDetectorRef);
+    private config = inject(ConfigService);
+
     // Graph data
     public tempsLabels: string[] = Array.from(Array(100).keys())
     .concat(100)
@@ -72,7 +68,7 @@ export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
         return this._fanProfile.name;
     }
 
-    private _minFanspeed: number = 0;
+    private _minFanspeed = 0;
     @Input() set minFanspeed(value: number) {
         this._minFanspeed = value;
         this.updateDatasets();
@@ -81,7 +77,7 @@ export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
         return this._minFanspeed;
     }
 
-    private _maxFanspeed: number = 0;
+    private _maxFanspeed = 0;
     @Input() set maxFanspeed(value: number) {
         this._maxFanspeed = value;
         this.updateDatasets();
@@ -90,7 +86,7 @@ export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
         return this._maxFanspeed;
     }
 
-    private _offsetFanspeed: number = 0;
+    private _offsetFanspeed = 0;
     @Input() set offsetFanspeed(value: number) {
         this._offsetFanspeed = value;
         this.updateDatasets();
@@ -101,9 +97,7 @@ export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
 
     initDone = false;
 
-    constructor(private cdref: ChangeDetectorRef,
-        private config: ConfigService,
-        ) {}
+
         
     ngOnInit() {}
 

@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Component, OnInit, OnDestroy } from "@angular/core";
+import { Component, OnInit, OnDestroy, inject } from "@angular/core";
 import {
     ILogicalCoreInfo,
     IGeneralCPUInfo,
@@ -51,6 +51,19 @@ import { SharedModule } from '../shared/shared.module';
     
 })
 export class CpuDashboardComponent implements OnInit, OnDestroy {
+    private sysfs = inject(SysFsService);
+    private utils = inject(UtilsService);
+    private tccdbus = inject(TccDBusClientService);
+    private state = inject(StateService);
+    private router = inject(Router);
+    private route = inject(ActivatedRoute);
+    private config = inject(ConfigService);
+    compat = inject(CompatibilityService);
+    private vendor = inject(VendorService);
+    private power = inject(PowerStateService);
+    availability = inject(AvailabilityService);
+    private electron = inject(ElectronService);
+
     public cpuCoreInfo: ILogicalCoreInfo[];
     public cpuInfo: IGeneralCPUInfo;
     public pstateInfo: IPstateInfo;
@@ -68,32 +81,32 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     public fanData: IDBusFanData;
 
     // CPU
-    public gaugeCPUPower: number = 0;
-    public cpuPower: number = 0;
+    public gaugeCPUPower = 0;
+    public cpuPower = 0;
     public cpuPowerLimit: number = undefined;
 
     // dGPU
-    public gaugeDGPUPower: number = 0;
-    public gaugeDGPUFreq: number = 0;
-    public gaugeDGPUTemp: number = 0;
-    public gaugeDGPUFanSpeed: number = 0;
-    public dGpuPower: number = 0;
-    public dGpuFreq: number = 0;
+    public gaugeDGPUPower = 0;
+    public gaugeDGPUFreq = 0;
+    public gaugeDGPUTemp = 0;
+    public gaugeDGPUFanSpeed = 0;
+    public dGpuPower = 0;
+    public dGpuFreq = 0;
     public hasGPUTemp = false;
     public powerState: string;
 
     // iGPU
-    public gaugeIGpuFreq: number = 0;
-    public iGpuTemp: number = 0;
-    public iGpuFreq: number = 0;
-    public cpuVendor: string = "unknown";
-    public iGpuPower: number = 0;
+    public gaugeIGpuFreq = 0;
+    public iGpuTemp = 0;
+    public iGpuFreq = 0;
+    public cpuVendor = "unknown";
+    public iGpuPower = 0;
 
     public activeProfile: ITccProfile;
     public isCustomProfile: boolean;
 
-    public animatedGauges: boolean = true;
-    public animatedGaugesDuration: number = 0.1;
+    public animatedGauges = true;
+    public animatedGaugesDuration = 0.1;
 
     private subscriptions: Subscription = new Subscription();
 
@@ -105,20 +118,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
 
     public isX11: boolean;
 
-    constructor(
-        private sysfs: SysFsService,
-        private utils: UtilsService,
-        private tccdbus: TccDBusClientService,
-        private state: StateService,
-        private router: Router,
-        private route: ActivatedRoute,
-        private config: ConfigService,
-        public compat: CompatibilityService,
-        private vendor: VendorService,
-        private power: PowerStateService,
-        public availability: AvailabilityService,
-        private electron: ElectronService
-    ) {}
+
 
     public async ngOnInit(): Promise<void> {
         this.setValuesFromRoute();
@@ -476,7 +476,7 @@ export class CpuDashboardComponent implements OnInit, OnDestroy {
     
     // Make numbers smaller than 1W not show 0, but <1W
     private roundWattage(val: number): string {
-        let num = Math.round(val);
+        const num = Math.round(val);
         let ret = "";
         if (num < 1) {
             ret = "<1";

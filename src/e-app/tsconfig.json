@@ -4,6 +4,7 @@
     "outDir": "../../dist/tuxedo-control-center/e-app",
     "rootDir": "../",
     "module": "commonjs",
+    "moduleResolution": "node",
     "types": ["node"],
     "target": "es6"
   },

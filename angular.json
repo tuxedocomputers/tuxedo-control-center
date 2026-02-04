@@ -1,167 +1,179 @@
 {
-    "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-    "version": 1,
-    "newProjectRoot": "projects",
-    "projects": {
-        "tuxedo-control-center": {
-            "projectType": "application",
-            "i18n": {
-                "locales": {
-                    "en": {
-                        "translation": "src/ng-app/assets/locale/lang.en.xlf",
-                        "baseHref": ""
-                    },
-                    "de": {
-                        "translation": "src/ng-app/assets/locale/lang.de.xlf",
-                        "baseHref": ""
-                    }
-                }
-            },
-            "schematics": {
-                "@schematics/angular:component": {
-                    "style": "scss"
-                }
-            },
-            "root": "",
-            "sourceRoot": "src/ng-app",
-            "prefix": "app",
-            "architect": {
-                "build": {
-                    "builder": "@angular-builders/custom-webpack:browser",
-                    "options": {
-                        "customWebpackConfig": {
-                            "path": "./extra-webpack.config.js"
-                        },
-                        "outputPath": "dist/tuxedo-control-center/ng-app",
-                        "index": "src/ng-app/index.html",
-                        "main": "src/ng-app/main.ts",
-                        "polyfills": "src/ng-app/polyfills.ts",
-                        "tsConfig": "tsconfig.app.json",
-                        "aot": true,
-                        "localize": false,
-                        "assets": [
-                            "src/ng-app/favicon.ico",
-                            "src/ng-app/assets"
-                        ],
-                        "styles": [
-                            "src/ng-app/styles.scss"
-                        ],
-                        "scripts": [
-                            "node_modules/marked/lib/marked.umd.js"
-                        ],
-                        "allowedCommonJsDependencies": [
-                            "node-ble"
-                        ]
-                    },
-                    "configurations": {
-                        "production": {
-                            "fileReplacements": [
-                                {
-                                    "replace": "src/ng-app/environments/environment.ts",
-                                    "with": "src/ng-app/environments/environment.prod.ts"
-                                }
-                            ],
-                            "optimization": true,
-                            "outputHashing": "all",
-                            "sourceMap": false,
-                            "extractCss": true,
-                            "namedChunks": false,
-                            "extractLicenses": true,
-                            "vendorChunk": false,
-                            "buildOptimizer": false,
-                            "budgets": [
-                                {
-                                    "type": "initial",
-                                    "maximumWarning": "3.5mb",
-                                    "maximumError": "5mb"
-                                },
-                                {
-                                    "type": "anyComponentStyle",
-                                    "maximumWarning": "6kb"
-                                }
-                            ]
-                        }
-                    }
-                },
-                "serve": {
-                    "builder": "@angular-builders/custom-webpack:dev-server",
-                    "options": {
-                        "browserTarget": "tuxedo-control-center:build"
-                    },
-                    "configurations": {
-                        "production": {
-                            "browserTarget": "tuxedo-control-center:build:production"
-                        }
-                    }
-                },
-                "extract-i18n": {
-                    "builder": "@angular-devkit/build-angular:extract-i18n",
-                    "options": {
-                        "buildTarget": "tuxedo-control-center:build"
-                    }
-                },
-                "test": {
-                    "builder": "@angular-builders/custom-webpack:karma",
-                    "options": {
-                        "customWebpackConfig": {
-                            "path": "./test-webpack.config.js"
-                        },
-                        "main": "src/ng-app/test.ts",
-                        "polyfills": "src/ng-app/polyfills.ts",
-                        "tsConfig": "tsconfig.spec.json",
-                        "karmaConfig": "karma.conf.js",
-                        "assets": [
-                            "src/ng-app/favicon.ico",
-                            "src/ng-app/assets"
-                        ],
-                        "styles": [
-                            "src/ng-app/styles.scss"
-                        ],
-                        "scripts": []
-                    }
-                },
-                "e2e": {
-                    "builder": "@angular-devkit/build-angular:protractor",
-                    "options": {
-                        "protractorConfig": "e2e/protractor.conf.js",
-                        "devServerTarget": "tuxedo-control-center:serve"
-                    },
-                    "configurations": {
-                        "production": {
-                            "devServerTarget": "tuxedo-control-center:serve:production"
-                        }
-                    }
-                }
-            }
+  "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "newProjectRoot": "projects",
+  "projects": {
+    "tuxedo-control-center": {
+      "projectType": "application",
+      "i18n": {
+        "locales": {
+          "en": {
+            "translation": "src/ng-app/assets/locale/lang.en.xlf",
+            "baseHref": ""
+          },
+          "de": {
+            "translation": "src/ng-app/assets/locale/lang.de.xlf",
+            "baseHref": ""
+          }
         }
-    },
-    "cli": {
-        "analytics": "229c6157-8b24-4cb8-9f14-0e28239c4233"
-    },
-    "schematics": {
-      "@schematics/angular:component": {
-        "type": "component"
       },
-      "@schematics/angular:directive": {
-        "type": "directive"
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        }
       },
-      "@schematics/angular:service": {
-        "type": "service"
-      },
-      "@schematics/angular:guard": {
-        "typeSeparator": "."
-      },
-      "@schematics/angular:interceptor": {
-        "typeSeparator": "."
-      },
-      "@schematics/angular:module": {
-        "typeSeparator": "."
-      },
-      "@schematics/angular:pipe": {
-        "typeSeparator": "."
-      },
-      "@schematics/angular:resolver": {
-        "typeSeparator": "."
+      "root": "",
+      "sourceRoot": "src/ng-app",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-builders/custom-webpack:browser",
+          "options": {
+            "customWebpackConfig": {
+              "path": "./extra-webpack.config.js"
+            },
+            "outputPath": "dist/tuxedo-control-center/ng-app",
+            "index": "src/ng-app/index.html",
+            "main": "src/ng-app/main.ts",
+            "polyfills": "src/ng-app/polyfills.ts",
+            "tsConfig": "tsconfig.app.json",
+            "aot": true,
+            "localize": false,
+            "assets": [
+              "src/ng-app/favicon.ico",
+              "src/ng-app/assets"
+            ],
+            "styles": [
+              "src/ng-app/styles.scss"
+            ],
+            "scripts": [
+              "node_modules/marked/lib/marked.umd.js"
+            ],
+            "allowedCommonJsDependencies": [
+              "node-ble"
+            ]
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/ng-app/environments/environment.ts",
+                  "with": "src/ng-app/environments/environment.prod.ts"
+                }
+              ],
+              "optimization": true,
+              "outputHashing": "all",
+              "sourceMap": false,
+              "extractCss": true,
+              "namedChunks": false,
+              "extractLicenses": true,
+              "vendorChunk": false,
+              "buildOptimizer": false,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "3.5mb",
+                  "maximumError": "5mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "6kb"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@angular-builders/custom-webpack:dev-server",
+          "options": {
+            "browserTarget": "tuxedo-control-center:build"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "tuxedo-control-center:build:production"
+            }
+          }
+        },
+        "extract-i18n": {
+          "builder": "@angular-devkit/build-angular:extract-i18n",
+          "options": {
+            "buildTarget": "tuxedo-control-center:build"
+          }
+        },
+        "test": {
+          "builder": "@angular-builders/custom-webpack:karma",
+          "options": {
+            "customWebpackConfig": {
+              "path": "./test-webpack.config.js"
+            },
+            "main": "src/ng-app/test.ts",
+            "polyfills": "src/ng-app/polyfills.ts",
+            "tsConfig": "tsconfig.spec.json",
+            "karmaConfig": "karma.conf.js",
+            "assets": [
+              "src/ng-app/favicon.ico",
+              "src/ng-app/assets"
+            ],
+            "styles": [
+              "src/ng-app/styles.scss"
+            ],
+            "scripts": []
+          }
+        },
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "e2e/protractor.conf.js",
+            "devServerTarget": "tuxedo-control-center:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "tuxedo-control-center:serve:production"
+            }
+          }
+        },
+        "lint": {
+          "builder": "@angular-eslint/builder:lint",
+          "options": {
+            "lintFilePatterns": [
+              "src/ng-app/**/*.ts",
+              "src/ng-app/**/*.html"
+            ]
+          }
+        }
       }
     }
+  },
+  "cli": {
+    "analytics": "229c6157-8b24-4cb8-9f14-0e28239c4233",
+    "schematicCollections": [
+      "angular-eslint"
+    ]
+  },
+  "schematics": {
+    "@schematics/angular:component": {
+      "type": "component"
+    },
+    "@schematics/angular:directive": {
+      "type": "directive"
+    },
+    "@schematics/angular:service": {
+      "type": "service"
+    },
+    "@schematics/angular:guard": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:interceptor": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:module": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:pipe": {
+      "typeSeparator": "."
+    },
+    "@schematics/angular:resolver": {
+      "typeSeparator": "."
+    }
+  }
 }

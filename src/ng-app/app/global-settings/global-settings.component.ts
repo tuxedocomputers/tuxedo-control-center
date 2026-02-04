@@ -18,7 +18,7 @@ import { ChargingSettingsComponent } from '../charging-settings/charging-setting
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ConfigService } from '../config.service';
 import { UtilsService } from '../utils.service';
 import { Subscription } from 'rxjs';
@@ -37,6 +37,13 @@ import { SharedModule } from '../shared/shared.module';
     
 })
 export class GlobalSettingsComponent implements OnInit {
+    private config = inject(ConfigService);
+    private utils = inject(UtilsService);
+    private tccdbus = inject(TccDBusClientService);
+    private router = inject(Router);
+    private route = inject(ActivatedRoute);
+    availability = inject(AvailabilityService);
+
     Object = Object;
 
     public gridParams = {
@@ -46,11 +53,11 @@ export class GlobalSettingsComponent implements OnInit {
         inputSpan: 3
     };
 
-    public cpuSettingsEnabled: boolean = true;
-    public fanControlEnabled: boolean = true;
-    public keyboardBacklightControlEnabled: boolean = true;
-    public forceYUV420OutputSwitchAvailable: boolean = false;
-    public ycbcr420Workaround: Array<Object> = [];
+    public cpuSettingsEnabled = true;
+    public fanControlEnabled = true;
+    public keyboardBacklightControlEnabled = true;
+    public forceYUV420OutputSwitchAvailable = false;
+    public ycbcr420Workaround: object[] = [];
     public temperatureDisplayFahrenheit: boolean;
     public ctrlBrightnessMode = new UntypedFormControl();
 
@@ -58,17 +65,10 @@ export class GlobalSettingsComponent implements OnInit {
 
     private subscriptions: Subscription = new Subscription();
 
-    public primeState: string = "iGPU";
-    public expandPrimeSelect: Boolean = false;
+    public primeState = "iGPU";
+    public expandPrimeSelect = false;
 
-    constructor(
-        private config: ConfigService,
-        private utils: UtilsService,
-        private tccdbus: TccDBusClientService,
-        private router: Router,
-        private route: ActivatedRoute,
-        public availability: AvailabilityService
-    ) { }
+
 
     ngOnInit() {
         this.setValuesFromResolverRoute();
@@ -88,7 +88,7 @@ export class GlobalSettingsComponent implements OnInit {
         this.keyboardBacklightControlEnabled = this.config.getSettings().keyboardBacklightControlEnabled;
         for (let card = 0; card < this.config.getSettings().ycbcr420Workaround.length; card++) {
             this.ycbcr420Workaround[card] = {};
-            for (let port in this.config.getSettings().ycbcr420Workaround[card]) {
+            for (const port in this.config.getSettings().ycbcr420Workaround[card]) {
                 this.ycbcr420Workaround[card][port] = this.config.getSettings().ycbcr420Workaround[card][port];
             }
         }

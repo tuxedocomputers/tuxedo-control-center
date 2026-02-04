@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Injectable, OnDestroy } from '@angular/core';
+import { Injectable, OnDestroy, inject } from '@angular/core';
 import { determineState } from '../../common/classes/StateUtils';
 import { ProfileStates, ITccSettings } from '../../common/models/TccSettings';
 import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
@@ -36,6 +36,9 @@ export interface IStateInfo {
   providedIn: 'root'
 })
 export class StateService implements OnDestroy {
+  private config = inject(ConfigService);
+  private tccdbus = inject(TccDBusClientService);
+
 
   private updateInterval: NodeJS.Timeout;
   private currentSettings: ITccSettings;
@@ -50,7 +53,10 @@ export class StateService implements OnDestroy {
   public stateInputMap = new Map<string, IStateInfo>();
   public stateInputArray: IStateInfo[];
 
-  constructor(private config: ConfigService, private tccdbus: TccDBusClientService) {
+
+  constructor() {
+    const tccdbus = this.tccdbus;
+
     this.activeProfile = tccdbus.activeProfile;
 
     this.stateSubject = new Subject<ProfileStates>();

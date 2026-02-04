@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnInit, Output, OnDestroy, inject } from "@angular/core";
 import {
     AbstractControl,
     UntypedFormBuilder,
@@ -51,7 +51,11 @@ import { SharedModule } from '../shared/shared.module';
     styleUrls: ["./fan-slider.component.scss"],
     
 })
-export class FanSliderComponent implements OnInit {
+export class FanSliderComponent implements OnInit, OnDestroy {
+    private fb = inject(UntypedFormBuilder);
+    private config = inject(ConfigService);
+    private utils = inject(UtilsService);
+
     public customFanPreset = customFanPreset;
 
     @Input()
@@ -72,7 +76,7 @@ export class FanSliderComponent implements OnInit {
     public fanFormGroup: UntypedFormGroup;
 
     @Input()
-    public showFanGraphs: boolean = false;
+    public showFanGraphs = false;
 
     private mutex = new Mutex();
     public tempsLabels: string[] = Array.from(Array(100).keys())
@@ -82,11 +86,7 @@ export class FanSliderComponent implements OnInit {
     public fantableDatasets: ChartDataset[] = fantableDatasets;
     public graphType: ChartConfiguration['type'] = "line";
 
-    constructor(
-        private fb: UntypedFormBuilder,       
-        private config: ConfigService, 
-        private utils: UtilsService,
-        ) {}
+
         
     public ngOnInit(): void {
         this.initFanFormGroup();
@@ -203,7 +203,7 @@ export class FanSliderComponent implements OnInit {
     }
 
     public updateFanChartDataset() {
-        let { tableCPU, tableGPU } = this.getFanFormGroupValues();
+        const { tableCPU, tableGPU } = this.getFanFormGroupValues();
 
         this.fantableDatasets[0].data = interpolatePointsArray(tableCPU);
         this.fantableDatasets[1].data = interpolatePointsArray(tableGPU);

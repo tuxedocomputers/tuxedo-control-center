@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, inject } from "@angular/core";
 import { UtilsService } from "../utils.service";
 import { ElectronService } from "../electron.service";
 import { ConfigService } from "../config.service";
@@ -32,17 +32,17 @@ import { SharedModule } from '../shared/shared.module';
     
 })
 export class PrimeDialogComponent implements OnInit {
+    private electron = inject(ElectronService);
+    private config = inject(ConfigService);
+    private utils = inject(UtilsService);
+
     primeSelectMode: string;
     loadingBar = false;
     langId: string;
 
-    dialogStatus: string = "info";
+    dialogStatus = "info";
 
-    constructor(
-        private electron: ElectronService,
-        private config: ConfigService,
-        private utils: UtilsService
-    ) {}
+
 
     public ngOnInit(): void {
         this.electron.ipcRenderer.on(

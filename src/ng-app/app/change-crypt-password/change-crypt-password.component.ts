@@ -15,7 +15,7 @@
 // You should have received a copy of the GNU General Public License
 // along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
 import { FormErrorStateMatcher } from 'src/ng-app/common/formErrorStateMatcher';
 import { UtilsService } from '../utils.service';
@@ -31,6 +31,8 @@ import { SharedModule } from '../shared/shared.module';
     
 })
 export class ChangeCryptPasswordComponent implements OnInit {
+    private utils = inject(UtilsService);
+
     matcher = new FormErrorStateMatcher();
     buttonType = 'password';
     show_password_button_text = '';
@@ -42,9 +44,7 @@ export class ChangeCryptPasswordComponent implements OnInit {
 
     passwordFormGroup: UntypedFormGroup;
 
-    constructor(
-        private utils: UtilsService
-    ) { }
+
 
     async ngOnInit(): Promise<void> {
         this.passwordFormGroup = new UntypedFormGroup({
@@ -91,9 +91,9 @@ export class ChangeCryptPasswordComponent implements OnInit {
     }
 
     private async changeCryptPassword() {
-        let oldPassword = this.passwordFormGroup.get("cryptPassword").value;
-        let newPassword = this.passwordFormGroup.get("newPassword").value;
-        let confirmPassword = this.passwordFormGroup.get("confirmPassword").value;
+        const oldPassword = this.passwordFormGroup.get("cryptPassword").value;
+        const newPassword = this.passwordFormGroup.get("newPassword").value;
+        const confirmPassword = this.passwordFormGroup.get("confirmPassword").value;
 
         // Just to be sure that sane values are read to not brick the encryption when gui logic failed
         if (oldPassword === "" || newPassword === "" || newPassword !== confirmPassword) {
@@ -101,10 +101,10 @@ export class ChangeCryptPasswordComponent implements OnInit {
         }
 
         let oneliner = "";
-        for (let drive of this.crypt_drives) {
+        for (const drive of this.crypt_drives) {
             oneliner += `printf '%s\\n' '${oldPassword}' | /usr/sbin/cryptsetup open --type luks -q --test-passphrase ${drive.devPath} && `
         }
-        for (let drive of this.crypt_drives) {
+        for (const drive of this.crypt_drives) {
             oneliner += `printf '%s\\n' '${oldPassword}' '${newPassword}' '${confirmPassword}' | /usr/sbin/cryptsetup -q luksChangeKey --force-password ${drive.devPath} && `
         }
         oneliner = oneliner.slice(0, -4); // remove the tailing " && "
@@ -121,8 +121,8 @@ export class ChangeCryptPasswordComponent implements OnInit {
     }
 
     confirmValidation(group: UntypedFormGroup) {
-        let pass = group.get("newPassword").value;
-        let confirmPass = group.get("confirmPassword").value;
+        const pass = group.get("newPassword").value;
+        const confirmPass = group.get("confirmPassword").value;
 
         return pass === confirmPass ? null : { notSame: true }
     }

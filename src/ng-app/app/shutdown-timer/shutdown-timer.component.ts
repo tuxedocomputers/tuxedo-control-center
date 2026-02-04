@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { UtilsService } from '../utils.service';
 import { SharedModule } from '../shared/shared.module';
 
@@ -30,17 +30,17 @@ import { SharedModule } from '../shared/shared.module';
     
 })
 export class ShutdownTimerComponent implements OnInit {
-    public hours: Array<number> = [...Array(24).keys()];
-    public minutes: Array<number> = [...Array(60).keys()];
+    private utils = inject(UtilsService);
 
-    public selectedHour: number = 0;
-    public selectedMinute: number = 0;
+    public hours: number[] = [...Array(24).keys()];
+    public minutes: number[] = [...Array(60).keys()];
 
-    public appliedTime: string = "";
+    public selectedHour = 0;
+    public selectedMinute = 0;
 
-    constructor(
-        private utils: UtilsService
-    ) { }
+    public appliedTime = "";
+
+
 
     ngOnInit() {
         this.updateTime();
@@ -70,8 +70,8 @@ export class ShutdownTimerComponent implements OnInit {
 
     public updateTime() {
         this.utils.execCmdAsync("cat /run/systemd/shutdown/scheduled").then((result) => {
-            let resultJSON = ('{"' + result.toString().replace(/\s+/g, '","').replace(/=/g, '":"') + '"}').replace(/.""}/g, '}');
-            let resultDate = new Date(parseInt(JSON.parse(resultJSON).USEC) / 1000);
+            const resultJSON = ('{"' + result.toString().replace(/\s+/g, '","').replace(/=/g, '":"') + '"}').replace(/.""}/g, '}');
+            const resultDate = new Date(parseInt(JSON.parse(resultJSON).USEC) / 1000);
             this.appliedTime = resultDate.getHours().toString().padStart(2, "0") + ":" + resultDate.getMinutes().toString().padStart(2, "0");
         }).catch(() => {
             this.appliedTime = ""

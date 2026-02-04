@@ -19,7 +19,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { Observable } from 'rxjs';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ProfileConflictComponent, IProfileConflictDialogResult } from "./profile-conflict-dialog.component";
@@ -30,9 +30,11 @@ import { ITccProfile } from 'src/common/models/TccProfile';
 
 
 @Injectable()
-export class ProfileConflictDialogService {  
+export class ProfileConflictDialogService {
+    private dialog = inject(MatDialog);
+
   
-    constructor(private dialog: MatDialog) { }  
+  
     dialogRef: MatDialogRef<ProfileConflictComponent>;
   
   private open(oldProfile: ITccProfile, newProfile: ITccProfile) 

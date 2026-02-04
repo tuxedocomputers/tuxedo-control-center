@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { ElectronService } from '../electron.service';
 import { Subscription } from 'rxjs';
 import { ITccProfile } from '../../../common/models/TccProfile';
@@ -37,6 +37,13 @@ import { SharedModule } from '../shared/shared.module';
     
 })
 export class MainGuiComponent implements OnInit, OnDestroy {
+    private electron = inject(ElectronService);
+    private config = inject(ConfigService);
+    private state = inject(StateService);
+    private utils = inject(UtilsService);
+    compat = inject(CompatibilityService);
+    private route = inject(ActivatedRoute);
+
 
     public profileSelect: string;
     public activeProfileName: string;
@@ -47,14 +54,8 @@ export class MainGuiComponent implements OnInit, OnDestroy {
 
     public dataLoaded: boolean;
 
-    constructor(
-        private electron: ElectronService,
-        private config: ConfigService,
-        private state: StateService,
-        private utils: UtilsService,
-        public compat: CompatibilityService,
-        private route: ActivatedRoute,
-        ) {
+
+    constructor() {
             const data = this.route.snapshot.data;
             this.dataLoaded = data.loaded === true;
         }

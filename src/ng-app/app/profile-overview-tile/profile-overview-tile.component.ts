@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, inject } from '@angular/core';
 import { ITccProfile, profileImageMap } from '../../../common/models/TccProfile';
 import { UtilsService } from '../utils.service';
 import { StateService, IStateInfo } from '../state.service';
@@ -40,6 +40,15 @@ import { SharedModule } from '../shared/shared.module';
     
 })
 export class ProfileOverviewTileComponent implements OnInit {
+    private utils = inject(UtilsService);
+    private state = inject(StateService);
+    private config = inject(ConfigService);
+    private router = inject(Router);
+    private route = inject(ActivatedRoute);
+    compat = inject(CompatibilityService);
+    private sysfs = inject(SysFsService);
+    private tccDBus = inject(TccDBusClientService);
+
 
     @Input() profile: ITccProfile;
     @Input() hoverEffect = false;
@@ -70,23 +79,14 @@ export class ProfileOverviewTileComponent implements OnInit {
     private subscriptions: Subscription = new Subscription();
 
     public odmProfileNames: string[] = [];
-    public odmProfileToName: Map<string, string> = new Map();
+    public odmProfileToName = new Map<string, string>();
 
     public odmPowerLimitInfos: TDPInfo[];
     public selectedCPUTabIndex: number;
 
     public get hasMaxFreqWorkaround() { return this.compat.hasMissingMaxFreqBoostWorkaround; }
 
-    constructor(
-        private utils: UtilsService,
-        private state: StateService,
-        private config: ConfigService,
-        private router: Router,
-        private route: ActivatedRoute,
-        public compat: CompatibilityService,
-        private sysfs: SysFsService,
-        private tccDBus: TccDBusClientService
-    ) { }
+
 
     ngOnInit() {
         this.subscriptions.add(this.sysfs.generalCpuInfo.subscribe(cpuInfo => { this.cpuInfo = cpuInfo; }));
