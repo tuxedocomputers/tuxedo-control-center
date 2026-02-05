@@ -373,14 +373,16 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         const outputPorts: string[][] = TuxedoIOAPI.getOutputPorts();
         // Delete additional cards from settings
         if (this.settings.ycbcr420Workaround?.length > outputPorts?.length) {
-            this.logLine('TuxedoControlCenterDaemon: Additional ycbcr420Workaround card in settings');
+            this.logLine(
+                `TuxedoControlCenterDaemon: Additional ycbcr420Workaround card in settings (${this.settings.ycbcr420Workaround?.length} > ${outputPorts?.length})`,
+            );
             this.settings.ycbcr420Workaround = this.settings.ycbcr420Workaround.slice(0, outputPorts?.length);
             missingSetting = true;
         }
         for (let card: number = 0; card < outputPorts?.length; card++) {
             // Add card to settings if missing
             if (this.settings.ycbcr420Workaround?.length <= card) {
-                this.logLine('TuxedoControlCenterDaemon: Missing ycbcr420Workaround card in settings');
+                this.logLine(`TuxedoControlCenterDaemon: Missing ycbcr420Workaround card "${card}" in settings`);
                 this.settings.ycbcr420Workaround[card] = {};
                 missingSetting = true;
             }
@@ -394,7 +396,9 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
                         }
                     }
                     if (!stillAvailable) {
-                        this.logLine('TuxedoControlCenterDaemon: Additional ycbcr420Workaround port in settings');
+                        this.logLine(
+                            `TuxedoControlCenterDaemon: Additional ycbcr420Workaround port "${settingsPort}" with card "${card}" in settings`,
+                        );
                         delete this.settings.ycbcr420Workaround[card][settingsPort];
                         missingSetting = true;
                     }
@@ -404,7 +408,9 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             if (outputPorts[card] !== undefined) {
                 for (const port of outputPorts[card]) {
                     if (this.settings.ycbcr420Workaround[card][port] === undefined) {
-                        this.logLine('TuxedoControlCenterDaemon: Missing ycbcr420Workaround port in settings');
+                        this.logLine(
+                            `TuxedoControlCenterDaemon: Missing ycbcr420Workaround port "${port}" with card "${card}" in settings`,
+                        );
                         this.settings.ycbcr420Workaround[card][port] = false;
                         missingSetting = true;
                     }
