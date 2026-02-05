@@ -26,7 +26,6 @@ import {
     type TUXEDODevice,
 } from '../models/DefaultProfiles';
 import { defaultProfiles } from '../models/profiles/LegacyProfiles';
-import { defaultAutosave, type ITccAutosave } from '../models/TccAutosave';
 import { defaultFanProfiles, type ITccFanProfile } from '../models/TccFanTable';
 import { generateProfileId, type ITccProfile } from '../models/TccProfile';
 import { defaultSettings, deviceCustomSettings, type ITccSettings } from '../models/TccSettings';
@@ -37,7 +36,6 @@ export class ConfigHandler {
     public profileFileMod: number;
     public webcamFileMod: number;
     public v4l2NamesFileMod: number;
-    public autosaveFileMod: number;
     public fantablesFileMod: number;
 
     // tslint:disable-next-line: variable-name
@@ -46,14 +44,12 @@ export class ConfigHandler {
         private _pathProfiles: string,
         private _pathWebcam: string,
         private _pathV4l2Names: string,
-        private _pathAutosave: string,
         private _pathFantables: string,
     ) {
         this.settingsFileMod = 0o644;
         this.profileFileMod = 0o644;
         this.webcamFileMod = 0o644;
         this.v4l2NamesFileMod = 0o644;
-        this.autosaveFileMod = 0o644;
         this.fantablesFileMod = 0o644;
     }
 
@@ -80,12 +76,6 @@ export class ConfigHandler {
     }
     public set pathV4l2Names(filename: string) {
         this._pathV4l2Names = filename;
-    }
-    public get pathAutosave(): string {
-        return this._pathAutosave;
-    }
-    public set pathAutosave(filename: string) {
-        this._pathAutosave = filename;
     }
     public get pathFanTables(): string {
         return this._pathFantables;
@@ -185,14 +175,6 @@ export class ConfigHandler {
         this.writeConfig<ITccProfile[]>(profiles, filePath, { mode: this.profileFileMod });
     }
 
-    public readAutosave(filePath: string = this.pathAutosave): ITccAutosave {
-        return this.readConfig<ITccAutosave>(filePath);
-    }
-
-    public writeAutosave(autosave: ITccAutosave, filePath: string = this.pathAutosave): void {
-        this.writeConfig<ITccAutosave>(autosave, filePath, { mode: this.autosaveFileMod });
-    }
-
     public readFanTables(filePath: string = this.pathFanTables): ITccFanProfile[] {
         return this.readConfig<ITccFanProfile[]>(filePath);
     }
@@ -288,10 +270,6 @@ export class ConfigHandler {
             findDefaultSettings = defaultSettings;
         }
         return this.copyConfig<ITccSettings>(findDefaultSettings);
-    }
-
-    public getDefaultAutosave(): ITccAutosave {
-        return this.copyConfig<ITccAutosave>(defaultAutosave);
     }
 
     public getCustomProfilesNoThrow(device: TUXEDODevice): ITccProfile[] {

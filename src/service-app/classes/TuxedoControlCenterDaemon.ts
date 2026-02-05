@@ -26,7 +26,6 @@ import { DMIController } from '../../common/classes/DMIController';
 import { ScalingDriver } from '../../common/classes/LogicalCpuController';
 import { TccPaths } from '../../common/classes/TccPaths';
 import { defaultCustomProfile, TUXEDODevice } from '../../common/models/DefaultProfiles';
-import type { ITccAutosave } from '../../common/models/TccAutosave';
 import { customFanPreset, type ITccFanProfile } from '../../common/models/TccFanTable';
 import { generateProfileId, type ITccProfile } from '../../common/models/TccProfile';
 import { type ITccSettings, ProfileStates } from '../../common/models/TccSettings';
@@ -63,7 +62,6 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
 
     public settings: ITccSettings;
     public customProfiles: ITccProfile[];
-    public autosave: ITccAutosave;
     public fanTables: ITccFanProfile[];
 
     public dbusData: TccDBusData = new TccDBusData();
@@ -85,7 +83,6 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             TccPaths.PROFILES_FILE,
             TccPaths.WEBCAM_FILE,
             TccPaths.V4L2_NAMES_FILE,
-            TccPaths.AUTOSAVE_FILE,
             TccPaths.FANTABLES_FILE,
         );
     }
@@ -202,7 +199,6 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             }
         }
 
-        this.config.writeAutosave(this.autosave);
         this.config.writeSettings(this.settings);
     }
 
@@ -504,14 +500,6 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
                     `TuxedoControlCenterDaemon: Failed to write default profiles: ${this.config.pathProfiles} => ${err}`,
                 );
             }
-        }
-
-        try {
-            this.autosave = this.config.readAutosave();
-        } catch (err: unknown) {
-            console.error(`TuxedoControlCenterDaemon: Failed to read autosave ${this.config.pathAutosave} => ${err}`);
-            // It probably doesn't exist yet so create a structure for saving
-            this.autosave = this.config.getDefaultAutosave();
         }
     }
 

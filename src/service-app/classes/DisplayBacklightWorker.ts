@@ -25,7 +25,6 @@ import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 export class DisplayBacklightWorker extends DaemonWorker {
     private controllers: DisplayBacklightController[];
     private basePath: string = '/sys/class/backlight';
-    private useAutosave: boolean = false;
 
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(3000, 'DisplayBacklightWorker', tccd);
@@ -43,22 +42,10 @@ export class DisplayBacklightWorker extends DaemonWorker {
     }
 
     public async onStart(): Promise<void> {
-        // Figure out which brightness percentage to set
         const currentProfile: ITccProfile = this.activeProfile;
-        let brightnessPercent: number;
 
-        if (!currentProfile.display.useBrightness || currentProfile.display.brightness === undefined) {
-            if (this.tccd.autosave.displayBrightness === undefined) {
-                brightnessPercent = 100;
-            } else {
-                brightnessPercent = this.tccd.autosave.displayBrightness;
-            }
-        } else {
-            brightnessPercent = currentProfile.display.brightness;
-        }
-
-        // Write brightness percentage to driver(s)
-        if (this.useAutosave || currentProfile.display.useBrightness) {
+        if (currentProfile.display.useBrightness && currentProfile.display.brightness !== undefined) {
+            const brightnessPercent: number = currentProfile.display.brightness;
             this.writeBrightness(brightnessPercent);
 
             // Recheck workaround for late loaded drivers and drivers that are not ready although
@@ -69,54 +56,9 @@ export class DisplayBacklightWorker extends DaemonWorker {
         }
     }
 
-    public async onWork(): Promise<void> {
-        this.findDrivers(); // Drivers are reenumerated before use since they can change on the fly
+    public async onWork(): Promise<void> {}
 
-        // Possibly save brightness regularly
-        for (const controller of this.controllers) {
-            let value: number;
-            let maxBrightness: number;
-
-            try {
-                value = controller.brightness.readValue();
-                maxBrightness = controller.maxBrightness.readValue();
-                if (!Number.isNaN(value) && value !== 0) {
-                    this.tccd.autosave.displayBrightness = Math.round((value * 100) / maxBrightness);
-                }
-            } catch (err: unknown) {
-                console.error(`DisplayBacklightWorker: onWork failed => ${err}`);
-            }
-        }
-    }
-
-    public async onExit(): Promise<void> {
-        this.findDrivers(); // Drivers are reenumerated before use since they can change on the fly
-
-        this.controllers.forEach((controller: DisplayBacklightController): void => {
-            let value: number;
-            let maxBrightness: number;
-            try {
-                value = controller.brightness.readValue();
-                maxBrightness = controller.maxBrightness.readValue();
-            } catch (err: unknown) {
-                console.error(
-                    `DisplayBacklightWorker: Failed to read display brightness on exit from ${controller.driver} => ${err}`,
-                );
-            }
-            if (value !== undefined) {
-                if (value === 0) {
-                    this.tccd.logLine(
-                        `DisplayBacklightWorker: Refused to save display brightness 0 from ${controller.driver}`,
-                    );
-                } else {
-                    this.tccd.autosave.displayBrightness = Math.round((value * 100) / maxBrightness);
-                    this.tccd.logLine(
-                        `DisplayBacklightWorker: Saving display brightness ${this.tccd.autosave.displayBrightness}% (${value}) on exit`,
-                    );
-                }
-            }
-        });
-    }
+    public async onExit(): Promise<void> {}
 
     private writeBrightness(brightnessPercent: number, recheck?: boolean): void {
         this.findDrivers();

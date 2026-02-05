@@ -30,7 +30,6 @@ const config: ConfigHandler = new ConfigHandler(
     TccPaths.PROFILES_FILE,
     TccPaths.WEBCAM_FILE,
     TccPaths.V4L2_NAMES_FILE,
-    TccPaths.AUTOSAVE_FILE,
     TccPaths.FANTABLES_FILE,
 );
 
