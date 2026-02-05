@@ -164,10 +164,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             <td mat-cell *matCellDef="let line">
                                 <mat-slide-toggle
                                     class="green-slide-toggle"
-                                    [disabled]="line.required === 'prerequisite' || line.blocked === 'yes'"
+                                    [disabled]="line.required === 'prerequisite' || line.blocked === 'yes' || line.name === 'tuxedo-control-center' || line.name === 'tuxedo-drivers'"
                                     [checked]="line.installed === 'yes'"
                                     (change)="tomteModuleInstallButton(line.name, line.installed, line.blocked)"
-                                    [matTooltip]="getSliderToolTip('installed', line.required, line.blocked, line.installed)">
+                                    [matTooltip]="getSliderToolTip(line.name, 'installed', line.required, line.blocked, line.installed)">
                                 </mat-slide-toggle>
                             </td>
                         </div>
@@ -177,10 +177,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             <td mat-cell *matCellDef="let line">
                                 <mat-slide-toggle
                                     class="green-slide-toggle"
-                                    [disabled]="line.required === 'prerequisite'"
+                                    [disabled]="line.required === 'prerequisite' || line.name === 'tuxedo-control-center' || line.name === 'tuxedo-drivers'"
                                     [checked]="line.blocked === 'no'"
                                     (change)="tomteBlockButton(line.name, line.blocked)"
-                                    [matTooltip]="getSliderToolTip('blocked', line.required, line.blocked, line.installed)">
+                                    [matTooltip]="getSliderToolTip(line.name, 'blocked', line.required, line.blocked, line.installed)">
                                 </mat-slide-toggle>
                             </td>
                         </div>

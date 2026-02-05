@@ -153,9 +153,15 @@ export class TomteGuiComponent implements OnInit {
         Returns properly translated tooltip for the sliders in each of their proper conditions
     */
     // todo: maybe refactor
-    public getSliderToolTip(whichButton: string, required: string, blocked: string, installed: string): string {
+    public getSliderToolTip(
+        name: string,
+        whichButton: string,
+        required: string,
+        blocked: string,
+        installed: string,
+    ): string {
         if (whichButton === 'blocked') {
-            if (required === 'prerequisite') {
+            if (required === 'prerequisite' || name === 'tuxedo-control-center' || name === 'tuxedo-drivers') {
                 return $localize`:@@tomteGuiSliderToolTipBlockRequisite:This module is essential for the proper operation of your TUXEDO and cannot be deactivated`;
             }
             if (blocked === 'yes') {
@@ -166,7 +172,7 @@ export class TomteGuiComponent implements OnInit {
         }
 
         if (whichButton === 'installed') {
-            if (required === 'prerequisite') {
+            if (required === 'prerequisite' || name === 'tuxedo-control-center' || name === 'tuxedo-drivers') {
                 return $localize`:@@tomteGuiSliderToolTipUninstallRequisite:This module is essential for the proper operation of your TUXEDO and cannot be uninstalled`;
             }
             if (blocked === 'yes') {
