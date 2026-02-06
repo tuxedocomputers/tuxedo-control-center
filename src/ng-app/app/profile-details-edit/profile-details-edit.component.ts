@@ -555,7 +555,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public sliderODMPowerLimitMinValue(sliderIndex: number): number {
         const odmPowerLimits: UntypedFormGroup = this.profileFormGroup.controls.odmPowerLimits as UntypedFormGroup;
-        const tdpValues: UntypedFormArray = odmPowerLimits.controls.tdpValues as UntypedFormArray;
+        const _tdpValues: UntypedFormArray = odmPowerLimits.controls.tdpValues as UntypedFormArray;
 
         // Find largest allowed min value
         const minValue = this.odmPowerLimitInfos[sliderIndex].min;
@@ -571,7 +571,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public sliderODMPowerLimitMaxValue(sliderIndex: number): number {
         const odmPowerLimits: UntypedFormGroup = this.profileFormGroup.controls.odmPowerLimits as UntypedFormGroup;
-        const tdpValues: UntypedFormArray = odmPowerLimits.controls.tdpValues as UntypedFormArray;
+        const _tdpValues: UntypedFormArray = odmPowerLimits.controls.tdpValues as UntypedFormArray;
 
         // Find smallest allowed max value
         const maxValue = this.odmPowerLimitInfos[sliderIndex].max;

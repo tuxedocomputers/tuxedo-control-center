@@ -125,7 +125,7 @@ export class SupportComponent implements OnInit {
         this.systeminfoOutput('Fetching: ' + this.systeminfosURL);
         const data = await this.utils.httpsGet(this.systeminfosURL);
         fileData = data.toString();
-      } catch (err) {
+      } catch (_err) {
         reject('Download failed'); return;
       }
 
@@ -133,7 +133,7 @@ export class SupportComponent implements OnInit {
       try {
         this.systeminfoOutput('Writing file: ' + this.systeminfoFilePath);
         await this.utils.writeTextFile(this.systeminfoFilePath, fileData, { mode: 0o755 });
-      } catch (err) {
+      } catch (_err) {
         reject('Failed to write file ' + this.systeminfoFilePath); return;
       }
 
@@ -143,7 +143,7 @@ export class SupportComponent implements OnInit {
         this.systeminfoOutput('Running systeminfos.sh');
         this.utils.pageDisabled = true;
         await this.utils.execCmdAsync('pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY XDG_SESSION_TYPE=$XDG_SESSION_TYPE XDG_CURRENT_DESKTOP=$XDG_CURRENT_DESKTOP sh ' + this.systeminfoFilePath + ' ' + ticketNumber);
-      } catch (err) {
+      } catch (_err) {
         reject('Failed to execute script');
       } finally {
         this.utils.pageDisabled = false;

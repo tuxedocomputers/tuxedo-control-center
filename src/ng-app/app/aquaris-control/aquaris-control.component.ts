@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { AfterContentInit, Component, ElementRef, OnDestroy, OnInit, ViewChild, inject } from '@angular/core';
+import { AfterContentInit, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { ElectronService } from '../electron.service';
 import { aquarisAPIHandle, ClientAPI } from '../../../e-app/AquarisAPI';
 import { UntypedFormControl } from '@angular/forms';
@@ -319,8 +319,8 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
         }
     }
 
-    public async sliderFanChange(fanSpeed: number) {
-
+    public async sliderFanChange(_fanSpeed: number) {
+        // Placeholder for future implementation
     }
 
     public async selectFanPreset(fanPresetId: string) {

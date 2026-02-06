@@ -26,7 +26,6 @@ import {
     KeyboardBacklightStateInterface,
 } from "../../../common/models/TccSettings";
 import { filter, take } from "rxjs/operators";
-import { MatSlider } from "@angular/material/slider";
 import { interval, Subscription } from "rxjs";
 import { SharedModule } from '../shared/shared.module';
 
@@ -122,7 +121,7 @@ export class KeyboardBacklightComponent implements OnInit {
             (keyboardBacklightStates) => {
                 const hasChosenColor = keyboardBacklightStates?.length > 0;
                 const hasNoPickerInUsage = !this.isPickerInUsage();
-                const { brightness, red, green, blue } =
+                const { brightness, red: _red, green: _green, blue: _blue } =
                     keyboardBacklightStates[0];
 
                 if (hasChosenColor && hasNoPickerInUsage) {
@@ -196,7 +195,9 @@ export class KeyboardBacklightComponent implements OnInit {
         );
     }
 
-    public onBrightnessSliderChange(): void {}
+    public onBrightnessSliderChange(): void {
+        // Event handler called by template
+    }
 
     public onColorPickerInput(color: string, selectedZones: number[]): void {
         this.triggerColorPickerTimeout(selectedZones);

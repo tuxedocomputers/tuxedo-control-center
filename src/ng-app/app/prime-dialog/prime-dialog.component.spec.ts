@@ -11,7 +11,7 @@ describe("PrimeDialogComponent", () => {
     beforeEach(async () => {
         await TestBed.configureTestingModule({
     imports: [PrimeDialogComponent],
-    providers: [DecimalPipe, { provide: ElectronService, useValue: { ipcRenderer: { on: () => {} } } }]
+    providers: [DecimalPipe, { provide: ElectronService, useValue: { ipcRenderer: { on: () => { /* mock listener */ } } } }]
 }).compileComponents();
     });
 

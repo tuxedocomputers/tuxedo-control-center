@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 
 
-import { Observable, of, from } from 'rxjs';
+import { Observable, from } from 'rxjs';
 import { TccDBusClientService } from './tcc-dbus-client.service';
 
 @Injectable({

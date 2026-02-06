@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { ChangeDetectionStrategy, Component, HostListener, Output, OnInit, OnDestroy, inject } from '@angular/core';
+import { Component, HostListener, OnInit, OnDestroy, inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { ITccProfile } from 'src/common/models/TccProfile';
 import { UntypedFormControl, Validators } from '@angular/forms';
@@ -69,7 +69,9 @@ export class ProfileConflictComponent implements OnInit, OnDestroy {
         this.subscriptions.add(this.sysfs.generalCpuInfo.subscribe(cpuInfo => { this.cpuInfo = cpuInfo; }));
      }
 
-    ngOnDestroy() { }
+    ngOnDestroy() {
+        // Cleanup handled by subscriptions
+    }
     
     // we need those two functions to properly display the overview tiles 
     // for now they are dublicates of the ones in profile-overview-tile

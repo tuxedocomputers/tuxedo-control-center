@@ -30,7 +30,6 @@ import {
 import { manageCriticalTemperature } from "src/common/classes/FanUtils";
 import { formatTemp } from "../../../common/classes/FanUtils";
 import { ConfigService } from "../config.service";
-import { UtilsService } from "../utils.service";
 import { SharedModule } from '../shared/shared.module';
 
 @Component({
@@ -99,14 +98,18 @@ export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
         
-    ngOnInit() {}
+    ngOnInit() {
+        // Component initialization handled by Angular
+    }
 
     ngAfterViewInit(): void {
         this.initDone = true;
         this.cdref.detectChanges();
     }
 
-    ngOnDestroy(): void {}
+    ngOnDestroy(): void {
+        // Cleanup handled by Angular
+    }
 
     private updateDatasets(): void {
         if (this._fanProfile === undefined) return;

@@ -41,6 +41,7 @@ export class InfoComponent implements OnInit {
 
 
   ngOnInit() {
+    // Component initialization handled by Angular
   }
 
   public changeLanguage(languageId: string) {

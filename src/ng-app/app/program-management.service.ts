@@ -38,7 +38,7 @@ export class ProgramManagementService {
   public async isInstalled(name: string): Promise<boolean> {
     this.isCheckingInstallation.set(name, true);
     return new Promise<boolean>(async (resolve) => {
-      this.utils.execCmdAsync('which ' + name).then((result) => {
+      this.utils.execCmdAsync('which ' + name).then((_result) => {
         this.isCheckingInstallation.set(name, false);
         resolve(true);
       }).catch(() => {

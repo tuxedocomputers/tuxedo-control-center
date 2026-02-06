@@ -67,7 +67,7 @@ export class MainGuiComponent implements OnInit, OnDestroy {
         this.updateLanguageName();
         this.getSettings();
         // this.subscriptions.add(this.config.observeSettings.subscribe(newSettings => { this.getSettings(); }));
-        this.subscriptions.add(this.state.activeProfile.subscribe(activeProfile => { this.getSettings(); }));
+        this.subscriptions.add(this.state.activeProfile.subscribe(_activeProfile => { this.getSettings(); }));
 
         if (!this.dataLoaded) {
             this.electron.remote.dialog.showMessageBox(

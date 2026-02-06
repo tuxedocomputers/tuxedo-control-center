@@ -715,7 +715,7 @@ export class WebcamSettingsComponent implements OnInit, AfterContentChecked, OnD
         const formGroupKeys = Object.keys(this.webcamFormGroup.getRawValue());
         const configKeys = Object.keys(preset.webcamSettings);
 
-        let renamed = false;
+        let _renamed = false;
         let unknown = false;
         const renamedKeys: string[] = [];
 
@@ -733,7 +733,7 @@ export class WebcamSettingsComponent implements OnInit, AfterContentChecked, OnD
                     const value = preset.webcamSettings[includedConfigKey];
                     delete preset.webcamSettings[includedConfigKey];
                     preset.webcamSettings[includedFormGroupKey] = value;
-                    renamed = true;
+                    _renamed = true;
                     renamedKeys.push(includedConfigKey);
                 }
             }
@@ -1039,12 +1039,11 @@ export class WebcamSettingsComponent implements OnInit, AfterContentChecked, OnD
     }
 
     public async savingWebcamPreset(): Promise<void> {
-        let selection: string | undefined;
         if (this.selectedPreset.presetName == "Default") {
             await this.handlePresetName();
             return;
         }
-        selection = await this.askOverwriteOrNewPreset();
+        const selection = await this.askOverwriteOrNewPreset();
         if (selection == undefined) {
             return;
         }

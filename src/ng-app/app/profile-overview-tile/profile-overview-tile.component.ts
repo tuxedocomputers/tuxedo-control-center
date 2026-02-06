@@ -156,7 +156,7 @@ export class ProfileOverviewTileComponent implements OnInit {
 
     public deleteProfile(): void {
         this.utils.pageDisabled = true;
-        this.config.deleteCustomProfile(this.profile.id).then(success => {
+        this.config.deleteCustomProfile(this.profile.id).then(_success => {
             this.utils.pageDisabled = false;
         });
     }

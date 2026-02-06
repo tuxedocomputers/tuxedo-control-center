@@ -26,7 +26,6 @@ import { UtilsService } from "../utils.service";
 import { TccDBusClientService } from "../tcc-dbus-client.service";
 import { Subscription } from "rxjs";
 import { first } from "rxjs/operators";
-import { SharedModule } from '../shared/shared.module';
 
 @Component({
   standalone: true,

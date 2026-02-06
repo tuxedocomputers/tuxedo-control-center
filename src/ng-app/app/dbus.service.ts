@@ -75,7 +75,7 @@ export class DBusService implements OnDestroy {
           const result = await this.displayBrightnessGnome.getBrightness();
           this.currentDisplayBrightness = result;
           this.displayBrightnessSubject.next(this.currentDisplayBrightness);
-        } catch (err) {
+        } catch (_err) {
           this.displayBrightnessNotSupported = true;
           return;
         }
@@ -96,7 +96,8 @@ export class DBusService implements OnDestroy {
   }
 
   public async setDisplayBrightness(valuePercent: number): Promise<void> {
-    return this.displayBrightnessGnome.setBrightness(valuePercent).catch(() => {});
+    // Silently catch errors since brightness setting may not be available
+    return this.displayBrightnessGnome.setBrightness(valuePercent).catch(() => { /* ignore */ });
   }
 
   ngOnDestroy() {

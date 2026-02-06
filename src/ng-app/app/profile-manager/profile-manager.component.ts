@@ -218,7 +218,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy, AfterContentC
             // TODO, this should probably be changed to not use remote module and instead using a function in
             // utils.service that opens a message box like utils.service confirmDialog()
             // for more uniform coding style and also remote module is deprecated.
-            const choice = this.electron.remote.dialog.showMessageBox(
+            const _choice = this.electron.remote.dialog.showMessageBox(
                 this.electron.remote.getCurrentWindow(),
                 {
                     title: $localize `:@@cProfMgrInvalidNameTitle:Invalid input`,
@@ -240,7 +240,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy, AfterContentC
             const txt = JSON.stringify(profiles);
             await this.utils.writeTextFile("" + res,txt);
         }
-        catch(err)
+        catch(_err)
         {
             console.log("export canceled");
         }
@@ -260,7 +260,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy, AfterContentC
             res = await this.utils.openFileDialog({ defaultPath: documentsPath, buttonLabel: importLabel, filters:[{name: "JSON Files", extensions: ["json"]} , { name: "All Files", extensions: ["*"] }], properties: ['openFile', 'multiSelections'] });
             txt = await this.utils.readTextFile(res[0] + "");
         }
-        catch (err)
+        catch (_err)
         {
             console.log("import canceled");
             this.utils.pageDisabled = false;
@@ -281,15 +281,15 @@ export class ProfileManagerComponent implements OnInit, OnDestroy, AfterContentC
         }
         const oldProfiles = this.config.getCustomProfiles();
         let newProfiles: ITccProfile[] = [];
-        for (var i = 0; i < profiles.length; i++)
+        for (const profile of profiles)
         {
-            const conflictProfileIndex = oldProfiles.findIndex(x => x.id === profiles[i].id);
+            const conflictProfileIndex = oldProfiles.findIndex(x => x.id === profile.id);
             if (conflictProfileIndex !== -1)
             {
-                const res = await this.dialogService.openConflictModal(oldProfiles[conflictProfileIndex],profiles[i]);
+                const res = await this.dialogService.openConflictModal(oldProfiles[conflictProfileIndex], profile);
                 if(res.action === "keepNew")
                 {
-                    newProfiles = newProfiles.concat(profiles[i]);
+                    newProfiles = newProfiles.concat(profile);
                 } 
                 else if (res.action === "keepOld") // basically same thing as cancel
                 {
@@ -297,13 +297,13 @@ export class ProfileManagerComponent implements OnInit, OnDestroy, AfterContentC
                 }
                 else if (res.action === "keepBoth")
                 {
-                    const newProfile = profiles[i];
+                    const newProfile = profile;
                     newProfile.id = "generateNewID";
                     newProfiles = newProfiles.concat(newProfile);
                 }
                 else if (res.action === "newName")
                 {
-                    const newProfile = profiles[i];
+                    const newProfile = profile;
                     newProfile.name = res.newName;
                     newProfile.id = "generateNewID";
                     newProfiles = newProfiles.concat(newProfile);
@@ -311,7 +311,7 @@ export class ProfileManagerComponent implements OnInit, OnDestroy, AfterContentC
             }
             else
             {
-                newProfiles = newProfiles.concat(profiles[i]);
+                newProfiles = newProfiles.concat(profile);
             }
         }
         if(newProfiles.length > 0)

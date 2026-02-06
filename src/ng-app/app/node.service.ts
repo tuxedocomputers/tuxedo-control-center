@@ -6,8 +6,7 @@ import * as os from 'os';
   providedIn: 'root'
 })
 export class NodeService {
-
-  constructor() { }
+  // No explicit constructor needed - DI handled by Angular
 
   public getOs() {
     return os;

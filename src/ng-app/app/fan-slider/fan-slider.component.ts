@@ -21,7 +21,6 @@ import {
     AbstractControl,
     UntypedFormBuilder,
     UntypedFormGroup,
-    Validators,
 } from "@angular/forms";
 import { Mutex } from "async-mutex";
 import {

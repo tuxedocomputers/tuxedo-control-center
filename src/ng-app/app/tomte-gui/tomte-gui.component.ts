@@ -77,6 +77,7 @@ export class TomteGuiComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit() {
+        // View initialization complete
     }
 
     public focusControl(control): void {
@@ -117,7 +118,7 @@ export class TomteGuiComponent implements OnInit, AfterViewInit {
                 this.getModuleDescriptions();
                 break;
             }
-            catch (e)
+            catch (_e)
             {
                 if(i === 10)
                 {
@@ -154,7 +155,7 @@ export class TomteGuiComponent implements OnInit, AfterViewInit {
             this.tomteListArray.push({moduleName: module.name, version: module.version, installed: module.installed === "yes", blocked: module.blocked === "yes", prerequisite: module.required});
         }
         }
-        catch (e)
+        catch (_e)
         {
             console.error("not valid json");
             this.jsonError = true;
@@ -183,8 +184,9 @@ export class TomteGuiComponent implements OnInit, AfterViewInit {
                     const results = await this.utils.execCmdAsync(command);
                     this.moduleToolTips.set(modulename, results);
                 }
-                catch (err)
+                catch (_err)
                 {
+                    // Silently ignore - description may not be available
                 }
 
             }
@@ -386,7 +388,7 @@ export class TomteGuiComponent implements OnInit, AfterViewInit {
         {
             const command = "yes | pkexec tuxedo-tomte remove " + name;
 
-            const results = await this.utils.execCmdAsync(command).catch((err) => {
+            const _results = await this.utils.execCmdAsync(command).catch((err) => {
                 console.error(err);
                 this.utils.pageDisabled = false;
                 this.tomtelist();
@@ -398,7 +400,7 @@ export class TomteGuiComponent implements OnInit, AfterViewInit {
 
             const command = "pkexec tuxedo-tomte configure " + name;
 
-            const results = await this.utils.execFile(command).catch((err) => {
+            const _results2 = await this.utils.execFile(command).catch((err) => {
                 console.error(err);
                 this.utils.pageDisabled = false;
                 this.tomtelist();
@@ -428,7 +430,7 @@ export class TomteGuiComponent implements OnInit, AfterViewInit {
         {
             command = "pkexec tuxedo-tomte unblock " + name ;
         }
-        const results = await this.utils.execFile(command).catch((err) => {
+        const _results = await this.utils.execFile(command).catch((err) => {
             console.error(err);
             this.utils.pageDisabled = false;
             return;
@@ -453,7 +455,7 @@ export class TomteGuiComponent implements OnInit, AfterViewInit {
         }
         this.utils.pageDisabled = true;
         const command = "pkexec tuxedo-tomte " + mode.value ;
-        const results = await this.utils.execFile(command).catch((err) => {
+        const _results = await this.utils.execFile(command).catch((err) => {
             console.error(err);
             this.utils.pageDisabled = false;
             return;

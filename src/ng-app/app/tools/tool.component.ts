@@ -40,7 +40,7 @@ export class ToolsComponent implements OnInit {
 
 
     ngOnInit() {
-        
+        // Component initialization handled by Angular
     }
 
     gotoComponent(component: string) {

@@ -27,7 +27,6 @@ import { ElectronService } from './electron.service';
 import { Observable, Subject, BehaviorSubject, Subscription } from 'rxjs';
 import { UtilsService } from './utils.service';
 import { ITccFanProfile } from '../../common/models/TccFanTable';
-import { DefaultProfileIDs } from '../../common/models/DefaultProfiles';
 import { TccDBusClientService } from './tcc-dbus-client.service';
 import { WebcamPreset } from 'src/common/models/TccWebcamSettings';
 
@@ -160,7 +159,7 @@ export class ConfigService implements OnDestroy {
             tccdExec = this.electron.process.cwd() + '/dist/tuxedo-control-center/data/service/tccd';
         }
 
-        const result = this.electron.ipcRenderer.sendSync(
+        const _result = this.electron.ipcRenderer.sendSync(
             'exec-cmd-sync', 'pkexec ' + tccdExec + ' --new_settings ' + tmpSettingsPath
         );
 
@@ -290,7 +289,7 @@ export class ConfigService implements OnDestroy {
         try {
             await this.utils.execFile('pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath);
             return true;
-        } catch (err) {
+        } catch (_err) {
             return false;
         }
     }
@@ -355,9 +354,9 @@ export class ConfigService implements OnDestroy {
 
             this.utils.execFile(
                 'pkexec ' + tccdExec + ' --new_webcam ' + tmpWebcamPath
-            ).then(data => {
+            ).then(_data => {
                 resolve(true);
-            }).catch(error => {
+            }).catch(_error => {
                 resolve(false);
             });
         });
@@ -378,9 +377,9 @@ export class ConfigService implements OnDestroy {
             }
             this.utils.execFile(
                 'pkexec ' + tccdExec + ' --new_profiles ' + tmpProfilesPath + ' --new_settings ' + tmpSettingsPath
-            ).then(data => {
+            ).then(_data => {
                 resolve(true);
-            }).catch(error => {
+            }).catch(_error => {
                 resolve(false);
             });
         });
