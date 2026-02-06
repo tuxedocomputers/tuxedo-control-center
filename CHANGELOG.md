@@ -1,5 +1,14 @@
 # Changelog
 
+## [3.0.0] - 2026-02-06
+### Changed
+- Modernized user interface with updated design
+- Improved application performance and responsiveness
+- Updated underlying framework for better security and stability
+
+### Fixed
+- Various minor UI inconsistencies
+
 ## [2.1.22] - 2025-12-19
 ### Added
 - Quirk for Gemini Gen4 Intel using CPU EPP `performance` instead of default `balance_performance`
