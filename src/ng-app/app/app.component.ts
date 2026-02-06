@@ -20,7 +20,6 @@ import { Component, HostBinding, OnInit, OnDestroy, ChangeDetectorRef, AfterCont
 import { ElectronService } from './electron.service';
 import { Subscription } from 'rxjs';
 import { UtilsService } from './utils.service';
-import { ActivatedRoute } from '@angular/router';
 import { SharedModule } from './shared/shared.module';
 
 @Component({
@@ -43,7 +42,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterContentChecked {
     private subscriptions: Subscription = new Subscription();
 
     // Store IPC listener reference for cleanup
-    private brightnessUpdateListener: ((event: any, ...args: any[]) => void) | null = null;
+    private brightnessUpdateListener: ((...args: unknown[]) => void) | null = null;
 
 
     ngOnInit(): void {
@@ -51,7 +50,7 @@ export class AppComponent implements OnInit, OnDestroy, AfterContentChecked {
 
         // Register light/dark update from main process using direct IPC listener
         if (this.electron.ipcRenderer) {
-            this.brightnessUpdateListener = (_event: any) => {
+            this.brightnessUpdateListener = () => {
                 // Run inside Angular zone to ensure change detection
                 this.ngZone.run(() => {
                     this.utils.updateBrightnessMode();

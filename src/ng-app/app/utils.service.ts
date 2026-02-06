@@ -52,8 +52,8 @@ export class UtilsService {
   set pageDisabled(value: boolean) { this.blurNoInput = value; }
 
   private languagesMenuArray = [
-    { id: 'en', label: 'English', img: 'english.svg' },
-    { id: 'de', label: 'Deutsch', img: 'german.svg' }
+    { id: 'en', label: 'English', labelInOtherLang: 'Englisch', img: 'english.svg' },
+    { id: 'de', label: 'Deutsch', labelInOtherLang: 'German', img: 'german.svg' }
   ];
   private languageMap;
 

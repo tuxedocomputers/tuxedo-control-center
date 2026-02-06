@@ -127,7 +127,7 @@ export class MainGuiComponent implements OnInit, OnDestroy {
     }
 
     public updateLanguageName(): void {
-        this.buttonLanguageLabel = this.utils.getLanguagesMenuArray().find(lang => lang.id !== this.utils.getCurrentLanguageId()).label;
+        this.buttonLanguageLabel = this.utils.getLanguagesMenuArray().find(lang => lang.id !== this.utils.getCurrentLanguageId()).labelInOtherLang;
     }
 
     public getStateInputs(): IStateInfo[] {

@@ -38,7 +38,10 @@
                         "polyfills": "src/ng-app/polyfills.ts",
                         "tsConfig": "tsconfig.app.json",
                         "aot": true,
-                        "localize": false,
+                        "localize": [
+                            "en",
+                            "de"
+                        ],
                         "assets": [
                             "src/ng-app/favicon.ico",
                             "src/ng-app/assets"

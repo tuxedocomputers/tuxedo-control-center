@@ -77,7 +77,8 @@ export class NgTranslations {
 
     private loadFile(fileName: string, target?: string): Promise<Map<string, string>> {
         return new Promise<Map<string, string>>((resolve, reject) => {
-            let xlfPath = path.join(__dirname, '..', '..', 'ng-app', 'assets', 'locale', fileName);
+            // Locale files are in each localized build, use 'en' as reference
+            const xlfPath = path.join(__dirname, '..', '..', 'ng-app', 'en', 'assets', 'locale', fileName);
             fs.readFile(xlfPath, (err, xmlBuffer) => {
                 if (err) {
                     reject(err);

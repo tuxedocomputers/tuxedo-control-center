@@ -587,7 +587,7 @@ async function createTccWindow(langId: string, module?: string) {
         }
     });
 
-    const indexPath = path.join(__dirname, '..', '..', 'ng-app', 'index.html');
+    const indexPath = path.join(__dirname, '..', '..', 'ng-app', langId, 'index.html');
     if (module !== undefined) {
         await tccWindow.loadFile(indexPath, { hash: '/' + module });
     } else {

@@ -1,16 +1,30 @@
 import { Injectable } from '@angular/core';
 
+// Declare the electron interface exposed by preload.ts
+interface ElectronWindow {
+  electron?: {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ipcRenderer: any;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    shell: any;
+  };
+}
+
 @Injectable({
   providedIn: 'root'
 })
 export class ElectronService {
   
+  private get electronWindow(): ElectronWindow {
+    return window as unknown as ElectronWindow;
+  }
+
   get ipcRenderer() {
-    return (window as any).electron ? (window as any).electron.ipcRenderer : null;
+    return this.electronWindow.electron ? this.electronWindow.electron.ipcRenderer : null;
   }
 
   get shell() {
-    return (window as any).electron ? (window as any).electron.shell : null;
+    return this.electronWindow.electron ? this.electronWindow.electron.shell : null;
   }
 
   get process() {
@@ -22,33 +36,26 @@ export class ElectronService {
   }
 
   get remote() {
-      const that = this;
       return {
           app: {
               getVersion: () => {
-                  return that.ipcRenderer ? that.ipcRenderer.sendSync('get-app-version') : '';
+                  return this.ipcRenderer ? this.ipcRenderer.sendSync('get-app-version') : '';
               }
           },
           process: {
-              get versions() {
-                  return that.ipcRenderer ? that.ipcRenderer.sendSync('get-process-versions') : {};
-              }
+              versions: this.ipcRenderer ? this.ipcRenderer.sendSync('get-process-versions') : {}
           },
           dialog: {
-              // Note: This changes behavior from Sync (if used so) to Async promise return.
-              // Legacy code awaits it?
-              // The error in main-gui.component.ts was strictly property existence.
-              showMessageBox: async (winOrOptions: any, options?: any) => {
-                 // Handle overloaded signature
+              showMessageBox: async (winOrOptions: unknown, options?: unknown) => {
                  const actualOptions = options || winOrOptions;
-                 return await that.ipcRenderer.invoke('dialog-show-message-box', actualOptions);
+                 return await this.ipcRenderer.invoke('dialog-show-message-box', actualOptions);
               }
           },
           getCurrentWindow: () => {
               return {
-                  close: () => that.ipcRenderer.send('window-close'),
-                  minimize: () => that.ipcRenderer.send('window-minimize'),
-                  maximize: () => that.ipcRenderer.send('window-maximize')
+                  close: () => this.ipcRenderer.send('window-close'),
+                  minimize: () => this.ipcRenderer.send('window-minimize'),
+                  maximize: () => this.ipcRenderer.send('window-maximize')
               };
           }
       };
