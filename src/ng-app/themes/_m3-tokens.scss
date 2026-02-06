@@ -9,33 +9,128 @@ $tuxedo-red: #e30016;
 // in the color input should be palette objects (M3 palettes), NOT single colors or M2 Palettes.
 // M3 Palettes require keys 0-100 and sub-palettes for secondary/neutral/etc.
 
-// SOLUTION: We construct M3-compatible palette objects.
-// We base them on an existing M3 palette (mat.$red-palette) to get the correct structure,
-// and then existing keys/values can be overridden if needed.
-
-// 1. Create a Grey M3 Palette (Using M2-like Grey tones mapped to M3 keys 0-100)
-// We merge onto mat.$red-palette so we inherit the required 'secondary', 'neutral' structures.
-$m3-grey-palette: map.merge(mat.$red-palette, (0: #000000,
-            10: #1b1b1b,
-            20: #323232,
-            25: #3e3e3e,
-            30: #4a4a4a,
-            35: #565656,
-            40: #626262,
-            50: #787878,
-            60: #909090,
-            70: #a9a9a9,
-            80: #c4c4c4,
-            90: #e0e0e0,
-            95: #f1f1f1,
-            98: #f9f9f9,
-            99: #fcfcfc,
-            100: #ffffff,
-        ));
+// 1. Create a truly neutral Grey M3 Palette with all required sub-palettes
+// We define all keys to avoid inheriting red tints from mat.$red-palette
+$m3-grey-palette: (
+    0: #000000,
+    10: #1b1b1b,
+    20: #323232,
+    25: #3e3e3e,
+    30: #4a4a4a,
+    35: #565656,
+    40: #626262,
+    50: #787878,
+    60: #909090,
+    70: #a9a9a9,
+    80: #c4c4c4,
+    90: #e0e0e0,
+    95: #f1f1f1,
+    98: #f9f9f9,
+    99: #fcfcfc,
+    100: #ffffff,
+    // Secondary palette - neutral grey (no red tint)
+    secondary: (0: #000000,
+        10: #1b1b1b,
+        20: #323232,
+        25: #3e3e3e,
+        30: #4a4a4a,
+        35: #565656,
+        40: #626262,
+        50: #787878,
+        60: #909090,
+        70: #a9a9a9,
+        80: #c4c4c4,
+        90: #e0e0e0,
+        95: #f1f1f1,
+        98: #f9f9f9,
+        99: #fcfcfc,
+        100: #ffffff,
+    ),
+    neutral: (0: #000000,
+        4: #0d0d0d,
+        6: #141414,
+        10: #1b1b1b,
+        12: #1f1f1f,
+        17: #2a2a2a,
+        20: #323232,
+        22: #373737,
+        24: #3c3c3c,
+        25: #3e3e3e,
+        30: #4a4a4a,
+        35: #565656,
+        40: #626262,
+        50: #787878,
+        60: #909090,
+        70: #a9a9a9,
+        80: #c4c4c4,
+        87: #d9d9d9,
+        90: #e0e0e0,
+        92: #e6e6e6,
+        94: #ececec,
+        95: #f1f1f1,
+        96: #f4f4f4,
+        98: #f9f9f9,
+        99: #fcfcfc,
+        100: #ffffff,
+    ),
+    neutral-variant: (0: #000000,
+        10: #1b1b1b,
+        20: #323232,
+        25: #3e3e3e,
+        30: #4a4a4a,
+        35: #565656,
+        40: #626262,
+        50: #787878,
+        60: #909090,
+        70: #a9a9a9,
+        80: #c4c4c4,
+        90: #e0e0e0,
+        95: #f1f1f1,
+        98: #f9f9f9,
+        99: #fcfcfc,
+        100: #ffffff,
+    ),
+    error: (0: #000000,
+        10: #410002,
+        20: #690005,
+        25: #7e0007,
+        30: #93000a,
+        35: #a80710,
+        40: #ba1a1a,
+        50: #de3730,
+        60: #ff5449,
+        70: #ff897d,
+        80: #ffb4ab,
+        90: #ffdad6,
+        95: #ffedea,
+        98: #fff8f7,
+        99: #fffbff,
+        100: #ffffff,
+    ),
+);
 
 // 2. Use the standard M3 Red palette for Tuxedo Red (it is a valid M3 palette).
 // If exact brand color matching is needed for specific tones, override them here.
 $m3-tuxedo-red-palette: mat.$red-palette;
+
+// 3. Create a Cyan palette for the light theme accent
+$m3-cyan-palette: map.merge(mat.$cyan-palette, (0: #001f24,
+            10: #003640,
+            20: #004d5a,
+            25: #005a6a,
+            30: #006878,
+            35: #007688,
+            40: #00838f, // Main cyan color
+            50: #00acc1,
+            60: #26c6da,
+            70: #4dd0e1,
+            80: #80deea,
+            90: #b2ebf2,
+            95: #d7f7fb,
+            98: #edfcff,
+            99: #f6feff,
+            100: #ffffff,
+        ));
 
 $dark-theme: mat.define-theme((color: (theme-type: dark,
                 primary: $m3-grey-palette,
@@ -48,7 +143,7 @@ $dark-theme: mat.define-theme((color: (theme-type: dark,
 
 $light-theme: mat.define-theme((color: (theme-type: light,
                 primary: $m3-grey-palette,
-                tertiary: $m3-tuxedo-red-palette,
+                tertiary: $m3-cyan-palette,
             ),
             typography: (brand-family: 'Titillium Web',
                 plain-family: 'Titillium Web',
@@ -153,10 +248,28 @@ $light-theme: mat.define-theme((color: (theme-type: light,
 
     --tcc-divider: rgba(0, 0, 0, 0.12);
 
-    // Brand Colors
+    // Brand Colors - Cyan accent for light theme
     --tcc-primary: #757575;
     --tcc-accent: #00838f; // Darker Cyan for light theme
     --tcc-warn: #f44336;
+
+    // Override M3 primary colors to use neutral grey (no red tint)
+    --sys-primary: #505050;
+    --sys-on-primary: #ffffff;
+    --sys-primary-container: #e0e0e0;
+    --sys-on-primary-container: #1a1a1a;
+
+    // Override M3 secondary to use neutral grey (no red tint)
+    --sys-secondary: #606060;
+    --sys-on-secondary: #ffffff;
+    --sys-secondary-container: #e8e8e8;
+    --sys-on-secondary-container: #1d1d1d;
+
+    // Override M3 tertiary to use Cyan instead of Red
+    --sys-tertiary: #00838f;
+    --sys-on-tertiary: #ffffff;
+    --sys-tertiary-container: #b2ebf2;
+    --sys-on-tertiary-container: #003640;
 
     // Override M3 surface tokens with TUXEDO values
     --sys-surface: #fafafa;
@@ -165,7 +278,69 @@ $light-theme: mat.define-theme((color: (theme-type: light,
     --sys-surface-container-low: #f5f5f5;
     --sys-surface-container-high: #ffffff;
     --sys-surface-container-highest: #ffffff;
+    --sys-surface-container-lowest: #ffffff;
     --sys-surface-variant: #e0e0e0;
     --sys-on-surface-variant: rgba(0, 0, 0, 0.54);
     --sys-background: #fafafa;
+
+    // Remove any surface tint (which can add red tone in M3)
+    --mat-sys-surface-tint: transparent;
+    --mdc-elevated-card-container-color: #ffffff;
+    --mdc-outlined-card-container-color: #ffffff;
+
+    // Override outline colors to neutral
+    --sys-outline: #757575;
+    --sys-outline-variant: #c4c4c4;
+
+    // Text field / form field overrides - remove red tint
+    --mdc-filled-text-field-container-color: #f0f0f0;
+    --mdc-filled-text-field-focus-active-indicator-color: #00838f;
+    --mdc-filled-text-field-hover-active-indicator-color: #606060;
+    --mdc-filled-text-field-active-indicator-color: #909090;
+    --mdc-filled-text-field-caret-color: #00838f;
+    --mdc-filled-text-field-focus-label-text-color: #00838f;
+    --mdc-outlined-text-field-focus-outline-color: #00838f;
+    --mdc-outlined-text-field-hover-outline-color: #606060;
+    --mdc-outlined-text-field-outline-color: #909090;
+    --mdc-outlined-text-field-caret-color: #00838f;
+    --mdc-outlined-text-field-focus-label-text-color: #00838f;
+    --mat-form-field-focus-select-arrow-color: #00838f;
+
+    // Additional M3 form field tokens
+    --mat-filled-text-field-container-color: #f0f0f0;
+    --mat-filled-button-state-layer-color: #606060;
+    --mat-form-field-container-text-color: rgba(0, 0, 0, 0.87);
+
+    // Override any M3 state layer colors that might add red tint
+    --mat-sys-primary: #505050;
+    --mat-sys-on-primary: #ffffff;
+    --mat-sys-primary-container: #e0e0e0;
+    --mat-sys-on-primary-container: #1a1a1a;
+    --mat-sys-secondary: #606060;
+    --mat-sys-on-secondary: #ffffff;
+    --mat-sys-secondary-container: #e8e8e8;
+    --mat-sys-on-secondary-container: #1d1d1d;
+    --mat-sys-tertiary: #00838f;
+    --mat-sys-on-tertiary: #ffffff;
+    --mat-sys-tertiary-container: #b2ebf2;
+    --mat-sys-on-tertiary-container: #003640;
+
+    // Slide toggle overrides - use cyan instead of red
+    --mdc-switch-selected-track-color: #00838f;
+    --mdc-switch-selected-hover-track-color: #00838f;
+    --mdc-switch-selected-focus-track-color: #00838f;
+    --mdc-switch-selected-pressed-track-color: #00838f;
+    --mdc-switch-selected-handle-color: #ffffff;
+    --mdc-switch-selected-hover-handle-color: #ffffff;
+    --mdc-switch-selected-focus-handle-color: #ffffff;
+    --mdc-switch-selected-pressed-handle-color: #ffffff;
+    --mdc-switch-selected-icon-color: #00838f;
+    --mdc-switch-unselected-track-color: #c0c0c0;
+    --mdc-switch-unselected-hover-track-color: #b0b0b0;
+    --mdc-switch-unselected-focus-track-color: #b0b0b0;
+    --mdc-switch-unselected-pressed-track-color: #a0a0a0;
+    --mdc-switch-unselected-handle-color: #fafafa;
+    --mdc-switch-unselected-hover-handle-color: #ffffff;
+    --mdc-switch-unselected-focus-handle-color: #ffffff;
+    --mdc-switch-unselected-pressed-handle-color: #ffffff;
 }

@@ -56,4 +56,23 @@
         opacity: 0.7;
         font-weight: 600;
     }
+
+    // Override button-toggle to use cyan instead of red
+    .mat-button-toggle-checked {
+        background-color: var(--sys-secondary-container) !important;
+        color: var(--sys-on-secondary-container) !important;
+    }
+
+    .mat-button-toggle-checked.mat-button-toggle-appearance-standard {
+        background-color: var(--sys-secondary-container) !important;
+    }
+
+    // Override expansion panel and card backgrounds to be pure white
+    .mat-expansion-panel {
+        background-color: var(--tcc-bg-card) !important;
+    }
+
+    .mat-mdc-card {
+        background-color: var(--tcc-bg-card) !important;
+    }
 }
