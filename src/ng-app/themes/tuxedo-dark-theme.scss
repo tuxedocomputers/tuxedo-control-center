@@ -21,37 +21,31 @@
 @use '../theme-mixin.scss' as theme-ops;
 @use '../typography.scss';
 
-$tuxedo-dark-theme-primary: mat.m2-define-palette(mat.$m2-grey-palette, 400, 50, 600);
-$tuxedo-dark-theme-accent: mat.m2-define-palette(mat.$m2-yellow-palette);
-$tuxedo-dark-theme-warn: mat.m2-define-palette(mat.$m2-red-palette);
+@use 'm3-tokens' as tokens;
 
-$dark-theme-base: mat.m2-define-dark-theme((
-    color: (
-        primary: $tuxedo-dark-theme-primary,
-        accent: $tuxedo-dark-theme-accent,
-        warn: $tuxedo-dark-theme-warn
-    ),
-    typography: typography.$custom-typography
-));
-
-$color-config: mat.m2-get-color-config($dark-theme-base);
-$default-background: map.get($color-config, background);
-$custom-background: map.merge($default-background, (dialog: #252525,
-            card: #252525,
-            status-bar: #151515,
-        ));
-
-$updated-color-config: map.merge($color-config, (background: $custom-background));
-
-$tuxedo-control-center-dark-theme: map.merge($dark-theme-base, (color: $updated-color-config,
-            --icon-invert: 100%));
+// Include the Material Core styles (M3)
+@include mat.core();
 
 .dark-theme {
-    @include mat.all-component-themes($tuxedo-control-center-dark-theme);
-    @include theme-ops.component-themes($tuxedo-control-center-dark-theme);
+    // 1. Generate Angular Material 3 Component Styles
+    @include mat.all-component-themes(tokens.$dark-theme);
 
-    --icon-main: currentColor;
-    --icon-detail: #e30016;
+    // 2. Expose System Tokens as CSS Variables
+    @include tokens.expose-sys-tokens(tokens.$dark-theme);
+
+    // 3. Apply TUXEDO brand color overrides
+    @include tokens.tuxedo-dark-overrides();
+
+    // 4. Apply custom component styles
+    @include theme-ops.component-themes();
+
+    // Global CSS Variable assignments for root
+    background-color: var(--tcc-bg-primary);
+    color: var(--tcc-text-primary);
+
+    --icon-main: var(--tcc-text-primary);
+    --icon-detail: var(--tcc-accent);
+    --icon-invert: 100%;
 
     .theme-page-title {
         opacity: 0.7;

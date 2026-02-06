@@ -1,0 +1,171 @@
+@use '@angular/material' as mat;
+@use 'sass:map';
+
+// TUXEDO Brand Colors
+$tuxedo-red: #e30016;
+
+// We define our M3 themes here.
+// Note: We use mat.define-theme. For Material 3, 'primary' and 'tertiary' 
+// in the color input should be palette objects (M3 palettes), NOT single colors or M2 Palettes.
+// M3 Palettes require keys 0-100 and sub-palettes for secondary/neutral/etc.
+
+// SOLUTION: We construct M3-compatible palette objects.
+// We base them on an existing M3 palette (mat.$red-palette) to get the correct structure,
+// and then existing keys/values can be overridden if needed.
+
+// 1. Create a Grey M3 Palette (Using M2-like Grey tones mapped to M3 keys 0-100)
+// We merge onto mat.$red-palette so we inherit the required 'secondary', 'neutral' structures.
+$m3-grey-palette: map.merge(mat.$red-palette, (0: #000000,
+            10: #1b1b1b,
+            20: #323232,
+            25: #3e3e3e,
+            30: #4a4a4a,
+            35: #565656,
+            40: #626262,
+            50: #787878,
+            60: #909090,
+            70: #a9a9a9,
+            80: #c4c4c4,
+            90: #e0e0e0,
+            95: #f1f1f1,
+            98: #f9f9f9,
+            99: #fcfcfc,
+            100: #ffffff,
+        ));
+
+// 2. Use the standard M3 Red palette for Tuxedo Red (it is a valid M3 palette).
+// If exact brand color matching is needed for specific tones, override them here.
+$m3-tuxedo-red-palette: mat.$red-palette;
+
+$dark-theme: mat.define-theme((color: (theme-type: dark,
+                primary: $m3-grey-palette,
+                tertiary: $m3-tuxedo-red-palette,
+            ),
+            typography: (brand-family: 'Titillium Web',
+                plain-family: 'Titillium Web',
+            ),
+            density: (scale: -2)));
+
+$light-theme: mat.define-theme((color: (theme-type: light,
+                primary: $m3-grey-palette,
+                tertiary: $m3-tuxedo-red-palette,
+            ),
+            typography: (brand-family: 'Titillium Web',
+                plain-family: 'Titillium Web',
+            ),
+            density: (scale: -2)));
+
+// Mixin to expose M3 System Design Tokens as CSS Variables
+// This allows us to use var(--sys-primary) in our custom components
+@mixin expose-sys-tokens($theme) {
+    $color-settings: mat.get-theme-color($theme, background);
+
+    // Extracting standard M3 tokens. 
+    // Angular Material doesn't export a simple list, so we map the most important ones.
+    // We use the mat.get-theme-color function.
+
+    --sys-primary: #{mat.get-theme-color($theme, primary)};
+    --sys-on-primary: #{mat.get-theme-color($theme, on-primary)};
+    --sys-primary-container: #{mat.get-theme-color($theme, primary-container)};
+    --sys-on-primary-container: #{mat.get-theme-color($theme, on-primary-container)};
+
+    --sys-secondary: #{mat.get-theme-color($theme, secondary)};
+    --sys-on-secondary: #{mat.get-theme-color($theme, on-secondary)};
+    --sys-secondary-container: #{mat.get-theme-color($theme, secondary-container)};
+    --sys-on-secondary-container: #{mat.get-theme-color($theme, on-secondary-container)};
+
+    --sys-tertiary: #{mat.get-theme-color($theme, tertiary)};
+    --sys-on-tertiary: #{mat.get-theme-color($theme, on-tertiary)};
+    --sys-tertiary-container: #{mat.get-theme-color($theme, tertiary-container)};
+    --sys-on-tertiary-container: #{mat.get-theme-color($theme, on-tertiary-container)};
+
+    --sys-error: #{mat.get-theme-color($theme, error)};
+    --sys-on-error: #{mat.get-theme-color($theme, on-error)};
+
+    --sys-surface: #{mat.get-theme-color($theme, surface)};
+    --sys-on-surface: #{mat.get-theme-color($theme, on-surface)};
+    --sys-surface-variant: #{mat.get-theme-color($theme, surface-variant)};
+    --sys-on-surface-variant: #{mat.get-theme-color($theme, on-surface-variant)};
+
+    --sys-surface-container-lowest: #{mat.get-theme-color($theme, surface-container-lowest)};
+    --sys-surface-container-low: #{mat.get-theme-color($theme, surface-container-low)};
+    --sys-surface-container: #{mat.get-theme-color($theme, surface-container)};
+    --sys-surface-container-high: #{mat.get-theme-color($theme, surface-container-high)};
+    --sys-surface-container-highest: #{mat.get-theme-color($theme, surface-container-highest)};
+
+    --sys-outline: #{mat.get-theme-color($theme, outline)};
+    --sys-outline-variant: #{mat.get-theme-color($theme, outline-variant)};
+
+    --sys-inverse-surface: #{mat.get-theme-color($theme, inverse-surface)};
+    --sys-inverse-on-surface: #{mat.get-theme-color($theme, inverse-on-surface)};
+
+    // Background is often similar to surface in M3, but let's expose it if distinct things happen
+    --sys-background: #{mat.get-theme-color($theme, surface)};
+
+    // ============================================================
+    // TUXEDO BRAND OVERRIDES
+    // Override M3-generated values with original TUXEDO styling
+    // ============================================================
+}
+
+// Mixin to apply TUXEDO-specific color overrides for Dark Theme
+@mixin tuxedo-dark-overrides() {
+    // Original TUXEDO Dark Theme Colors
+    --tcc-bg-primary: #2b2b2b; // Slightly lighter than #212121 to address "too dark"
+    --tcc-bg-card: #2b2b2b; // Seamless with primary background
+    --tcc-bg-status-bar: #1a1a1a;
+    --tcc-bg-sidebar: #1e1e1e; // Distinct sidebar
+
+    --tcc-text-primary: #e0e0e0;
+    --tcc-text-secondary: rgba(255, 255, 255, 0.7);
+    --tcc-text-disabled: rgba(255, 255, 255, 0.38);
+
+    --tcc-divider: rgba(255, 255, 255, 0.12);
+
+    // Brand Colors
+    --tcc-primary: #757575;
+    --tcc-accent: #e30016; // TUXEDO Red
+    --tcc-warn: #f44336;
+
+    // Override M3 surface tokens with TUXEDO values
+    --sys-surface: #212121;
+    --sys-on-surface: #e0e0e0;
+    --sys-surface-container: #252525;
+    --sys-surface-container-low: #1e1e1e;
+    --sys-surface-container-high: #2a2a2a;
+    --sys-surface-container-highest: #333333;
+    --sys-surface-variant: #3a3a3a;
+    --sys-on-surface-variant: rgba(255, 255, 255, 0.7);
+    --sys-background: #212121;
+}
+
+// Mixin to apply TUXEDO-specific color overrides for Light Theme
+@mixin tuxedo-light-overrides() {
+    // Original TUXEDO Light Theme Colors
+    --tcc-bg-primary: #fafafa;
+    --tcc-bg-card: #ffffff;
+    --tcc-bg-status-bar: #e0e0e0;
+    --tcc-bg-sidebar: #f5f5f5;
+
+    --tcc-text-primary: rgba(0, 0, 0, 0.87);
+    --tcc-text-secondary: rgba(0, 0, 0, 0.54);
+    --tcc-text-disabled: rgba(0, 0, 0, 0.38);
+
+    --tcc-divider: rgba(0, 0, 0, 0.12);
+
+    // Brand Colors
+    --tcc-primary: #757575;
+    --tcc-accent: #00838f; // Darker Cyan for light theme
+    --tcc-warn: #f44336;
+
+    // Override M3 surface tokens with TUXEDO values
+    --sys-surface: #fafafa;
+    --sys-on-surface: rgba(0, 0, 0, 0.87);
+    --sys-surface-container: #ffffff;
+    --sys-surface-container-low: #f5f5f5;
+    --sys-surface-container-high: #ffffff;
+    --sys-surface-container-highest: #ffffff;
+    --sys-surface-variant: #e0e0e0;
+    --sys-on-surface-variant: rgba(0, 0, 0, 0.54);
+    --sys-background: #fafafa;
+}

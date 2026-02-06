@@ -27,7 +27,7 @@
 
 .content-container {
     max-width: 900px;
-    margin:auto;
+    margin: auto;
 
     &.centered {
         text-align: center;
@@ -36,9 +36,10 @@
 
 .tcc-icons {
     height: 55px;
+    color: var(--tcc-text-primary);
 
     &.row {
-        margin-right:10px;
+        margin-right: 10px;
     }
 }
 
@@ -53,6 +54,8 @@
 
 .tcc-card {
     margin-bottom: 10px;
+    background-color: var(--tcc-bg-card);
+    color: var(--tcc-text-primary);
 
     mat-card-title {
         display: flex;
@@ -91,7 +94,7 @@
         margin-bottom: 20px;
 
         &.top {
-            margin-top:0px;
+            margin-top: 0px;
         }
 
         hr {
@@ -113,6 +116,7 @@
             padding-right: 30px;
 
             font-weight: bold;
+
             mat-icon {
                 transform: scale(2);
                 transform-origin: center bottom;
@@ -124,6 +128,7 @@
 .not-available {
     opacity: 0.7;
     filter: blur(0.11rem);
+
     * {
         pointer-events: none;
     }
@@ -146,13 +151,17 @@
 }
 
 mat-radio-button.hide-radio-circle {
-    .mat-radio-container {
+
+    .mat-radio-container,
+    .mdc-radio {
         display: none;
     }
 }
 
 mat-tab-group.active-always-focused {
-    .mat-tab-label-active {
+
+    .mat-tab-label-active,
+    .mdc-tab--active {
         opacity: 1.0;
     }
 }

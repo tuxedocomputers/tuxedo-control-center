@@ -19,19 +19,12 @@
 @use '@angular/material' as mat;
 @use 'sass:map';
 
-@mixin tcc-charts-theme($theme) {
-    $color-config: mat.m2-get-color-config($theme);
-    $primary: map.get($color-config, primary);
-    $accent: map.get($color-config, accent);
-    $warn: map.get($color-config, warn);
-    $foreground: map.get($color-config, foreground);
-    $background: map.get($color-config, background);
-
+@mixin tcc-charts-theme() {
     canvas.tcc-charts {
-        background-color: mat.m2-get-color-from-palette($background, card);
+        background-color: var(--sys-surface-container);
     }
 
     .tcc-charts-text {
-        color: mat.m2-get-color-from-palette($primary);
+        color: var(--sys-primary);
     }
 }

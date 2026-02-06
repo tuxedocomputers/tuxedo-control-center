@@ -19,51 +19,49 @@
 @use '@angular/material' as mat;
 @use 'sass:map';
 
-@mixin tcc-gauge-theme($theme) {
-    $color-config: mat.m2-get-color-config($theme);
-    $primary: map.get($color-config, primary);
-    $accent: map.get($color-config, accent);
-    $warn: map.get($color-config, warn);
-    $foreground: map.get($color-config, foreground);
-    $background: map.get($color-config, background);
-
-    $gauge-value-text-color: mat.m2-get-color-from-palette($foreground, text);
-    $gauge-unit-text-color: mat.m2-get-color-from-palette($foreground, disabled-text);
-    $gauge-legend-text-color: mat.m2-get-color-from-palette($foreground, disabled-text);
-
-    $gauge-icon-color: mat.m2-get-color-from-palette($foreground, disabled-text);
-    $gauge-background-color: mat.m2-get-color-from-palette($background, status-bar);
-
+@mixin tcc-gauge-theme() {
     .tcc-gauge {
         position: relative;
-        width: 180px;
-        height: 180px;
+        // width: 180px;  <-- Removed fixed constraints to allow card sizing
+        // height: 180px;
+        min-width: 180px;
+        min-height: 180px;
+        flex-shrink: 0;
+
+        // Use CSS variables for colors
+        --gauge-text-color: var(--tcc-text-primary);
+        --gauge-text-color-dark: var(--sys-inverse-on-surface); // Fallback or inverted
+        --gauge-dim-color: var(--tcc-text-secondary);
+        --gauge-bg-stroke: var(--tcc-bg-status-bar);
 
         mwl-gauge {
             position: absolute;
             top: 0;
-            left: 0;
+            left: 50%;
+            /* Center horizontally */
+            transform: translateX(-50%);
 
-            width: 100%;
-            height: 100%;
+            width: 180px;
+            /* Internal gauge size fixed */
+            height: 180px;
 
             .dial {
                 stroke-width: 3px;
-                stroke: $gauge-background-color;
+                stroke: var(--gauge-bg-stroke);
             }
 
             .value {
                 //transform: scale(0.92);
                 transform-origin: center;
                 stroke-width: 3px;
-                stroke: #e22131;
+                stroke: var(--tcc-accent); // Use theme accent color
                 opacity: .7;
                 //stroke: #00E333;
                 stroke-linecap: round;
             }
 
             .value-text {
-                fill: $gauge-value-text-color;
+                fill: var(--gauge-text-color);
                 transform: translateY(0px);
                 font-size: 1.8em;
                 transform-origin: center center;
@@ -83,7 +81,7 @@
             width: 100%;
             text-align: center;
 
-            fill: $gauge-value-text-color;
+            color: var(--gauge-text-color);
             // transform: translateY(0px);
             font-size: 3.2em;
             // transform-origin: center center;
@@ -103,7 +101,7 @@
 
             text-align: center;
 
-            color: $gauge-unit-text-color;
+            color: var(--gauge-dim-color);
             font-weight: bold;
         }
 
@@ -114,7 +112,7 @@
             width: 100%;
             height: 35px;
 
-            color: $gauge-icon-color;
+            color: var(--gauge-dim-color);
             --icon-detail: var(--icon-main);
         }
 
@@ -122,6 +120,7 @@
             position: absolute;
             bottom: 5px;
             left: 0;
+            // ...
 
             display: flex;
             flex-flow: row nowrap;
@@ -132,12 +131,11 @@
             height: 30px;
 
             border-radius: 20px;
-            background-color: $gauge-background-color;
+            background-color: var(--tcc-bg-status-bar); // Dark Pill Background
             opacity: 1.0;
 
-            border-width: 5px;
-            border-style: solid;
-            border-color: mat.m2-get-color-from-palette($background, card);
+            // Border removed to match original flat pill style
+            // border-width: 5px; ...
 
             .text {
                 white-space: nowrap;
@@ -147,7 +145,7 @@
                 margin-left: 10px;
                 margin-right: 10px;
 
-                color: $gauge-legend-text-color;
+                color: var(--gauge-dim-color);
                 font-weight: bold;
 
                 &.small {
@@ -157,20 +155,25 @@
         }
     }
 
-    $tcc-info-bar-border-color: $gauge-background-color;
-    $tcc-info-bar-background-color: $gauge-background-color;
-    $tcc-info-bar-color-disabled: mat.m2-get-color-from-palette($foreground, disabled-text);
+    // $tcc-info-bar-border-color: $gauge-background-color;
+    // $tcc-info-bar-background-color: $gauge-background-color;
+
     $tcc-info-bar-width: 270px;
     $tcc-info-bar-height: 30px;
 
     .tcc-info-bar {
+        // CSS variables for info bar styling
+        --info-bar-border-color: var(--tcc-bg-status-bar);
+        --info-bar-bg-color: var(--tcc-bg-status-bar);
+        --info-bar-disabled-color: var(--tcc-text-disabled);
+
         width: $tcc-info-bar-width;
         height: $tcc-info-bar-height;
 
         border-width: 2px;
         border-style: solid;
         border-radius: 20px;
-        border-color: $tcc-info-bar-border-color;
+        border-color: var(--info-bar-border-color);
 
         padding: 2px;
 
@@ -180,15 +183,15 @@
         }
 
         .label {
-            background-color: $tcc-info-bar-background-color;
+            background-color: var(--info-bar-bg-color);
         }
 
         .color-disabled {
-            color: $tcc-info-bar-color-disabled;
+            color: var(--info-bar-disabled-color);
         }
     }
 
-    $progress-inactive-color: $tcc-info-bar-background-color;
+    // $progress-inactive-color: $tcc-info-bar-background-color;
 
     .tcc-progress {
         position: relative;
@@ -199,21 +202,30 @@
 
             border-radius: inherit;
 
-            .mat-progress-bar-fill::after {
-                background: $tcc-info-bar-background-color;
-            }
+            // ::ng-deep is often needed for internal material styles if view encapsulation is on,
+            // but in global theme files it works directly.
+            // Note: mat-progress-bar internal structure in recent versions might have changed.
+            // We use standard variables where possible, or specific overrides if needed.
 
-            &.disabled .mat-progress-bar-fill::after {
-                background: $progress-inactive-color;
-            }
+            // .mat-progress-bar-fill::after {
+            //     background: $tcc-info-bar-background-color;
+            // }
 
-            .mat-progress-bar-buffer {
-                background-color: rgba(255, 255, 255, 0);
-            }
+            // &.disabled .mat-progress-bar-fill::after {
+            //     background: $progress-inactive-color;
+            // }
 
-            .mat-progress-bar-background {
-                opacity: 0;
-            }
+            // .mat-progress-bar-buffer {
+            //     background-color: rgba(255, 255, 255, 0);
+            // }
+
+            // .mat-progress-bar-background {
+            //     opacity: 0;
+            // }
+            // Since we are moving to M3, we should try to lean on the component's theme.
+            // But if we need custom coloring:
+            --mdc-linear-progress-track-color: transparent;
+            --mdc-linear-progress-active-indicator-color: var(--info-bar-bg-color);
         }
 
         .label-text {

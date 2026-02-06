@@ -58,18 +58,29 @@
             margin: 10px;
 
             background-color: gray;
-        
+
             @keyframes pulse-frames {
-                0%   { opacity: 0.3; transform: scale(0.42); }
-                50%  { opacity: 0.7; transform: scale(0.83); }
-                100% { opacity: 0.3; transform: scale(0.42);}
+                0% {
+                    opacity: 0.3;
+                    transform: scale(0.42);
+                }
+
+                50% {
+                    opacity: 0.7;
+                    transform: scale(0.83);
+                }
+
+                100% {
+                    opacity: 0.3;
+                    transform: scale(0.42);
+                }
             }
-        
+
             &.searching {
                 background-color: gray;
                 animation: pulse-frames 1.0s infinite;
             }
-        
+
             &.connected {
                 transform: scale(0.42);
                 background-color: rgba(100, 209, 113, 1.00);
@@ -123,7 +134,7 @@
             mat-tab-group {
                 width: 100%;
 
-                ::ng-deep .mat-tab-body-content {
+                ::ng-deep .mat-mdc-tab-body-content {
                     display: flex;
                     flex-flow: column nowrap;
                     align-items: center;
@@ -152,7 +163,7 @@
 .color-visualizer {
     width: 0px;
     height: 0px;
-/*
+    /*
     width: 50px;
     height: 150px;
 
@@ -162,7 +173,7 @@
 
 .device-list-wrapper {
     border-radius: 4px;
-    border: 1px solid rgba(0,0,0,.2);
+    border: 1px solid rgba(0, 0, 0, .2);
     margin: 24px 0;
     padding: 10px;
     min-height: 200px;

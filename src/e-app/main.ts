@@ -551,6 +551,7 @@ async function createTccWindow(langId: string, module?: string) {
         resizable: true,
         minWidth: windowWidth,
         minHeight: windowHeight,
+        backgroundColor: '#212121', // Matches the friendlier dark theme background
         icon: path.join(__dirname, '../../data/dist-data/tuxedo-control-center_256.png'),
         webPreferences: {
             nodeIntegration: true,
@@ -727,11 +728,13 @@ nativeTheme.on('updated', () => {
 });
 
 type BrightnessModeString = 'light' | 'dark' | 'system';
-async function setBrightnessMode(mode: BrightnessModeString) {
+async function setBrightnessMode(mode: BrightnessModeString): Promise<{ shouldUseDarkColors: boolean }> {
     // Save wish to user config
     await userConfig.set('brightnessMode', mode);
     // Update electron theme source
     nativeTheme.themeSource = mode;
+    // Return the resolved theme so renderer can apply immediately
+    return { shouldUseDarkColors: nativeTheme.shouldUseDarkColors };
 }
 
 async function getBrightnessMode(): Promise<BrightnessModeString> {

@@ -21,28 +21,28 @@
 }
 
 .title-row {
-    height:40px;
+    height: 40px;
     -webkit-app-region: drag;
     display: flex;
     justify-content: space-between;
     flex-flow: nowrap;
     align-items: center;
 
-    background-color: #252525;
-    
+    background-color: var(--tcc-bg-primary);
+
     #title-left {
         display: flex;
         justify-content: space-between;
         align-items: center;
 
         #title-logo {
-            height:26px;
+            height: 26px;
         }
 
         #title-text {
             font-size: 16px;
-            margin-left:16px;
-            color:#F5F5F5;
+            margin-left: 16px;
+            color: var(--tcc-text-primary);
         }
 
         /*#title-lang {
@@ -69,9 +69,10 @@
 
     #title-right {
         -webkit-app-region: no-drag;
+
         svg {
-            width:14px;
-            margin-left:16px;
+            width: 14px;
+            margin-left: 16px;
             cursor: pointer;
         }
     }
@@ -89,8 +90,18 @@
     }
 
     mat-icon {
-        transform-origin: center left;
-        transform: scale(2);
+        margin-right: 16px;
+        width: 48px;
+        height: 48px;
+        font-size: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        svg {
+            width: 40px;
+            height: 40px;
+        }
     }
 }
 
@@ -98,14 +109,16 @@
     --sidenav-width: 240px;
     width: var(--sidenav-width);
     // height: 100%;
-    margin-top:10px;
+    margin-top: 10px;
+    background-color: var(--tcc-bg-sidebar);
 
     .sidenav-top {
         mat-list-item {
-            content {
+            div {
                 width: 100%;
                 display: flex;
-                justify-content: space-between;
+                justify-content: flex-start;
+                align-items: center;
 
                 .profile-name {
                     max-width: 80%;
@@ -131,19 +144,21 @@
             padding-top: 0px;
 
             mat-list-item {
-                width: var(--sidenav-width) / 2;
-                height: 60px;
-                content {
+                width: calc(var(--sidenav-width) / 2);
+                height: 80px;
+
+                div {
                     width: 100%;
-                    height: 75%;
+                    height: 100%;
                     display: flex;
                     flex-direction: column;
-                    justify-content: space-between;
+                    justify-content: center;
                     align-items: center;
 
                     mat-icon {
-                        transform-origin: center center;
-                        transform: scale(2);
+                        margin-right: 0;
+                        margin-bottom: 10px;
+                        // Keep size from global, but reset margins
                     }
                 }
             }

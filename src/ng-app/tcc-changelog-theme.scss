@@ -19,15 +19,8 @@
 @use '@angular/material' as mat;
 @use 'sass:map';
 
-@mixin tcc-changelog-theme($theme) {
-    $color-config: mat.m2-get-color-config($theme);
-    $primary: map.get($color-config, primary);
-    $accent: map.get($color-config, accent);
-    $warn: map.get($color-config, warn);
-    $foreground: map.get($color-config, foreground);
-    $background: map.get($color-config, background);
-
+@mixin tcc-changelog-theme() {
     .changelog {
-        background-color: mat.m2-get-color-from-palette($background, background);
+        background-color: var(--sys-background);
     }
 }

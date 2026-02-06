@@ -21,34 +21,36 @@
 @use '../theme-mixin.scss' as theme-ops;
 @use '../typography.scss';
 
-$tuxedo-light-theme-primary: mat.m2-define-palette(mat.$m2-grey-palette, 600, 400, 900);
-$tuxedo-light-theme-accent: mat.m2-define-palette(mat.$m2-yellow-palette);
-$tuxedo-light-theme-warn: mat.m2-define-palette(mat.$m2-red-palette);
+@use 'm3-tokens' as tokens;
 
-$light-theme-base: mat.m2-define-light-theme((
-    color: (
-        primary: $tuxedo-light-theme-primary,
-        accent: $tuxedo-light-theme-accent,
-        warn: $tuxedo-light-theme-warn
-    ),
-    typography: typography.$custom-typography
-));
-
-$color-config: mat.m2-get-color-config($light-theme-base);
-$default-foreground: map.get($color-config, foreground);
-$custom-foreground: map.merge($default-foreground, (mat-toolbar-text: #F5F5F5));
-
-$updated-color-config: map.merge($color-config, (foreground: $custom-foreground));
-
-$tuxedo-control-center-light-theme: map.merge($light-theme-base, (color: $updated-color-config,
-            --icon-invert: 0%));
+// Include the Material Core styles (M3)
+// Note: mat.core() only needs to be included once per application, usually. 
+// If dark theme is loaded first, we might skip it here, but usually it's fine.
+// However, since we toggle classes, we don't want to duplicate base styles.
+// Assuming dark theme is default or loaded together. 
+// If both are imported in styles.scss, mat.core() should be outside.
+// But for now let's keep it safe.
 
 .light-theme {
-    @include mat.all-component-themes($tuxedo-control-center-light-theme);
-    @include theme-ops.component-themes($tuxedo-control-center-light-theme);
+    // 1. Generate Angular Material 3 Component Styles
+    @include mat.all-component-themes(tokens.$light-theme);
 
-    --icon-main: currentColor;
-    --icon-detail: #e30016;
+    // 2. Expose System Tokens as CSS Variables
+    @include tokens.expose-sys-tokens(tokens.$light-theme);
+
+    // 3. Apply TUXEDO brand color overrides
+    @include tokens.tuxedo-light-overrides();
+
+    // 4. Apply custom component styles
+    @include theme-ops.component-themes();
+
+    // Global CSS Variable assignments for root
+    background-color: var(--tcc-bg-primary);
+    color: var(--tcc-text-primary);
+
+    --icon-main: var(--tcc-text-primary);
+    --icon-detail: var(--tcc-accent);
+    --icon-invert: 0%;
 
     .theme-page-title {
         opacity: 0.7;

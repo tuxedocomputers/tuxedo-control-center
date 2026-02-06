@@ -17,20 +17,21 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
- .logo {
+.logo {
     width: 200px;
+    color: var(--tcc-text-primary); // Ensure SVG picks up the text color forcurrentColor
 }
 
 .content-container {
     max-width: 900px;
-    margin:auto;
+    margin: auto;
     text-align: center;
 }
 
 .updates-table {
-    width:300px;
-    margin:auto;
-    text-align:left;
+    width: 300px;
+    margin: auto;
+    text-align: left;
     margin-bottom: 20px;
 }
 
@@ -41,7 +42,7 @@
 .infoseparator {
     position: static;
     width: 200px;
-    right:0;
+    right: 0;
     margin: auto;
     margin-top: 20px;
     margin-bottom: 20px;
@@ -49,7 +50,8 @@
 
 .accordion-info {
     p {
-        font-size: 1.2em;;
+        font-size: 1.2em;
+        ;
     }
 }
 
@@ -80,5 +82,9 @@ table.versions {
 }
 
 .content-container mat-divider.divider-separator {
-    position: static; width: 200px; margin: auto; margin-top: 20px; margin-bottom: 20px;
+    position: static;
+    width: 200px;
+    margin: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }

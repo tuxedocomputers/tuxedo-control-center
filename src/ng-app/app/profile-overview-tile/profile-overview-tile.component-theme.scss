@@ -21,59 +21,56 @@
 @use '@angular/material' as mat;
 @use 'sass:map';
 
-@mixin profile-overview-tile-theme($theme) {
-    // Extract the palettes you need from the theme definition.
-    $color-config: mat.m2-get-color-config($theme);
-    $primary: map.get($color-config, primary);
-    $accent: map.get($color-config, accent);
-    $warn: map.get($color-config, warn);
-    $foreground: map.get($color-config, foreground);
-    $background: map.get($color-config, background);
+@mixin profile-overview-tile-theme() {
 
     // Define any styles affected by the theme.
     .profile-overview-tile {
+        // Ensure card background is opaque and uses the theme variable
+        background-color: var(--tcc-bg-card);
+        color: var(--tcc-text-primary);
+
+        // Typography (M3 Replacement)
+        font-family: 'Titillium Web', sans-serif;
+        font-size: 14px;
+        font-weight: 400;
+
         &.tile-active {
-            //color: mat.get-color-from-palette($accent);
+            //color: var(--sys-tertiary);
         }
 
         &.hover-effect:hover {
-            background-color: mat.m2-get-color-from-palette($background, hover);
+            // M2 'hover' on background is usually a slight overlay. 
+            // In M3 we can use surface-variant or just an opacity.
+            background-color: var(--sys-surface-variant);
         }
 
         &.selected {
-            background-color: mat.m2-get-color-from-palette($primary, lighter);
+            background-color: var(--sys-primary-container);
+            color: var(--sys-on-primary-container);
         }
 
         .overlay {
-            color: mat.m2-get-color-from-palette($primary, default-contrast);
-            background-color: mat.m2-get-color-from-palette($primary, darker);
+            color: var(--sys-on-primary); // default-contrast
+            background-color: var(--sys-primary); // darker? approximating to primary
 
             mat-button-toggle-group {
                 mat-button-toggle {
-                    color: mat.m2-get-color-from-palette($primary, default-contrast);
-                    background-color: mat.m2-get-color-from-palette($primary, darker);
+                    color: var(--sys-on-primary);
+                    background-color: var(--sys-primary);
 
                     &.mat-button-toggle-disabled,
                     &.mat-button-toggle-checked {
-                        background-color: mat.m2-get-color-from-palette($foreground, text);
+                        background-color: var(--sys-on-surface); // foreground text
+                        color: var(--sys-surface); // invert text
                     }
 
-                    .mat-button-toggle-focus-overlay {
-                        border-width: 0px;
-                        background-color: mat.m2-get-color-from-palette($primary, darker-contrast);
-                    }
+                    // .mat-button-toggle-focus-overlay {
+                    //    border-width: 0px;
+                    //    background-color: var(--sys-on-primary); // darker-contrast?
+                    //    opacity: 0.12;
+                    // }
                 }
             }
-        }
-    }
-}
-
-@mixin profile-overview-tile-typography($config) {
-    .profile-overview-tile {
-        font: {
-            family: mat.m2-font-family($config, body-1);
-            size: mat.m2-font-size($config, body-1);
-            weight: mat.m2-font-weight($config, body-1);
         }
     }
 }

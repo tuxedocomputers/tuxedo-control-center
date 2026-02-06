@@ -17,13 +17,16 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 @use '@angular/material' as mat;
+@use './_variables.scss';
 @use './themes/tuxedo-light-theme.scss';
 @use './themes/tuxedo-dark-theme.scss';
 @use './global-styles.scss';
 @use './typography.scss';
+@use './theme-mixin.scss';
 
 @include mat.elevation-classes();
 @include mat.app-background();
+@include theme-mixin.component-themes();
 
 [hidden] {
     visibility: hidden !important;
@@ -35,6 +38,18 @@ body {
     height: 100vh;
     font-family: 'Titillium Web', sans-serif;
 }
+
+html,
+body {
+    height: 100%;
+}
+
+app-root {
+    display: block;
+    height: 100%;
+    min-height: 100vh;
+}
+
 
 .blur-no-input {
     pointer-events: none;

@@ -18,28 +18,45 @@
  */
 
 .dashboard {
-    display: block;
-    position: absolute;
-    top: 10px;
-    bottom: 25px;
-    right: 5px;
-    left: 0px;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    min-height: 100%;
     margin: 0px;
-    padding: 0px;
-    overflow-y: scroll;
+    padding: 20px 0;
+    box-sizing: border-box;
 }
 
 .inner-dashboard {
-    margin: 0 10px 10px 10px;
+    flex: 1;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 16px;
+    box-sizing: border-box;
+
+    // Make the mat-card blend with the background for a flat look
+    .tcc-card {
+        background-color: transparent;
+        box-shadow: none;
+        border: none;
+    }
 }
 
 .system-monitor-gauges {
     display: flex;
-    flex-flow: row;
-    justify-content: space-evenly;
-    
+    flex-flow: row wrap;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+
     margin: 10px auto 30px auto;
     padding-bottom: 5px;
+
+    .tcc-gauge {
+        // Layout
+        flex-shrink: 0; // Prevent gauges from shrinking
+    }
 
     &.bottom {
         margin-bottom: 30px;
@@ -70,7 +87,7 @@
     }
 }
 
-.active-tcc-profile{
+.active-tcc-profile {
     padding-bottom: 15px;
 }
 
@@ -109,7 +126,8 @@
         }
 
         .tcc-gauge.small {
-            transform: scale(0.7);
+            // Native density handles sizing now
+            // transform: scale(0.7);
 
             .legend {
                 bottom: 20px;

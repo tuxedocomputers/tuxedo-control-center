@@ -19,28 +19,10 @@
 @use '@angular/material' as mat;
 @use 'sass:map';
 
-@mixin profile-details-edit-theme($theme) {
-
-    $color-config: mat.m2-get-color-config($theme);
-    $primary: map.get($color-config, primary);
-    $accent: map.get($color-config, accent);
-    $warn: map.get($color-config, warn);
-    $background: map.get($color-config, background);
-
+@mixin profile-details-edit-theme() {
     .profile-details-edit {
-
         .profile-title {
-            background-color: mat.m2-get-color-from-palette($background, card);
+            background-color: var(--sys-surface-container); // formerly card background
         }
-
-        /*.mat-button-toggle {
-        opacity: 0.8;
-        color: mat.get-color-from-palette($primary, lighter);
-    }
-    .mat-button-toggle-checked, .mat-button-toggle-disabled {
-        opacity: 1.0;
-        color: mat.get-color-from-palette($primary);
-        background: inherit;
-    }*/
     }
 }

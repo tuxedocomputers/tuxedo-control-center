@@ -19,8 +19,7 @@
 .profile-details-edit {
     margin: 0 10px 10px 10px;
 
-    .sub-header
-    {
+    .sub-header {
         font-size: 1.15em;
         font-weight: bold;
     }
@@ -45,7 +44,7 @@
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
-            font-size:20px;
+            font-size: 20px;
 
             input {
                 width: 400px;
@@ -57,6 +56,11 @@
         .inactive {
             opacity: 0.2;
             pointer-events: none;
+        }
+
+        // Add spacing between grid sections
+        &+.profile-details-edit-grid {
+            margin-top: 16px;
         }
 
         header {
@@ -99,14 +103,17 @@
             }
 
             mat-button-toggle-group {
-                transform: scale(0.8);
-                transform-origin: left;
+                // SCALING REMOVED
+                // transform: scale(0.8);
+                // transform-origin: left;
 
                 mat-button-toggle {
-                    font-size: 1.6em;
+
+                    // font-size: 1.6em; // Removed oversized font
                     svg {
-                        width: 40px;
-                        height: 40px;
+                        // Resized for dense buttons
+                        width: 24px;
+                        height: 24px;
 
                         --icon-detail: var(--icon-main);
                     }

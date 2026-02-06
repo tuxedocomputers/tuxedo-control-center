@@ -6,15 +6,15 @@
 @use './tcc-charts-theme.scss' as *;
 @use './tcc-color-picker-theme.scss' as *;
 
-@mixin component-themes($theme) {
+@mixin component-themes() {
     // Angular components
-    @include profile-overview-tile-theme($theme);
-    @include profile-details-edit-theme($theme);
+    @include profile-overview-tile-theme();
+    @include profile-details-edit-theme();
 
     // Other components
-    @include tcc-general-defs-theme($theme);
-    @include tcc-gauge-theme($theme);
-    @include tcc-changelog-theme($theme);
-    @include tcc-charts-theme($theme);
-    @include tcc-color-picker-theme($theme);
+    @include tcc-general-defs-theme();
+    @include tcc-gauge-theme();
+    @include tcc-changelog-theme();
+    @include tcc-charts-theme();
+    @include tcc-color-picker-theme();
 }

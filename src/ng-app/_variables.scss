@@ -1,0 +1,27 @@
+// Legacy variable definitions - now mapped to M3 System Tokens
+// These provide backwards compatibility for components that still use the old variable names.
+// The actual values are set in the theme files (tuxedo-dark-theme.scss, tuxedo-light-theme.scss)
+// via the expose-sys-tokens mixin.
+
+// Note: We no longer define static values here. 
+// All theming is controlled by the M3 token system.
+// If a component uses --tcc-bg-primary, it will resolve to --sys-background 
+// which is set per-theme.
+
+// Fallback defaults for when no theme class is applied (shouldn't happen in normal use)
+:root {
+    // These are overridden by .dark-theme and .light-theme classes
+    --tcc-bg-primary: #121212;
+    --tcc-bg-card: #1e1e1e;
+    --tcc-bg-status-bar: #0a0a0a;
+
+    --tcc-text-primary: #e0e0e0;
+    --tcc-text-secondary: rgba(255, 255, 255, 0.7);
+    --tcc-text-disabled: rgba(255, 255, 255, 0.38);
+
+    --tcc-divider: rgba(255, 255, 255, 0.12);
+
+    --tcc-primary: #757575;
+    --tcc-accent: #e30016;
+    --tcc-warn: #f44336;
+}

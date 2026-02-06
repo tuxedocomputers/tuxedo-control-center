@@ -30,6 +30,8 @@ import { ITccSettings } from '../../../common/models/TccSettings';
 import { ChangeDetectorRef, AfterContentChecked } from '@angular/core';
 import { ProfileConflictDialogService } from "../profile-conflict-dialog/profile-conflict-dialog.service";
 import { SharedModule } from '../shared/shared.module';
+import { ProfileOverviewTileComponent } from '../profile-overview-tile/profile-overview-tile.component';
+import { ProfileDetailsEditComponent } from '../profile-details-edit/profile-details-edit.component';
 
 
 enum InputMode {
@@ -47,7 +49,7 @@ class ProfileManagerButton {
 
 @Component({
   standalone: true,
-  imports: [SharedModule], 
+  imports: [SharedModule, ProfileOverviewTileComponent, ProfileDetailsEditComponent], 
     selector: 'app-profile-manager',
     templateUrl: './profile-manager.component.html',
     styleUrls: ['./profile-manager.component.scss'],

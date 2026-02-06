@@ -19,28 +19,21 @@
 @use '@angular/material' as mat;
 @use 'sass:map';
 
-@mixin tcc-color-picker-theme($theme) {
-    $color-config: mat.m2-get-color-config($theme);
-    $primary: map.get($color-config, primary);
-    $accent: map.get($color-config, accent);
-    $warn: map.get($color-config, warn);
-    $foreground: map.get($color-config, foreground);
-    $background: map.get($color-config, background);
-
+@mixin tcc-color-picker-theme() {
     .tcc-color-picker+color-picker>.color-picker {
         box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
-        background-color: mat.m2-get-color-from-palette($background, card);
+        background-color: var(--sys-surface-container); // formerly card
 
         &.open {
             margin: 0 auto;
             border-style: none;
 
             .type-policy {
-                filter: invert(map.get($theme, --icon-invert));
+                filter: invert(var(--icon-invert));
             }
 
             .cursor {
-                filter: invert(map.get($theme, --icon-invert));
+                filter: invert(var(--icon-invert));
             }
 
             .saturation-lightness {
@@ -52,19 +45,19 @@
             }
 
             .hex-text * {
-                color: mat.m2-get-color-from-palette($foreground, text);
+                color: var(--sys-on-surface);
             }
 
             .hsla-text * {
-                color: mat.m2-get-color-from-palette($foreground, text);
+                color: var(--sys-on-surface);
             }
 
             .rgba-text * {
-                color: mat.m2-get-color-from-palette($foreground, text);
+                color: var(--sys-on-surface);
             }
 
             .box div {
-                color: mat.m2-get-color-from-palette($foreground, text-disabled);
+                color: var(--sys-on-surface-variant); // formerly text-disabled
             }
         }
     }

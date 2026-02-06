@@ -71,7 +71,9 @@ export class UtilsService {
         this.languageMap[lang.id] = lang;
       }
 
-      this.themeClass = new BehaviorSubject(undefined);
+      // Initialize with dark-theme as default to ensure styles are applied immediately
+      // The actual theme will be updated by updateBrightnessMode() on app init
+      this.themeClass = new BehaviorSubject('dark-theme');
     }
 
     // if return status code is not zero, it will count as an error
@@ -319,7 +321,10 @@ export class UtilsService {
   }
 
   public async setBrightnessMode(mode: 'light' | 'dark' | 'system') {
-    return await this.electron.ipcRenderer.invoke('set-brightness-mode', mode);
+    console.log('[Theme] setBrightnessMode called with mode:', mode);
+    const result = await this.electron.ipcRenderer.invoke('set-brightness-mode', mode);
+    console.log('[Theme] setBrightnessMode IPC result:', result);
+    return result;
   }
 
   public async getBrightnessMode(): Promise<'light' | 'dark' | 'system'> {
@@ -327,13 +332,16 @@ export class UtilsService {
   }
 
   public async getShouldUseDarkColors(): Promise<boolean> {
-    return this.electron.ipcRenderer.invoke('get-should-use-dark-colors');
+    const result = await this.electron.ipcRenderer.invoke('get-should-use-dark-colors');
+    console.log('[Theme] getShouldUseDarkColors returned:', result);
+    return result;
   }
 
   /**
    * Note: Only for updating web part, to change behaviour use setBrightnessMode
    */
   public setThemeClass(className: string) {
+    console.log('[Theme] setThemeClass called with:', className);
     if (className == "light-theme") {
         this.overlayContainer.getContainerElement().classList.remove("dark-theme");
     }
@@ -342,17 +350,21 @@ export class UtilsService {
     }
     this.overlayContainer.getContainerElement().classList.add(className);
     this.themeClass.next(className);
+    console.log('[Theme] themeClass.next emitted:', className);
   }
 
   public setThemeLight() {
+    console.log('[Theme] setThemeLight called');
     this.setThemeClass('light-theme');
   }
 
   public setThemeDark() {
+    console.log('[Theme] setThemeDark called');
     this.setThemeClass('dark-theme');
   }
 
   public async updateBrightnessMode() {
+    console.log('[Theme] updateBrightnessMode called');
     if (await this.getShouldUseDarkColors()) {
         this.setThemeDark();
     } else {

@@ -195,7 +195,28 @@ export class GlobalSettingsComponent implements OnInit {
     }
 
     public async onBrightnessModeCtrlChange() {
-        await this.utils.setBrightnessMode(this.ctrlBrightnessMode.value);
+        const mode = this.ctrlBrightnessMode.value;
+        console.log('[Theme] onBrightnessModeCtrlChange called, value:', mode);
+        
+        // Apply theme directly based on user selection for immediate feedback
+        if (mode === 'light') {
+            this.utils.setThemeLight();
+            await this.utils.setBrightnessMode(mode);
+        } else if (mode === 'dark') {
+            this.utils.setThemeDark();
+            await this.utils.setBrightnessMode(mode);
+        } else if (mode === 'system') {
+            // For 'system' mode, the main process returns the resolved theme state
+            const result = await this.utils.setBrightnessMode(mode);
+            console.log('[Theme] System mode result:', result);
+            if (result && result.shouldUseDarkColors) {
+                this.utils.setThemeDark();
+            } else {
+                this.utils.setThemeLight();
+            }
+        }
+        
+        console.log('[Theme] Theme change completed');
     }
 
     public gotoComponent(component: string) {
