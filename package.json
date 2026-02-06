@@ -21,7 +21,7 @@
         "build": "run-s clean build-electron build-native build-service build-ng copy-files",
         "build-prod": "run-s clean build-electron build-native build-service build-ng-prod copy-files",
         "build-ng": "npm run copy-changelog && ng build",
-        "build-ng-prod": "npm run copy-changelog && ng build --prod",
+        "build-ng-prod": "npm run copy-changelog && ng build --configuration=production",
         "build-electron": "tsc -p ./src/e-app",
         "build-service": "tsc -p ./src/service-app && cp ./src/package.json ./dist/tuxedo-control-center/service-app/package.json && run-s bundle-service",
         "bundle-service": "cp ./build/Release/TuxedoIOAPI.node ./dist/tuxedo-control-center/service-app/native-lib && pkg --target node14-linux-x64 --output ./dist/tuxedo-control-center/data/service/tccd ./dist/tuxedo-control-center/service-app/package.json",
