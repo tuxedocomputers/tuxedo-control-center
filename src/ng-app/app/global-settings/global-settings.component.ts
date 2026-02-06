@@ -113,7 +113,7 @@ export class GlobalSettingsComponent implements OnInit {
         this.primeState = data.primeSelectAvailable;
     }
     
-    onCPUSettingsEnabledChanged(event: any) {
+    onCPUSettingsEnabledChanged(event: { checked: boolean }) {
         this.utils.pageDisabled = true;
 
         this.config.getSettings().cpuSettingsEnabled = event.checked;
@@ -143,7 +143,7 @@ export class GlobalSettingsComponent implements OnInit {
         });
     }
 
-    onFanControlEnabledChanged(event: any) {
+    onFanControlEnabledChanged(event: { checked: boolean }) {
         this.utils.pageDisabled = true;
 
         this.config.getSettings().fanControlEnabled = event.checked;
@@ -159,7 +159,7 @@ export class GlobalSettingsComponent implements OnInit {
         });
     }
 
-    onKeyboardBacklightControlEnabledChanged(event: any) {
+    onKeyboardBacklightControlEnabledChanged(event: { checked: boolean }) {
         this.utils.pageDisabled = true;
 
         this.config.getSettings().keyboardBacklightControlEnabled = event.checked;
@@ -175,7 +175,7 @@ export class GlobalSettingsComponent implements OnInit {
         });
     }
 
-    onYCbCr420WorkaroundChanged(event: any, card: number, port: string) {
+    onYCbCr420WorkaroundChanged(event: { checked: boolean }, card: number, port: string) {
         if (this.config.getSettings().ycbcr420Workaround.length > card && port in this.config.getSettings().ycbcr420Workaround[card]) {
             this.utils.pageDisabled = true;
 

@@ -273,7 +273,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </div>
       </mat-expansion-panel>
 
-      @if (availability.isIGpuAvailable() && availability.isDGpuAvailable() && primeState !== 'off' && primeState != '-1') {
+      @if (availability.isIGpuAvailable() && availability.isDGpuAvailable() && primeState !== 'off' && primeState !== '-1') {
         <mat-expansion-panel [expanded]="expandPrimeSelect"
           >
           <mat-expansion-panel-header>

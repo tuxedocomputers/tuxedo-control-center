@@ -290,11 +290,15 @@ export class TccDBusClientService implements OnDestroy {
   }
 
   public async setSensorDataCollectionStatus(status: boolean): Promise<void> {
-    await this.tccDBusInterface.dbusAvailable() && await this.tccDBusInterface.setSensorDataCollectionStatus(status)
+    if (await this.tccDBusInterface.dbusAvailable()) {
+      await this.tccDBusInterface.setSensorDataCollectionStatus(status);
+    }
   }
 
   public async setDGpuD0Metrics(status: boolean): Promise<void> {
-    await this.tccDBusInterface.dbusAvailable() && await this.tccDBusInterface.setDGpuD0Metrics(status)
+    if (await this.tccDBusInterface.dbusAvailable()) {
+      await this.tccDBusInterface.setDGpuD0Metrics(status);
+    }
   }
 
   public getInterface(): TccDBusController | undefined {

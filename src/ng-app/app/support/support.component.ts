@@ -118,39 +118,35 @@ export class SupportComponent implements OnInit {
   }
 
   public async runSysteminfo(): Promise<void> {
-    return new Promise<void>(async (resolve, reject) => {
-      let fileData: string;
-      // Download file
-      try {
-        this.systeminfoOutput('Fetching: ' + this.systeminfosURL);
-        const data = await this.utils.httpsGet(this.systeminfosURL);
-        fileData = data.toString();
-      } catch (_err) {
-        reject('Download failed'); return;
-      }
+    let fileData: string;
+    // Download file
+    try {
+      this.systeminfoOutput('Fetching: ' + this.systeminfosURL);
+      const data = await this.utils.httpsGet(this.systeminfosURL);
+      fileData = data.toString();
+    } catch (_err) {
+      throw new Error('Download failed');
+    }
 
-      // Write file
-      try {
-        this.systeminfoOutput('Writing file: ' + this.systeminfoFilePath);
-        await this.utils.writeTextFile(this.systeminfoFilePath, fileData, { mode: 0o755 });
-      } catch (_err) {
-        reject('Failed to write file ' + this.systeminfoFilePath); return;
-      }
+    // Write file
+    try {
+      this.systeminfoOutput('Writing file: ' + this.systeminfoFilePath);
+      await this.utils.writeTextFile(this.systeminfoFilePath, fileData, { mode: 0o755 });
+    } catch (_err) {
+      throw new Error('Failed to write file ' + this.systeminfoFilePath);
+    }
 
-      // Run
-      try {
-        const ticketNumber: number = this.formTicketNumber.controls.inputTicketNumber.value;
-        this.systeminfoOutput('Running systeminfos.sh');
-        this.utils.pageDisabled = true;
-        await this.utils.execCmdAsync('pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY XDG_SESSION_TYPE=$XDG_SESSION_TYPE XDG_CURRENT_DESKTOP=$XDG_CURRENT_DESKTOP sh ' + this.systeminfoFilePath + ' ' + ticketNumber);
-      } catch (_err) {
-        reject('Failed to execute script');
-      } finally {
-        this.utils.pageDisabled = false;
-      }
-
-      resolve();
-    });
+    // Run
+    try {
+      const ticketNumber: number = this.formTicketNumber.controls.inputTicketNumber.value;
+      this.systeminfoOutput('Running systeminfos.sh');
+      this.utils.pageDisabled = true;
+      await this.utils.execCmdAsync('pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY XDG_SESSION_TYPE=$XDG_SESSION_TYPE XDG_CURRENT_DESKTOP=$XDG_CURRENT_DESKTOP sh ' + this.systeminfoFilePath + ' ' + ticketNumber);
+    } catch (_err) {
+      throw new Error('Failed to execute script');
+    } finally {
+      this.utils.pageDisabled = false;
+    }
   }
 
   public systeminfoOutput(text: string): void {

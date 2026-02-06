@@ -37,41 +37,38 @@ export class ProgramManagementService {
 
   public async isInstalled(name: string): Promise<boolean> {
     this.isCheckingInstallation.set(name, true);
-    return new Promise<boolean>(async (resolve) => {
-      this.utils.execCmdAsync('which ' + name).then((_result) => {
-        this.isCheckingInstallation.set(name, false);
-        resolve(true);
-      }).catch(() => {
-        this.isCheckingInstallation.set(name, false);
-        resolve(false);
-      });
-    });
+    try {
+      await this.utils.execCmdAsync('which ' + name);
+      this.isCheckingInstallation.set(name, false);
+      return true;
+    } catch {
+      this.isCheckingInstallation.set(name, false);
+      return false;
+    }
   }
 
   public async install(name: string): Promise<boolean> {
     this.isInProgress.set(name, true);
-    return new Promise<boolean>(async (resolve) => {
-      this.utils.execCmdAsync('pkexec apt install -y ' + name).then(() => {
-        this.isInProgress.set(name, false);
-        resolve(true);
-      }).catch(() => {
-        this.isInProgress.set(name, false);
-        resolve(false);
-      });
-    });
+    try {
+      await this.utils.execCmdAsync('pkexec apt install -y ' + name);
+      this.isInProgress.set(name, false);
+      return true;
+    } catch {
+      this.isInProgress.set(name, false);
+      return false;
+    }
   }
 
   public async remove(name: string): Promise<boolean> {
     this.isInProgress.set(name, true);
-    return new Promise<boolean>(async (resolve) => {
-      this.utils.execCmdAsync('pkexec apt remove -y ' + name).then(() => {
-        this.isInProgress.set(name, false);
-        resolve(true);
-      }).catch(() => {
-        this.isInProgress.set(name, false);
-        resolve(false);
-      });
-    });
+    try {
+      await this.utils.execCmdAsync('pkexec apt remove -y ' + name);
+      this.isInProgress.set(name, false);
+      return true;
+    } catch {
+      this.isInProgress.set(name, false);
+      return false;
+    }
   }
 
   public run(name: string): void {

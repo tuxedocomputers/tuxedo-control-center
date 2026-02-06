@@ -19,7 +19,7 @@ import { ShutdownTimerComponent } from '../shutdown-timer/shutdown-timer.compone
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CompatibilityService } from '../compatibility.service';
 import { SharedModule } from '../shared/shared.module';
@@ -32,16 +32,12 @@ import { SharedModule } from '../shared/shared.module';
     styleUrls: ['./tools.component.scss'],
     
 })
-export class ToolsComponent implements OnInit {
+export class ToolsComponent {
     compat = inject(CompatibilityService);
     private router = inject(Router);
     private route = inject(ActivatedRoute);
 
 
-
-    ngOnInit() {
-        // Component initialization handled by Angular
-    }
 
     gotoComponent(component: string) {
         this.router.navigate([ component ], { relativeTo: this.route.parent });

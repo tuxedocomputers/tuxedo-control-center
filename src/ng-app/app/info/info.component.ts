@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Component, OnInit, VERSION, inject } from '@angular/core';
+import { Component, VERSION, inject } from '@angular/core';
 import { UtilsService } from '../utils.service';
 import { SharedModule } from '../shared/shared.module';
 
@@ -28,7 +28,7 @@ import { SharedModule } from '../shared/shared.module';
     styleUrls: ['./info.component.scss'],
     
 })
-export class InfoComponent implements OnInit {
+export class InfoComponent {
   private utils = inject(UtilsService);
 
 
@@ -39,10 +39,6 @@ export class InfoComponent implements OnInit {
   public angularVersion = VERSION.full;
 
 
-
-  ngOnInit() {
-    // Component initialization handled by Angular
-  }
 
   public changeLanguage(languageId: string) {
     if (languageId !== this.getCurrentLanguageId()) {

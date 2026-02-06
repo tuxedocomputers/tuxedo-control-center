@@ -205,19 +205,18 @@ export class ConfigService implements OnDestroy {
     public async importProfiles(newProfiles: ITccProfile[])
     {
         let newProfileList = this.getCustomProfiles();
-        for (let i = 0; i < newProfiles.length; i++)
+        for (const newProfile of newProfiles)
         {
             // https://stackoverflow.com/questions/7364150/find-object-by-id-in-an-array-of-javascript-objects
-            const oldProfileIndex = newProfileList.findIndex(x => x.id === newProfiles[i].id);
+            const oldProfileIndex = newProfileList.findIndex(x => x.id === newProfile.id);
             if(oldProfileIndex !== -1)
             {
-                newProfileList[oldProfileIndex] = newProfiles[i];
+                newProfileList[oldProfileIndex] = newProfile;
             }
             else
             {
                 // when we want to override the old profile or there is no conflict we want to keep the
                 // original ID
-                const newProfile = newProfiles[i];
                 if (newProfile.id === "generateNewID")
                 {
                     newProfile.id = generateProfileId();

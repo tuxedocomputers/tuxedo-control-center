@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { AfterViewInit, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, inject } from "@angular/core";
+import { AfterViewInit, ChangeDetectorRef, Component, Input, inject } from "@angular/core";
 import { ChartConfiguration, ChartDataset, ChartOptions } from "chart.js";
 import {
     defaultFanProfiles,
@@ -40,7 +40,7 @@ import { SharedModule } from '../shared/shared.module';
     styleUrls: ["./fan-graph.component.scss"],
     
 })
-export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
+export class FanGraphComponent implements AfterViewInit {
     private cdref = inject(ChangeDetectorRef);
     private config = inject(ConfigService);
 
@@ -98,17 +98,9 @@ export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
 
 
         
-    ngOnInit() {
-        // Component initialization handled by Angular
-    }
-
     ngAfterViewInit(): void {
         this.initDone = true;
         this.cdref.detectChanges();
-    }
-
-    ngOnDestroy(): void {
-        // Cleanup handled by Angular
     }
 
     private updateDatasets(): void {
@@ -137,9 +129,9 @@ export class FanGraphComponent implements OnInit, OnDestroy, AfterViewInit {
      * @returns Resulting speed
      */
     private applyParameters(entry: ITccFanTableEntry): number {
-        let { temp, speed } = entry;
+        const { temp, speed: baseSpeed } = entry;
 
-        speed += this.offsetFanspeed;
+        let speed = baseSpeed + this.offsetFanspeed;
 
         speed = Math.max(this.minFanspeed, Math.min(this.maxFanspeed, speed));
         speed = Math.max(0, Math.min(100, speed));

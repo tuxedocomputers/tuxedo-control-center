@@ -38,7 +38,7 @@ import { SystemProfileInfo } from 'src/common/models/ISystemProfileInfo';
 import { SharedModule } from '../shared/shared.module';
 
 function minControlValidator(comparisonControl: AbstractControl): ValidatorFn {
-    return (thisControl: AbstractControl): Record<string, any> | null => {
+    return (thisControl: AbstractControl): Record<string, number> | null => {
         let errors = null;
         if (thisControl.value < comparisonControl.value) {
             errors = { min: comparisonControl.value, actual: thisControl.value };
@@ -48,7 +48,7 @@ function minControlValidator(comparisonControl: AbstractControl): ValidatorFn {
 }
 
 function maxControlValidator(comparisonControl: AbstractControl): ValidatorFn {
-    return (thisControl: AbstractControl): Record<string, any> | null => {
+    return (thisControl: AbstractControl): Record<string, number> | null => {
         let errors = null;
         if (thisControl.value > comparisonControl.value) {
             errors = { max: comparisonControl.value, actual: thisControl.value };
@@ -285,11 +285,11 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     }
 
     public getPowerLimitToName(name: string) {
-        for (let i = 0; i < this.deviceSystemProfileInfo.pl.length; i++)
+        for (const pl of this.deviceSystemProfileInfo.pl)
         {
-            if (this.deviceSystemProfileInfo.pl[i].odmName === name)
+            if (pl.odmName === name)
             {
-                return this.deviceSystemProfileInfo.pl[i].limit + " W";
+                return pl.limit + " W";
             }
         }
     }
@@ -621,32 +621,12 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         if (newValue !== undefined) {
             tdpValues.controls[movedSliderIndex].setValue(newValue);
 
-            // Update LED choice (if available) on first TDP change
-            // Note: Deactivated update
-            const updateLEDChoice = false &&
-                movedSliderIndex === 0 &&
-                this.compat.uwLEDOnlyMode
-                // Also make sure three profiles are available
-                this.odmProfileNames.length === 3;
-
-            if (updateLEDChoice) {
-                const sliderMax = this.odmPowerLimitInfos[movedSliderIndex].max;
-                const sliderMin = this.odmPowerLimitInfos[movedSliderIndex].min;
-                const tdpPercentage = Math.round((newValue - sliderMin) / (sliderMax - sliderMin) * 100);
-                const odmProfileGroup: UntypedFormGroup = this.profileFormGroup.controls.odmProfile as UntypedFormGroup;
-                const profileNameControl: UntypedFormControl = odmProfileGroup.controls.name as UntypedFormControl;
-                if (tdpPercentage < 25) {
-                    profileNameControl.setValue(this.odmProfileNames[0]);
-                } else if ( tdpPercentage < 75) {
-                    profileNameControl.setValue(this.odmProfileNames[1]);
-                } else {
-                    profileNameControl.setValue(this.odmProfileNames[2]);
-                }
-            }
+            // TODO: LED choice update deactivated - activate when needed
+            // Requirements: movedSliderIndex === 0 && uwLEDOnlyMode && odmProfileNames.length === 3
         }
         // to fix bug of not updated validity of middle slider
-        for (let i = 0; i < tdpValues.controls.length; i++) {
-            tdpValues.controls[i].updateValueAndValidity();
+        for (const control of tdpValues.controls) {
+            control.updateValueAndValidity();
         }
 
     }

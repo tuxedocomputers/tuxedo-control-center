@@ -16,7 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Component, OnInit, AfterViewInit, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { ElectronService } from '../electron.service';
 import { UtilsService } from '../utils.service';
 import { ProgramManagementService } from '../program-management.service';
@@ -47,7 +47,7 @@ interface ITomteModule {
     ],
     
 })
-export class TomteGuiComponent implements OnInit, AfterViewInit {
+export class TomteGuiComponent implements OnInit {
     private electron = inject(ElectronService);
     private utils = inject(UtilsService);
     private pmgs = inject(ProgramManagementService);
@@ -76,9 +76,6 @@ export class TomteGuiComponent implements OnInit, AfterViewInit {
         this.tomtelist();
     }
 
-    ngAfterViewInit() {
-        // View initialization complete
-    }
 
     public focusControl(control): void {
         setImmediate(() => { control.focus(); });
@@ -113,7 +110,7 @@ export class TomteGuiComponent implements OnInit, AfterViewInit {
             try
             {
                 results = await this.utils.execCmdAsync(command + "");
-                results = results.replace(/^[^\{]*\{/, "{"); // delete everything up to the first occurance of {
+                results = results.replace(/^[^{]*{/, "{"); // delete everything up to the first occurance of {
                 this.parseTomteListJson(results);
                 this.getModuleDescriptions();
                 break;
@@ -149,9 +146,8 @@ export class TomteGuiComponent implements OnInit, AfterViewInit {
         this.tomteMode = givenobject.mode;
         this.tomteListArray = [];
         this.rebootRequired = givenobject.restart === "yes";
-        for (let i = 0; i < givenobject.modules.length; i++)
+        for (const module of givenobject.modules)
         {
-            const module = givenobject.modules[i];
             this.tomteListArray.push({moduleName: module.name, version: module.version, installed: module.installed === "yes", blocked: module.blocked === "yes", prerequisite: module.required});
         }
         }
@@ -171,9 +167,9 @@ export class TomteGuiComponent implements OnInit, AfterViewInit {
     {
         if (this.moduleToolTips.size < this.tomteListArray.length)
         {
-        for (let i = 0; i < this.tomteListArray.length; i++)
+        for (const module of this.tomteListArray)
             {
-                const modulename = this.tomteListArray[i].moduleName;
+                const modulename = module.moduleName;
                 if(this.moduleToolTips.has(modulename))
                 {
                     continue;
@@ -250,7 +246,7 @@ export class TomteGuiComponent implements OnInit, AfterViewInit {
     private async throwErrorMessage(errorMessage: string | undefined)
     {
         console.error(errorMessage);
-        const askToClose = await this.utils.confirmDialog({
+        await this.utils.confirmDialog({
             title: $localize `:@@tomteGuiDialogErrorTitle:An Error occured!`,
             description: errorMessage,
             linkLabel: ``,

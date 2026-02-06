@@ -126,7 +126,12 @@ export class UtilsService {
   // Opens a file dialog (systems file dialog) and returns selected path or false if canceled
   // for selecting existing files
   // needs to be modified if you need more than one file (and you need to give it the multiSelections flag https://www.electronjs.org/de/docs/latest/api/dialog)
-  public async openFileDialog(properties): Promise<Buffer> {
+  public async openFileDialog(properties: { 
+    defaultPath?: string; 
+    buttonLabel?: string; 
+    filters?: { name: string; extensions: string[] }[];
+    properties?: string[];
+  }): Promise<Buffer> {
     return new Promise<Buffer>((resolve, reject) => {
       this.electron.ipcRenderer.invoke('show-open-dialog', properties).then((result) => {
         if (result.canceled) {
@@ -142,7 +147,7 @@ export class UtilsService {
   // Opens a file dialog (systems file dialog) and returns selected path or false if canceled
   // for selecting a non existing file (saving)
   // does not save anything, just returns a path
-  public async saveFileDialog(properties): Promise<Buffer> {
+  public async saveFileDialog(properties: { defaultPath?: string; filters?: { name: string; extensions: string[] }[] }): Promise<Buffer> {
     return new Promise<Buffer>((resolve, reject) => {
       this.electron.ipcRenderer.invoke('show-save-dialog', properties).then((result) => {
         if (result.canceled) {
@@ -199,8 +204,9 @@ export class UtilsService {
     });
   }
 
-  public async writeTextFile(filePath: string, fileData: string | Buffer, writeFileOptions?: any): Promise<void> {
+  public async writeTextFile(filePath: string, fileData: string | Buffer, writeFileOptions?: { mode?: number }): Promise<void> {
     // Modern implementation using ContextBridge
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const electron = (window as any).electron;
     if (electron && electron.fs) {
         const dir = path.dirname(filePath);
@@ -241,6 +247,7 @@ export class UtilsService {
 
 
   public async readTextFile(filePath: string, ): Promise<string> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const electron = (window as any).electron;
     if (electron && electron.fs) {
         const result = await electron.fs.readFile(filePath);
@@ -266,6 +273,7 @@ export class UtilsService {
   }
 
   public async modFile(filePath: string, mode: number): Promise<void> {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const electron = (window as any).electron;
     if (electron && electron.fs) {
         const result = await electron.fs.chmod(filePath, mode);
@@ -422,7 +430,7 @@ export class UtilsService {
     return status;
   }
 
-  public async inputTextDialog(config: any) {
+  public async inputTextDialog(config: { title: string; description?: string; buttonConfirmLabel?: string }) {
     const dialogRef = this.dialog.open(DialogInputTextComponent, {
       minWidth: 350,
       data: config,

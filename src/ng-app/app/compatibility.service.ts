@@ -100,7 +100,7 @@ export class CompatibilityService {
         return this.hasFanControl;
     }
 
-    private hasPowerDrawWithValue(powerData: any): boolean {
+    private hasPowerDrawWithValue(powerData: { powerDraw?: number }): boolean {
         return (
             typeof powerData?.powerDraw !== "undefined" &&
             powerData.powerDraw > -1

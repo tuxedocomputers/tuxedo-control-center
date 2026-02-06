@@ -19,7 +19,7 @@ export class WebcamPreviewComponent implements OnInit, OnDestroy {
 
     @ViewChild("video", { static: true })
     public video: ElementRef;
-    mediaDeviceStream: any;
+    mediaDeviceStream: MediaStream | undefined;
     spinnerActive = false;
 
     ngOnInit(): void {

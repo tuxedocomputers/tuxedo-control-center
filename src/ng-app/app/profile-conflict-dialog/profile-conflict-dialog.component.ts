@@ -32,7 +32,7 @@ export interface IProfileConflictDialogResult {
 @Component({
   standalone: true,
   imports: [SharedModule], 
-    selector: 'profile-conflict-dialog',
+    selector: 'app-profile-conflict-dialog',
     templateUrl: './profile-conflict-dialog.component.html',
     styleUrls: ['./profile-conflict-dialog.component.scss'],
     
@@ -70,7 +70,7 @@ export class ProfileConflictComponent implements OnInit, OnDestroy {
      }
 
     ngOnDestroy() {
-        // Cleanup handled by subscriptions
+        this.subscriptions.unsubscribe();
     }
     
     // we need those two functions to properly display the overview tiles 

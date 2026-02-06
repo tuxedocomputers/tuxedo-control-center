@@ -18,6 +18,7 @@
  */
 import { Injectable, OnDestroy } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const dbus = require('dbus-next');
 import { DBusDisplayBrightnessGnome } from '../../common/classes/DBusDisplayBrightnessGnome';
 
@@ -26,7 +27,10 @@ import { DBusDisplayBrightnessGnome } from '../../common/classes/DBusDisplayBrig
 })
 export class DBusService implements OnDestroy {
 
+  // dbus-next package has no TypeScript types
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private sessionBus: any;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   private dbusProperties: any;
 
   public observeDisplayBrightness: Observable<number>;
@@ -60,35 +64,32 @@ export class DBusService implements OnDestroy {
   }
 
   public async initDusDisplayBrightness(): Promise<void> {
-    return new Promise<void>(async resolve => {
-
       if (this.sessionBus === undefined) {
         this.displayBrightnessNotSupported = true;
-      } else {
-        this.displayBrightnessGnome = new DBusDisplayBrightnessGnome(this.sessionBus);
-        if (!await this.displayBrightnessGnome.isAvailable()) {
-          this.displayBrightnessNotSupported = true;
-          return;
-        }
-
-        try {
-          const result = await this.displayBrightnessGnome.getBrightness();
-          this.currentDisplayBrightness = result;
-          this.displayBrightnessSubject.next(this.currentDisplayBrightness);
-        } catch (_err) {
-          this.displayBrightnessNotSupported = true;
-          return;
-        }
-
-        this.displayBrightnessGnome.setOnPropertiesChanged(
-          (value) => {
-            this.currentDisplayBrightness = value;
-            this.displayBrightnessSubject.next(this.currentDisplayBrightness);
-          }
-        );
+        return;
       }
-      resolve();
-    });
+
+      this.displayBrightnessGnome = new DBusDisplayBrightnessGnome(this.sessionBus);
+      if (!await this.displayBrightnessGnome.isAvailable()) {
+        this.displayBrightnessNotSupported = true;
+        return;
+      }
+
+      try {
+        const result = await this.displayBrightnessGnome.getBrightness();
+        this.currentDisplayBrightness = result;
+        this.displayBrightnessSubject.next(this.currentDisplayBrightness);
+      } catch (_err) {
+        this.displayBrightnessNotSupported = true;
+        return;
+      }
+
+      this.displayBrightnessGnome.setOnPropertiesChanged(
+        (value) => {
+          this.currentDisplayBrightness = value;
+          this.displayBrightnessSubject.next(this.currentDisplayBrightness);
+        }
+      );
   }
 
   public getDBusDriverNames(): string[] {

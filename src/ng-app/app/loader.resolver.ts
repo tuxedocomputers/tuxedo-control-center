@@ -12,7 +12,7 @@ export class LoaderResolver  {
 
 
 
-    resolve(): Observable<any> {
+    resolve(): Observable<boolean> {
         return from(this.waitForLoading());
     }
 

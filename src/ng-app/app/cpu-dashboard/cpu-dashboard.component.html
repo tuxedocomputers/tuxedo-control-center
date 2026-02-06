@@ -139,7 +139,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
               </div>
             </div>
             @if (isX11 && availability.isIGpuAvailable()
-              && availability.isDGpuAvailable() && primeState != undefined && primeState != '-1') {
+              && availability.isDGpuAvailable() && primeState !== undefined && primeState !== '-1') {
               <div class="content-container active-profile">
                 <span i18n="@@cDashboardActiveGraphicsMode">Active Graphics Mode:</span>
                 <a mat-button class="link" (click)="gotoSettings()">

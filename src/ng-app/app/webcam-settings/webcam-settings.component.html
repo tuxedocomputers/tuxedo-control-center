@@ -330,7 +330,7 @@
               </mat-expansion-panel-header>
               <!-- SLIDER -->
               @for (webcamConfig of getWebcamSettingNames(); track webcamConfig) {
-                @if (getOptionValue(webcamConfig, 'category')==webcamCategory && getOptionValue(webcamConfig, 'type') ==='slider') {
+                @if (getOptionValue(webcamConfig, 'category')===webcamCategory && getOptionValue(webcamConfig, 'type') ==='slider') {
                   <div
                     >
                     <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
@@ -377,7 +377,7 @@
                   </div>
                 }
                 <!-- BOOL -->
-                @if (getOptionValue(webcamConfig, 'category')==webcamCategory && getOptionValue(webcamConfig, 'type') ==='bool') {
+                @if (getOptionValue(webcamConfig, 'category')===webcamCategory && getOptionValue(webcamConfig, 'type') ==='bool') {
                   <div
                     >
                     <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"
@@ -400,7 +400,7 @@
                   </div>
                 }
                 <!-- MENU -->
-                @if (getOptionValue(webcamConfig, 'category')==webcamCategory && getOptionValue(webcamConfig, 'type') ==='menu') {
+                @if (getOptionValue(webcamConfig, 'category')===webcamCategory && getOptionValue(webcamConfig, 'type') ==='menu') {
                   <div
                     >
                     <mat-grid-list [cols]="gridParams.cols" rowHeight="30px"

@@ -157,7 +157,7 @@ export class MainGuiComponent implements OnInit, OnDestroy {
         }
     }
 
-    public getProfileLink(state: any) {
+    public getProfileLink(state: { value: string }) {
         if (!this.getSettings()) {
             return 'profile-manager/'
         }

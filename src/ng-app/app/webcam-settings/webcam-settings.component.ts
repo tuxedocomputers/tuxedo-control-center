@@ -228,27 +228,25 @@ export class WebcamSettingsComponent implements OnInit, AfterContentChecked, OnD
 
     private async setWebcamDeviceInformation(): Promise<WebcamDevice[]> {
         const devices = await this.getWebcamDevices();
-        return new Promise<WebcamDevice[]>(async (resolve) => {
-            const dropdownData: WebcamDevice[] = [];
-            const webcamPaths = await this.getWebcamPaths();
-            if (devices.length !== 0 && webcamPaths != null) {
-                for (const [webcamPath, webcamId] of Object.entries(
-                    webcamPaths
-                )) {
-                    const [label, deviceId] = this.getDeviceData(
-                        devices,
-                        webcamId
-                    );
-                    dropdownData.push({
-                        label: label,
-                        deviceId: deviceId,
-                        id: webcamId,
-                        path: webcamPath,
-                    });
-                }
+        const dropdownData: WebcamDevice[] = [];
+        const webcamPaths = await this.getWebcamPaths();
+        if (devices.length !== 0 && webcamPaths != null) {
+            for (const [webcamPath, webcamId] of Object.entries(
+                webcamPaths
+            )) {
+                const [label, deviceId] = this.getDeviceData(
+                    devices,
+                    webcamId
+                );
+                dropdownData.push({
+                    label: label,
+                    deviceId: deviceId,
+                    id: webcamId,
+                    path: webcamPath,
+                });
             }
-            resolve(dropdownData);
-        });
+        }
+        return dropdownData;
     }
 
     private async webcamNotAvailabledDialog(): Promise<void> {
@@ -271,22 +269,21 @@ export class WebcamSettingsComponent implements OnInit, AfterContentChecked, OnD
         return webcamCtrolsPath;
     }
 
-    private getWebcamSettings(): Promise<string> {
-        return new Promise<string>(async (resolve) => {
-            try {
-                const data = await this.utils.execCmdAsync(
-                    "python3 " +
-                        this.getWebcamCtrlPythonPath() +
-                        ` -d ${this.selectedWebcam.path} -j`
-                );
-                resolve(data);
-            } catch (error) {
-                console.error(error);
-                this.mutex.release();
-                this.webcamNotAvailabledDialog();
-                await this.reloadWebcamList(undefined);
-            }
-        });
+    private async getWebcamSettings(): Promise<string> {
+        try {
+            const data = await this.utils.execCmdAsync(
+                "python3 " +
+                    this.getWebcamCtrlPythonPath() +
+                    ` -d ${this.selectedWebcam.path} -j`
+            );
+            return data;
+        } catch (error) {
+            console.error(error);
+            this.mutex.release();
+            this.webcamNotAvailabledDialog();
+            await this.reloadWebcamList(undefined);
+            return '';
+        }
     }
 
     private handleVideoEnded(): void {
@@ -336,10 +333,9 @@ export class WebcamSettingsComponent implements OnInit, AfterContentChecked, OnD
     }
 
     private getCurrentWebcamConstraints(): WebcamConstraints {
-        const [webcamWidth, webcamHeight] = this.webcamFormGroup
-            .getRawValue()
-            ["resolution"].split("x");
-        const fps = this.webcamFormGroup.getRawValue()["fps"];
+        const rawValues = this.webcamFormGroup.getRawValue();
+        const [webcamWidth, webcamHeight] = rawValues["resolution"].split("x");
+        const fps = rawValues["fps"];
         return {
             deviceId: { exact: this.selectedWebcam.deviceId },
             width: { exact: Number(webcamWidth) },
