@@ -35,13 +35,14 @@ export class CpuWorker extends DaemonWorker {
      * Skip writing energy performance preference if flag is set
      */
     private noEPPWriteQuirk: boolean;
+    private device: TUXEDODevice;
 
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(10000, 'CpuWorker', tccd);
         this.cpuCtrl = new CpuController(this.basePath);
 
-        const dev: TUXEDODevice = this.tccd.identifyDevice();
-        if ([TUXEDODevice.SIRIUS1602, TUXEDODevice.STELLSL15A06].includes(dev)) {
+        this.device = this.tccd.identifyDevice();
+        if ([TUXEDODevice.SIRIUS1602, TUXEDODevice.STELLSL15A06].includes(this.device)) {
             this.noEPPWriteQuirk = true;
         } else {
             this.noEPPWriteQuirk = false;
@@ -168,7 +169,12 @@ export class CpuWorker extends DaemonWorker {
 
                 this.cpuCtrl.setGovernor(profile.cpu.governor);
                 if (!this.noEPPWriteQuirk) {
-                    this.cpuCtrl.setEnergyPerformancePreference(profile.cpu.energyPerformancePreference);
+                    if (this.device === TUXEDODevice.GEMINI17I04) {
+                        // Quirk for Gemini Gen4 Intel, needs EPP = performance to allow full frequency range
+                        this.cpuCtrl.setEnergyPerformancePreference('performance');
+                    } else {
+                        this.cpuCtrl.setEnergyPerformancePreference(profile.cpu.energyPerformancePreference);
+                    }
                 }
 
                 this.cpuCtrl.setGovernorScalingMinFrequency(profile.cpu.scalingMinFrequency);
@@ -338,11 +344,13 @@ export class CpuWorker extends DaemonWorker {
 
                 const currentPerformancePreference: string = core.energyPerformancePreference.readValue();
                 let performancePreferenceProfile: string;
-                if (!profile.cpu.useMaxPerfGov) {
+
+                if (!profile.cpu.useMaxPerfGov && this.device !== TUXEDODevice.GEMINI17I04) {
                     performancePreferenceProfile = profile.cpu.energyPerformancePreference;
                 } else {
                     performancePreferenceProfile = 'performance';
                 }
+
                 // Skip check if not set in profile or is 'default'
                 // note: writing 'default' tends to set another string which is considered the default
                 if (performancePreferenceProfile !== undefined && performancePreferenceProfile !== 'default') {

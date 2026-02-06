@@ -1,5 +1,34 @@
 # Changelog
 
+## [2.1.23] - 2026-02-05
+### Added
+- Additional ID for Gemini 17 Gen4 Intel devices
+- Desktop shortcut to TUXEDO category
+
+### Fixed
+- Non used platform profiles for InfinityBook Max Gen10 AMD
+- Accidental wakeup of dGPU from reading display brightness in on-demand
+
+## [2.1.22] - 2025-12-19
+### Added
+- Quirk for Gemini Gen4 Intel using CPU EPP `performance` instead of default `balance_performance`
+- GPU hybrid graphics selection identification for InfinityBook Max Gen10 AMD
+
+### Fixed
+- Workaround for profile generation when intel_pstate no_turbo is unavailable (Gemini Gen4 Intel)
+- Take min/max frequency over all cores instead of using core 0 as reference
+
+## [2.1.21] - 2025-11-26
+### Added
+- "TCC" keyword to desktop-file
+
+### Changed
+- "Remote support" removed from support area
+
+### Fixed
+- Default "System profile" in some cases not being the highest performing one
+- Text tweaks and typos
+
 ## [2.1.20] - 2025-09-10
 ### Fixed
 - Revert the Sirius "start TCC" shortcut due to an issue with keyboard input in certain applications in Wayland

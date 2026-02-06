@@ -445,7 +445,11 @@ public:
                 // LEDs only case (default to LEDs off)
                 profileName = PERF_PROF_STR_OVERBOOST;
             } else {
-                profileName = PERF_PROF_STR_ENTHUSIAST;
+                if (nrProfiles > 2) {
+                    profileName = PERF_PROF_STR_OVERBOOST;
+                } else {
+                    profileName = PERF_PROF_STR_ENTHUSIAST;
+                }
             }
         } else {
             result = false;
