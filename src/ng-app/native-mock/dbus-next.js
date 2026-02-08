@@ -1,5 +1,3 @@
-console.error('DBUS MOCK LOADED');
-
 class Interface {
   static configureMembers(args) {}
 }
