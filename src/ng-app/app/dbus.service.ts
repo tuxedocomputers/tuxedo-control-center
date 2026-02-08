@@ -19,6 +19,7 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 // eslint-disable-next-line @typescript-eslint/no-require-imports
+// TODO: Replace require() with dynamic import or abstraction layer once dbus-next supports ESM
 const dbus = require('dbus-next');
 import { DBusDisplayBrightnessGnome } from '../../common/classes/DBusDisplayBrightnessGnome';
 

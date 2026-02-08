@@ -17,6 +17,7 @@
     }
   },
   "angularCompilerOptions": {
+    // TODO: Enable strictTemplates once all template type errors are resolved
     "strictTemplates": false
   },
   "include": [
