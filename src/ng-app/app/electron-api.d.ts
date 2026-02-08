@@ -13,13 +13,6 @@ export interface ElectronAPI {
     shell: {
         openExternal: (url: string) => Promise<void>;
     };
-    fs: {
-        readFile: (path: string) => Promise<{data: string, error: any}>;
-        writeFile: (path: string, data: string, options?: any) => Promise<{error: any}>;
-        exists: (path: string) => Promise<boolean>;
-        mkdir: (path: string, options?: any) => Promise<{error: any}>;
-        chmod: (path: string, mode: any) => Promise<{error: any}>;
-    }
 }
 
 declare global {

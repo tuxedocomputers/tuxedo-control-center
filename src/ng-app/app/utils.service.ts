@@ -18,7 +18,6 @@
  */
 import { Injectable, LOCALE_ID, inject } from '@angular/core';
 import { SysFsService } from './sys-fs.service';
-// import { ElectronService } from 'ngx-electron';
 import { ElectronService } from './electron.service';
 import { DecimalPipe } from '@angular/common';
 import * as https from 'https';
@@ -205,28 +204,6 @@ export class UtilsService {
   }
 
   public async writeTextFile(filePath: string, fileData: string | Buffer, writeFileOptions?: { mode?: number }): Promise<void> {
-    // Modern implementation using ContextBridge
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const electron = (window as any).electron;
-    if (electron && electron.fs) {
-        const dir = path.dirname(filePath);
-        // Check dir exists
-        const dirExists = await electron.fs.exists(dir);
-        if (!dirExists) {
-            await electron.fs.mkdir(dir, { mode: 0o755, recursive: true });
-        }
-        
-        // Convert buffer to string if necessary, or handle it. 
-        // For simplicity assuming string or compatible data for now.
-        const dataToWrite = fileData; 
-        
-        const result = await electron.fs.writeFile(filePath, dataToWrite, writeFileOptions);
-        if (result.error) {
-            throw result.error;
-        }
-        return;
-    }
-
     return new Promise<void>((resolve, reject) => {
       try {
         if (!fs.existsSync(path.dirname(filePath))) {
@@ -246,17 +223,7 @@ export class UtilsService {
   }
 
 
-  public async readTextFile(filePath: string, ): Promise<string> {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const electron = (window as any).electron;
-    if (electron && electron.fs) {
-        const result = await electron.fs.readFile(filePath);
-        if (result.error) {
-            throw result.error;
-        }
-        return result.data + "";
-    }
-
+  public async readTextFile(filePath: string): Promise<string> {
     return new Promise<string>((resolve, reject) => {
       try {
         fs.readFile(filePath,(err, data) => {
@@ -273,14 +240,6 @@ export class UtilsService {
   }
 
   public async modFile(filePath: string, mode: number): Promise<void> {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const electron = (window as any).electron;
-    if (electron && electron.fs) {
-        const result = await electron.fs.chmod(filePath, mode);
-        if (result.error) throw result.error;
-        return;
-    }
-
     return new Promise<void>((resolve, reject) => {
       fs.chmod(filePath, mode, err => {
         if (err) {
@@ -329,9 +288,7 @@ export class UtilsService {
   }
 
   public async setBrightnessMode(mode: 'light' | 'dark' | 'system') {
-    console.log('[Theme] setBrightnessMode called with mode:', mode);
     const result = await this.electron.ipcRenderer.invoke('set-brightness-mode', mode);
-    console.log('[Theme] setBrightnessMode IPC result:', result);
     return result;
   }
 
@@ -340,16 +297,13 @@ export class UtilsService {
   }
 
   public async getShouldUseDarkColors(): Promise<boolean> {
-    const result = await this.electron.ipcRenderer.invoke('get-should-use-dark-colors');
-    console.log('[Theme] getShouldUseDarkColors returned:', result);
-    return result;
+    return await this.electron.ipcRenderer.invoke('get-should-use-dark-colors');
   }
 
   /**
    * Note: Only for updating web part, to change behaviour use setBrightnessMode
    */
   public setThemeClass(className: string) {
-    console.log('[Theme] setThemeClass called with:', className);
     if (className == "light-theme") {
         this.overlayContainer.getContainerElement().classList.remove("dark-theme");
     }
@@ -358,21 +312,17 @@ export class UtilsService {
     }
     this.overlayContainer.getContainerElement().classList.add(className);
     this.themeClass.next(className);
-    console.log('[Theme] themeClass.next emitted:', className);
   }
 
   public setThemeLight() {
-    console.log('[Theme] setThemeLight called');
     this.setThemeClass('light-theme');
   }
 
   public setThemeDark() {
-    console.log('[Theme] setThemeDark called');
     this.setThemeClass('dark-theme');
   }
 
   public async updateBrightnessMode() {
-    console.log('[Theme] updateBrightnessMode called');
     if (await this.getShouldUseDarkColors()) {
         this.setThemeDark();
     } else {

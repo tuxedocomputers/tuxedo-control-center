@@ -666,47 +666,6 @@ ipcMain.handle('exec-file-async', async (event, arg) => {
     });
 });
 
-ipcMain.handle('fs-read-file', async (event, filePath) => {
-    try {
-        const data = await fs.promises.readFile(filePath, 'utf8');
-        return { data, error: null };
-    } catch (err) {
-        return { data: null, error: err };
-    }
-});
-
-ipcMain.handle('fs-write-file', async (event, args) => {
-    try {
-        await fs.promises.writeFile(args.path, args.data, args.options);
-        return { error: null };
-    } catch (err) {
-        return { error: err };
-    }
-});
-
-ipcMain.handle('fs-exists', async (event, filePath) => {
-    // Exists is typically sync, but we wrap it
-    return fs.existsSync(filePath);
-});
-
-ipcMain.handle('fs-mkdir', async (event, args) => {
-    try {
-        await fs.promises.mkdir(args.path, args.options);
-        return { error: null };
-    } catch (err) {
-        return { error: err };
-    }
-});
-
-ipcMain.handle('fs-chmod', async (event, args) => {
-    try {
-        await fs.promises.chmod(args.path, args.mode);
-        return { error: null };
-    } catch (err) {
-        return { error: err };
-    }
-});
-
 ipcMain.on('spawn-external-async', (event, arg) => {
     child_process.spawn(arg, { detached: true, stdio: 'ignore' }).on('error', (err) => {
         console.log("\"" + arg + "\" could not be executed.")
