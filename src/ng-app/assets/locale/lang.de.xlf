@@ -2067,7 +2067,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Dieses Modul wird zwingend für den ordnungsmäßen Betrieb Ihres TUXEDOs benötigt und kann nicht deaktiviert werden</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">159</context>
+          <context context-type="linenumber">165</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tomteGuiSliderToolTipUnblock" datatype="html">
@@ -2075,7 +2075,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Modul aktivieren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">162</context>
+          <context context-type="linenumber">168</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tomteGuiSliderToolTipBlock" datatype="html">
@@ -2083,7 +2083,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Modul deaktivieren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">164</context>
+          <context context-type="linenumber">170</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tomteGuiSliderToolTipUninstallRequisite" datatype="html">
@@ -2091,7 +2091,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Dieses Modul wird zwingend für den ordnungsmäßen Betrieb Ihres TUXEDOs benötigt und kann nicht deinstalliert werden</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">170</context>
+          <context context-type="linenumber">176</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tomteGuiSliderToolTipUnInstallBlocked" datatype="html">
@@ -2099,7 +2099,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Ein blockiertes Modul kann nicht installiert oder deinstalliert werden</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">173</context>
+          <context context-type="linenumber">179</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tomteGuiSliderToolTipBlockUninstall" datatype="html">
@@ -2107,7 +2107,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Dieses Modul entfernen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">176</context>
+          <context context-type="linenumber">182</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tomteGuiSliderToolTipInstall" datatype="html">
@@ -2115,7 +2115,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Dieses Modul installieren</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">178</context>
+          <context context-type="linenumber">184</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tomteGuiDialogErrorTitle" datatype="html">
@@ -2123,7 +2123,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Ein Fehler ist aufgetreten!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">191</context>
+          <context context-type="linenumber">197</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tomteBreakingChangesTitle" datatype="html">
@@ -2131,7 +2131,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Zum Ausführen von TUXEDO Tomte ist eine Authentifizierung erforderlich</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">210</context>
+          <context context-type="linenumber">216</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tomteBreakingChangesWarning" datatype="html">
@@ -2139,7 +2139,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Achtung: Änderungen an der Standard Tomte Konfiguration können dazu führen, dass ihr Gerät nicht mehr ordnungsgemäß funktioniert!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">211</context>
+          <context context-type="linenumber">217</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tomteAbortButtonLabel" datatype="html">
@@ -2147,11 +2147,11 @@ Handelsregisternummer HRB 27755
         <target state="translated">Abbrechen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">214</context>
+          <context context-type="linenumber">220</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">241</context>
+          <context context-type="linenumber">247</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tomteConfirmButtonLabel" datatype="html">
@@ -2159,11 +2159,11 @@ Handelsregisternummer HRB 27755
         <target state="translated">Ich verstehe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">215</context>
+          <context context-type="linenumber">221</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">242</context>
+          <context context-type="linenumber">248</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tomteDialogCheckboxNoBotherLabel" datatype="html">
@@ -2171,7 +2171,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Nicht nochmal fragen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">216</context>
+          <context context-type="linenumber">222</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tomteResetDefaultsTitle" datatype="html">
@@ -2179,7 +2179,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Sind Sie sich sicher, dass sie die Einstellungen auf Standard zurücksetzen wollen?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">237</context>
+          <context context-type="linenumber">243</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tomteResetDefaultsMessage" datatype="html">
@@ -2187,7 +2187,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Dies wird alle manuel getätigten Änderungen verwerfen, sind Sie sich sicher, dass Sie fortfahren wollen?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">238</context>
+          <context context-type="linenumber">244</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tomteGuiResetFailedPopup" datatype="html">
@@ -2195,7 +2195,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Zurücksetzen fehlgeschlagen. Läuft Tomte bereits? In diesem Fall versuchen Sie es später nochmal.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">276</context>
+          <context context-type="linenumber">282</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tomteGuiInstallErrorMessagePopup" datatype="html">
@@ -2203,7 +2203,7 @@ Handelsregisternummer HRB 27755
         <target state="translated">Tomte konnte nicht installiert werden. Benutzen Sie ein TUXEDO Gerät und die TUXEDO Repos?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">388</context>
+          <context context-type="linenumber">394</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cTomteGuiTomteHeader" datatype="html">

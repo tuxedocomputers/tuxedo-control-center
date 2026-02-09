@@ -2072,7 +2072,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">This module is essential for the proper operation of your TUXEDO and cannot be deactivated</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">159</context>
+          <context context-type="linenumber">165</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tomteGuiSliderToolTipUnblock" datatype="html">
@@ -2080,7 +2080,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Activate module</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">162</context>
+          <context context-type="linenumber">168</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tomteGuiSliderToolTipBlock" datatype="html">
@@ -2088,7 +2088,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Deactivate module</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">164</context>
+          <context context-type="linenumber">170</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tomteGuiSliderToolTipUninstallRequisite" datatype="html">
@@ -2096,7 +2096,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">This module is essential for the proper operation of your TUXEDO and cannot be uninstalled</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">170</context>
+          <context context-type="linenumber">176</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tomteGuiSliderToolTipUnInstallBlocked" datatype="html">
@@ -2104,7 +2104,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Cannot install or uninstall a module that is blocked</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">173</context>
+          <context context-type="linenumber">179</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tomteGuiSliderToolTipBlockUninstall" datatype="html">
@@ -2112,7 +2112,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Uninstall this module</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">176</context>
+          <context context-type="linenumber">182</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tomteGuiSliderToolTipInstall" datatype="html">
@@ -2120,7 +2120,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Install this module</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">178</context>
+          <context context-type="linenumber">184</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tomteGuiDialogErrorTitle" datatype="html">
@@ -2128,7 +2128,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">An Error occured!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">191</context>
+          <context context-type="linenumber">197</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tomteBreakingChangesTitle" datatype="html">
@@ -2136,7 +2136,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Authentication is required to run TUXEDO Tomte</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">210</context>
+          <context context-type="linenumber">216</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tomteBreakingChangesWarning" datatype="html">
@@ -2144,7 +2144,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Warning: Changes to the default Tomte-configuration can lead to your device not working properly anymore!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">211</context>
+          <context context-type="linenumber">217</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tomteAbortButtonLabel" datatype="html">
@@ -2152,11 +2152,11 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Abort</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">214</context>
+          <context context-type="linenumber">220</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">241</context>
+          <context context-type="linenumber">247</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tomteConfirmButtonLabel" datatype="html">
@@ -2164,11 +2164,11 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">I understand</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">215</context>
+          <context context-type="linenumber">221</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">242</context>
+          <context context-type="linenumber">248</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tomteDialogCheckboxNoBotherLabel" datatype="html">
@@ -2176,7 +2176,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Don&apos;t ask again</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">216</context>
+          <context context-type="linenumber">222</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tomteResetDefaultsTitle" datatype="html">
@@ -2184,7 +2184,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Are you sure you want to reset to defaults?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">237</context>
+          <context context-type="linenumber">243</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tomteResetDefaultsMessage" datatype="html">
@@ -2192,7 +2192,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">This will revert any manual configuration you did, are you sure you want to proceed?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">238</context>
+          <context context-type="linenumber">244</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tomteGuiResetFailedPopup" datatype="html">
@@ -2200,7 +2200,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Reset failed. Maybe Tomte is already running? If that is the case simply try again later.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">276</context>
+          <context context-type="linenumber">282</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tomteGuiInstallErrorMessagePopup" datatype="html">
@@ -2208,7 +2208,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Tomte failed to install. Do you use a tuxedo device and are using the tuxedo repos?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.ts</context>
-          <context context-type="linenumber">388</context>
+          <context context-type="linenumber">394</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cTomteGuiTomteHeader" datatype="html">
