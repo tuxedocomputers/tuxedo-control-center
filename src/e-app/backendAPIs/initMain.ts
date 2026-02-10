@@ -162,7 +162,6 @@ async function initTray(): Promise<void> {
     }
     [tray.state.isPrimeSupported, tray.state.primeQuery] = await getPrimeAvailable();
     [tray.state.iGpuAvailable, tray.state.dGpuAvailable] = await getGpuAvailable();
-    tray.state.isX11 = await getX11Available();
 
     await updateTrayProfiles();
     tray.events.startTCCClick = (): Promise<void> => activateTccGui();
@@ -346,20 +345,6 @@ async function getGpuAvailable(): Promise<[boolean, boolean]> {
     }
     console.log('initMain: getGpuAvailable: Failed to get gpu status');
     return [false, false];
-}
-
-async function getX11Available(): Promise<boolean> {
-    for (let i: number = 0; i < 5; i++) {
-        const x11Available: number = await tccDBus.getIsX11();
-
-        if (x11Available !== -1) {
-            return x11Available === 1;
-        }
-        console.log('initMain: getX11Available: x11 status not available, retrying');
-        await new Promise<void>((resolve: () => void): NodeJS.Timeout => setTimeout(resolve, 1000));
-    }
-    console.log('initMain: getX11Available: Failed to get x11 status');
-    return false;
 }
 
 async function fnLockSupported(): Promise<boolean> {

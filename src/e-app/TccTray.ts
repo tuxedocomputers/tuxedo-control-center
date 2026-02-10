@@ -102,19 +102,11 @@ export class TccTray {
             },
             {
                 type: 'separator',
-                visible:
-                    this.state.isPrimeSupported &&
-                    this.state.isX11 &&
-                    this.state.iGpuAvailable &&
-                    this.state.dGpuAvailable,
+                visible: this.state.isPrimeSupported && this.state.iGpuAvailable && this.state.dGpuAvailable,
             },
             {
                 label: 'Graphics',
-                visible:
-                    this.state.isPrimeSupported &&
-                    this.state.isX11 &&
-                    this.state.iGpuAvailable &&
-                    this.state.dGpuAvailable,
+                visible: this.state.isPrimeSupported && this.state.iGpuAvailable && this.state.dGpuAvailable,
                 submenu: [
                     {
                         label: 'Select dGPU',
@@ -149,7 +141,6 @@ class TrayState {
     tccGUIVersion: string;
     isAutostartTrayInstalled: boolean;
     isPrimeSupported: boolean;
-    isX11: boolean;
     iGpuAvailable: boolean;
     dGpuAvailable: boolean;
     primeQuery: string;
