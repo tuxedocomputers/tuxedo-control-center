@@ -107,7 +107,7 @@
         "@types/node": "24.10.2",
         "@yao-pkg/pkg": "6.12.0",
         "angular-gauge": "5.0.0",
-        "electron": "40.2.1",
+        "electron": "38.1.2",
         "electron-builder": "26.0.20",
         "electron-reload": "1.5.0",
         "esbuild": "0.27.3",
