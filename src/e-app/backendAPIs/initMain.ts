@@ -262,7 +262,7 @@ function installAutostartTray(): boolean {
     try {
         fs.mkdirSync(autostartLocation, { recursive: true });
         fs.copyFileSync(
-            path.join(appPath, '../../data/dist-data', autostartDesktopFilename),
+            path.join(appPath, '../../../data/dist-data', autostartDesktopFilename),
             path.join(autostartLocation, autostartDesktopFilename),
         );
         return true;
