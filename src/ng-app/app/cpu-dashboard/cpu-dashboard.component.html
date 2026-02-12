@@ -267,7 +267,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <!-- TABS -->
                 <div class="gauge-tabs"
                     *ngIf="availability.isIGpuAvailable() && availability.isDGpuAvailable() && (primeState === 'on-demand' || primeState === '-1')">
-                    <mat-tab-group mat-align-tabs="center" disablePagination="true">
+                    <mat-tab-group mat-align-tabs="center" disablePagination="true" [selectedIndex]="gpuMonitorTabIndex">
                         <mat-tab label="Power-saving CPU graphics processor (iGPU)" i18n-label="@@primeSelectIGpu">
                             <div class="content-container system-monitor-gauges">
                                 <div class="tcc-gauge" *ngIf="cpuVendor == 'amd'"
