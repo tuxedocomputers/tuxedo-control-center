@@ -56,6 +56,8 @@ export class ClientAPI {
     public writePumpMode(dutyCyclePercent: number, voltage: PumpVoltage | number) { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.writePumpMode.name, dutyCyclePercent, voltage]); }
     public writePumpOff() { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.writePumpOff.name]); }
     public saveState() { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.saveState.name]); }
+    public getAutoConnect() { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.getAutoConnect.name]) as Promise<boolean>; }
+    public setAutoConnect(enabled: boolean) { return this.ipc.invoke(this.apiHandle, [ClientAPI.prototype.setAutoConnect.name, enabled]); }
 }
 
 export function registerAPI (ipcMain: Electron.IpcMain, apiHandle: string, mainsideHandlers: Map<string, (...args: any[]) => any>) {

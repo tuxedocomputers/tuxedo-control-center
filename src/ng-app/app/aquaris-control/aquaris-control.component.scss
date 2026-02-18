@@ -215,3 +215,35 @@
 .try-demo-mode-button {
     margin: 0 10px;
 }
+
+.auto-reconnect-toggle {
+    margin-top: 10px;
+    font-size: 0.8em;
+}
+
+.auto-reconnect-notice {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+    gap: 5px;
+    margin: 15px 0;
+    padding: 10px 15px;
+    background-color: rgba(100, 209, 113, 0.15);
+    border: 1px solid rgba(100, 209, 113, 0.5);
+    border-radius: 4px;
+    font-size: 0.9em;
+
+    mat-icon {
+        color: rgba(100, 209, 113, 1.0);
+        font-size: 20px;
+        height: 20px;
+        width: 20px;
+    }
+
+    .disable-auto-reconnect-button {
+        margin-left: auto;
+        font-size: 0.85em;
+        line-height: 1.5em;
+        padding: 0 10px;
+    }
+}

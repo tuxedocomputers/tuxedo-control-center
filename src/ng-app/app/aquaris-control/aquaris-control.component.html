@@ -45,6 +45,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </button>
         </span>
         <button mat-raised-button (click)="connectionToggle()" *ngIf="isConnected && !isConnecting && !isDisconnecting" i18n="@@aqButtonDisconnectLabel">Disconnect</button>
+        <mat-slide-toggle
+            class="auto-reconnect-toggle green-slide-toggle"
+            *ngIf="isConnected && !isConnecting && !isDisconnecting"
+            [formControl]="ctrlAutoConnect"
+            (change)="toggleAutoConnect()"
+            i18n="@@aqAutoReconnectToggleLabel">Auto-reconnect on startup</mat-slide-toggle>
     </mat-card-title>
 
     <div class="aquaris-content">
@@ -193,6 +199,13 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
         <div class="device-list-wrapper" *ngIf="hasBluetooth && !isConnected && !isConnecting && !isDisconnecting && deviceList.length > 0">
             <ng-container i18n="@@aqChooseAquarisText">Please choose your TUXEDO Aquaris and click on the connect button</ng-container>
+            <p class="auto-reconnect-notice" *ngIf="autoConnectEnabled && getAutoConnectTargetDisplay()">
+                <mat-icon>sync</mat-icon>
+                <span i18n="@@aqAutoReconnectNotice">Auto-reconnect is enabled. Will automatically connect to</span>
+                <strong>{{ getAutoConnectTargetDisplay() }}</strong>
+                <span i18n="@@aqAutoReconnectNoticeWhenDetected">when detected.</span>
+                <button mat-stroked-button class="disable-auto-reconnect-button" (click)="disableAutoConnect()" i18n="@@aqDisableAutoReconnectButton">Disable</button>
+            </p>
             <mat-selection-list [formControl]="ctrlDeviceList" [multiple]="false" [hidden]="deviceList.length === 0">
                 <mat-list-option #currentOption *ngFor="let device of deviceList" [value]="device.uuid" (click)="selectDevice(device.uuid)">
                     <mat-icon mat-list-icon *ngIf="device.rssi >= -65">signal_cellular_alt</mat-icon>
@@ -220,6 +233,13 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
         </div>
 
         <div class="troubleshoot-list" *ngIf="(!isConnected && !isConnecting && !isDisconnecting) && (hasBluetooth && deviceList.length === 0)">
+            <p class="auto-reconnect-notice" *ngIf="autoConnectEnabled && getAutoConnectTargetDisplay()">
+                <mat-icon>sync</mat-icon>
+                <span i18n="@@aqAutoReconnectNotice">Auto-reconnect is enabled. Will automatically connect to</span>
+                <strong>{{ getAutoConnectTargetDisplay() }}</strong>
+                <span i18n="@@aqAutoReconnectNoticeWhenDetected">when detected.</span>
+                <button mat-stroked-button class="disable-auto-reconnect-button" (click)="disableAutoConnect()" i18n="@@aqDisableAutoReconnectButton">Disable</button>
+            </p>
             <p><b i18n="@@aqNoDevicesHeadlineText">TUXEDO Control Center could not find your TUXEDO Aquaris</b></p>
             <p i18n="@@aqNoDevicesVerifyText">Please verify that:</p>
             <ol>
