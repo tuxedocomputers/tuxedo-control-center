@@ -119,7 +119,13 @@ export class PrimeWorker extends DaemonWorker {
     }
 
     private async checkPrimeAvailable(): Promise<boolean> {
-        const primeAvailable: boolean = !!(await execCommandAsync('which prime-select')).toString().trim();
+        let primeAvailable: boolean;
+
+        try {
+            primeAvailable = !!(await execCommandAsync('which prime-select', false)).toString().trim();
+        } catch (_err: unknown) {
+            primeAvailable = false;
+        }
 
         if (primeAvailable) {
             const isTuxPrime: boolean = await this.isTuxPrime();
