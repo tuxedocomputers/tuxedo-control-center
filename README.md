@@ -47,7 +47,7 @@ tuxedo-control-center
 3. Install service file that points to development build path (or use installed service from packaged version)
    
    Manual instructions:
-   1. Copy `tccd.service` and `tccd-sleep.service` (from src/dist-data) to `/etc/systemd/system/`
+   1. Copy `tccd.service` and `tccd-sleep.service` (from src/dist-data) to `/usr/local/lib/systemd/system/`
    2. Edit the `tccd.service` (exec start/stop) to point to `<dev path>/dist/tuxedo-control-center/data/service/tccd`.
    3. Copy `com.tuxedocomputers.tccd.conf` to `/usr/share/dbus-1/system.d/`
    4. Start service `systemctl start tccd`. (And enable for autostart `systemctl enable tccd tccd-sleep`)

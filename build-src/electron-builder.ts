@@ -51,23 +51,15 @@ async function buildDeb(filenameAddition: string): Promise<void> {
         },
 
         files: [
-            distSrc + '/**/*'
+            distSrc + '/**/*',
         ],
         extraResources: [
             distSrc + '/data/service/tccd',
             distSrc + '/data/service/TuxedoIOAPI.node',
             distSrc + '/data/CHANGELOG.md',
-            distSrc + '/data/dist-data/tccd.service',
-            distSrc + '/data/dist-data/tccd-sleep.service',
             distSrc + '/data/dist-data/tuxedo-control-center_256.svg',
-            distSrc + '/data/dist-data/tuxedo-control-center.desktop',
-            distSrc + '/data/dist-data/tuxedo-control-center-tray.desktop',
-            distSrc + '/data/dist-data/com.tuxedocomputers.tccd.policy',
-            distSrc + '/data/dist-data/com.tuxedocomputers.tccd.conf',
             distSrc + '/data/camera/cameractrls.py',
-            distSrc + '/data/dist-data/99-webcam.rules',
-            distSrc + '/data/dist-data/com.tuxedocomputers.tomte.policy',
-            distSrc + '/data/camera/v4l2_kernel_names.json'
+            distSrc + '/data/camera/v4l2_kernel_names.json',
         ],
         linux: {
             target: [
@@ -79,12 +71,16 @@ async function buildDeb(filenameAddition: string): Promise<void> {
         deb: {
             depends: ['tuxedo-drivers (>= 4.0.0) | tuxedo-keyboard (>= 3.1.2)', 'libayatana-appindicator3-1'],
             category: 'System',
-            afterInstall: "./build-src/after_install.sh",
-            afterRemove: "./build-src/after_remove.sh",
+            afterInstall: "./build-src/after_install_deb.sh",
             fpm: [
                 '--conflicts=tuxedofancontrol',
                 '--replaces=tuxedofancontrol',
-                '--inputs=build-src/package-files.txt'
+                '--inputs=build-src/package-files.txt',
+                '--deb-systemd=src/dist-data/tccd.service',
+                '--deb-systemd=src/dist-data/tccd-sleep.service',
+                '--deb-systemd-restart-after-upgrade',
+                '--deb-after-purge=build-src/after_purge.sh',
+                '--deb-upstream-changelog=CHANGELOG.md'
             ]
         }
     };
@@ -140,7 +136,6 @@ async function buildRpm(filenameAddition: string): Promise<void> {
         },
         rpm: {
             depends: ['(tuxedo-drivers >= 4.0.0 or tuxedo-keyboard >= 3.1.2)', '(libayatana-appindicator3-1 or libappindicator or libappindicator3-1)'],
-            afterInstall: './build-src/dummy.sh',
             afterRemove: './build-src/after_remove.sh',
             fpm: [
                 '--replaces=tuxedofancontrol <= 0.1.9',
