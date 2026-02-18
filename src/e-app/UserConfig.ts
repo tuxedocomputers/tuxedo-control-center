@@ -107,6 +107,7 @@ export class UserConfig {
                     } catch (err: unknown) {
                         console.error(`UserConfig: readConfig failed => ${err}`);
                         this.data = {};
+                        resolve();
                     }
                 });
             },
