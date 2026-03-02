@@ -395,6 +395,8 @@ const defaultCustomProfile25WcTGP: ITccProfile = {
 export enum TUXEDODevice {
     UNKNOWN,
     IBP17G6,
+    PULSE1501,
+    PULSE1502,
     PULSE1403,
     PULSE1404,
     IBP14G6_TUX,
@@ -404,7 +406,7 @@ export enum TUXEDODevice {
     IBPG8,
     IBPG10AMD,
     IBM15A10,
-    PULSE1502,
+    IBM15I10,
     AURA14G3,
     AURA15G3,
     POLARIS1XA02,
@@ -427,6 +429,7 @@ export enum TUXEDODevice {
     SIRIUS1601,
     SIRIUS1602,
     GEMINI17I04,
+    BA1510,
 }
 
 /*

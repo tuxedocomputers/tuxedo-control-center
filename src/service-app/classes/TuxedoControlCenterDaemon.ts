@@ -593,6 +593,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         dmiSKUDeviceMap.set('IBP14A10MK1 / IBP15A10MK1', TUXEDODevice.IBPG10AMD);
         dmiSKUDeviceMap.set('IIBP14A10MK1 / IBP15A10MK1', TUXEDODevice.IBPG10AMD);
         dmiSKUDeviceMap.set('IBM15A10', TUXEDODevice.IBM15A10);
+        dmiSKUDeviceMap.set('IBM15I10', TUXEDODevice.IBM15I10);
         dmiSKUDeviceMap.set('POLARIS1XA02', TUXEDODevice.POLARIS1XA02);
         dmiSKUDeviceMap.set('POLARIS1XI02', TUXEDODevice.POLARIS1XI02);
         dmiSKUDeviceMap.set('POLARIS1XA03', TUXEDODevice.POLARIS1XA03);
@@ -601,6 +602,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         dmiSKUDeviceMap.set('STEPOL1XA04', TUXEDODevice.STEPOL1XA04);
         dmiSKUDeviceMap.set('STELLARIS1XI03', TUXEDODevice.STELLARIS1XI03);
         dmiSKUDeviceMap.set('STELLARIS1XI04', TUXEDODevice.STELLARIS1XI04);
+        dmiSKUDeviceMap.set('PULSE1501', TUXEDODevice.PULSE1501);
         dmiSKUDeviceMap.set('PULSE1502', TUXEDODevice.PULSE1502);
         dmiSKUDeviceMap.set('PULSE1403', TUXEDODevice.PULSE1403);
         dmiSKUDeviceMap.set('PULSE1404', TUXEDODevice.PULSE1404);
@@ -619,6 +621,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         dmiSKUDeviceMap.set('SIRIUS1602', TUXEDODevice.SIRIUS1602);
         dmiSKUDeviceMap.set('GEMINI17I04', TUXEDODevice.GEMINI17I04);
         dmiSKUDeviceMap.set('GEMINIGEN4I', TUXEDODevice.GEMINI17I04);
+        dmiSKUDeviceMap.set('BA1510', TUXEDODevice.BA1510);
 
         const skuMatch: TUXEDODevice = dmiSKUDeviceMap.get(productSKU);
 

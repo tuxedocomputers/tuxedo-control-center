@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import type { TUXEDODevice } from '../../common/models/DefaultProfiles';
+import { TUXEDODevice } from '../../common/models/DefaultProfiles';
 import { FanData } from '../../common/models/IFanData';
 import type { ITccFanProfile, ITccFanTableEntry } from '../../common/models/TccFanTable';
 import { DaemonWorker } from './DaemonWorker';
@@ -288,8 +288,20 @@ export class FanControlWorker extends DaemonWorker {
     private async writeFanSpeed(fanLogic: FanControlLogic, fanIndex: number, calculatedSpeed: number): Promise<void> {
         if (!fanLogic) return;
 
+        // todo: tuxedo-drivers currently has 2 issues
+        // - ec does set a different fan speed after 1 hour
+        // - fan speed does change after writing a value
+        // writing fan speed with tccd worker as a temporary solution
+        const forceFanWrite: boolean = [
+            // 1 hour ec issue
+            TUXEDODevice.BA1510,
+            TUXEDODevice.PULSE1501,
+            // fan control issue
+            TUXEDODevice.IBM15I10,
+        ].includes(this.tuxedoDevice);
+
         if (this.tccd.settings.fanControlEnabled) {
-            if (this.previousTempValues.get(fanIndex) !== calculatedSpeed && calculatedSpeed > -1) {
+            if (forceFanWrite || (this.previousTempValues.get(fanIndex) !== calculatedSpeed && calculatedSpeed > -1)) {
                 await this.fanApi.writeFanSpeed(fanIndex, calculatedSpeed);
                 this.previousTempValues.set(fanIndex, calculatedSpeed);
             }
