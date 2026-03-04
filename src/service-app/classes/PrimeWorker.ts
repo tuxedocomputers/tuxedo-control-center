@@ -27,8 +27,9 @@ const fsp: typeof import('fs').promises = require('node:fs').promises;
 
 export class PrimeWorker extends DaemonWorker {
     private tuxedoDevice: TUXEDODevice;
-    private isDisplayConnectedToNvidia: boolean;
-    private primeAvailable: boolean;
+    private isDisplayConnectedToNvidia: boolean = false;
+    private primeAvailable: boolean = false;
+    private primeSupported: boolean = false;
 
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(10000, 'PrimeWorker', tccd);
@@ -45,6 +46,9 @@ export class PrimeWorker extends DaemonWorker {
         }
 
         this.primeAvailable = await this.checkPrimeAvailable();
+        if (this.primeAvailable) {
+            this.primeSupported = await this.checkPrimeSupported();
+        }
 
         this.setPrimeStatus();
     }
@@ -57,9 +61,7 @@ export class PrimeWorker extends DaemonWorker {
     public async onExit(): Promise<void> {}
 
     private async setPrimeStatus(): Promise<void> {
-        const primeSupported: boolean = await this.checkPrimeSupported();
-
-        if (this.primeAvailable && primeSupported) {
+        if (this.primeAvailable && this.primeSupported) {
             this.tccd.dbusData.primeState = JSON.stringify(await this.checkPrimeStatus());
         } else {
             this.tccd.dbusData.primeState = JSON.stringify('-1');
@@ -119,7 +121,7 @@ export class PrimeWorker extends DaemonWorker {
     }
 
     private async checkPrimeAvailable(): Promise<boolean> {
-        let primeAvailable: boolean;
+        let primeAvailable: boolean = false;
 
         try {
             primeAvailable = !!(await execCommandAsync('which prime-select', false)).toString().trim();
