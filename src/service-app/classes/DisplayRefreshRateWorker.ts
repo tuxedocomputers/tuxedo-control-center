@@ -165,18 +165,20 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
             this.tccd.dbusData.displayModesJSON = '{}';
         }
 
-        this.tccd.dbusData.isX11 = this.controller.getIsX11();
+        if (this.controller.checkVariablesAvailable()) {
+            this.tccd.dbusData.isX11 = this.controller.getIsX11();
 
-        if (this.controller.getIsX11() === 1) {
-            console.log('DisplayRefreshRateWorker: Detected x11');
-        }
+            if (this.controller.getIsX11() === 1) {
+                console.log('DisplayRefreshRateWorker: Detected x11');
+            }
 
-        if (this.controller.getIsWayland()) {
-            console.log('DisplayRefreshRateWorker: Detected wayland');
-        }
+            if (this.controller.getIsWayland()) {
+                console.log('DisplayRefreshRateWorker: Detected wayland');
+            }
 
-        if (this.controller.getIsTTY()) {
-            console.log('DisplayRefreshRateWorker: Detected tty');
+            if (this.controller.getIsTTY()) {
+                console.log('DisplayRefreshRateWorker: Detected tty');
+            }
         }
     }
 
