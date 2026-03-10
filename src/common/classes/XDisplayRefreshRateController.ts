@@ -33,6 +33,52 @@ export class XDisplayRefreshRateController {
     private display: string = '';
     private xAuthorityFile: string = '';
 
+    private setSessionType(xdgSessionMatch: RegExpMatchArray) {
+        const sessionType: string = xdgSessionMatch
+            ? xdgSessionMatch[1].replace('XDG_SESSION_TYPE=', '').trim().toLowerCase()
+            : '';
+
+        this.isX11 = sessionType === 'x11' ? 1 : 0;
+        this.isWayland = sessionType === 'wayland';
+        this.isTTY = sessionType === 'tty';
+    }
+
+    private setXAuthority(xAuthorityMatch: RegExpMatchArray, userMatch: RegExpMatchArray) {
+        // additional checks to make sure environment variables are not taken from login screen
+        // sddm XDG_SESSION_TYPE can differ from actual session type
+        let xAuthorityFile: string;
+
+        if (
+            xAuthorityMatch &&
+            (xAuthorityMatch[1].includes('/var/run/sddm/{') || xAuthorityMatch[1].includes('/var/lib/lightdm'))
+        ) {
+            xAuthorityFile = undefined;
+        } else {
+            xAuthorityFile = xAuthorityMatch ? xAuthorityMatch[1].replace('XAUTHORITY=', '').trim() : '';
+        }
+
+        let xAuthorityFileExists: boolean = undefined;
+
+        if (xAuthorityFile) {
+            xAuthorityFileExists = fs.existsSync(xAuthorityFile);
+        }
+
+        if (xAuthorityFileExists) {
+            // gdm XDG_SESSION_TYPE can differ from actual session type
+            // Ubuntu creates xAuthority file with user gdm and that user name is unavailable,
+            // but Tuxedo OS with sddm allows the user name gdm
+            const xAuthorityFileInfo: string = child_process.execSync(`ls -l ${xAuthorityFile}`).toString();
+
+            if (xAuthorityFileInfo.includes(' gdm gdm ') && userMatch && userMatch[1] === 'gdm') {
+                this.xAuthorityFile = undefined;
+            } else {
+                this.xAuthorityFile = xAuthorityFile;
+            }
+        } else {
+            this.xAuthorityFile = undefined;
+        }
+    }
+
     public async setVariables(): Promise<undefined> {
         const environmentVariables: string = child_process
             .execSync(
@@ -51,41 +97,10 @@ export class XDisplayRefreshRateController {
         const xdgSessionMatch: RegExpMatchArray = environmentVariables.match(/^XDG_SESSION_TYPE=(.*)$/m);
         const userMatch: RegExpMatchArray = environmentVariables.match(/^USER=(.*)$/m);
 
-        // additional checks to make sure environment variables are not taken from login screen
-        // sddm XDG_SESSION_TYPE can differ from actual session type
-        if (
-            xAuthorityMatch &&
-            (xAuthorityMatch[1].includes('/var/run/sddm/{') || xAuthorityMatch[1].includes('/var/lib/lightdm'))
-        ) {
-            return undefined;
-        }
-
-        const xAuthorityFile: string = xAuthorityMatch ? xAuthorityMatch[1].replace('XAUTHORITY=', '').trim() : '';
-
-        this.xAuthorityFile = fs.existsSync(xAuthorityFile) ? xAuthorityFile : '';
-
-        if (!this.xAuthorityFile) {
-            return undefined;
-        }
-
-        // gdm XDG_SESSION_TYPE can differ from actual session type
-        // Ubuntu creates xAuthority file with user gdm and that user name is unavailable,
-        // but Tuxedo OS with sddm allows the user name gdm
-        const xAuthorityFileInfo: string = child_process.execSync(`ls -l ${this.xAuthorityFile}`).toString();
-
-        if (xAuthorityFileInfo.includes(' gdm gdm ') && userMatch && userMatch[1] === 'gdm') {
-            return undefined;
-        }
+        this.setSessionType(xdgSessionMatch);
+        this.setXAuthority(xAuthorityMatch, userMatch);
 
         this.display = displayMatch ? displayMatch[1].replace('DISPLAY=', '').trim() : '';
-
-        const sessionType: string = xdgSessionMatch
-            ? xdgSessionMatch[1].replace('XDG_SESSION_TYPE=', '').trim().toLowerCase()
-            : '';
-
-        this.isX11 = sessionType === 'x11' ? 1 : 0;
-        this.isWayland = sessionType === 'wayland';
-        this.isTTY = sessionType === 'tty';
 
         if (this.xrandrAvailable === undefined) {
             this.xrandrAvailable = await this.checkXrandrInstalled();
