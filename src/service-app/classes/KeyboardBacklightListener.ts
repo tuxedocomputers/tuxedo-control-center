@@ -93,7 +93,6 @@ export class KeyboardBacklightListener {
     public onActiveProfileChanged(): void {}
 
     // Input from SysFS
-
     private async initUPower(): Promise<void> {
         const sysDBus: dbus.MessageBus = dbus.systemBus();
 
@@ -102,16 +101,48 @@ export class KeyboardBacklightListener {
             'org.freedesktop.UPower',
             '/org/freedesktop/UPower',
         );
-        this.sysDBusUPowerProps = sysDBusUPowerObject.getInterface('org.freedesktop.DBus.Properties');
 
-        // BrightnessChanged handler
-        const sysDBusUPowerKbdBacklightObject: dbus.ProxyObject = await sysDBus.getProxyObject(
-            'org.freedesktop.UPower',
-            '/org/freedesktop/UPower/KbdBacklight',
-        );
-        this.sysDBusUPowerKbdBacklightInterface = sysDBusUPowerKbdBacklightObject.getInterface(
-            'org.freedesktop.UPower.KbdBacklight',
-        );
+        this.sysDBusUPowerProps = sysDBusUPowerObject.getInterface('org.freedesktop.DBus.Properties');
+        let sysDBusUPowerKbdBacklightObject: dbus.ProxyObject = undefined;
+
+        // Tuxedo OS
+        try {
+            sysDBusUPowerKbdBacklightObject = await sysDBus.getProxyObject(
+                'org.freedesktop.UPower',
+                '/org/freedesktop/UPower/KbdBacklight',
+            );
+            console.log('KeyboardBacklightListener: initUPower: Using /org/freedesktop/UPower/KbdBacklight');
+
+            this.sysDBusUPowerKbdBacklightInterface = sysDBusUPowerKbdBacklightObject.getInterface(
+                'org.freedesktop.UPower.KbdBacklight',
+            );
+        } catch (_err: unknown) {
+            sysDBusUPowerKbdBacklightObject = undefined;
+            console.error(
+                'KeyboardBacklightListener: initUPower: /org/freedesktop/UPower/KbdBacklight does not exist, trying different path',
+            );
+
+            // Fedora
+            try {
+                sysDBusUPowerKbdBacklightObject = await sysDBus.getProxyObject(
+                    'org.freedesktop.UPower',
+                    '/org/freedesktop/UPower/KbdBacklight/rgbokbd_backlight',
+                );
+                console.log(
+                    'KeyboardBacklightListener: initUPower: Using /org/freedesktop/UPower/KbdBacklight/rgbokbd_backlight',
+                );
+
+                this.sysDBusUPowerKbdBacklightInterface = sysDBusUPowerKbdBacklightObject.getInterface(
+                    'org.freedesktop.UPower.KbdBacklight',
+                );
+            } catch (_err: unknown) {
+                console.error(
+                    'KeyboardBacklightListener: initUPower: /org/freedesktop/UPower/KbdBacklight/rgbokbd_backlight does not exist',
+                );
+                return;
+            }
+        }
+
         this.sysDBusUPowerKbdBacklightInterface.on(
             'BrightnessChanged',
             async function (brightness: number): Promise<void> {
