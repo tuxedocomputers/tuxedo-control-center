@@ -30,7 +30,7 @@ import { DaemonWorker } from './DaemonWorker';
 import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
 export class GpuInfoWorker extends DaemonWorker {
-    private isNvidiaSmiInstalled: boolean = false;
+    private isNvidiaSmiInstalled: boolean = undefined;
 
     private amdIGpuHwmonPath: string;
     private amdDGpuHwmonPath: string;
@@ -60,7 +60,9 @@ export class GpuInfoWorker extends DaemonWorker {
         }
 
         if (this.availability.getNvidiaDGpuCount() === 1) {
-            this.isNvidiaSmiInstalled = await this.checkNvidiaSmiInstalled();
+            if (this.isNvidiaSmiInstalled === undefined) {
+                this.isNvidiaSmiInstalled = await this.checkNvidiaSmiInstalled();
+            }
         } else if (this.availability.getAmdDGpuCount() === 1) {
             this.amdDGpuHwmonPath = await this.getAmdDGpuHwmonPath();
         }
@@ -203,11 +205,6 @@ export class GpuInfoWorker extends DaemonWorker {
     }
 
     private async getNvidiaDGPUValues(): Promise<IdGpuInfo> {
-        if (!this.isNvidiaSmiInstalled) {
-            this.isNvidiaSmiInstalled = await this.checkNvidiaSmiInstalled();
-            return;
-        }
-
         return await this.getNvidiaDGpuPowerValues();
     }
 
