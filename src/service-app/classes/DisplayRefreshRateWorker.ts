@@ -96,7 +96,7 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
 
         if (usersAvailable && !this.controller.checkVariablesAvailable()) {
             if (!this.displayInfoFound && this.controller.getIsTTY() !== true) {
-                this.updateDisplayData();
+                await this.updateDisplayData();
             }
         }
         this.setActiveDisplayMode();
@@ -143,9 +143,9 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
         }
     }
 
-    private updateDisplayData(): void {
+    private async updateDisplayData(): Promise<void> {
         this.resetToDefault();
-        this.controller.setVariables();
+        await this.controller.setVariables();
 
         if (
             this.controller.checkVariablesAvailable() &&

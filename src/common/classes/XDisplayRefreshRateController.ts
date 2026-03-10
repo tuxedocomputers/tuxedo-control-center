@@ -20,6 +20,7 @@
 import * as child_process from 'node:child_process';
 import * as fs from 'node:fs';
 import type { IDisplayFreqRes, IDisplayMode } from '../models/DisplayFreqRes';
+import { execCommandAsync } from './Utils';
 
 export class XDisplayRefreshRateController {
     private displayName: string = '';
@@ -27,11 +28,12 @@ export class XDisplayRefreshRateController {
     private isX11: number = -1;
     private isWayland: boolean = undefined;
     private isTTY: boolean = undefined;
+    private xrandrAvailable: boolean = undefined;
 
     private display: string = '';
     private xAuthorityFile: string = '';
 
-    public setVariables(): undefined {
+    public async setVariables(): Promise<undefined> {
         const environmentVariables: string = child_process
             .execSync(
                 `cat $(printf "/proc/%s/environ " $(pgrep -vu root | tail -n 20)) 2>/dev/null | \
@@ -84,6 +86,10 @@ export class XDisplayRefreshRateController {
         this.isX11 = sessionType === 'x11' ? 1 : 0;
         this.isWayland = sessionType === 'wayland';
         this.isTTY = sessionType === 'tty';
+
+        if (this.xrandrAvailable === undefined) {
+            this.xrandrAvailable = await this.checkXrandrInstalled();
+        }
     }
 
     public getIsX11(): number {
@@ -129,11 +135,26 @@ export class XDisplayRefreshRateController {
             this.display !== ' ' &&
             this.xAuthorityFile !== undefined &&
             this.xAuthorityFile !== '' &&
-            this.xAuthorityFile !== ' '
+            this.xAuthorityFile !== ' ' &&
+            this.xrandrAvailable !== undefined
         );
     }
 
+    private async checkXrandrInstalled(): Promise<boolean> {
+        try {
+            const stdout: string = await execCommandAsync('which xrandr');
+            return stdout?.trim()?.length > 0;
+        } catch (err: unknown) {
+            console.error(`XDisplayRefreshRateController: checkXrandrInstalled failed => ${err}`);
+            return false;
+        }
+    }
+
     public getDisplayModes(): IDisplayFreqRes {
+        if (!this.xrandrAvailable) {
+            return undefined;
+        }
+
         let result: string = '';
         try {
             result = child_process
