@@ -181,15 +181,4 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
             }
         }
     }
-
-    public getActiveDisplayMode(): IDisplayMode {
-        if (this.displayInfo === undefined) {
-            this.updateDisplayData();
-        }
-        if (this.displayInfo === undefined) {
-            return undefined;
-        } else {
-            return this.displayInfo.activeMode;
-        }
-    }
 }

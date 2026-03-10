@@ -30,10 +30,6 @@ export class XDisplayRefreshRateController {
 
     private display: string = '';
     private xAuthorityFile: string = '';
-    public XDisplayRefreshRateController(): void {
-        this.displayName = '';
-        this.setVariables();
-    }
 
     public setVariables(): undefined {
         const environmentVariables: string = child_process
