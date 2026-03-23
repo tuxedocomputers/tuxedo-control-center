@@ -96,20 +96,6 @@ export class FanControlLogic {
      * Minimum fan speed hardware is capable of
      */
     private _fansMinSpeedHWLimit: number = 0;
-    private get fansMinSpeedHWLimit(): number {
-        return this._fansMinSpeedHWLimit;
-    }
-    private set fansMinSpeedHWLimit(speed: number) {
-        if (speed === undefined) {
-            this._fansMinSpeedHWLimit = 0;
-        } else if (speed < 0) {
-            this._fansMinSpeedHWLimit = 0;
-        } else if (speed > 100) {
-            this._fansMinSpeedHWLimit = 100;
-        } else {
-            this._fansMinSpeedHWLimit = speed;
-        }
-    }
 
     /**
      * Jump from 0 to _fansMinSpeedHWLimit or never go below _fansMinSpeedHWLimit
