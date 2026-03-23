@@ -28,7 +28,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             If you've previously disabled the internal webcam in the profile settings, you'll need to re-enable it in order to configure it. Some laptops also allow you to toggle the webcam quickly
             with a keyboard shortcut.
         </p>
-        <button mat-stroked-button color="primary" (click)="reloadWebcamList()" i18n="@@noWebcamFoundInfoReloadButton">Reload</button>
+        <button type="button" mat-stroked-button color="primary" (click)="reloadWebcamList()" i18n="@@noWebcamFoundInfoReloadButton">Reload</button>
     </div>
 </mat-card>
 
@@ -40,19 +40,19 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <mat-card-title class="webcam-title">
                 <div class="save-reset-buttons">
                     <span i18n-matTooltip="@@cProfMgrButtonDiscardTooltip" matTooltip="Discard changes">
-                        <button mat-icon-button color="basic" (click)="discardFormInput()" [disabled]="!webcamFormGroup?.dirty">
+                        <button type="button" mat-icon-button color="basic" (click)="discardFormInput()" [disabled]="!webcamFormGroup?.dirty">
                             <svg viewBox="0 0 512 512">
                                 <use href="./assets/images/icon_reset.svg#Icon"></use>
                             </svg>
                         </button>
                     </span>
                     <span i18n-matTooltip="@@cProfMgrButtonApplyTooltip" matTooltip="Apply changes">
-                        <button mat-icon-button color="basic" (click)="savePreset(selectedPreset.presetName, true)" [disabled]="!applyConfigAllowed()">
+                        <button type="button" mat-icon-button color="basic" (click)="savePreset(selectedPreset.presetName, true)" [disabled]="!applyConfigAllowed()">
                             <mat-icon>done</mat-icon>
                         </button>
                     </span>
                     <span i18n-matTooltip="@@cProfMgrButtonSaveTooltip" matTooltip="Save changes">
-                        <button mat-icon-button color="basic" (click)="savingWebcamPreset()" [disabled]="!webcamFormGroup?.dirty">
+                        <button type="button" mat-icon-button color="basic" (click)="savingWebcamPreset()" [disabled]="!webcamFormGroup?.dirty">
                             <svg viewBox="0 0 512 512">
                                 <use href="./assets/images/icon_save.svg#Icon"></use>
                             </svg>
@@ -127,10 +127,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     </mat-grid-tile>
 
                                     <mat-grid-tile [colspan]="gridParams?.undo">
-                                        <button mat-icon-button color="primary" (click)="reloadWebcamList(selectedWebcam)">
+                                        <button type="button" mat-icon-button color="primary" (click)="reloadWebcamList(selectedWebcam)">
                                             <mat-icon>refresh</mat-icon>
                                         </button>
-                                        <button mat-icon-button color="primary" [hidden]="webcamService.getDetachedWebcamWindowActive()" (click)="openWindow()">
+                                        <button type="button" mat-icon-button color="primary" [hidden]="webcamService.getDetachedWebcamWindowActive()" (click)="openWindow()">
                                             <mat-icon>open_in_new</mat-icon>
                                         </button>
                                     </mat-grid-tile>
@@ -155,7 +155,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         </content>
                                     </mat-grid-tile>
                                     <mat-grid-tile [colspan]="gridParams?.undo">
-                                        <button mat-icon-button color="primary" (click)="deletePreset()">
+                                        <button type="button" mat-icon-button color="primary" (click)="deletePreset()">
                                             <mat-icon>delete_forever</mat-icon>
                                         </button>
                                     </mat-grid-tile>
@@ -176,6 +176,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                     </content>
                                                     <div class="increment-decrement-buttons">
                                                         <button
+                                                            type="button"
                                                             mat-icon-button
                                                             color="primary"
                                                             (mousedown)="mousedown(webcamConfig, -getOptionValue(webcamConfig, 'step'))"
@@ -184,6 +185,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                             <mat-icon>remove</mat-icon>
                                                         </button>
                                                         <button
+                                                            type="button"
                                                             mat-icon-button
                                                             color="primary"
                                                             (mousedown)="mousedown(webcamConfig, getOptionValue(webcamConfig, 'step'))"
@@ -220,6 +222,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                                                 <mat-grid-tile [colspan]="gridParams?.undo">
                                                     <button
+                                                        type="button"
                                                         mat-icon-button
                                                         color="primary"
                                                         (click)="
@@ -253,6 +256,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                 </mat-grid-tile>
                                                 <mat-grid-tile [colspan]="gridParams?.undo">
                                                     <button
+                                                        type="button"
                                                         mat-icon-button
                                                         color="primary"
                                                         (click)="
@@ -293,6 +297,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                 </mat-grid-tile>
                                                 <mat-grid-tile [colspan]="gridParams?.undo">
                                                     <button
+                                                        type="button"
                                                         mat-icon-button
                                                         color="primary"
                                                         (click)="
@@ -344,10 +349,10 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             </mat-grid-tile>
 
                             <mat-grid-tile [colspan]="gridParams?.undo">
-                                <button mat-icon-button color="primary" (click)="reloadWebcamList(selectedWebcam)">
+                                <button type="button" mat-icon-button color="primary" (click)="reloadWebcamList(selectedWebcam)">
                                     <mat-icon>refresh</mat-icon>
                                 </button>
-                                <button mat-icon-button color="primary" [hidden]="webcamService.getDetachedWebcamWindowActive()" (click)="openWindow()">
+                                <button type="button" mat-icon-button color="primary" [hidden]="webcamService.getDetachedWebcamWindowActive()" (click)="openWindow()">
                                     <mat-icon>open_in_new</mat-icon>
                                 </button>
                             </mat-grid-tile>
@@ -373,7 +378,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             </mat-grid-tile>
 
                             <mat-grid-tile [colspan]="gridParams?.undo">
-                                <button mat-icon-button color="primary" (click)="deletePreset()">
+                                <button type="button" mat-icon-button color="primary" (click)="deletePreset()">
                                     <mat-icon>delete_forever</mat-icon>
                                 </button>
                             </mat-grid-tile>
@@ -403,6 +408,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             </content>
                                             <div class="increment-decrement-buttons">
                                                 <button
+                                                    type="button"
                                                     mat-icon-button
                                                     color="primary"
                                                     (mousedown)="mousedown(webcamConfig, -getOptionValue(webcamConfig, 'step'))"
@@ -411,6 +417,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                     <mat-icon>remove</mat-icon>
                                                 </button>
                                                 <button
+                                                    type="button"
                                                     mat-icon-button
                                                     color="primary"
                                                     (mousedown)="mousedown(webcamConfig, getOptionValue(webcamConfig, 'step'))"
@@ -446,6 +453,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         </mat-grid-tile>
                                         <mat-grid-tile [colspan]="gridParams?.undo">
                                             <button
+                                                type="button"
                                                 mat-icon-button
                                                 color="primary"
                                                 (click)="
@@ -481,6 +489,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         </mat-grid-tile>
                                         <mat-grid-tile [colspan]="gridParams?.undo">
                                             <button
+                                                type="button"
                                                 mat-icon-button
                                                 color="primary"
                                                 (click)="
@@ -522,6 +531,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         </mat-grid-tile>
                                         <mat-grid-tile [colspan]="gridParams?.undo">
                                             <button
+                                                type="button"
                                                 mat-icon-button
                                                 color="primary"
                                                 (click)="

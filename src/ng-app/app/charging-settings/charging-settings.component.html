@@ -113,7 +113,12 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     </mat-grid-list>
 
     <div class="apply-button">
-        <button mat-stroked-button i18n="@@chargingThresholdsButtonSave" [disabled]="ctrlChargingThresholdGroup.value !== 'custom' || chargingThresholdsProgress" (click)="thresholdChange()">
+        <button
+            type="button"
+            mat-stroked-button
+            i18n="@@chargingThresholdsButtonSave"
+            [disabled]="ctrlChargingThresholdGroup.value !== 'custom' || chargingThresholdsProgress"
+            (click)="thresholdChange()">
             Save
         </button>
     </div>

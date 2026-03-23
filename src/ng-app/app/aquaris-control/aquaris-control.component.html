@@ -42,11 +42,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     >{{ connectedStatusString() }} <b *ngIf="isConnected && !isConnecting && !isDisconnecting">{{ connectedDisplayName() }}</b></span
                 >
             </div>
-            <button mat-icon-button *ngIf="isConnected && !isConnecting && !isDisconnecting" (click)="inputTextDialog()">
+            <button type="button" mat-icon-button *ngIf="isConnected && !isConnecting && !isDisconnecting" (click)="inputTextDialog()">
                 <mat-icon>edit</mat-icon>
             </button>
         </span>
-        <button mat-stroked-button (click)="connectionToggle()" *ngIf="isConnected && !isConnecting && !isDisconnecting" i18n="@@aqButtonDisconnectLabel">Disconnect</button>
+        <button type="button" mat-stroked-button (click)="connectionToggle()" *ngIf="isConnected && !isConnecting && !isDisconnecting" i18n="@@aqButtonDisconnectLabel">Disconnect</button>
     </mat-card-title>
 
     <div class="aquaris-content">
@@ -59,9 +59,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </svg>
                     <div i18n="@@aqLabelFanControl" class="title">Fan control</div>
                 </header>
-                <button mat-stroked-button [matMenuTriggerFor]="fanPresetMenu" i18n="@@aqButtonFanPresetsLabel">Fan presets</button>
+                <button type="button" mat-stroked-button [matMenuTriggerFor]="fanPresetMenu" i18n="@@aqButtonFanPresetsLabel">Fan presets</button>
                 <mat-menu #fanPresetMenu>
-                    <button mat-menu-item *ngFor="let fanPreset of fanPresets | keyvalue" (click)="selectFanPreset(fanPreset.key)">
+                    <button type="button" mat-menu-item *ngFor="let fanPreset of fanPresets | keyvalue" (click)="selectFanPreset(fanPreset.key)">
                         {{ fanPreset.value.name }}
                     </button>
                 </mat-menu>
@@ -81,6 +81,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </div>
                 <span class="fan-control">
                     <button
+                        type="button"
                         mat-icon-button
                         color="primary"
                         (mousedown)="buttonRepeatDown(modifyFanSliderInputFunc(ctrlFanDutyCycle, -1, fanSpeed.min, fanSpeed.max))"
@@ -92,6 +93,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <input #fanSpeed matSliderThumb [formControl]="ctrlFanDutyCycle" (input)="sliderFanInput(fanSpeed.value)" #ngSliderThumb="matSliderThumb" />
                     </mat-slider>
                     <button
+                        type="button"
                         mat-icon-button
                         color="primary"
                         (mousedown)="buttonRepeatDown(modifyFanSliderInputFunc(ctrlFanDutyCycle, +1, fanSpeed.min, fanSpeed.max))"
@@ -186,7 +188,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     <span matListItemLine>
                         {{ device.uuid }}
                     </span>
-                    <button matListItemMeta mat-stroked-button class="list-connect-button" *ngIf="currentOption.selected" (click)="buttonConnect(device.uuid)" i18n="@@aqButtonConnectLabel">
+                    <button
+                        type="button"
+                        matListItemMeta
+                        mat-stroked-button
+                        class="list-connect-button"
+                        *ngIf="currentOption.selected"
+                        (click)="buttonConnect(device.uuid)"
+                        i18n="@@aqButtonConnectLabel">
                         Connect
                     </button>
                 </mat-list-option>
@@ -213,7 +222,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </ol>
             <div class="demo">
                 <div i18n="@@aqNoDevicesSuggestDemoMode" class="description">Do not have a TUXEDO Aquaris yet?</div>
-                <button mat-stroked-button class="try-demo-mode-button" (click)="buttonConnect('demo')" i18n="@@aqNoDevicesDemoButtonLabel">Try demo mode</button>
+                <button type="button" mat-stroked-button class="try-demo-mode-button" (click)="buttonConnect('demo')" i18n="@@aqNoDevicesDemoButtonLabel">Try demo mode</button>
             </div>
         </div>
 

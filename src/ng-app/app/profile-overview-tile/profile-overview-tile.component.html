@@ -26,23 +26,23 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     }"
     *ngIf="visible">
     <mat-menu #menuAdjust="matMenu" class="adjust-menu" yPosition="below">
-        <button mat-menu-item (click)="selectProfile()" *ngIf="isCustomProfile">
+        <button type="button" mat-menu-item (click)="selectProfile()" *ngIf="isCustomProfile">
             <svg viewBox="0 0 512 512">
                 <use href="./assets/images/icon_gear.svg#Icon"></use>
             </svg>
             <span i18n="@@ProfOverviewTileMenuEdit">Edit</span>
         </button>
-        <button mat-menu-item (click)="selectProfile()" *ngIf="!isCustomProfile">
+        <button type="button" mat-menu-item (click)="selectProfile()" *ngIf="!isCustomProfile">
             <mat-icon>visibility</mat-icon>
             <span i18n="@@ProfOverviewTileMenuView">View</span>
         </button>
-        <button mat-menu-item (click)="copyProfile(profile)">
+        <button type="button" mat-menu-item (click)="copyProfile(profile)">
             <svg viewBox="0 0 512 512">
                 <use href="./assets/images/icon_copy.svg#Icon"></use>
             </svg>
             <span i18n="@@ProfOverviewTileMenuCopy">Copy</span>
         </button>
-        <button mat-menu-item (click)="deleteProfile()" [disabled]="!isCustomProfile || used">
+        <button type="button" mat-menu-item (click)="deleteProfile()" [disabled]="!isCustomProfile || used">
             <svg viewBox="0 0 512 512">
                 <use href="./assets/images/icon_trash.svg#Icon"></use>
             </svg>
@@ -59,7 +59,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <use attr.href="./assets/images/{{ state.icon }}"></use>
                     </svg>
                 </div>
-                <button mat-icon-button [matMenuTriggerFor]="menuAdjust">
+                <button type="button" mat-icon-button [matMenuTriggerFor]="menuAdjust">
                     <mat-icon>more_vert</mat-icon>
                 </button>
             </div>

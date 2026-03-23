@@ -28,6 +28,6 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 <mat-dialog-actions align="end">
     <mat-checkbox [formControl]="ctrlCheckboxNoBother" *ngIf="data.showCheckboxNoBother" color="primary">{{ data.checkboxNoBotherLabel }}</mat-checkbox>
     <div class="bx--row" *ngFor="let label of data.labelData; let i = index">
-        <button mat-button (click)="closeDialog(label.value)">{{ label.label }}</button>
+        <button type="button" mat-button (click)="closeDialog(label.value)">{{ label.label }}</button>
     </div>
 </mat-dialog-actions>

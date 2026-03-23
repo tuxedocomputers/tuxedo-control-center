@@ -40,7 +40,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <svg viewBox="0 0 512 512" class="tcc-icons">
                             <use href="./assets/images/icon_online.svg#Icon"></use>
                         </svg>
-                        <button mat-stroked-button color="basic" (click)="openExternalUrl('https://www.tuxedocomputers.com/en/Contact.tuxedo')">
+                        <button type="button" mat-stroked-button color="basic" (click)="openExternalUrl('https://www.tuxedocomputers.com/en/Contact.tuxedo')">
                             <strong i18n="@@cSupportButtonOnline" class="support-button">TUXEDO online support</strong>
                         </button>
                     </div>
@@ -101,7 +101,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             placeholder="Ticket number" />
                                     </mat-form-field>
                                     &nbsp;
-                                    <button mat-stroked-button matStepperNext color="primary" i18n="@@cSupportTicketStepperButtonNext" (click)="systemInfosCompleted = false">Next</button>
+                                    <button type="button" mat-stroked-button matStepperNext color="primary" i18n="@@cSupportTicketStepperButtonNext" (click)="systemInfosCompleted = false">
+                                        Next
+                                    </button>
                                 </div>
                                 <div *ngIf="formTicketNumber.invalid && formTicketNumber.dirty" class="alert alert-danger">
                                     <div i18n="@@cSupportTicketNumberInvalid">Ticket number may only contain numbers, starts with 99 and is 9 digits long.</div>
@@ -113,7 +115,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             <div i18n="@@cSupportSystemDiagnosticsDataCollectionDescription">
                                 <p>When executed our diagnostics script collects the data and thereafter sends it to our support associated with your ticket number.</p>
                             </div>
-                            <button mat-stroked-button color="primary" (click)="buttonStartSysteminfo(systeminfoStepper)" [disabled]="systeminfoRunProgress || systemInfosCompleted">
+                            <button type="button" mat-stroked-button color="primary" (click)="buttonStartSysteminfo(systeminfoStepper)" [disabled]="systeminfoRunProgress || systemInfosCompleted">
                                 <div class="start-button">
                                     <i class="fas fa-cog" [ngClass]="{ 'fa-spin': systeminfoRunProgress }"></i>&nbsp;
                                     <div i18n="@@cSupportSysInfoButtonStart">Start</div>
@@ -151,7 +153,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         <p>Thanks to the cloud-based data, you always get the latest system updates! The TUXEDO WebFAI Creator helps to create the required USB-Stick with only three clicks!</p>
                     </div>
                     <p>
-                        <button mat-stroked-button (click)="buttonInstallRemoveWebfaiCreator()" [disabled]="progress().get(webfaiCreatorProgramName) || progressCheck().get(webfaiCreatorProgramName)">
+                        <button
+                            type="button"
+                            mat-stroked-button
+                            (click)="buttonInstallRemoveWebfaiCreator()"
+                            [disabled]="progress().get(webfaiCreatorProgramName) || progressCheck().get(webfaiCreatorProgramName)">
                             <i class="fas fa-cog" [ngClass]="{ 'fa-spin': progress().get(webfaiCreatorProgramName) || progressCheck().get(webfaiCreatorProgramName) }"></i>&nbsp;
                             <span *ngIf="!webfaiCreatorInstalled && !progressCheck().get(webfaiCreatorProgramName)" i18n="@@cSupportWebfaiCreatorInstallButton">Install WebFAI Creator</span>
                             <span *ngIf="webfaiCreatorInstalled && !progressCheck().get(webfaiCreatorProgramName)" i18n="@@cSupportWebfaiCreatorRemoveButton">Remove WebFAI Creator</span>
@@ -159,6 +165,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </button>
                         &nbsp;
                         <button
+                            type="button"
                             mat-stroked-button
                             color="primary"
                             (click)="buttonStartWebfaiCreator()"

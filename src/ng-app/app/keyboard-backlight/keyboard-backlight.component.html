@@ -106,6 +106,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </content>
                     <div class="increment-decrement-buttons">
                         <button
+                            type="button"
                             mat-icon-button
                             color="primary"
                             (mousedown)="startPress(brightnessSlider, -1, +brightnessSlider.min, +brightnessSlider.max)"
@@ -114,6 +115,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             <mat-icon>remove</mat-icon>
                         </button>
                         <button
+                            type="button"
                             mat-icon-button
                             color="primary"
                             (mousedown)="startPress(brightnessSlider, +1, +brightnessSlider.min, +brightnessSlider.max)"

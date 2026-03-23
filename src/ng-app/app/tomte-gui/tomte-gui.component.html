@@ -39,7 +39,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                 <div class="content-container centered timeout">
                     <p i18n="@@cTomteGuiUnableToLoadInformationDescription">TUXEDO Tomte ran into a timeout. Maybe it is already running.</p>
-                    <button mat-stroked-button color="primary" (click)="tomtelist()" i18n="@@cTomteGuiUnableToLoadInformationRetryButton">Retry</button>
+                    <button type="button" mat-stroked-button color="primary" (click)="tomtelist()" i18n="@@cTomteGuiUnableToLoadInformationRetryButton">Retry</button>
                 </div>
             </div>
 
@@ -49,7 +49,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                 <div class="content-container centered" *ngIf="aptInstalled">
                     <p i18n="@@cTomteGuiInstallTomteDescription">Install TUXEDO Tomte now by pressing this button:</p>
-                    <button mat-stroked-button color="primary" (click)="installTomteButton()" i18n="@@cTomteGuiInstallTomteButtonLabel">Install</button>
+                    <button type="button" mat-stroked-button color="primary" (click)="installTomteButton()" i18n="@@cTomteGuiInstallTomteButtonLabel">Install</button>
                 </div>
 
                 <div i18n="@@cTomteGuiInstallNotInstalled" class="content-container centered" *ngIf="!aptInstalled">Tomte is not installed.</div>
@@ -210,6 +210,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                 <div class="content-container centered reset-button">
                     <button
+                        type="button"
                         mat-stroked-button
                         color="primary"
                         (click)="tomteResetToDefaults()"

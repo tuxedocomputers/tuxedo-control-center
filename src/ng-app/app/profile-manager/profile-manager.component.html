@@ -49,16 +49,16 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             </span>
 
             <div class="menu-button">
-                <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                <button type="button" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
                     <mat-icon>more_vert</mat-icon>
                 </button>
                 <mat-menu #menu="matMenu">
-                    <button mat-menu-item (click)="exportProfiles()">
+                    <button type="button" mat-menu-item (click)="exportProfiles()">
                         <mat-icon>save</mat-icon>
 
                         <span i18n="@@cProfMgrExportSettings">Export profile settings</span>
                     </button>
-                    <button mat-menu-item (click)="importProfiles()">
+                    <button type="button" mat-menu-item (click)="importProfiles()">
                         <mat-icon>file_upload</mat-icon>
 
                         <span i18n="@@cProfMgrImportSettings">Import profile settings</span>
@@ -75,8 +75,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <mat-label>{{ inputProfileNameLabel }}</mat-label>
                 <input matInput #inputFocus="matInput" type="text" [formControl]="inputProfileName" (keyup.esc)="cancelInput()" placeholder="Profile name" minLength="1" maxLength="50" />
             </mat-form-field>
-            <button mat-stroked-button color="primary" i18n="@@cProfMgrSave" [disabled]="profileNameExist(inputFocus.value)">Save</button>
-            <button mat-stroked-button color="basic" (click)="cancelInput()" i18n="@@cProfMgrCancel">Cancel</button>
+            <button type="button" mat-stroked-button color="primary" i18n="@@cProfMgrSave" [disabled]="profileNameExist(inputFocus.value)">Save</button>
+            <button type="button" mat-stroked-button color="basic" (click)="cancelInput()" i18n="@@cProfMgrCancel">Cancel</button>
         </form>
     </mat-toolbar-row>
 </mat-toolbar>

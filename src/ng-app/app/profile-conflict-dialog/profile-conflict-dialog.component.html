@@ -147,9 +147,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
     </div>
 
     <div mat-dialog-actions *ngIf="!rename">
-        <button mat-stroked-button color="primary" (click)="action('keepNew')" i18n="@@cProfMgrConflictButtonKeepNew">Replace existing profile</button>
-        <button mat-stroked-button color="primary" (click)="renameProfile()" i18n="@@cProfMgrConflictButtonRename">Rename imported profile</button>
-        <button mat-stroked-button color="basic" (click)="cancel()" i18n="@@cProfMgrConflictButtonCancel">Cancel</button>
+        <button type="button" mat-stroked-button color="primary" (click)="action('keepNew')" i18n="@@cProfMgrConflictButtonKeepNew">Replace existing profile</button>
+        <button type="button" mat-stroked-button color="primary" (click)="renameProfile()" i18n="@@cProfMgrConflictButtonRename">Rename imported profile</button>
+        <button type="button" mat-stroked-button color="basic" (click)="cancel()" i18n="@@cProfMgrConflictButtonCancel">Cancel</button>
     </div>
 
     <div mat-dialog-actions *ngIf="rename">
@@ -167,8 +167,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     minLength="1"
                     maxLength="50" />
             </mat-form-field>
-            <button mat-stroked-button color="primary" i18n="@@cProfMgrConflictButtonSave" [disabled]="profileNameExist(inputFocus.value)">Save</button>
-            <button mat-stroked-button color="basic" (click)="cancelRename()" i18n="@@cProfMgrConflictButtonGoBack">Go back</button>
+            <button type="button" mat-stroked-button color="primary" i18n="@@cProfMgrConflictButtonSave" [disabled]="profileNameExist(inputFocus.value)">Save</button>
+            <button type="button" mat-stroked-button color="basic" (click)="cancelRename()" i18n="@@cProfMgrConflictButtonGoBack">Go back</button>
         </form>
     </div>
 </div>

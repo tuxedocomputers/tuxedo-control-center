@@ -23,14 +23,14 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
             <mat-card-title class="profile-title">
                 <div class="save-reset-buttons">
                     <span i18n-matTooltip="@@cProfMgrButtonDiscardTooltip" matTooltip="Discard changes">
-                        <button mat-icon-button color="basic" (click)="discardFormInput()" [disabled]="!profileDirty">
+                        <button type="button" mat-icon-button color="basic" (click)="discardFormInput()" [disabled]="!profileDirty">
                             <svg viewBox="0 0 512 512">
                                 <use href="./assets/images/icon_reset.svg#Icon"></use>
                             </svg>
                         </button>
                     </span>
                     <span i18n-matTooltip="@@cProfMgrButtonSaveTooltip" matTooltip="Save changes">
-                        <button mat-icon-button color="basic" (click)="submitFormInput()" [disabled]="!profileDirty">
+                        <button type="button" mat-icon-button color="basic" (click)="submitFormInput()" [disabled]="!profileDirty">
                             <svg viewBox="0 0 512 512">
                                 <use href="./assets/images/icon_save.svg#Icon"></use>
                             </svg>
@@ -116,6 +116,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     </mat-grid-tile>
                                     <mat-grid-tile [colspan]="gridParams.undo">
                                         <button
+                                            type="button"
                                             mat-icon-button
                                             color="primary"
                                             (click)="profileFormGroup.get('odmProfile').get('name').reset(viewProfile.odmProfile.name)"
@@ -180,6 +181,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                                 <mat-grid-tile [colspan]="gridParams.undo">
                                     <button
+                                        type="button"
                                         mat-icon-button
                                         color="primary"
                                         (click)="profileFormGroup.get('display').get('useBrightness').reset(viewProfile.display.useBrightness)"
@@ -198,6 +200,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     >
                                     <div class="increment-decrement-buttons">
                                         <button
+                                            type="button"
                                             mat-icon-button
                                             color="primary"
                                             [hidden]="!editProfile"
@@ -211,6 +214,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             <mat-icon>remove</mat-icon>
                                         </button>
                                         <button
+                                            type="button"
                                             mat-icon-button
                                             color="primary"
                                             [hidden]="!editProfile"
@@ -235,6 +239,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                                 <mat-grid-tile [colspan]="gridParams.undo">
                                     <button
+                                        type="button"
                                         mat-icon-button
                                         color="primary"
                                         (click)="profileFormGroup.get('display').get('brightness').reset(viewProfile.display.brightness); inputDisplayBrightnessChange(inputDisplayBrightness.value)"
@@ -269,6 +274,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                                 <mat-grid-tile [colspan]="gridParams.undo">
                                     <button
+                                        type="button"
                                         mat-icon-button
                                         color="primary"
                                         (click)="profileFormGroup.get('display').get('useRefRate').reset(viewProfile.display.useRefRate)"
@@ -297,6 +303,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                                 <mat-grid-tile [colspan]="gridParams.undo">
                                     <button
+                                        type="button"
                                         mat-icon-button
                                         color="primary"
                                         (click)="profileFormGroup.get('display').get('refreshRate').reset(viewProfile.display.refreshRate)"
@@ -351,6 +358,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                                 <mat-grid-tile [colspan]="gridParams.undo">
                                     <button
+                                        type="button"
                                         mat-icon-button
                                         color="primary"
                                         (click)="profileFormGroup.get('fan').get('fanProfile').reset(viewProfile.fan.fanProfile)"
@@ -371,6 +379,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         <content class="value" [hidden]="!editProfile">{{ profileFormGroup.get('fan.minimumFanspeed')?.value }} %</content>
                                         <div class="increment-decrement-buttons">
                                             <button
+                                                type="button"
                                                 mat-icon-button
                                                 color="primary"
                                                 [hidden]="!editProfile"
@@ -384,6 +393,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                 <mat-icon>remove</mat-icon>
                                             </button>
                                             <button
+                                                type="button"
                                                 mat-icon-button
                                                 color="primary"
                                                 [hidden]="!editProfile"
@@ -408,6 +418,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                                     <mat-grid-tile [colspan]="gridParams.undo">
                                         <button
+                                            type="button"
                                             mat-icon-button
                                             color="primary"
                                             (click)="profileFormGroup.get('fan').get('minimumFanspeed').reset(viewProfile.fan.minimumFanspeed)"
@@ -427,6 +438,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         <content class="value" [hidden]="!editProfile">{{ profileFormGroup.get('fan.maximumFanspeed')?.value }} %</content>
                                         <div class="increment-decrement-buttons">
                                             <button
+                                                type="button"
                                                 mat-icon-button
                                                 color="primary"
                                                 [hidden]="!editProfile"
@@ -440,6 +452,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                 <mat-icon>remove</mat-icon>
                                             </button>
                                             <button
+                                                type="button"
                                                 mat-icon-button
                                                 color="primary"
                                                 [hidden]="!editProfile"
@@ -464,6 +477,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                                     <mat-grid-tile [colspan]="gridParams.undo">
                                         <button
+                                            type="button"
                                             mat-icon-button
                                             color="primary"
                                             (click)="profileFormGroup.get('fan').get('maximumFanspeed').reset(viewProfile.fan.maximumFanspeed)"
@@ -487,6 +501,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         </content>
                                         <div class="increment-decrement-buttons">
                                             <button
+                                                type="button"
                                                 mat-icon-button
                                                 color="primary"
                                                 [hidden]="!editProfile"
@@ -499,6 +514,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                 <mat-icon>remove</mat-icon>
                                             </button>
                                             <button
+                                                type="button"
                                                 mat-icon-button
                                                 color="primary"
                                                 [hidden]="!editProfile"
@@ -522,6 +538,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                                     <mat-grid-tile [colspan]="gridParams.undo">
                                         <button
+                                            type="button"
                                             mat-icon-button
                                             color="primary"
                                             (click)="profileFormGroup.get('fan').get('offsetFanspeed').reset(viewProfile.fan.offsetFanspeed)"
@@ -545,7 +562,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </div>
 
                         <div *ngIf="profileFormGroup.controls.fan.controls.fanProfile.value !== 'Custom'" class="fan-chart-container">
-                            <button mat-stroked-button (click)="toggleFanGraphs()">
+                            <button type="button" mat-stroked-button (click)="toggleFanGraphs()">
                                 <ng-container i18n="@@cProfMgrDetailsToggleFanChartsLabel">Toggle fan table chart</ng-container>
                                 <mat-icon>bar_chart</mat-icon>
                             </button>
@@ -592,6 +609,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                 </mat-grid-tile>
                                 <mat-grid-tile [colspan]="gridParams.undo">
                                     <button
+                                        type="button"
                                         mat-icon-button
                                         color="primary"
                                         (click)="profileFormGroup.get('webcam').get('status').reset(viewProfile.webcam.status)"
@@ -653,6 +671,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     </mat-grid-tile>
                                     <mat-grid-tile [colspan]="gridParams.undo">
                                         <button
+                                            type="button"
                                             mat-icon-button
                                             color="primary"
                                             (click)="profileFormGroup.get('odmProfile').get('name').reset(viewProfile.odmProfile.name)"
@@ -669,6 +688,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         }}</content>
                                         <div class="increment-decrement-buttons">
                                             <button
+                                                type="button"
                                                 mat-icon-button
                                                 color="primary"
                                                 [hidden]="!editProfile"
@@ -678,6 +698,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                 <mat-icon>remove</mat-icon>
                                             </button>
                                             <button
+                                                type="button"
                                                 mat-icon-button
                                                 color="primary"
                                                 [hidden]="!editProfile"
@@ -701,6 +722,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     </mat-grid-tile>
                                     <mat-grid-tile [colspan]="gridParams.undo">
                                         <button
+                                            type="button"
                                             *ngIf="!hasDeviceSystemProfileInfo"
                                             mat-icon-button
                                             color="primary"
@@ -710,6 +732,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         </button>
 
                                         <button
+                                            type="button"
                                             *ngIf="hasDeviceSystemProfileInfo"
                                             mat-icon-button
                                             color="primary"
@@ -736,6 +759,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             <content class="value" [hidden]="!editProfile">{{ inputODMPowerLimit.value }} W</content>
                                             <div class="increment-decrement-buttons">
                                                 <button
+                                                    type="button"
                                                     mat-icon-button
                                                     color="primary"
                                                     [hidden]="!editProfile"
@@ -749,6 +773,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                     <mat-icon>remove</mat-icon>
                                                 </button>
                                                 <button
+                                                    type="button"
                                                     mat-icon-button
                                                     color="primary"
                                                     [hidden]="!editProfile"
@@ -773,6 +798,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                                         <mat-grid-tile [colspan]="gridParams.undo">
                                             <button
+                                                type="button"
                                                 mat-icon-button
                                                 color="primary"
                                                 (click)="buttonODMPowerLimitUndo(i)"
@@ -806,6 +832,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         <content class="value" [hidden]="!editProfile">{{ profileFormGroup.get('cpu.onlineCores')?.value }}</content>
                                         <div class="increment-decrement-buttons">
                                             <button
+                                                type="button"
                                                 mat-icon-button
                                                 color="primary"
                                                 [hidden]="!editProfile"
@@ -815,6 +842,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                 <mat-icon>remove</mat-icon>
                                             </button>
                                             <button
+                                                type="button"
                                                 mat-icon-button
                                                 color="primary"
                                                 [hidden]="!editProfile"
@@ -835,6 +863,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                                     <mat-grid-tile [colspan]="gridParams.undo">
                                         <button
+                                            type="button"
                                             mat-icon-button
                                             color="primary"
                                             (click)="profileFormGroup.get('cpu').get('onlineCores').reset(viewProfile.cpu.onlineCores)"
@@ -861,6 +890,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                                     <mat-grid-tile [colspan]="gridParams.undo">
                                         <button
+                                            type="button"
                                             mat-icon-button
                                             color="primary"
                                             (click)="profileFormGroup.get('cpu').get('useMaxPerfGov').reset(viewProfile.cpu.useMaxPerfGov)"
@@ -891,6 +921,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         >
                                         <div class="increment-decrement-buttons">
                                             <button
+                                                type="button"
                                                 mat-icon-button
                                                 color="primary"
                                                 [hidden]="!editProfile"
@@ -910,6 +941,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                 <mat-icon>remove</mat-icon>
                                             </button>
                                             <button
+                                                type="button"
                                                 mat-icon-button
                                                 color="primary"
                                                 [hidden]="!editProfile"
@@ -959,6 +991,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                                     <mat-grid-tile [colspan]="gridParams.undo">
                                         <button
+                                            type="button"
                                             mat-icon-button
                                             color="primary"
                                             (click)="profileFormGroup.get('cpu').get('scalingMinFrequency').reset(viewProfile.cpu.scalingMinFrequency)"
@@ -1017,6 +1050,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         <content class="value" [hidden]="!(inputUseMaxPerfGov.checked && hasMaxFreqWorkaround)" [ngClass]="{ inactive: true }"> Boost</content>
                                         <div class="increment-decrement-buttons">
                                             <button
+                                                type="button"
                                                 mat-icon-button
                                                 color="primary"
                                                 [hidden]="!editProfile"
@@ -1036,6 +1070,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                 <mat-icon>remove</mat-icon>
                                             </button>
                                             <button
+                                                type="button"
                                                 mat-icon-button
                                                 color="primary"
                                                 [hidden]="!editProfile"
@@ -1077,6 +1112,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                                     <mat-grid-tile [colspan]="gridParams.undo">
                                         <button
+                                            type="button"
                                             mat-icon-button
                                             color="primary"
                                             (click)="profileFormGroup.get('cpu').get('scalingMaxFrequency').reset(viewProfile.cpu.scalingMaxFrequency)"
@@ -1103,6 +1139,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         <content class="value" [hidden]="!editProfile">{{ nvidiaPowerCTRLDefaultPowerLimit + +inputCTGPOffset.value }} W</content>
                                         <div class="increment-decrement-buttons">
                                             <button
+                                                type="button"
                                                 mat-icon-button
                                                 color="primary"
                                                 [hidden]="!editProfile"
@@ -1122,6 +1159,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                                 <mat-icon>remove</mat-icon>
                                             </button>
                                             <button
+                                                type="button"
                                                 mat-icon-button
                                                 color="primary"
                                                 [hidden]="!editProfile"
@@ -1151,6 +1189,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     </mat-grid-tile>
                                     <mat-grid-tile [colspan]="gridParams.undo">
                                         <button
+                                            type="button"
                                             mat-icon-button
                                             color="primary"
                                             (click)="profileFormGroup.get('nvidiaPowerCTRLProfile').get('cTGPOffset').reset(viewProfile.nvidiaPowerCTRLProfile.cTGPOffset); updateTGPChart()"
@@ -1162,7 +1201,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             </mat-grid-list>
 
                             <div class="tgp-chart-container">
-                                <button mat-stroked-button (click)="toggleTGPChart()">
+                                <button type="button" mat-stroked-button (click)="toggleTGPChart()">
                                     <ng-container i18n="@@cProfMgrDetailsToggleTGPChartLabel">Toggle TGP chart</ng-container>
                                     <mat-icon>bar_chart</mat-icon>
                                 </button>

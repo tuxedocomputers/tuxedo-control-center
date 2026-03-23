@@ -41,8 +41,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
     <mat-dialog-actions align="end">
         <div class="action-row">
-            <button mat-button (click)="closeWindow()" i18n="@@dialogAbort">Cancel</button>
-            <button mat-button (click)="setDialogStatus('warning')" i18n="@@dialogContinue">Continue</button>
+            <button type="button" mat-button (click)="closeWindow()" i18n="@@dialogAbort">Cancel</button>
+            <button type="button" mat-button (click)="setDialogStatus('warning')" i18n="@@dialogContinue">Continue</button>
         </div>
     </mat-dialog-actions>
 </div>
@@ -59,9 +59,9 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
     <mat-dialog-actions align="end">
         <div class="action-row">
-            <button mat-button (click)="closeWindow()" i18n="@@dialogAbort">Cancel</button>
-            <button mat-button (click)="applyPrimeConfig('REBOOT')" i18n="@@dialogInstantReboot">Instant Reboot</button>
-            <button mat-button (click)="applyPrimeConfig('NO_REBOOT')" i18n="@@dialogRebootLater">Reboot later</button>
+            <button type="button" mat-button (click)="closeWindow()" i18n="@@dialogAbort">Cancel</button>
+            <button type="button" mat-button (click)="applyPrimeConfig('REBOOT')" i18n="@@dialogInstantReboot">Instant Reboot</button>
+            <button type="button" mat-button (click)="applyPrimeConfig('NO_REBOOT')" i18n="@@dialogRebootLater">Reboot later</button>
         </div>
     </mat-dialog-actions>
 </div>
