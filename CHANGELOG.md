@@ -8,7 +8,7 @@
 
 ### Changed
 - Major internal frameworks updates
-  - Electron 38
+  - Electron 41
   - Angular 21
   - Node 24
   - Material design 3
@@ -26,7 +26,7 @@
 ### Fixed
 - Dashboard fan speed now always reflects sensor value, previously only showed set fan speed in some cases
 - Dashboard now hides values when none are available (for example during suspend/wakeup)
-- Crash of tccd  due to EC timeout
+- Crash of tccd due to EC timeout
 - Access errors for keyboard backlight
 - Fan speed for dGPU not shown in certain cases
 - Global settings checkbox not representing actual state
