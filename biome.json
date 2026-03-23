@@ -3,5 +3,15 @@
         "parser": {
             "interpolation": true
         }
+    },
+    "linter": {
+        "rules": {
+            "a11y": {
+                "noSvgWithoutTitle": "info",
+                "useMediaCaption": "info",
+                "useAnchorContent": "info",
+                "useAltText": "info"
+            }
+        }
     }
 }
