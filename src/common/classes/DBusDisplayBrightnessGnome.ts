@@ -46,7 +46,7 @@ export class DBusDisplayBrightnessGnome {
                         'PropertiesChanged',
                         (interfaceString: string, changed: any, _invalidated: any): void => {
                             const changedValueExists: boolean =
-                                changed.hasOwnProperty('Brightness') && changed.Brightness.hasOwnProperty('value');
+                                Object.hasOwn(changed, 'Brightness') && Object.hasOwn(changed.Brightness, 'value');
                             const interfaceMatch: boolean = interfaceString === this.propertyInterface;
                             const callbackDefined: boolean = this.customOnPropertiesChanged !== undefined;
                             if (interfaceMatch && changedValueExists && callbackDefined) {

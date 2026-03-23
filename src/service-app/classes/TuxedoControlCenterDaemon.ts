@@ -288,7 +288,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         for (const stateId of Object.keys(ProfileStates)) {
             const stateDescriptor: ProfileStates = ProfileStates[stateId];
             if (
-                !this.settings.stateMap.hasOwnProperty(stateDescriptor) ||
+                !Object.hasOwn(this.settings.stateMap, stateDescriptor) ||
                 defaultProfilesFilled
                     .concat(customProfilesFilled)
                     .find((p: ITccProfile): boolean => p.id === this.settings.stateMap[stateDescriptor]) === undefined
