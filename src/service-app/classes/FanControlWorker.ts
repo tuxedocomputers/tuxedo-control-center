@@ -17,9 +17,10 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { TUXEDODevice } from '../../common/models/DefaultProfiles';
+import type { TUXEDODevice } from '../../common/models/DefaultProfiles';
 import { FanData } from '../../common/models/IFanData';
 import type { ITccFanProfile, ITccFanTableEntry } from '../../common/models/TccFanTable';
+import { ModuleInfo, TuxedoIOAPI } from '../../native-lib/TuxedoIOAPI';
 import { DaemonWorker } from './DaemonWorker';
 import type { FanControlBaseClass } from './FanControlBaseClass';
 import type { FanControlLogic } from './FanControlLogic';
@@ -70,6 +71,7 @@ export class FanControlWorker extends DaemonWorker {
     };
     private tuxedoDevice: TUXEDODevice;
     private fanCheckCounter: number = 0;
+    private isUniwill: boolean = false;
 
     constructor(tccd: TuxedoControlCenterDaemon, tuxedoDevice: TUXEDODevice) {
         super(1000, 'FanControlWorker', tccd);
@@ -97,12 +99,38 @@ export class FanControlWorker extends DaemonWorker {
             for (const { class: fanClass, name } of fanControlClasses) {
                 this.fanApi = fanClass;
                 if (await this.initializeFanControl(this.fanApi, name)) {
+                    if (name === 'tuxedo-io') {
+                        this.setActiveInterface();
+                    }
                     return;
                 }
             }
 
             this.fanApi = null;
             console.log('FanControlWorker: onStart: Fan API not available');
+        }
+    }
+
+    private setActiveInterface() {
+        // todo: tuxedo-drivers currently has 2 issues
+        // - ec does set a different fan speed after one or more hours
+        // - fan speed does change after writing a value
+        // writing fan speed with tccd worker for all uniwill devices as a temporary solution, but
+        // increasing the usage of tuxedo-drivers can increase cpu usage
+
+        const modInfo = new ModuleInfo();
+
+        if (TuxedoIOAPI.wmiAvailable()) {
+            const status = TuxedoIOAPI.getModuleInfo(modInfo);
+
+            if (!status) {
+                console.error('FanControlWorker: setActiveInterface failed');
+                return;
+            }
+
+            this.isUniwill = modInfo.activeInterface === 'uniwill';
+        } else {
+            console.error('FanControlWorker: setActiveInterface: wmi not available');
         }
     }
 
@@ -288,20 +316,11 @@ export class FanControlWorker extends DaemonWorker {
     private async writeFanSpeed(fanLogic: FanControlLogic, fanIndex: number, calculatedSpeed: number): Promise<void> {
         if (!fanLogic) return;
 
-        // todo: tuxedo-drivers currently has 2 issues
-        // - ec does set a different fan speed after 1 hour
-        // - fan speed does change after writing a value
-        // writing fan speed with tccd worker as a temporary solution
-        const forceFanWrite: boolean = [
-            // 1 hour ec issue
-            TUXEDODevice.BA1510,
-            TUXEDODevice.PULSE1501,
-            // fan control issue
-            TUXEDODevice.IBM15I10,
-        ].includes(this.tuxedoDevice);
-
         if (this.tccd.settings.fanControlEnabled) {
-            if (forceFanWrite || (this.previousTempValues.get(fanIndex) !== calculatedSpeed && calculatedSpeed > -1)) {
+            if (
+                (this.isUniwill && calculatedSpeed > -1) ||
+                (this.previousTempValues.get(fanIndex) !== calculatedSpeed && calculatedSpeed > -1)
+            ) {
                 await this.fanApi.writeFanSpeed(fanIndex, calculatedSpeed);
                 this.previousTempValues.set(fanIndex, calculatedSpeed);
             }
