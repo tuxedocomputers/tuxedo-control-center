@@ -4,6 +4,7 @@
 ### Added
 - Wayland check for GPU selection
 - Systeminfos file size check
+- Missing increment/decrement buttons in edit profile
 - Dev dependencies (esbuild, prettier formatter and biome linter)
 
 ### Changed
@@ -24,7 +25,7 @@
 - Extended error handling and logging
 
 ### Fixed
-- Dashboard fan speed now always reflects sensor value, previously only showed set fan speed in some cases
+- Dashboard fan speed now always reflects sensor value, previously only showed set fan speed when fan control was active
 - Dashboard now hides values when none are available (for example during suspend/wakeup)
 - Crash of tccd due to EC timeout
 - Access errors for keyboard backlight
@@ -32,7 +33,6 @@
 - Global settings checkbox not representing actual state
 - Cases of GPU selection in tray being incorrectly shown/hidden
 - D-Bus related access errors
-- Missing increment/decrement buttons in edit profile
 - Refreshrate worker trying to use empty values
 
 ## [2.1.23] - 2026-02-05
