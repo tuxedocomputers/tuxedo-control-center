@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -17,23 +17,26 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { DaemonWorker } from "./DaemonWorker";
-import { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
-import { execCommandAsync, delay } from "../../common/classes/Utils";
-import * as fs from "fs";
-import { TUXEDODevice } from "../../common/models/DefaultProfiles";
-const fsp: typeof import("fs").promises = require("fs").promises;
+import * as fs from 'node:fs';
+import { delay, execCommandAsync } from '../../common/classes/Utils';
+import { TUXEDODevice } from '../../common/models/DefaultProfiles';
+import { DaemonWorker } from './DaemonWorker';
+import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
+
+const fsp: typeof import('fs').promises = require('node:fs').promises;
 
 export class PrimeWorker extends DaemonWorker {
     private tuxedoDevice: TUXEDODevice;
-    private isDisplayConnectedToNvidia: boolean;
+    private isDisplayConnectedToNvidia: boolean = false;
+    private primeAvailable: boolean = false;
+    private primeSupported: boolean = false;
 
     constructor(tccd: TuxedoControlCenterDaemon) {
-        super(10000, tccd);
+        super(10000, 'PrimeWorker', tccd);
         this.tuxedoDevice = this.tccd.identifyDevice();
     }
 
-    public async onStart() {
+    public async onStart(): Promise<void> {
         // not instantly setting prime status in onStart() because requires_offloading only gets updated after some delay
         // checking it directly in onStart() will result in getting a wrong state
         await delay(2000);
@@ -42,24 +45,26 @@ export class PrimeWorker extends DaemonWorker {
             this.isDisplayConnectedToNvidia = await this.getDisplayConnectedToNvidia();
         }
 
+        this.primeAvailable = await this.checkPrimeAvailable();
+        if (this.primeAvailable) {
+            this.primeSupported = await this.checkPrimeSupported();
+        }
+
         this.setPrimeStatus();
     }
 
-    public async onWork() {
+    public async onWork(): Promise<void> {
         // checking in case someone changes state externally, otherwise could be removed to avoid periodic checking
         this.setPrimeStatus();
     }
 
-    public onExit() {}
+    public async onExit(): Promise<void> {}
 
-    private async setPrimeStatus() {
-        const primeSupported = await this.checkPrimeSupported();
-
-        if (primeSupported) {
-            this.tccd.dbusData.primeState = await this.checkPrimeStatus();
-        }
-        if (!primeSupported) {
-            this.tccd.dbusData.primeState = "-1";
+    private async setPrimeStatus(): Promise<void> {
+        if (this.primeAvailable && this.primeSupported) {
+            this.tccd.dbusData.primeState = JSON.stringify(await this.checkPrimeStatus());
+        } else {
+            this.tccd.dbusData.primeState = JSON.stringify('-1');
         }
     }
 
@@ -70,20 +75,20 @@ export class PrimeWorker extends DaemonWorker {
             return !this.isDisplayConnectedToNvidia;
         }
 
-        const offloadingStatus =
-            fs.existsSync(
-                "/var/lib/ubuntu-drivers-common/requires_offloading"
-            ) == true;
+        const offloadingStatus: boolean = fs.existsSync('/var/lib/ubuntu-drivers-common/requires_offloading') === true;
 
-        const primeAvailable = (
-            await execCommandAsync("which prime-select | cat")
-        )
+        return offloadingStatus;
+    }
+
+    // official prime-select has no dGPU mode in wayland
+    private async isTuxPrime(): Promise<boolean> {
+        // biome-ignore lint: ${Version} is not a typescript variable here
+        const primeSelectVersion: string = (await execCommandAsync("dpkg-query -W -f='${Version}\n' nvidia-prime"))
             .toString()
             .trim();
 
-        return offloadingStatus && !!primeAvailable;
+        return primeSelectVersion.includes('tux');
     }
-
 
     private async getDisplayConnectedToNvidia(): Promise<boolean> {
         try {
@@ -97,10 +102,10 @@ export class PrimeWorker extends DaemonWorker {
                 const statusPath: string = `${edpPath}/status`;
 
                 try {
-                    const vendorId: string = (await fsp.readFile(vendorPath, "utf-8")).trim();
-                    const status: string = (await fsp.readFile(statusPath, "utf-8")).trim();
+                    const vendorId: string = (await fsp.readFile(vendorPath, 'utf-8')).trim();
+                    const status: string = (await fsp.readFile(statusPath, 'utf-8')).trim();
 
-                    if (vendorId.toLowerCase() === "0x10de" && status === "connected") {
+                    if (vendorId.toLowerCase() === '0x10de' && status === 'connected') {
                         return true;
                     }
                 } catch (err: unknown) {
@@ -115,22 +120,40 @@ export class PrimeWorker extends DaemonWorker {
         }
     }
 
+    private async checkPrimeAvailable(): Promise<boolean> {
+        let primeAvailable: boolean = false;
+
+        try {
+            primeAvailable = !!(await execCommandAsync('which prime-select', false)).toString().trim();
+        } catch (_err: unknown) {
+            primeAvailable = false;
+        }
+
+        if (primeAvailable) {
+            const isTuxPrime: boolean = await this.isTuxPrime();
+
+            if (isTuxPrime) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private async checkPrimeStatus(): Promise<string> {
-        return this.transformPrimeStatus(
-            await execCommandAsync("prime-select query")
-        );
+        return this.transformPrimeStatus(await execCommandAsync('prime-select query'));
     }
 
     private transformPrimeStatus(status: string): string {
         switch (status) {
-            case "nvidia":
-                return "dGPU";
-            case "intel":
-                return "iGPU";
-            case "on-demand":
-                return "on-demand";
+            case 'nvidia':
+                return 'dGPU';
+            case 'intel':
+                return 'iGPU';
+            case 'on-demand':
+                return 'on-demand';
             default:
-                return "off";
+                return 'off';
         }
     }
 }

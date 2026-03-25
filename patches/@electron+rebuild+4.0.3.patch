@@ -1,0 +1,22 @@
+diff --git a/node_modules/@electron/rebuild/lib/module-type/node-gyp/node-gyp.js b/node_modules/@electron/rebuild/lib/module-type/node-gyp/node-gyp.js
+index 4a34eda..37b27df 100644
+--- a/node_modules/@electron/rebuild/lib/module-type/node-gyp/node-gyp.js
++++ b/node_modules/@electron/rebuild/lib/module-type/node-gyp/node-gyp.js
+@@ -6,6 +6,8 @@ import { ELECTRON_GYP_DIR } from '../../constants.js';
+ import { getClangEnvironmentVars } from '../../clang-fetcher.js';
+ import { NativeModule } from '../index.js';
+ import { fork } from 'node:child_process';
++import { dirname } from 'node:path';
++import { fileURLToPath } from 'node:url';
+ const d = debug('electron-rebuild');
+ export class NodeGyp extends NativeModule {
+     async buildArgs(prefixedArgs) {
+@@ -88,7 +90,7 @@ export class NodeGyp extends NativeModule {
+         }
+         const nodeGypArgs = await this.buildArgs(extraNodeGypArgs);
+         d('rebuilding', this.moduleName, 'with args', nodeGypArgs);
+-        const forkedChild = fork(path.resolve(import.meta.dirname, 'worker.js'), {
++        const forkedChild = fork(path.resolve(dirname(fileURLToPath(import.meta.url)), 'worker.js'), {
+             env,
+             cwd: this.modulePath,
+             stdio: 'pipe',

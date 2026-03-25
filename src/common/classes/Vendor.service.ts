@@ -1,14 +1,29 @@
-import { Injectable } from "@angular/core";
-import { execCommandAsync } from "./Utils";
+/*!
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ *
+ * This file is part of TUXEDO Control Center.
+ *
+ * TUXEDO Control Center is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TUXEDO Control Center is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
-@Injectable({
-    providedIn: "root",
-})
+import { execCommandAsync } from './Utils';
+
 export class VendorService {
     private cpuVendor: string | null = null;
 
     constructor() {
-        this.checkCpuVendor().then((vendor) => {
+        this.checkCpuVendor().then((vendor: string): void => {
             this.cpuVendor = vendor;
         });
     }
@@ -18,31 +33,27 @@ export class VendorService {
             return this.cpuVendor;
         }
 
-        const vendor = await this.checkCpuVendor();
+        const vendor: string = await this.checkCpuVendor();
         this.cpuVendor = vendor;
 
         return vendor;
     }
 
     private async checkCpuVendor(): Promise<string> {
-        const stdout = (
-            await execCommandAsync("cat /proc/cpuinfo | grep vendor_id")
-        ).toString();
+        const stdout: string = (await execCommandAsync('cat /proc/cpuinfo | grep vendor_id')).toString();
 
-        const outputLines = stdout.split("\n");
-        const vendorLine = outputLines.find((line) =>
-            line.includes("vendor_id")
-        );
+        const outputLines: string[] = stdout.split('\n');
+        const vendorLine: string = outputLines.find((line: string): boolean => line.includes('vendor_id'));
 
         if (vendorLine) {
-            const vendor = vendorLine.split(":")[1].trim();
+            const vendor: string = vendorLine.split(':')[1].trim();
 
-            if (vendor === "GenuineIntel") {
-                return "intel";
-            } else if (vendor === "AuthenticAMD") {
-                return "amd";
+            if (vendor === 'GenuineIntel') {
+                return 'intel';
+            } else if (vendor === 'AuthenticAMD') {
+                return 'amd';
             }
         }
-        return "unknown";
+        return 'unknown';
     }
 }

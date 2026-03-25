@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,44 +16,55 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Component, OnInit, VERSION } from '@angular/core';
+
+import { Component, type OnInit, VERSION } from '@angular/core';
+import type { IProcessVersions } from '../renderer';
+// biome-ignore lint: injection token
 import { UtilsService } from '../utils.service';
 
 @Component({
-  selector: 'app-info',
-  templateUrl: './info.component.html',
-  styleUrls: ['./info.component.scss']
+    selector: 'app-info',
+    templateUrl: './info.component.html',
+    styleUrls: ['./info.component.scss'],
+    standalone: false,
 })
 export class InfoComponent implements OnInit {
+    public appVersion: string;
+    public nodeVersion: string;
+    public electronVersion: string;
+    public chromeVersion: string;
+    public angularVersion: string;
 
-  public appVersion = this.utils.getAppVersion();
-  public nodeVersion = this.utils.getProcessVersions().node;
-  public electronVersion = this.utils.getProcessVersions().electron;
-  public chromeVersion = this.utils.getProcessVersions().chrome;
-  public angularVersion = VERSION.full;
+    constructor(private utils: UtilsService) {}
 
-  constructor(
-    private utils: UtilsService
-  ) { }
-
-  ngOnInit() {
-  }
-
-  public changeLanguage(languageId: string) {
-    if (languageId !== this.getCurrentLanguageId()) {
-      this.utils.changeLanguage(languageId);
+    ngOnInit(): void {
+        this.init();
     }
-  }
 
-  public getCurrentLanguageId(): string {
-    return this.utils.getCurrentLanguageId();
-  }
+    private async init(): Promise<void> {
+        this.appVersion = await window.ipc.getAppVersion();
+        const processVersions: IProcessVersions = await window.ipc.getProcessVersions();
+        this.nodeVersion = processVersions.node;
+        this.electronVersion = processVersions.electron;
+        this.chromeVersion = processVersions.chrome;
+        this.angularVersion = VERSION.full;
+    }
 
-  public getLanguagesMenuArray() {
-    return this.utils.getLanguagesMenuArray();
-  }
+    public changeLanguage(languageId: string): void {
+        if (languageId !== this.getCurrentLanguageId()) {
+            this.utils.changeLanguage(languageId);
+        }
+    }
 
-  public getLanguageData(langId: string) {
-    return this.utils.getLanguageData(langId);
-  }
+    public getCurrentLanguageId(): string {
+        return this.utils.getCurrentLanguageId();
+    }
+
+    public getLanguagesMenuArray(): { id: string; label: string; img: string }[] {
+        return this.utils.getLanguagesMenuArray();
+    }
+
+    public getLanguageData(langId: string): string {
+        return this.utils.getLanguageData(langId);
+    }
 }

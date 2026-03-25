@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -17,6 +17,8 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
+@use '@angular/material' as mat;
+
 * {
     -webkit-user-drag: none;
     user-select: none;
@@ -27,7 +29,7 @@
 
 .content-container {
     max-width: 900px;
-    margin:auto;
+    margin: auto;
 
     &.centered {
         text-align: center;
@@ -38,7 +40,7 @@
     height: 55px;
 
     &.row {
-        margin-right:10px;
+        margin-right: 10px;
     }
 }
 
@@ -53,16 +55,46 @@
 
 .tcc-card {
     margin-bottom: 10px;
+    padding: 16px;
 
     mat-card-title {
         display: flex;
         justify-content: center;
-
-        +hr {
-            opacity: 0.3;
-            margin-bottom: 20px;
-        }
     }
+
+    hr {
+        width: 100%;
+    }
+
+    hr:first-of-type {
+        opacity: 0.3;
+        margin-bottom: 20px;
+    }
+
+    hr:not(:first-of-type) {
+        opacity: 0.2;
+    }
+
+    div hr {
+        opacity: 0.2 !important;
+        margin-bottom: 8px !important;
+    }
+
+    .card-title {
+        font-size: 24px;
+    }
+
+    .card-header {
+        font-size: 18px;
+    }
+
+    .card-content {
+        font-size: 16px;
+    }
+}
+
+.mat-mdc-card-content {
+    padding: 0px !important;
 }
 
 .tcc-accordion {
@@ -86,16 +118,9 @@
         display: flex;
         justify-content: stretch;
         align-items: center;
-
-        margin-top: 30px;
         margin-bottom: 20px;
 
-        &.top {
-            margin-top:0px;
-        }
-
         hr {
-            flex: 1;
             opacity: 0.3;
             width: 100%;
         }
@@ -106,9 +131,10 @@
             justify-content: space-between;
             align-items: center;
 
-            font-size: 1.2em;
+            font-size: 20px;
+            text-align: center;
+            white-space: nowrap;
 
-            //height: 45px;
             padding-left: 30px;
             padding-right: 30px;
 
@@ -121,6 +147,12 @@
     }
 }
 
+.tcc-options-group:not(:first-child) {
+    .title-row {
+        margin-top: 30px;
+    }
+}
+
 .not-available {
     opacity: 0.7;
     filter: blur(0.11rem);
@@ -129,20 +161,8 @@
     }
 }
 
-.mat-tooltip {
-    font-size: 1.2em !important;
+.mdc-tooltip--multiline .mat-mdc-tooltip-surface {
     text-align: center !important;
-}
-
-.green-slide-toggle {
-
-    &.mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
-        background-color: rgba(100, 209, 113, 0.54);
-    }
-
-    &.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
-        background-color: rgba(100, 209, 113, 1.00);
-    }
 }
 
 mat-radio-button.hide-radio-circle {
@@ -153,6 +173,151 @@ mat-radio-button.hide-radio-circle {
 
 mat-tab-group.active-always-focused {
     .mat-tab-label-active {
-        opacity: 1.0;
+        opacity: 1;
     }
+}
+
+:root {
+    --icon-main: currentColor;
+    --icon-detail: #e30016;
+    --gauge-red: #e22131;
+
+    // todo: font with typography does not apply everywhere, changing globally
+    // font should be changed with typography
+    font-family: 'Titillium Web';
+}
+
+@include mat.list-overrides(
+    (
+        active-indicator-shape: 0,
+    )
+);
+
+@include mat.button-overrides(
+    (
+        outlined-label-text-color: var(--text-color),
+        outlined-outline-color: var(--text-color),
+    )
+);
+
+@include mat.tooltip-overrides(
+    (
+        container-color: var(--tooltip-container-color),
+        supporting-text-color: var(--tooltip-text-color),
+        supporting-text-size: 16px,
+    )
+);
+
+@include mat.sidenav-overrides(
+    (
+        container-background-color: var(--foreground-color),
+        content-background-color: var(--background-color),
+        container-text-color: var(--text-color),
+        container-divider-color: var(--container-divider-color),
+    )
+);
+
+@include mat.divider-overrides(
+    (
+        color: var(--divider-color),
+    )
+);
+
+@include mat.card-overrides(
+    (
+        subtitle-text-color: var(--text-color),
+        elevated-container-color: var(--foreground-color),
+    )
+);
+
+@include mat.expansion-overrides(
+    (
+        container-background-color: var(--foreground-color),
+        container-text-color: var(--text-color),
+    )
+);
+
+@include mat.slide-toggle-overrides(
+    (
+        selected-track-color: var(--slide-toggle-track-color),
+        selected-handle-color: var(--slide-toggle-handle-color),
+        selected-focus-track-color: var(--slide-toggle-track-color),
+        selected-focus-handle-color: var(--slide-toggle-handle-color),
+        selected-hover-track-color: var(--slide-toggle-track-color),
+        selected-hover-handle-color: var(--slide-toggle-handle-color),
+        selected-pressed-track-color: var(--slide-toggle-track-color),
+        selected-pressed-handle-color: var(--slide-toggle-handle-color),
+    )
+);
+
+@include mat.dialog-overrides(
+    (
+        supporting-text-size: 16px,
+        supporting-text-color: var(--text-color),
+        with-actions-content-padding: 20px 24px 5px,
+    )
+);
+
+@include mat.button-overrides(
+    (
+        filled-label-text-color: var(--text-color),
+        outlined-label-text-color: var(--text-color),
+        protected-label-text-color: var(--text-color),
+        text-label-text-color: var(--text-color),
+        tonal-label-text-color: var(--text-color),
+        filled-label-text-size: 16px,
+        outlined-label-text-size: 16px,
+        protected-label-text-size: 16px,
+        text-label-text-size: 16px,
+    )
+);
+
+@include mat.button-toggle-overrides(
+    (
+        label-text-size: 16px,
+    )
+);
+
+@include mat.form-field-overrides(
+    (
+        filled-label-text-size: 16px,
+        outlined-label-text-size: 16px,
+        container-text-size: 16px,
+        outlined-label-text-populated-size: 16px,
+        subscript-text-size: 16px,
+    )
+);
+
+@include mat.tabs-overrides(
+    (
+        label-text-size: 16px,
+    )
+);
+
+@include mat.radio-overrides(
+    (
+        label-text-size: 16px,
+    )
+);
+
+@include mat.checkbox-overrides(
+    (
+        label-text-size: 16px,
+    )
+);
+
+@include mat.stepper-overrides(
+    (
+        header-label-text-size: 16px,
+        header-error-state-label-text-size: 16px,
+        header-selected-state-label-text-size: 16px,
+    )
+);
+
+.mdc-button__label {
+    z-index: unset !important;
+}
+
+.mat-icon {
+    z-index: unset !important;
 }

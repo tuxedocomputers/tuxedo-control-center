@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -17,35 +17,60 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { DaemonWorker } from "./DaemonWorker";
-import { XDisplayRefreshRateController } from "../../common/classes/XDisplayRefreshRateController";
-import {
-    IDisplayFreqRes,
-    IDisplayMode,
-} from "../../common/models/DisplayFreqRes";
-import { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
-import * as child_process from "child_process";
+import * as child_process from 'node:child_process';
+import { execCommandAsync } from '../../common/classes/Utils';
+import { XDisplayRefreshRateController } from '../../common/classes/XDisplayRefreshRateController';
+import type { IDisplayFreqRes, IDisplayMode } from '../../common/models/DisplayFreqRes';
+import type { ITccProfile } from '../../common/models/TccProfile';
+import { DaemonWorker } from './DaemonWorker';
+import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
 export class DisplayRefreshRateWorker extends DaemonWorker {
     private controller: XDisplayRefreshRateController;
     private displayInfo: IDisplayFreqRes;
     private displayInfoFound: boolean = false;
-    private previousUsers: string = "";
+    private previousUsers: string[] = [];
+    private wAvailable: boolean = undefined;
+    private disallowedUserNames: string[] = ['sddm', 'gdm', 'gdm-gree', 'root'];
 
     constructor(tccd: TuxedoControlCenterDaemon) {
-        super(5000, tccd);
+        super(5000, 'DisplayRefreshrateWorker', tccd);
         this.controller = new XDisplayRefreshRateController();
     }
 
-    public onStart(): void {}
+    public async onStart(): Promise<void> {
+        try {
+            this.wAvailable = !!(await execCommandAsync('which w')).toString().trim();
+            if (!this.wAvailable) {
+                console.log('DisplayRefreshrateWorker: w not available');
+            }
+        } catch (err: unknown) {
+            console.error(`DisplayRefreshrateWorker: onStart failed => ${err}`);
+            this.wAvailable = false;
+        }
+    }
 
     // user is able to switch XDG_SESSION_TYPE in login screen and thus a new check needs to be done
     // not checking XDG_SESSION_TYPE during login screen, checking again on user change
-    private checkUsers() {
-        const loggedInUsers = child_process.execSync(`users`).toString().trim();
+    private checkUsers(): boolean[] {
+        const userInformation: string[] = child_process.execSync('w --no-header').toString().split('\n');
 
-        const usersAvailable = Boolean(loggedInUsers);
-        const usersChanged = loggedInUsers !== this.previousUsers;
+        const loggedInUsers: string[] = [];
+
+        for (const line of userInformation) {
+            const result: RegExpMatchArray = line.match(/^([^\s\d]+)/);
+
+            if (result) {
+                const userName: string = result[0];
+
+                if (userName && !this.disallowedUserNames.includes(userName)) {
+                    loggedInUsers.push(userName);
+                }
+            }
+        }
+
+        const usersAvailable: boolean = loggedInUsers.length > 0;
+        const usersChanged: boolean = JSON.stringify(loggedInUsers) !== JSON.stringify(this.previousUsers);
 
         this.previousUsers = loggedInUsers;
 
@@ -58,71 +83,102 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
         this.controller.resetValues();
     }
 
-    public onWork(): void {
+    public async onWork(): Promise<void> {
+        if (!this.wAvailable) {
+            return;
+        }
+
         const [usersAvailable, usersChanged] = this.checkUsers();
 
         if (usersChanged) {
             this.resetToDefault();
         }
 
-        if (usersAvailable && !this.controller.getIsWayland()) {
-            if (!this.displayInfoFound) {
-                this.updateDisplayData();
+        if (usersAvailable && !this.controller.checkVariablesAvailable()) {
+            if (!this.displayInfoFound && this.controller.getIsTTY() !== true) {
+                await this.updateDisplayData();
             }
-
-            this.setActiveDisplayMode();
         }
+        this.setActiveDisplayMode();
     }
 
-    public onExit(): void {}
+    public async onExit(): Promise<void> {}
 
     private setActiveDisplayMode(): void {
-        const activeprofile = this.tccd.getCurrentProfile();
+        const activeprofile: ITccProfile = this.tccd.getCurrentProfile();
 
-        const useRefRate = activeprofile?.display?.useRefRate;
-        const activeMode = this.displayInfo?.activeMode;
+        const useRefRate: boolean = activeprofile?.display?.useRefRate;
+        const activeMode: IDisplayMode = this.displayInfo?.activeMode;
 
         if (useRefRate && activeMode) {
-            const refreshRate = activeprofile.display.refreshRate;
-            const hasDifferentRefreshRate =
-                refreshRate !== activeMode.refreshRates[0];
+            const refreshRate: number = activeprofile.display.refreshRate;
+            // todo: add variable checks to avoid access error
+            const hasDifferentRefreshRate: boolean = refreshRate !== activeMode?.refreshRates[0];
 
             if (hasDifferentRefreshRate) {
-                this.setDisplayMode(
+                const status: boolean = this.controller.setRefreshRateAndResolution(
                     activeMode.xResolution,
                     activeMode.yResolution,
-                    refreshRate
+                    refreshRate,
                 );
-                activeMode.refreshRates[0] = refreshRate;
+
+                if (status) {
+                    console.log(
+                        `DisplayRefreshRateWorker: setActiveDisplayMode: Set ${refreshRate}Hz with ${
+                            activeMode.xResolution
+                        }x${activeMode.yResolution} and XAUTHORITY "${this.controller.getXAuthorityFile()}"`,
+                    );
+                    activeMode.refreshRates[0] = refreshRate;
+                } else {
+                    console.error(
+                        `DisplayRefreshRateWorker: setActiveDisplayMode: Failed to set refresh rate ${refreshRate}Hz with ${
+                            activeMode.xResolution
+                        }x${
+                            activeMode.yResolution
+                        } for display "${this.controller.getDisplay()}" with the name "${this.controller.getDisplayName()}" and XAUTHORITY "${this.controller.getXAuthorityFile()}"`,
+                    );
+                    this.resetToDefault();
+                }
             }
         }
     }
 
-    private updateDisplayData(): void {
-        this.displayInfo = this.controller.getDisplayModes();
+    private async updateDisplayData(): Promise<void> {
+        this.resetToDefault();
+        await this.controller.setVariables();
 
-        this.tccd.dbusData.isX11 = this.controller.getIsX11();
+        if (
+            this.controller.checkVariablesAvailable() &&
+            this.controller.getIsTTY() === false &&
+            this.controller.getIsWayland() === false &&
+            this.controller.getIsX11() === 1
+        ) {
+            this.displayInfo = this.controller.getDisplayModes();
 
-        if (this.displayInfo === undefined) {
-            this.tccd.dbusData.displayModes = undefined;
+            if (this.displayInfo === undefined) {
+                this.tccd.dbusData.displayModesJSON = '{}';
+            } else {
+                this.displayInfoFound = true;
+                this.tccd.dbusData.displayModesJSON = JSON.stringify(this.displayInfo);
+            }
         } else {
-            this.displayInfoFound = true;
-            this.tccd.dbusData.displayModes = JSON.stringify(this.displayInfo);
+            this.tccd.dbusData.displayModesJSON = '{}';
         }
-    }
 
-    public getActiveDisplayMode(): IDisplayMode {
-        if (this.displayInfo === undefined) {
-            this.updateDisplayData();
-        }
-        if (this.displayInfo === undefined) {
-            return undefined;
-        } else {
-            return this.displayInfo.activeMode;
-        }
-    }
+        if (this.controller.checkVariablesAvailable()) {
+            this.tccd.dbusData.isX11 = this.controller.getIsX11();
 
-    private setDisplayMode(xRes: number, yRes: number, refRate: number) {
-        this.controller.setRefreshResolution(xRes, yRes, refRate);
+            if (this.controller.getIsX11() === 1) {
+                console.log('DisplayRefreshRateWorker: Detected x11');
+            }
+
+            if (this.controller.getIsWayland()) {
+                console.log('DisplayRefreshRateWorker: Detected wayland');
+            }
+
+            if (this.controller.getIsTTY()) {
+                console.log('DisplayRefreshRateWorker: Detected tty');
+            }
+        }
     }
 }

@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,9 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import * as path from 'path';
-import { SysFsPropertyInteger } from './SysFsProperties';
+
+import * as path from 'node:path';
 import { SysFsController } from './SysFsController';
+import { SysFsPropertyInteger } from './SysFsProperties';
 
 // Exception for amd backlight driver (amdgpu_bl)
 // amdgpu brightness workaround, scale actual_brightness [0, 0xffff] to [0, 0xff]
@@ -44,21 +45,27 @@ class SysFsPropertyAmdgpuBrightness extends SysFsPropertyInteger {
 }
 
 export class DisplayBacklightController extends SysFsController {
-
-    constructor(public readonly basePath: string, public readonly driver: string) {
+    constructor(
+        public readonly basePath: string,
+        public readonly driver: string,
+    ) {
         super();
 
         // Workaround
         if (driver.includes('amdgpu_bl')) {
             this.brightness = new SysFsPropertyAmdgpuBrightness(
-                path.join(this.basePath, this.driver, 'actual_brightness'),
-                path.join(this.basePath, this.driver, 'brightness'));
+                path.join(basePath, driver, 'actual_brightness'),
+                path.join(basePath, driver, 'brightness'),
+            );
         }
+
+        this.brightness = new SysFsPropertyInteger(
+            path.join(basePath, driver, 'actual_brightness'),
+            path.join(basePath, driver, 'brightness'),
+        );
+        this.maxBrightness = new SysFsPropertyInteger(path.join(basePath, driver, 'max_brightness'));
     }
 
-    readonly brightness = new SysFsPropertyInteger(
-        path.join(this.basePath, this.driver, 'actual_brightness'),
-        path.join(this.basePath, this.driver, 'brightness'));
-
-    readonly maxBrightness = new SysFsPropertyInteger(path.join(this.basePath, this.driver, 'max_brightness'));
+    public readonly brightness: SysFsPropertyInteger;
+    public readonly maxBrightness: SysFsPropertyInteger;
 }

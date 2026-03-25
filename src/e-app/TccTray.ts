@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -17,153 +17,142 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Menu, Tray } from "electron";
-import { TccProfile } from "../common/models/TccProfile";
-import { DMIController } from '../common/classes/DMIController';
+import { Menu, type MenuItemConstructorOptions, Tray } from 'electron';
+import type { TccProfile } from '../common/models/TccProfile';
 
 export class TccTray {
-
     private tray: Electron.Tray;
 
-    public state = new TrayState();
-    public events = new TrayEvents();
+    public state: TrayState = new TrayState();
+    public events: TrayEvents = new TrayEvents();
 
-    constructor(public trayIcon) {}
+    constructor(public trayIcon: Electron.NativeImage | string) {}
 
-    public isActive() {
+    public isActive(): boolean {
         return this.tray !== undefined && !this.tray.isDestroyed();
     }
 
-    public destroy() {
+    public destroy(): void {
         this.tray.destroy();
     }
 
-    public async create() {
-        
+    public async create(): Promise<void> {
         if (!this.tray) {
             this.tray = new Tray(this.trayIcon);
             this.tray.setTitle('TUXEDO Control Center');
             this.tray.setToolTip('TUXEDO Control Center');
         }
-    
-        const profilesSubmenu: Object[] = this.state.profiles.map(profile => {
-            // Creation of each profile selection submenu item
-            return {
-                label: profile.name,
-                click: () => this.events.profileClick(profile.id),
-                type: 'radio',
-                checked: profile.id === this.state.activeProfile.id
-            };
-        });
 
-        // Add profiles submenu "header"
-        profilesSubmenu.unshift(
-            { label: 'Activate profile temporarily', enabled: false },
-            { type: 'separator' }
+        const profilesSubmenu: MenuItemConstructorOptions[] = this.state.profiles.map(
+            (
+                profile: TccProfile,
+            ): {
+                label: string;
+                click: () => void;
+                type: 'radio' | 'separator' | 'normal' | 'submenu' | 'checkbox' | 'header' | 'palette';
+                checked: boolean;
+            } => {
+                return {
+                    label: profile.name,
+                    click: (): void => this.events.profileClick(profile?.id),
+                    type: 'radio',
+                    checked: profile?.id === this.state?.activeProfile?.id,
+                };
+            },
         );
 
-        // TODO: Manual read until general device id get merged
-        const dmi = new DMIController('/sys/class/dmi/id');
-        const deviceName = dmi.productSKU.readValueNT();
-        const boardVendor = dmi.boardVendor.readValueNT();
-        const chassisVendor = dmi.chassisVendor.readValueNT();
-        const sysVendor = dmi.sysVendor.readValueNT();
-        let showAquarisMenu;
-        const isTuxedo = (boardVendor !== undefined && boardVendor.toLowerCase().includes('tuxedo')) ||
-                         (chassisVendor !== undefined && chassisVendor.toLowerCase().includes('tuxedo')) ||
-                         (sysVendor !== undefined && sysVendor.toLowerCase().includes('tuxedo'));
+        // Add profiles submenu "header"
+        profilesSubmenu.unshift({ label: 'Activate profile temporarily', enabled: false }, { type: 'separator' });
 
-        if (isTuxedo) {
-            if (deviceName !== undefined &&
-                (deviceName === 'STELLARIS1XI04' ||
-                 deviceName === 'STEPOL1XA04' ||
-                 deviceName === 'STELLARIS1XI05' ||
-                 deviceName === 'STELLARIS16I06' ||
-                 deviceName === 'STELLARIS17I06' ||
-                 deviceName === 'STELLARIS16A07' ||
-                 deviceName === 'STELLARIS16I07')) {
-                showAquarisMenu = true;
-            } else {
-                showAquarisMenu = false;
-            }
-        } else {
-            showAquarisMenu = true;
-        }
-
-        const contextMenu = Menu.buildFromTemplate([
-            { label: 'TUXEDO Control Center', type: 'normal', click: () => this.events.startTCCClick() },
-            { label: 'Aquaris control', type: 'normal', click: () => this.events.startAquarisControl(), visible: showAquarisMenu },
+        const contextMenu: Menu = Menu.buildFromTemplate([
+            { label: 'TUXEDO Control Center', type: 'normal', click: (): void => this.events.startTCCClick() },
+            {
+                label: 'Aquaris control',
+                type: 'normal',
+                click: (): void => this.events.startAquarisControl(),
+                visible: this.state.hasAquaris,
+            },
             {
                 label: 'Profiles',
                 submenu: profilesSubmenu,
-                visible: this.state.profiles.length > 0
+                visible: this.state.profiles?.length > 0,
             },
             {
-                    label: 'Tray autostart', type: 'checkbox', checked: this.state.isAutostartTrayInstalled,
-                    click: () => this.events.autostartTrayToggle()
+                label: 'Tray autostart',
+                type: 'checkbox',
+                checked: this.state.isAutostartTrayInstalled,
+                click: (): void => this.events.autostartTrayToggle(),
             },
             {
                 label: 'Power save blocker',
                 type: 'checkbox',
-                click: () => { this.events.powersaveBlockerClick(); },
-                checked: this.state.powersaveBlockerActive
+                click: (): void => {
+                    this.events.powersaveBlockerClick();
+                },
+                checked: this.state.powersaveBlockerActive,
             },
             {
-                label: "Fn-Lock",
-                type: "checkbox",
-                click: () => {
+                label: 'Fn-Lock',
+                type: 'checkbox',
+                click: (): void => {
                     this.events.fnLockClick(this.state.fnLockStatus);
                 },
                 checked: this.state.fnLockStatus,
                 visible: this.state.fnLockSupported,
             },
-            { type: 'separator', visible: this.state.isPrimeSupported },
+            {
+                type: 'separator',
+                visible: this.state.isPrimeSupported && this.state.iGpuAvailable && this.state.dGpuAvailable,
+            },
             {
                 label: 'Graphics',
-                visible: this.state.isPrimeSupported,
+                visible: this.state.isPrimeSupported && this.state.iGpuAvailable && this.state.dGpuAvailable,
                 submenu: [
                     {
                         label: 'Select dGPU',
                         type: 'normal',
-                        click: () => this.events.selectNvidiaClick(),
+                        click: (): void => this.events.selectNvidiaClick(),
                         visible: this.state.primeQuery !== 'dGPU',
                     },
                     {
                         label: 'Apply on-demand mode',
                         type: 'normal',
-                        click: () => this.events.selectOnDemandClick(),
-                        visible: this.state.primeQuery !== 'on-demand'
+                        click: (): void => this.events.selectOnDemandClick(),
+                        visible: this.state.primeQuery !== 'on-demand',
                     },
                     {
                         label: 'Select iGPU',
                         type: 'normal',
-                        click: () => this.events.selectBuiltInClick(),
-                        visible: this.state.primeQuery !== 'iGPU'
-                    }
+                        click: (): void => this.events.selectBuiltInClick(),
+                        visible: this.state.primeQuery !== 'iGPU',
+                    },
                 ],
             },
             { type: 'separator' },
             { label: this.state.tccGUIVersion, type: 'normal', enabled: false },
             { type: 'separator' },
-            { label: 'Exit', type: 'normal', click: () => this.events.exitClick() }
+            { label: 'Exit', type: 'normal', click: (): void => this.events.exitClick() },
         ]);
         this.tray.setContextMenu(contextMenu);
     }
 }
 
-export class TrayState {
+class TrayState {
     tccGUIVersion: string;
     isAutostartTrayInstalled: boolean;
     isPrimeSupported: boolean;
+    iGpuAvailable: boolean;
+    dGpuAvailable: boolean;
     primeQuery: string;
     activeProfile: TccProfile;
     profiles: TccProfile[];
-    powersaveBlockerActive: boolean
+    powersaveBlockerActive: boolean;
     fnLockSupported: boolean;
     fnLockStatus: boolean;
-};
+    hasAquaris: boolean;
+}
 
-export class TrayEvents {
+class TrayEvents {
     startTCCClick: () => void;
     startAquarisControl: () => void;
     exitClick: () => void;

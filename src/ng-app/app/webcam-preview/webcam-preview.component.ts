@@ -1,76 +1,88 @@
-import {
-    ChangeDetectorRef,
-    Component,
-    ElementRef,
-    OnInit,
-    ViewChild,
-} from "@angular/core";
-import { ElectronService } from "ngx-electron";
-import { WebcamConstraints } from "src/common/models/TccWebcamSettings";
+/*!
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ *
+ * This file is part of TUXEDO Control Center.
+ *
+ * TUXEDO Control Center is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TUXEDO Control Center is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+// biome-ignore lint: injection token
+import { ChangeDetectorRef, Component, type ElementRef, type OnInit, ViewChild } from '@angular/core';
+import type { IpcRendererEvent } from 'electron';
+import type { WebcamConstraints } from '../../../common/models/TccWebcamSettings';
 
 @Component({
-    selector: "app-webcam-preview",
-    templateUrl: "./webcam-preview.component.html",
-    styleUrls: ["./webcam-preview.component.scss"],
+    selector: 'app-webcam-preview',
+    templateUrl: './webcam-preview.component.html',
+    styleUrls: ['./webcam-preview.component.scss'],
+    standalone: false,
 })
 export class WebcamPreviewComponent implements OnInit {
-    constructor(
-        private electron: ElectronService,
-        private cdref: ChangeDetectorRef
-    ) {}
-
-    @ViewChild("video", { static: true })
+    @ViewChild('video', { static: true })
     public video: ElementRef;
-    mediaDeviceStream: any;
-    spinnerActive: boolean = false;
+    private mediaStream: MediaStream;
+    public spinnerActive: boolean = undefined;
 
-    ngOnInit(): void {
-        this.electron.ipcRenderer.on(
-            "setting-webcam-with-loading",
-            async (event, config) => {
-                document.getElementById("video").style.visibility = "hidden";
+    constructor(public cdRef: ChangeDetectorRef) {}
+
+    public async ngOnInit(): Promise<void> {
+        window.webcam.onSettingWebcamWithLoading(
+            async (_event: IpcRendererEvent, config: WebcamConstraints): Promise<void> => {
                 this.spinnerActive = true;
-                this.cdref.detectChanges();
+                this.cdRef.detectChanges();
+                document.getElementById('video').style.visibility = 'hidden';
                 this.stopWebcam();
                 await this.setWebcamWithConfig(config);
-                this.electron.ipcRenderer.send("apply-controls");
-                setTimeout(async () => {
-                    document.getElementById("video").style.visibility =
-                        "visible";
-                    this.spinnerActive = false;
-                    this.cdref.detectChanges();
-                }, 500);
-            }
+                window.webcamAPI.applyControls();
+                await new Promise<void>(
+                    (resolve: () => void): NodeJS.Timeout =>
+                        setTimeout(async (): Promise<void> => {
+                            document.getElementById('video').style.visibility = 'visible';
+                            this.spinnerActive = false;
+                            this.cdRef.detectChanges();
+                            resolve();
+                        }, 500),
+                );
+            },
         );
     }
 
-    private async setWebcamWithConfig(
-        config: WebcamConstraints
-    ): Promise<void> {
+    private async setWebcamWithConfig(config: WebcamConstraints): Promise<void> {
         await navigator.mediaDevices
             .getUserMedia({
                 video: config,
             })
-            .then(async (stream) => {
+            .then(async (stream: MediaStream): Promise<void> => {
                 this.video.nativeElement.srcObject = stream;
-                this.mediaDeviceStream = stream;
+                this.mediaStream = stream;
             });
-        this.mediaDeviceStream.getVideoTracks()[0].onended = () => {
-            this.electron.ipcRenderer.send("video-ended");
+        this.mediaStream.getVideoTracks()[0].onended = (): void => {
+            window.webcamAPI.videoEnded();
         };
     }
 
-    private stopWebcam() {
+    private stopWebcam(): void {
         this.video.nativeElement.pause();
-        if (this.mediaDeviceStream != undefined) {
-            for (const track of this.mediaDeviceStream.getTracks()) {
+        if (this.mediaStream !== undefined) {
+            for (const track of this.mediaStream.getTracks()) {
                 track.stop();
             }
         }
         this.video.nativeElement.srcObject = null;
     }
 
-    async ngOnDestroy() {
+    async ngOnDestroy(): Promise<void> {
         this.stopWebcam();
     }
 }

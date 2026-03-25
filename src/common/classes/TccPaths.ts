@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 export class TccPaths {
     static readonly PID_FILE: string = '/var/run/tccd.pid';
     static readonly TCCD_EXEC_FILE: string =
@@ -25,9 +26,8 @@ export class TccPaths {
     static readonly SETTINGS_FILE: string = '/etc/tcc/settings';
     static readonly PROFILES_FILE: string = '/etc/tcc/profiles';
     static readonly WEBCAM_FILE: string = '/etc/tcc/webcam';
-    static readonly V4L2_NAMES_FILE: string = 
+    static readonly V4L2_NAMES_FILE: string =
         '/opt/tuxedo-control-center/resources/dist/tuxedo-control-center/data/camera/v4l2_kernel_names.json';
-    static readonly AUTOSAVE_FILE: string = '/etc/tcc/autosave';
     static readonly FANTABLES_FILE: string = '/etc/tcc/fantables';
     static readonly TCCD_LOG_FILE: string = '/var/log/tccd/log';
 }

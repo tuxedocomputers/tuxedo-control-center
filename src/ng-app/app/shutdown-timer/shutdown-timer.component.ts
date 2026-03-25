@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -17,13 +17,15 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, type OnInit } from '@angular/core';
+// biome-ignore lint: injection token
 import { UtilsService } from '../utils.service';
 
 @Component({
     selector: 'app-shutdown-timer',
     templateUrl: './shutdown-timer.component.html',
-    styleUrls: ['./shutdown-timer.component.scss']
+    styleUrls: ['./shutdown-timer.component.scss'],
+    standalone: false,
 })
 export class ShutdownTimerComponent implements OnInit {
     public hours: Array<number> = [...Array(24).keys()];
@@ -32,45 +34,44 @@ export class ShutdownTimerComponent implements OnInit {
     public selectedHour: number = 0;
     public selectedMinute: number = 0;
 
-    public appliedTime: string = "";
+    public appliedTime: string = '';
 
-    constructor(
-        private utils: UtilsService
-    ) { }
+    constructor(private utils: UtilsService) {}
 
-    ngOnInit() {
+    public ngOnInit(): void {
         this.updateTime();
     }
 
-    public saveTime() {
+    public async saveTime(): Promise<void> {
         this.utils.pageDisabled = true;
-        this.utils.execCmdAsync("pkexec shutdown -h " + this.selectedHour + ":" + this.selectedMinute).then(() => {
-            this.updateTime();
-            this.utils.pageDisabled = false;
-        }).catch(() => {
+        await window.ipc.setShutdownTime(this.selectedHour, this.selectedMinute);
+        await this.updateTime();
+        this.utils.pageDisabled = false;
+    }
+
+    public async deleteTime(): Promise<void> {
+        this.utils.pageDisabled = true;
+        window.ipc.cancelShutdown().then((): void => {
             this.updateTime();
             this.utils.pageDisabled = false;
         });
     }
 
-    public deleteTime() {
-        this.utils.pageDisabled = true;
-        this.utils.execCmdAsync("pkexec shutdown -c").then(() => {
-            this.updateTime();
-            this.utils.pageDisabled = false;
-        }).catch(() => {
-            this.updateTime();
-            this.utils.pageDisabled = false;
-        });
-    }
-
-    public updateTime() {
-        this.utils.execCmdAsync("cat /run/systemd/shutdown/scheduled").then((result) => {
-            let resultJSON = ('{"' + result.toString().replace(/\s+/g, '","').replace(/=/g, '":"') + '"}').replace(/.""}/g, '}');
-            let resultDate = new Date(parseInt(JSON.parse(resultJSON).USEC) / 1000);
-            this.appliedTime = resultDate.getHours().toString().padStart(2, "0") + ":" + resultDate.getMinutes().toString().padStart(2, "0");
-        }).catch(() => {
-            this.appliedTime = ""
-        });
+    public async updateTime(): Promise<void> {
+        const result: string = await window.ipc.getScheduledShutdown();
+        try {
+            if (result) {
+                const resultJSON: string =
+                    `{"${result.toString().replace(/\s+/g, '","').replace(/=/g, '":"')}"}`.replace(/.""}/g, '}');
+                const resultDate: Date = new Date(Number.parseInt(JSON.parse(resultJSON).USEC, 10) / 1000);
+                this.appliedTime = `${resultDate.getHours().toString().padStart(2, '0')}:${resultDate.getMinutes().toString().padStart(2, '0')}`;
+            }
+            if (!result) {
+                console.log('shutdown-timer: updateTime: getScheduledShutdown() did not return data');
+            }
+        } catch (err: unknown) {
+            console.error(`shutdown-timer: updateTime failed => ${err}`);
+            this.appliedTime = '';
+        }
     }
 }

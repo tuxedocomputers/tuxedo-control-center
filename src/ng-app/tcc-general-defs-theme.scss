@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,7 +16,6 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-@import '~@angular/material/theming';
 
 @mixin tcc-general-defs-theme($theme) {
     $primary: map-get($theme, primary);
@@ -25,20 +24,18 @@
     $foreground: map-get($theme, foreground);
     $background: map-get($theme, background);
 
-
     /*
      * Definitions for general use of theme colors not warranting their own file
      */
     .color-primary {
-        color: mat-color($primary) !important;
+        color: mat.m2-get-color-from-palette($primary) !important;
     }
 
     .color-accent {
-        color: mat-color($accent) !important;
+        color: mat.m2-get-color-from-palette($accent) !important;
     }
 
     .color-warn {
-        color: mat-color($warn) !important;
+        color: mat.m2-get-color-from-palette($warn) !important;
     }
 }
- 

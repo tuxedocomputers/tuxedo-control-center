@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,54 +16,50 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-@import '~@angular/material/theming';
 
-@mixin tcc-color-picker-theme($theme) {
-    $primary: map-get($theme, primary);
-    $accent: map-get($theme, accent);
-    $warn: map-get($theme, warn);
-    $foreground: map-get($theme, foreground);
-    $background: map-get($theme, background);
+.tcc-color-picker + color-picker > .color-picker {
+    box-shadow:
+        0px 2px 1px -1px rgb(0 0 0 / 20%),
+        0px 1px 1px 0px rgb(0 0 0 / 14%),
+        0px 1px 3px 0px rgb(0 0 0 / 12%);
 
-    .tcc-color-picker+color-picker>.color-picker {
-        box-shadow: 0px 2px 1px -1px rgb(0 0 0 / 20%), 0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
-        background-color: mat-color($background, card);
+    background-color: var(--foreground-color);
 
-        &.open {
-            margin: 0 auto;
-            border-style: none;
+    &.open {
+        margin: 0 auto;
+        border-style: none;
 
-            .type-policy {
-                filter: invert(map-get($theme, --icon-invert));
-            }
+        .type-policy {
+            // todo: --icon-invert
+            //filter: invert(map-get($theme, --icon-invert));
+        }
 
-            .cursor {
-                filter: invert(map-get($theme, --icon-invert));
-            }
-            
-            .saturation-lightness {
-                border-radius: 4px;
-            }
-    
-            .hue {
-                border-radius: 8px;
-            }
+        .cursor {
+            //filter: invert(map-get($theme, --icon-invert));
+        }
 
-            .hex-text * {
-                color: mat-color($foreground, text);
-            }
+        .saturation-lightness {
+            border-radius: 4px;
+        }
 
-            .hsla-text * {
-                color: mat-color($foreground, text);
-            }
+        .hue {
+            border-radius: 8px;
+        }
 
-            .rgba-text * {
-                color: mat-color($foreground, text);
-            }
+        .hex-text * {
+            color: var(--text-color);
+        }
 
-            .box div {
-                color: mat-color($foreground, text-disabled);
-            }
+        .hsla-text * {
+            color: var(--text-color);
+        }
+
+        .rgba-text * {
+            color: var(--text-color);
+        }
+
+        .box div {
+            color: var(--text-color);
         }
     }
 }

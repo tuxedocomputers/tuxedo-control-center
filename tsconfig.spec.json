@@ -1,18 +1,9 @@
 {
-  "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "outDir": "./out-tsc/spec",
-    "types": [
-      "jasmine",
-      "node"
-    ]
-  },
-  "files": [
-    "src/ng-app/test.ts",
-    "src/ng-app/polyfills.ts"
-  ],
-  "include": [
-    "src/**/*.spec.ts",
-    "src/**/*.d.ts"
-  ]
+    "extends": "./tsconfig.json",
+    "compilerOptions": {
+        "outDir": "./out-tsc/spec",
+        "types": ["jasmine", "node"]
+    },
+    "files": ["src/ng-app/main.ts", "src/ng-app/polyfills.ts", "src/ng-app/process.ts"],
+    "include": ["src/**/*.spec.ts", "src/**/*.d.ts"]
 }

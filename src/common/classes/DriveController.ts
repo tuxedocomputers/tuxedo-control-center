@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -17,26 +17,25 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as path from 'path';
-import * as fs from 'fs';
-import * as child_process from 'child_process';
+import * as child_process from 'node:child_process';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 
-import { IDrive } from "../models/IDrive";
+import type { IDrive } from '../models/IDrive';
 import { SysFsPropertyInteger } from './SysFsProperties';
 
 export class DriveController {
-
-    private static _sysBlockDir = "/sys/block/";
+    private static _sysBlockDir: string = '/sys/block/';
 
     public static async getDrives(includeLoopDevices: boolean = false): Promise<IDrive[]> {
-        let drives: IDrive[] = [];
+        const drives: IDrive[] = [];
 
-        let dirs = fs.readdirSync(this._sysBlockDir);
-        for (let d of dirs) {
-            let dr = await this.getChildDevices(path.join(this._sysBlockDir, d));
+        const dirs: string[] = fs.readdirSync(DriveController._sysBlockDir);
+        for (const d of dirs) {
+            const dr: IDrive[] = await DriveController.getChildDevices(path.join(DriveController._sysBlockDir, d));
             if (dr !== undefined) {
-                for (let drive of dr) {
-                    if (!includeLoopDevices && !drive.name.startsWith("loop")) {
+                for (const drive of dr) {
+                    if (!includeLoopDevices && !drive.name.startsWith('loop')) {
                         drives.push(drive);
                     }
                 }
@@ -46,29 +45,19 @@ export class DriveController {
         return drives;
     }
 
-    /*
-    // Unused
-    public static async getDrivesWorkaround(includeLoopDevices: boolean = false): Promise<IDrive[]> {
-        // Workaround for suse. Suse need a first call of blkid with sudo, to create the map for normal users
-        child_process.execSync(`pkexec blkid -o value -s TYPE`);
-
-        return this.getDrives(includeLoopDevices);
-    }
-    */
-
     public static async getDeviceInfo(devicePath: string): Promise<IDrive> {
-        let name = path.basename(devicePath);
-        let size = new SysFsPropertyInteger(path.join(devicePath, "size")).readValue();
+        const name: string = path.basename(devicePath);
+        const size: number = new SysFsPropertyInteger(path.join(devicePath, 'size')).readValue();
 
-        let isParent = !fs.existsSync(path.join(devicePath, "partition"));
-        let devPath = "";
+        const isParent: boolean = !fs.existsSync(path.join(devicePath, 'partition'));
+        let devPath: string = '';
 
-        if (fs.existsSync(path.join("/dev/", name))) {
-            devPath = path.join("/dev/", name);
+        if (fs.existsSync(path.join('/dev/', name))) {
+            devPath = path.join('/dev/', name);
         }
 
-        let result = child_process.execSync(`lsblk --noheadings --nodeps --output FSTYPE ${devPath}`);
-        const isCrpyt = result.toString().trim() == "crypto_LUKS";
+        const result: Buffer = child_process.execSync(`lsblk --noheadings --nodeps --output FSTYPE ${devPath}`);
+        const isCrpyt: boolean = result.toString().trim() === 'crypto_LUKS';
 
         return {
             name: name,
@@ -76,17 +65,17 @@ export class DriveController {
             devPath: devPath,
             crypt: isCrpyt,
             size: size,
-            isParent: isParent
-        }
+            isParent: isParent,
+        };
     }
 
     public static async getChildDevices(devicePath: string): Promise<IDrive[]> {
-        let childDevices: IDrive[] = [];
+        const childDevices: IDrive[] = [];
 
-        let name = path.basename(devicePath);
-        for (let f of fs.readdirSync(devicePath)) {
+        const name: string = path.basename(devicePath);
+        for (const f of fs.readdirSync(devicePath)) {
             if (f.startsWith(name)) {
-                childDevices.push(await this.getDeviceInfo(path.join(devicePath, f)));
+                childDevices.push(await DriveController.getDeviceInfo(path.join(devicePath, f)));
             }
         }
 

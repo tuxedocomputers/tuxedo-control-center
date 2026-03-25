@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,55 +16,64 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 import 'jasmine';
-const mock = require('mock-fs');
-import * as fs from 'fs';
+const mock: typeof import('mock-fs') = require('mock-fs');
+
+import * as fs from 'node:fs';
 
 import { SysFsPropertyString } from './SysFsProperties';
 
-describe('SysDevPropertyString', () => {
-
+describe('SysDevPropertyString', (): void => {
     const dev = new SysFsPropertyString('/sys/class/backlight/intel_backlight/type');
 
     // Mock file structure in memory
-    beforeEach(() => {
+    beforeEach((): void => {
         mock({
-            '/sys/class': {}
+            '/sys/class': {},
         });
     });
 
-    afterEach(() => {
+    afterEach((): void => {
         mock.restore();
     });
 
-    it('when read should throw error if file does not exist', () => {
-        expect(() => { dev.readValue(); }).toThrow();
+    it('when read should throw error if file does not exist', (): void => {
+        expect((): void => {
+            dev.readValue();
+        }).toThrow();
     });
 
-    it('when written should throw error if file does not exist', () => {
-        expect(() => { dev.writeValue('something'); }).toThrow();
+    it('when written should throw error if file does not exist', (): void => {
+        expect((): void => {
+            dev.writeValue('something');
+        }).toThrow();
     });
 
-    it('should throw error if writing to file while not the owner', () => {
+    it('should throw error if writing to file while not the owner', (): void => {
         mock({
             '/sys/class/backlight/intel_backlight/type': mock.file({
                 content: '',
                 uid: 0,
                 gid: 0,
-                mode: 0o644
-            })
+                mode: 0o644,
+            }),
         });
-        expect(() => { dev.writeValue('something'); }).toThrow();
+        expect((): void => {
+            dev.writeValue('something');
+        }).toThrow();
     });
 
-    it('should not throw error if writing to file while the owner', () => {
+    it('should not throw error if writing to file while the owner', (): void => {
         mock({
             '/sys/class/backlight/intel_backlight/type': mock.file({
                 content: 'something',
-                mode: 0o644
-            })
+                mode: 0o644,
+            }),
         });
-        expect(() => { dev.writeValue('something else'); }).not.toThrow();
+        expect((): void => {
+            dev.writeValue('something else');
+        }).not.toThrow();
         expect(fs.readFileSync('/sys/class/backlight/intel_backlight/type').toString()).toBe('something else');
     });
 });

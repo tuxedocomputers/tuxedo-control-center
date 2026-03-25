@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,46 +16,53 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
+
+import type { Dirent } from 'node:fs';
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 import { SysFsController } from './SysFsController';
 import { SysFsPropertyIntegerHex, SysFsPropertyString } from './SysFsProperties';
-import * as path from 'path';
-import * as fs from 'fs';
 
 export class UsbController extends SysFsController {
-
-    private static readonly USB_DEVICES_PATH = '/sys/bus/usb/devices';
-    private static readonly USB_DRIVER_PATH = '/sys/bus/usb/drivers/usb';
-
-    public readonly idProduct = new SysFsPropertyIntegerHex(path.join(this.devicePath, 'idProduct'));
-    public readonly idVendor = new SysFsPropertyIntegerHex(path.join(this.devicePath, 'idVendor'));
-    public readonly product = new SysFsPropertyString(path.join(this.devicePath, 'product'));
-    public readonly manufacturer = new SysFsPropertyString(path.join(this.devicePath, 'manufacturer'));
-
-    public readonly deviceIdString: string;
+    private static readonly USB_DEVICES_PATH: string = '/sys/bus/usb/devices';
+    private static readonly USB_DRIVER_PATH: string = '/sys/bus/usb/drivers/usb';
 
     // Static stuff
     public static getUsbDeviceList(): string[] {
-        const completeDeviceList = SysFsController.getDeviceList(UsbController.USB_DEVICES_PATH);
-        return completeDeviceList.filter(devIdString => !devIdString.includes(':'));
+        const completeDeviceList: string[] = SysFsController.getDeviceList(UsbController.USB_DEVICES_PATH);
+        return completeDeviceList.filter((devIdString: string): boolean => !devIdString.includes(':'));
     }
 
     public static getUsbDriverDeviceList(): string[] {
         return SysFsController.getDeviceListDirent(UsbController.USB_DRIVER_PATH)
-            .filter(dirent => dirent.isDirectory() || dirent.isSymbolicLink())
-            .map(dirent => dirent.name);
+            .filter((dirent: Dirent): boolean => dirent.isDirectory() || dirent.isSymbolicLink())
+            .map((dirent: Dirent): string => dirent.name);
     }
     // End static stuff
+
+    public readonly deviceIdString: string;
+
+    public readonly idProduct: SysFsPropertyIntegerHex;
+    public readonly idVendor: SysFsPropertyIntegerHex;
+    public readonly product: SysFsPropertyString;
+    public readonly manufacturer: SysFsPropertyString;
 
     constructor(public readonly devicePath: string) {
         super();
         this.deviceIdString = path.basename(this.devicePath);
+
+        this.idProduct = new SysFsPropertyIntegerHex(path.join(this.devicePath, 'idProduct'));
+        this.idVendor = new SysFsPropertyIntegerHex(path.join(this.devicePath, 'idVendor'));
+        this.product = new SysFsPropertyString(path.join(this.devicePath, 'product'));
+        this.manufacturer = new SysFsPropertyString(path.join(this.devicePath, 'manufacturer'));
     }
 
     public enableDevice(): boolean {
         try {
             fs.writeFileSync(path.join(UsbController.USB_DRIVER_PATH, 'bind'), this.deviceIdString);
             return true;
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error(`UsbController: enableDevice failed => ${err}`);
             return false;
         }
     }
@@ -64,13 +71,14 @@ export class UsbController extends SysFsController {
         try {
             fs.writeFileSync(path.join(UsbController.USB_DRIVER_PATH, 'unbind'), this.deviceIdString);
             return true;
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error(`UsbController: disableDevice failed => ${err}`);
             return false;
         }
     }
 
     public isEnabled(): boolean {
-        const driverDeviceList = UsbController.getUsbDriverDeviceList();
+        const driverDeviceList: string[] = UsbController.getUsbDriverDeviceList();
 
         return driverDeviceList.includes(this.deviceIdString);
     }

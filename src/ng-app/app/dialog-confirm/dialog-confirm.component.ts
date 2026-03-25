@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,21 +16,22 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Component, Inject } from '@angular/core';
+
+import { Component, inject } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ElectronService } from 'ngx-electron';
+// biome-ignore lint: injection token
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 export interface ConfirmDialogData {
-    title: string,
-    heading?: string,
-    description: string,
-    linkLabel?: string,
-    linkHref?: string,
-    buttonAbortLabel?: string,
-    buttonConfirmLabel: string,
-    showCheckboxNoBother?: boolean,
-    checkboxNoBotherLabel?: string
+    title: string;
+    heading?: string;
+    description: string;
+    linkLabel?: string;
+    linkHref?: string;
+    buttonAbortLabel?: string;
+    buttonConfirmLabel: string;
+    showCheckboxNoBother?: boolean;
+    checkboxNoBotherLabel?: string;
 }
 
 export interface ConfirmDialogResult {
@@ -41,44 +42,44 @@ export interface ConfirmDialogResult {
 @Component({
     selector: 'app-dialog-confirm',
     templateUrl: './dialog-confirm.component.html',
-    styleUrls: ['./dialog-confirm.component.scss']
+    styleUrls: ['./dialog-confirm.component.scss'],
+    standalone: false,
 })
 export class DialogConfirmComponent {
-
     public ctrlCheckboxNoBother: FormControl;
+    public data: ConfirmDialogData;
 
-    constructor(
-        private electron: ElectronService,
-        public dialogRef: MatDialogRef<DialogConfirmComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: ConfirmDialogData) {
+    constructor(public dialogRef: MatDialogRef<DialogConfirmComponent>) {
+        this.data = inject(MAT_DIALOG_DATA);
 
-            if (data.checkboxNoBotherLabel === undefined) {
-                data.checkboxNoBotherLabel = '';
-            }
-            if (data.showCheckboxNoBother === undefined) {
-                data.showCheckboxNoBother = false;
-            }
-            this.ctrlCheckboxNoBother = new FormControl(false);
+        if (this.data.checkboxNoBotherLabel === undefined) {
+            this.data.checkboxNoBotherLabel = '';
+        }
+        if (this.data.showCheckboxNoBother === undefined) {
+            this.data.showCheckboxNoBother = false;
         }
 
-    closeDialog(result?: boolean) {
+        this.ctrlCheckboxNoBother = new FormControl(false);
+    }
+
+    public closeDialog(result?: boolean): void {
         let dialogResult: ConfirmDialogResult;
         const noBotherValue = this.ctrlCheckboxNoBother.value as boolean;
         if (result === true) {
             dialogResult = {
                 confirm: true,
-                noBother: noBotherValue
+                noBother: noBotherValue,
             };
         } else {
             dialogResult = {
                 confirm: false,
-                noBother: noBotherValue
+                noBother: noBotherValue,
             };
         }
         this.dialogRef.close(dialogResult);
     }
 
-    public async openExternalUrl(url: string) {
-        await this.electron.shell.openExternal(url);
+    public async openExternalUrl(url: string): Promise<void> {
+        window.ipc.openExternal(url);
     }
 }

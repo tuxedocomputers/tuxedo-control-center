@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -17,69 +17,63 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, OnInit } from "@angular/core";
-import { UtilsService } from "../utils.service";
-import { ElectronService } from "ngx-electron";
-import { ConfigService } from "../config.service";
+import { Component, type OnInit } from '@angular/core';
+import type { IpcRendererEvent } from 'electron';
+// biome-ignore lint: injection token
+import { ConfigService } from '../config.service';
+// biome-ignore lint: injection token
+import { UtilsService } from '../utils.service';
 
 @Component({
-    selector: "app-prime-dialog",
-    templateUrl: "./prime-dialog.component.html",
-    styleUrls: ["./prime-dialog.component.scss"],
+    selector: 'app-prime-dialog',
+    templateUrl: './prime-dialog.component.html',
+    styleUrls: ['./prime-dialog.component.scss'],
+    standalone: false,
 })
 export class PrimeDialogComponent implements OnInit {
-    primeSelectMode: string;
-    loadingBar = false;
-    langId: string;
+    private primeSelectMode: string;
+    public langId: string;
 
-    dialogStatus: string = "info";
+    public dialogStatus: string = 'info';
 
     constructor(
-        private electron: ElectronService,
         private config: ConfigService,
-        private utils: UtilsService
+        private utils: UtilsService,
     ) {}
 
     public ngOnInit(): void {
-        this.electron.ipcRenderer.on(
-            "set-prime-select-mode",
-            async (event, primeSelectMode) => {
-                this.primeSelectMode = primeSelectMode;
+        window.ipc.onSetPrimeSelectMode(async (_event: IpcRendererEvent, primeSelectMode: string): Promise<void> => {
+            this.primeSelectMode = primeSelectMode;
 
-                // small delay required to avoid flickering ui since html does not instantly update
-                setTimeout(async () => {
-                    this.electron.ipcRenderer.send("show-prime-window");
-                }, 250);
-            }
-        );
-
+            // small delay required to avoid flickering ui since html does not instantly update
+            setTimeout(async (): Promise<void> => {
+                window.ipc.primeWindowShow();
+            }, 250);
+        });
         this.langId = this.utils.getCurrentLanguageId();
     }
 
-    public setDialogStatus(status: string) {
+    public setDialogStatus(status: string): void {
         this.dialogStatus = status;
     }
 
-    public async applyPrimeConfig(rebootStatus: string) {
-        this.setDialogStatus("loading");
+    public async applyPrimeConfig(rebootStatus: string): Promise<void> {
+        this.setDialogStatus('loading');
 
-        this.loadingBar = true;
-        const status = await this.config.pkexecSetPrimeSelectAsync(
-            this.primeSelectMode
-        );
+        const status: boolean = await this.config.pkexecSetPrimeSelectAsync(this.primeSelectMode);
 
         if (status) {
-            if (rebootStatus === "REBOOT") {
-                this.utils.execCmdAsync("reboot");
+            if (rebootStatus === 'REBOOT') {
+                window.ipc.issueReboot();
             }
-            this.electron.ipcRenderer.send("prime-window-close");
+            window.ipc.primeWindowClose();
         }
         if (!status) {
-            this.electron.ipcRenderer.send("prime-window-close");
+            window.ipc.primeWindowClose();
         }
     }
 
-    public closeWindow() {
-        this.electron.ipcRenderer.send("prime-window-close");
+    public closeWindow(): void {
+        window.ipc.primeWindowClose();
     }
 }

@@ -1,5 +1,5 @@
 <!--
-Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
 
 This file is part of TUXEDO Control Center.
 
@@ -16,121 +16,167 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<mat-card class="tcc-card card-support">
-    <mat-card-title class="theme-page-title">
-        <ng-container i18n>TUXEDO Support</ng-container>
-    </mat-card-title>
-    <hr />
-    
-    <div class="content-container centered">
-        <p i18n>You got a problem with your TUXEDO device?</p>
-        <p i18n>Then please contact us by phone or use our online support.</p>
-    
-        <mat-grid-list cols="2" rowHeight="100px">
-            <mat-grid-tile>
-                <div class="phone-info">
-                    <svg viewBox="0 0 512 512" class="tcc-icons"><use href="./assets/images/icon_support.svg#Icon"></use></svg>
-                    <span class="phone-number">+49 (0) 821 / 8998 2992</span>
-                </div>
-            </mat-grid-tile>
-            <mat-grid-tile>
-                <div class="web-info">
-                    <svg viewBox="0 0 512 512" class="tcc-icons"><use href="./assets/images/icon_online.svg#Icon"></use></svg>
-                    <button mat-raised-button color="basic" (click)="openExternalUrl('https://www.tuxedocomputers.com/en/Contact.tuxedo')">
-                        <strong i18n="@@cSupportButtonOnline">TUXEDO online support</strong>
-                    </button>
-                </div>
-            </mat-grid-tile>
-        </mat-grid-list>
-    </div>
-</mat-card>
 
-<mat-accordion class="tcc-accordion">
-    <mat-expansion-panel (click)="focusControl(frmInputTicketNumber)">
-        <mat-expansion-panel-header>
-            <mat-panel-title>
-                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_systemdiagnose.svg#Icon"></use></svg></mat-icon>
-                <ng-container i18n>System diagnostics</ng-container>
-            </mat-panel-title>
-        </mat-expansion-panel-header>
-        <div class="content-container">
-            <div i18n>
-                <p>For more complex problems it may be necessary to evaluate diagnostic data from your PC.</p>
-                <p>Our diagnostic program does NOT collect ANY personal data or private login data! Only information about your hardware and software configuration is gathered.</p>
-            </div>
-            <p>
-                <ng-container i18n>For further information please click</ng-container>:
-                &nbsp;<a style="color: currentColor; cursor: pointer" (click)="openExternalUrl('http://systeminfos.sh')">http://systeminfos.sh</a>
-            </p>
-        
-            <mat-vertical-stepper [linear]="true" #systeminfoStepper>
-                <mat-step [stepControl]="formTicketNumber">
-                    <ng-template matStepLabel>
-                        <ng-container i18n>Step1: Input ticket number</ng-container><!--{{ formTicketNumber.valid ? ': ' : '' }}
-                        <strong>{{ formTicketNumber.valid ? frmInputTicketNumber.value : '' }}</strong>-->
-                    </ng-template>
-                    
-                    <form [formGroup]="formTicketNumber">
-                        <p>
-                            <ng-container i18n="@@cSupportPleaseEnterTicketnumber">Please enter the ticket number of your support request. If you have not yet submitted a request, please visit the appropriate </ng-container>
-                            <a style="color: currentColor; cursor: pointer; text-decoration: underline;" (click)="openExternalUrl('https://www.tuxedocomputers.com/en/Contact.tuxedo')" i18n>online form</a>
-                        </p>
-                        <mat-form-field>
-                            <input matInput formControlName="inputTicketNumber" #frmInputTicketNumber type="text" i18n-placeholder="@@cSupportTicketNumberInputPlaceholder" placeholder="Ticket number" />
-                        </mat-form-field> &nbsp;
-                        <button mat-raised-button matStepperNext color="primary" i18n="@@cSupportTicketStepperButtonNext" (click)="systeminfosCompleted=false">Next</button>
-                        <div *ngIf="formTicketNumber.invalid && formTicketNumber.dirty"
-                        class="alert alert-danger">
-                            <ng-container i18n="@@cSupportTicketNumberInvalid">Ticket number may only contain numbers, starts with 99 and is 9 digits long.</ng-container>
-                        </div>
-                    </form>
+<div class="support-settings-edit">
+    <div class="inner-support-settings-edit">
+        <mat-card class="tcc-card card-support">
+            <mat-card-title>
+                <div class="title">TUXEDO Support</div>
+            </mat-card-title>
+            <hr />
 
-                </mat-step>
-                <mat-step i18n-label label="Step2: Download and run system info collection program" [completed]="systeminfosCompleted">
-                    <div i18n>
-                        <p>When executed our diagnostics script collects the data and thereafter sends it to our support associated with your ticket number.</p>
+            <div class="content-container centered">
+                <p i18n="@@cSupportProblem">You got a problem with your TUXEDO device?</p>
+                <p i18n="@@cSupportContactSupport">Then please contact us by phone or use our online support.</p>
+
+                <div class="contact-information">
+                    <div class="phone-info">
+                        <svg viewBox="0 0 512 512" class="tcc-icons">
+                            <use href="./assets/images/icon_support.svg#Icon"></use>
+                        </svg>
+                        <div class="phone-number">+49 (0) 821 / 8998 2992</div>
                     </div>
-                    <button mat-raised-button color="primary" (click)="buttonStartSysteminfo(systeminfoStepper)" [disabled]="systeminfoRunProgress || systeminfosCompleted">
-                        <i class="fas fa-cog" [ngClass]="{'fa-spin': systeminfoRunProgress }"></i>&nbsp;
-                        <ng-container i18n="@@cSupportSysInfoButtonStart">Start</ng-container>
-                    </button>
-                    &nbsp; <strong *ngIf="systeminfoRunOutput !== ''">Status:</strong> {{ systeminfoRunOutput }}
-                </mat-step>
-                <mat-step i18n-label label="Step 3: Done" [completed]="systeminfosCompleted" state="done">
-                    <p i18n="@@cSupportSysInfoTextDone1">Your system diagnostics data has been successfully sent.</p>
-                    <p i18n="@@cSupportSysInfoTextDone2">We will come back to you as soon as this has been evaluated.</p>
-                </mat-step>
-                <ng-template matStepperIcon="done">
-                    <mat-icon>done</mat-icon>
-                </ng-template>
-            </mat-vertical-stepper>
-        </div>
-    </mat-expansion-panel>
-
-    <mat-expansion-panel>
-        <mat-expansion-panel-header>
-            <mat-panel-title>
-                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_restoresystem.svg#Icon"></use></svg></mat-icon>
-                <ng-container i18n>Restore system</ng-container>
-            </mat-panel-title>
-        </mat-expansion-panel-header>
-
-        <div class="content-container">
-            <div i18n>
-                <p>With our "Fully Automated Installation", you can easily restore your Linux system to its delivery state within minutes and with a few clicks.</p>
-                <p>Thanks to the cloud-based data, you always get the latest system updates! The TUXEDO WebFAI Creator helps to create the required USB-Stick with only three clicks!</p>
+                    <div class="web-info">
+                        <svg viewBox="0 0 512 512" class="tcc-icons">
+                            <use href="./assets/images/icon_online.svg#Icon"></use>
+                        </svg>
+                        <button type="button" mat-stroked-button color="basic" (click)="openExternalUrl('https://www.tuxedocomputers.com/en/Contact.tuxedo')">
+                            <strong i18n="@@cSupportButtonOnline" class="support-button">TUXEDO online support</strong>
+                        </button>
+                    </div>
+                </div>
             </div>
-            <p>
-                <button mat-raised-button (click)="buttonInstallRemoveWebFAICreator()" [disabled]="progress().get(webFAICreatorProgramName) || progressCheck().get(webFAICreatorProgramName)">
-                    <i class="fas fa-cog" [ngClass]="{'fa-spin': progress().get(webFAICreatorProgramName) || progressCheck().get(webFAICreatorProgramName) }"></i>&nbsp;
-                    <span *ngIf="!webFAICreatorInstalled && !progressCheck().get(webFAICreatorProgramName)" i18n="@@cSupportWebFAICreatorInstallButton">Install WebFAI Creator</span>
-                    <span *ngIf="webFAICreatorInstalled && !progressCheck().get(webFAICreatorProgramName)" i18n="@@cSupportWebFAICreatorRemoveButton">Remove WebFAI Creator</span>
-                    <span *ngIf="progressCheck().get(webFAICreatorProgramName)" i18n="@@cSupportWebFAICreatorProgressButton">Checking</span>
-                </button>
-                &nbsp;
-                <button mat-raised-button color="primary" (click)="buttonStartWebFAICreator()" *ngIf="webFAICreatorInstalled" i18n="@@cSupportWebFAICreatorStartButton">Start WebFAI Creator</button>
-            </p>
-        </div>
-    </mat-expansion-panel>
-</mat-accordion>
-<br />
+        </mat-card>
+
+        <mat-accordion class="tcc-accordion">
+            <mat-expansion-panel (click)="focusControl(frmInputTicketNumber)">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <mat-icon>
+                            <svg viewBox="0 0 512 512">
+                                <use href="./assets/images/icon_systemdiagnose.svg#Icon"></use>
+                            </svg>
+                        </mat-icon>
+                        <div i18n="@@cSupportSystemDiagnosticsTitle" class="panel-title">System diagnostics</div>
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div class="content-container">
+                    <div>
+                        <div i18n="@@cSupportSystemDiagnosticsDescription1" class="description">For more complex problems it may be necessary to evaluate diagnostic data from your PC.</div>
+                        <div i18n="@@cSupportSystemDiagnosticsDescription2" class="description">
+                            Our diagnostic program does NOT collect ANY personal data or private login data! Only information about your hardware and software configuration is gathered.
+                        </div>
+                        <div class="description">
+                            <span i18n="@@cSupportSystemDiagnosticsClick"> For further information please click</span>:
+                            <a style="color: currentColor; cursor: pointer" (click)="openExternalUrl('http://systeminfos.sh')">http://systeminfos.sh</a>
+                        </div>
+                    </div>
+
+                    <mat-vertical-stepper [linear]="true" #systeminfoStepper>
+                        <mat-step [stepControl]="formTicketNumber">
+                            <ng-template matStepLabel>
+                                <ng-container i18n="@@cSupportSystemDiagnosticsTicketNumber">Step 1: Input ticket number</ng-container>
+                            </ng-template>
+
+                            <form [formGroup]="formTicketNumber">
+                                <div>
+                                    <span i18n="@@cSupportPleaseEnterTicketNumber">
+                                        Please enter the ticket number of your support request. If you have not yet submitted a request, please visit the appropriate
+                                    </span>
+                                    <a
+                                        style="color: currentColor; cursor: pointer; text-decoration: underline"
+                                        (click)="openExternalUrl('https://www.tuxedocomputers.com/en/Contact.tuxedo')"
+                                        i18n="@@cSupportTicketOnlineForm">
+                                        online form </a
+                                    >.
+                                </div>
+                                <div style="padding-top: 16px">
+                                    <mat-form-field>
+                                        <input
+                                            matInput
+                                            formControlName="inputTicketNumber"
+                                            #frmInputTicketNumber
+                                            type="text"
+                                            i18n-placeholder="@@cSupportTicketNumberInputPlaceholder"
+                                            placeholder="Ticket number" />
+                                    </mat-form-field>
+                                    &nbsp;
+                                    <button type="button" mat-stroked-button matStepperNext color="primary" i18n="@@cSupportTicketStepperButtonNext" (click)="systemInfosCompleted = false">
+                                        Next
+                                    </button>
+                                </div>
+                                <div *ngIf="formTicketNumber.invalid && formTicketNumber.dirty" class="alert alert-danger">
+                                    <div i18n="@@cSupportTicketNumberInvalid">Ticket number may only contain numbers, starts with 99 and is 9 digits long.</div>
+                                </div>
+                            </form>
+                        </mat-step>
+                        <mat-step [completed]="systemInfosCompleted">
+                            <ng-template matStepLabel i18n="@@cSupportInfoCollection">Step 2: Download and run system info collection program</ng-template>
+                            <div i18n="@@cSupportSystemDiagnosticsDataCollectionDescription">
+                                <p>When executed our diagnostics script collects the data and thereafter sends it to our support associated with your ticket number.</p>
+                            </div>
+                            <button type="button" mat-stroked-button color="primary" (click)="buttonStartSysteminfo(systeminfoStepper)" [disabled]="systeminfoRunProgress || systemInfosCompleted">
+                                <div class="start-button">
+                                    <i class="fas fa-cog" [ngClass]="{ 'fa-spin': systeminfoRunProgress }"></i>&nbsp;
+                                    <div i18n="@@cSupportSysInfoButtonStart">Start</div>
+                                </div>
+                            </button>
+                            &nbsp; <strong *ngIf="systeminfoRunOutput !== ''">Status:</strong> {{ systeminfoRunOutput }}
+                        </mat-step>
+                        <mat-step [completed]="systemInfosCompleted" state="done">
+                            <ng-template matStepLabel i18n="@@cSupportSystemDiagnosticsDone">Step 3: Done</ng-template>
+                            <p i18n="@@cSupportSysInfoTextDone1">Your system diagnostics data has been successfully sent.</p>
+                            <p i18n="@@cSupportSysInfoTextDone2">We will come back to you as soon as this has been evaluated.</p>
+                        </mat-step>
+                        <ng-template matStepperIcon="done">
+                            <mat-icon>done</mat-icon>
+                        </ng-template>
+                    </mat-vertical-stepper>
+                </div>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel *ngIf="aptInstalled">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <mat-icon>
+                            <svg viewBox="0 0 512 512">
+                                <use href="./assets/images/icon_restoresystem.svg#Icon"></use>
+                            </svg>
+                        </mat-icon>
+                        <div i18n="@@cSupportRestoreTitle" class="panel-title">Restore system</div>
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+
+                <div class="content-container">
+                    <div i18n="@@cSupportRestoreDescription">
+                        <p>With our "Fully Automated Installation", you can easily restore your Linux system to its delivery state within minutes and with a few clicks.</p>
+                        <p>Thanks to the cloud-based data, you always get the latest system updates! The TUXEDO WebFAI Creator helps to create the required USB-Stick with only three clicks!</p>
+                    </div>
+                    <p>
+                        <button
+                            type="button"
+                            mat-stroked-button
+                            (click)="buttonInstallRemoveWebfaiCreator()"
+                            [disabled]="progress().get(webfaiCreatorProgramName) || progressCheck().get(webfaiCreatorProgramName)">
+                            <i class="fas fa-cog" [ngClass]="{ 'fa-spin': progress().get(webfaiCreatorProgramName) || progressCheck().get(webfaiCreatorProgramName) }"></i>&nbsp;
+                            <span *ngIf="!webfaiCreatorInstalled && !progressCheck().get(webfaiCreatorProgramName)" i18n="@@cSupportWebfaiCreatorInstallButton">Install WebFAI Creator</span>
+                            <span *ngIf="webfaiCreatorInstalled && !progressCheck().get(webfaiCreatorProgramName)" i18n="@@cSupportWebfaiCreatorRemoveButton">Remove WebFAI Creator</span>
+                            <span *ngIf="progressCheck().get(webfaiCreatorProgramName)" i18n="@@cSupportWebFAICreatorProgressButton">Checking</span>
+                        </button>
+                        &nbsp;
+                        <button
+                            type="button"
+                            mat-stroked-button
+                            color="primary"
+                            (click)="buttonStartWebfaiCreator()"
+                            *ngIf="webfaiCreatorInstalled && !(progress().get(webfaiCreatorProgramName) || progressCheck().get(webfaiCreatorProgramName))"
+                            i18n="@@cSupportWebFAICreatorStartButton">
+                            Start WebFAI Creator
+                        </button>
+                    </p>
+                </div>
+            </mat-expansion-panel>
+        </mat-accordion>
+        <br />
+    </div>
+</div>

@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -17,31 +17,38 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, OnInit } from "@angular/core";
-import { ConfigService } from "../config.service";
-import { UtilsService } from "../utils.service";
-import { TccDBusClientService } from "../tcc-dbus-client.service";
-import { Subscription } from "rxjs";
-import { first } from "rxjs/operators";
+import { Component, type OnInit } from '@angular/core';
+import { Mutex } from 'async-mutex';
+import { Subscription } from 'rxjs';
+import { first } from 'rxjs/operators';
+// biome-ignore lint: injection token
+import { ConfigService } from '../config.service';
+import type { ConfirmChoiceResult } from '../dialog-choice/dialog-choice.component';
+// biome-ignore lint: injection token
+import { TccDBusClientService } from '../tcc-dbus-client.service';
+// biome-ignore lint: injection token
+import { UtilsService } from '../utils.service';
 
 @Component({
-    selector: "app-prime-select",
-    templateUrl: "./prime-select.component.html",
-    styleUrls: ["./prime-select.component.scss"],
+    selector: 'app-prime-select',
+    templateUrl: './prime-select.component.html',
+    styleUrls: ['./prime-select.component.scss'],
+    standalone: false,
 })
 export class PrimeSelectComponent implements OnInit {
     public primeState: string;
     public activeState: string;
-    public primeSelectValues: string[] = ["iGPU", "dGPU", "on-demand"];
+    public primeSelectValues: string[] = ['iGPU', 'dGPU', 'on-demand'];
     private subscriptions: Subscription = new Subscription();
+    private mutex = new Mutex();
 
     constructor(
         private utils: UtilsService,
         private config: ConfigService,
-        private tccdbus: TccDBusClientService
+        private tccdbus: TccDBusClientService,
     ) {}
 
-    public async ngOnInit() {
+    public async ngOnInit(): Promise<void> {
         this.subscribePrimeState();
     }
 
@@ -49,8 +56,8 @@ export class PrimeSelectComponent implements OnInit {
         this.subscriptions.unsubscribe();
     }
 
-    private subscribePrimeState() {
-        this.tccdbus.primeState.pipe(first()).subscribe((state: string) => {
+    private subscribePrimeState(): void {
+        this.tccdbus.primeState.pipe(first()).subscribe((state: string): void => {
             if (state) {
                 this.primeState = this.activeState = state;
             }
@@ -58,10 +65,18 @@ export class PrimeSelectComponent implements OnInit {
     }
 
     public async applyGpuProfile(selectedPrimeStatus: string): Promise<void> {
-        const status = await this.askProceedDialog();
+        if (this.primeState === selectedPrimeStatus) return;
 
-        if (status === "CANCEL" || status === undefined) {
+        // https://github.com/angular/components/issues/27680
+        if (this.mutex.isLocked()) return;
+
+        this.mutex.acquire();
+
+        const status: string = await this.askProceedDialog();
+
+        if (status === 'CANCEL' || status === undefined) {
             this.activeState = this.primeState;
+            this.mutex.release();
             return;
         }
 
@@ -70,22 +85,21 @@ export class PrimeSelectComponent implements OnInit {
             description: $localize`:@@primeSelectDialogApplyProfileDescription:Do not power off your device until the process is complete.`,
         };
 
-        const pkexecSetPrimeSelectAsync =
-            this.config.pkexecSetPrimeSelectAsync(selectedPrimeStatus);
+        const pkexecSetPrimeSelectAsync: Promise<boolean> = this.config.pkexecSetPrimeSelectAsync(selectedPrimeStatus);
 
-        const isSuccessful = await this.utils.waitingDialog(
-            config,
-            pkexecSetPrimeSelectAsync
-        );
+        // todo: use boolean instead
+        const isSuccessful: boolean = await this.utils.waitingDialog(config, pkexecSetPrimeSelectAsync);
 
         if (isSuccessful) {
             this.activeState = this.primeState = selectedPrimeStatus;
-            if (status === "REBOOT") {
-                this.utils.execCmdAsync("reboot");
+            if (status === 'REBOOT') {
+                window.ipc.issueReboot();
             }
         } else {
             this.activeState = this.primeState;
         }
+
+        this.mutex.release();
     }
 
     private async askProceedDialog(): Promise<string> {
@@ -95,19 +109,19 @@ export class PrimeSelectComponent implements OnInit {
             labelData: [
                 {
                     label: $localize`:@@dialogAbort:Cancel`,
-                    value: "CANCEL",
+                    value: 'CANCEL',
                 },
                 {
                     label: $localize`:@@dialogInstantReboot:Instant Reboot`,
-                    value: "REBOOT",
+                    value: 'REBOOT',
                 },
                 {
                     label: $localize`:@@dialogRebootLater:Reboot later`,
-                    value: "NO_REBOOT",
+                    value: 'NO_REBOOT',
                 },
             ],
         };
-        const returnValue = await this.utils.choiceDialog(rebootConfig);
+        const returnValue: ConfirmChoiceResult = await this.utils.choiceDialog(rebootConfig);
         return returnValue.value as string;
     }
 }

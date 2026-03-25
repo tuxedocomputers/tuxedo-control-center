@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2022-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -19,7 +19,7 @@
 
 .charging-group-label {
     display: block;
-    font-size: 1.5em;
+    font-size: 16px;
     font-weight: bolder;
     padding-top: 20px;
 }
@@ -27,26 +27,35 @@
 .charging-radio-group {
     display: flex;
     flex-direction: column;
-    margin: 15px 0;
+    padding-top: 16px;
     align-items: flex-start;
 
-    mat-radio-button {
-        margin: 5px;
+    .header-text {
+        font-size: 16px;
+        font-weight: bold;
+    }
+    .content-text {
+        font-size: 16px;
+    }
 
-        .inner-label {
-            padding-left: 8px;
-            white-space: normal;
+    .radio-text {
+        padding-top: 16px;
+        padding-bottom: 16px;
 
-            header {
-                font-size: 1.2em;
-                font-weight: bolder;
-            }
+        .radio-title {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .radio-description {
+            font-size: 16px;
         }
     }
 }
 
 .charging-profile-note {
-    padding-top: 10px;
+    font-size: 16px;
+    padding-top: 16px;
 
     display: flex;
     flex-flow: row nowrap;
@@ -58,63 +67,49 @@
     height: 30px;
 }
 
-.charging-thresholds {
-    display: flex;
-    flex-flow: column nowrap;
-
-    mat-checkbox {
-        margin-top: 20px;
-        margin-bottom: 10px;
-    }
-
-    mat-slider {
-        width: 250px;
-    }
+.inactive {
+    opacity: 0.2;
+    pointer-events: none;
 }
 
 .edit-grid {
-
-    .inactive {
-        opacity: 0.2;
-        pointer-events: none;
+    mat-grid-tile {
+        overflow: visible;
     }
 
-    header {
-        display: flex;
-        align-items: center;
-
-        width: 100%;
+    .description {
+        font-size: 16px;
         text-align: left;
-        font-size: 1.10em;
+        padding-top: 0px;
+        font-style: oblique;
     }
 
-    content.value {
-        width: 100%;
-        text-align: left;
-        font-weight: bold;
-        font-size: 1.15em;
-    }
-
-    content.input {
+    .input {
         width: 100%;
 
         mat-slider {
-            width: 200px;
-        }
-
-        mat-select {
-            width: 200px;
-        }
-
-        mat-form-field {
-            width: 360px;
-
-            &.input-description {
-
-                textarea {
-                    resize: none;
-                }
-            }
+            width: 100%;
         }
     }
+
+    .header {
+        width: 100%;
+        text-align: left;
+        font-size: 16px;
+        font-weight: bold;
+    }
+
+    .value {
+        width: 100%;
+        text-align: left;
+        font-weight: bold;
+        font-size: 16px;
+    }
+}
+
+.apply-button {
+    display: flex;
+    justify-content: center;
+    padding-top: 16px;
+    padding-bottom: 16px;
 }

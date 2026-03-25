@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2024 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,52 +16,71 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import * as path from 'path';
-import { LogicalCpuController, ScalingDriver } from './LogicalCpuController';
-import { SysFsPropertyInteger, SysFsPropertyNumList, SysFsPropertyBoolean, SysFsPropertyString } from './SysFsProperties';
+
+import * as path from 'node:path';
 import { IntelPstateController } from './IntelPStateController';
+import { LogicalCpuController, ScalingDriver } from './LogicalCpuController';
+import {
+    SysFsPropertyBoolean,
+    SysFsPropertyInteger,
+    SysFsPropertyNumList,
+    SysFsPropertyString,
+} from './SysFsProperties';
 import { findClosestValue } from './Utils';
 
 export class CpuController {
-
     constructor(public readonly basePath: string) {
         this.cores = [];
-        this.getAvailableLogicalCores();
+        this.basePath = basePath;
+
+        this.kernelMax = new SysFsPropertyInteger(path.join(basePath, 'kernel_max'));
+        this.offline = new SysFsPropertyNumList(path.join(basePath, 'offline'));
+        this.online = new SysFsPropertyNumList(path.join(basePath, 'online'));
+        this.possible = new SysFsPropertyNumList(path.join(basePath, 'possible'));
+        this.present = new SysFsPropertyNumList(path.join(basePath, 'present'));
+        this.intelPstate = new IntelPstateController(path.join(basePath, 'intel_pstate'));
+        this.boost = new SysFsPropertyBoolean(path.join(basePath, 'cpufreq/boost'));
+        this.amdPstateStatus = new SysFsPropertyString(path.join(basePath, 'amd_pstate/status'));
+
+        this.getAvailableLogicalCores(basePath);
     }
 
     public cores: LogicalCpuController[];
+    private unsupportedEnergyPreferenceValues: string[] = [];
 
-    public readonly kernelMax = new SysFsPropertyInteger(path.join(this.basePath, 'kernel_max'));
-    public readonly offline = new SysFsPropertyNumList(path.join(this.basePath, 'offline'));
-    public readonly online = new SysFsPropertyNumList(path.join(this.basePath, 'online'));
-    public readonly possible = new SysFsPropertyNumList(path.join(this.basePath, 'possible'));
-    public readonly present = new SysFsPropertyNumList(path.join(this.basePath, 'present'));
+    public readonly kernelMax: SysFsPropertyInteger;
+    public readonly offline: SysFsPropertyNumList;
+    public readonly online: SysFsPropertyNumList;
+    public readonly possible: SysFsPropertyNumList;
+    public readonly present: SysFsPropertyNumList;
 
-    public readonly intelPstate = new IntelPstateController(path.join(this.basePath, 'intel_pstate'));
+    public readonly intelPstate: IntelPstateController;
 
-    public readonly boost = new SysFsPropertyBoolean(path.join(this.basePath, 'cpufreq/boost'));
-    public readonly amdPstateStatus = new SysFsPropertyString(path.join(this.basePath, 'amd_pstate/status'));
+    public readonly boost: SysFsPropertyBoolean;
+    public readonly amdPstateStatus: SysFsPropertyString;
 
-    public getAvailableLogicalCores(): void {
+    public getAvailableLogicalCores(basePath: string): void {
         // Add "possible" and "present" logical cores
         this.cores = [];
         try {
-            const possibleCores = this.possible.readValue();
-            const presentCores = this.present.readValue();
+            const possibleCores: number[] = this.possible.readValue();
+            const presentCores: number[] = this.present.readValue();
             const coreIndexToAdd: number[] = [];
             for (const possibleCoreIndex of possibleCores) {
                 if (presentCores.includes(possibleCoreIndex)) {
                     coreIndexToAdd.push(possibleCoreIndex);
                 }
             }
-            coreIndexToAdd.sort((a, b) => a - b );
+            coreIndexToAdd.sort((a: number, b: number): number => a - b);
             for (const coreIndex of coreIndexToAdd) {
-                const newCore = new LogicalCpuController(this.basePath, coreIndex);
+                const newCore = new LogicalCpuController(basePath, coreIndex);
                 if (coreIndex === 0 || newCore.online.isAvailable()) {
                     this.cores.push(newCore);
                 }
             }
-        } catch (err) {}
+        } catch (err: unknown) {
+            console.error(`CpuController: getAvailableLogicalCores failed => ${err}`);
+        }
     }
 
     /**
@@ -70,10 +89,16 @@ export class CpuController {
      * @param numberOfCores Number of logical cpu cores to use, defaults to "use all available"
      */
     public useCores(numberOfCores?: number): void {
-        if (numberOfCores === undefined) { numberOfCores = this.cores.length; }
-        if (numberOfCores === 0) { return; }
-        for (let i = 1; i < this.cores.length; ++i) {
-            if (!this.cores[i].online.isAvailable()) { continue; }
+        if (numberOfCores === undefined) {
+            numberOfCores = this.cores?.length;
+        }
+        if (numberOfCores === 0) {
+            return;
+        }
+        for (let i: number = 1; i < this.cores?.length; ++i) {
+            if (!this.cores[i].online.isAvailable()) {
+                continue;
+            }
             if (i < numberOfCores) {
                 this.cores[i].online.writeValue(true);
             } else {
@@ -87,20 +112,36 @@ export class CpuController {
      *
      * @param setMaxFrequency Maximum scaling frequency value to set, defaults to max value for core
      */
+    // todo: function too long
     public setGovernorScalingMaxFrequency(setMaxFrequency?: number): void {
-        let scalingDriver;
+        let scalingDriver: string;
 
         for (const core of this.cores) {
-            if (!core.scalingMinFreq.isAvailable() || !core.scalingMaxFreq.isAvailable()
-                || !core.cpuinfoMinFreq.isAvailable() || !core.cpuinfoMaxFreq.isAvailable()) { continue; }
-            if (core.coreIndex !== 0 && !core.online.readValue()) { continue; }
-            const coreMinFrequency = core.cpuinfoMinFreq.readValue();
-            const coreMaxFrequency = core.cpuinfoMaxFreq.readValue();
-            const scalingMinFrequency = core.scalingMinFreq.readValue();
-            let availableFrequencies = core.scalingAvailableFrequencies.readValueNT();
-            scalingDriver = core.scalingDriver.readValueNT();
-            let newMaxFrequency: number;
+            if (
+                !core.scalingMinFreq.isAvailable() ||
+                !core.scalingMaxFreq.isAvailable() ||
+                !core.cpuinfoMinFreq.isAvailable() ||
+                !core.cpuinfoMaxFreq.isAvailable()
+            ) {
+                continue;
+            }
+            if (core.coreIndex !== 0 && !core.online.readValue()) {
+                continue;
+            }
+            //const coreMinFrequency = core.cpuinfoMinFreq.readValue();
+            const coreMaxFrequency: number = core.cpuinfoMaxFreq.readValue();
+            const scalingMinFrequency: number = core.scalingMinFreq.readValue();
 
+            const scalingFrequencyAvailable: boolean = this.cores[0].scalingAvailableFrequencies.isAvailable();
+            let availableFrequencies: number[];
+            if (scalingFrequencyAvailable) {
+                availableFrequencies = core.scalingAvailableFrequencies.readValueNT();
+            }
+            const scalingDriverAvailable: boolean = this.cores[0].scalingAvailableFrequencies.isAvailable();
+            if (scalingDriverAvailable) {
+                scalingDriver = core.scalingDriver.readValueNT();
+            }
+            let newMaxFrequency: number;
 
             // Default to max available
             if (setMaxFrequency === undefined) {
@@ -125,8 +166,12 @@ export class CpuController {
             // Additionally verify that it is one of the available frequencies
             // ..if available frequencies are defined
             if (availableFrequencies !== undefined) {
-                availableFrequencies = availableFrequencies.filter(value => value >= scalingMinFrequency);
-                if (availableFrequencies.length === 0) { continue; }
+                availableFrequencies = availableFrequencies.filter(
+                    (value: number): boolean => value >= scalingMinFrequency,
+                );
+                if (availableFrequencies?.length === 0) {
+                    continue;
+                }
                 newMaxFrequency = findClosestValue(newMaxFrequency, availableFrequencies);
             }
 
@@ -136,17 +181,21 @@ export class CpuController {
         // AMD does not count boost frequency to coreMaxFrequency while Intel does. So on AMD a setMaxFrequency over
         // coreMaxFrequency indicates that the boost switch should be enabled. On Intel this switch doesn't exist
         // and boost is handled via scalingMaxFreq.
-        const maxFrequency = this.cores[0].cpuinfoMaxFreq.readValue();
-        const availableFrequencies = this.cores[0].scalingAvailableFrequencies.readValueNT();
-        let maximumAvailableFrequency = maxFrequency;
-        if (availableFrequencies !== undefined) {
-            maximumAvailableFrequency = availableFrequencies[0];
+        const maxFrequency: number = this.cores[0].cpuinfoMaxFreq.readValue();
+        let maximumAvailableFrequency: number = maxFrequency;
+
+        const scalingFrequencyAvailable: boolean = this.cores[0].scalingAvailableFrequencies.isAvailable();
+        if (scalingFrequencyAvailable) {
+            const availableFrequencies: number[] = this.cores[0].scalingAvailableFrequencies.readValueNT();
+            if (availableFrequencies !== undefined) {
+                maximumAvailableFrequency = availableFrequencies[0];
+            }
         }
+
         if (this.boost.isAvailable() && scalingDriver === ScalingDriver.acpi_cpufreq) {
             if (setMaxFrequency === undefined || setMaxFrequency > maximumAvailableFrequency) {
                 this.boost.writeValue(true);
-            }
-            else {
+            } else {
                 this.boost.writeValue(false);
             }
         }
@@ -159,13 +208,26 @@ export class CpuController {
      */
     public setGovernorScalingMinFrequency(setMinFrequency?: number): void {
         for (const core of this.cores) {
-            if (!core.scalingMinFreq.isAvailable() || !core.scalingMaxFreq.isAvailable()
-                || !core.cpuinfoMinFreq.isAvailable() || !core.cpuinfoMaxFreq.isAvailable()) { continue; }
-            if (core.coreIndex !== 0 && !core.online.readValue()) { continue; }
-            const coreMinFrequency = core.cpuinfoMinFreq.readValue();
-            const coreMaxFrequency = core.cpuinfoMaxFreq.readValue();
-            const scalingMaxFrequency = core.scalingMaxFreq.readValue();
-            let availableFrequencies = core.scalingAvailableFrequencies.readValueNT();
+            if (
+                !core.scalingMinFreq.isAvailable() ||
+                !core.scalingMaxFreq.isAvailable() ||
+                !core.cpuinfoMinFreq.isAvailable() ||
+                !core.cpuinfoMaxFreq.isAvailable()
+            ) {
+                continue;
+            }
+            if (core.coreIndex !== 0 && !core.online.readValue()) {
+                continue;
+            }
+            const coreMinFrequency: number = core.cpuinfoMinFreq.readValue();
+            const coreMaxFrequency: number = core.cpuinfoMaxFreq.readValue();
+            const scalingMaxFrequency: number = core.scalingMaxFreq.readValue();
+
+            const scalingAvailable: boolean = core.scalingAvailableFrequencies.isAvailable();
+            let availableFrequencies: number[];
+            if (scalingAvailable) {
+                availableFrequencies = core.scalingAvailableFrequencies.readValueNT();
+            }
 
             let newMinFrequency: number;
 
@@ -176,7 +238,7 @@ export class CpuController {
                 newMinFrequency = coreMaxFrequency;
             } else {
                 newMinFrequency = setMinFrequency;
-                
+
                 // Enforce min/max limits
                 if (newMinFrequency < coreMinFrequency) {
                     newMinFrequency = coreMinFrequency;
@@ -188,8 +250,12 @@ export class CpuController {
             // Additionally verify that it is one of the available frequencies
             // ..if available frequencies are defined
             if (availableFrequencies !== undefined) {
-                availableFrequencies = availableFrequencies.filter(value => value <= scalingMaxFrequency);
-                if (availableFrequencies.length === 0) { continue; }
+                availableFrequencies = availableFrequencies.filter(
+                    (value: number): boolean => value <= scalingMaxFrequency,
+                );
+                if (availableFrequencies?.length === 0) {
+                    continue;
+                }
                 newMinFrequency = findClosestValue(newMinFrequency, availableFrequencies);
             }
 
@@ -204,21 +270,25 @@ export class CpuController {
      * @param governor The chosen governor (the same will be applied to all cores),
      *                 defaults to "don't set"
      */
-    public setGovernor(governor?: string) {
+    public setGovernor(governor?: string): void {
         if (governor === undefined) {
             return;
         }
 
         for (const core of this.cores) {
-            if (!core.scalingGovernor.isAvailable() || !core.scalingAvailableGovernors.isAvailable()) { continue; }
-            if (core.coreIndex !== 0 && !core.online.readValue()) { return; }
-            const availableGovernors = core.scalingAvailableGovernors.readValue();
+            if (!core.scalingGovernor.isAvailable() || !core.scalingAvailableGovernors.isAvailable()) {
+                continue;
+            }
+            if (core.coreIndex !== 0 && !core.online.readValue()) {
+                return;
+            }
+            const availableGovernors: string[] = core.scalingAvailableGovernors.readValue();
             if (availableGovernors.includes(governor)) {
                 core.scalingGovernor.writeValue(governor);
             } else {
-                throw Error('setGovernor: choosen governor \''
-                 + governor + '\' is not available (' + core.cpuPath
-                 + ') available are: ' + JSON.stringify(availableGovernors));
+                throw Error(
+                    `CpuController: setGovernor: Choosen governor '${governor}' is not available (${core.cpuPath}), available are: ${JSON.stringify(availableGovernors)}`,
+                );
             }
         }
     }
@@ -230,16 +300,39 @@ export class CpuController {
      * @param performancePreference The chosen energy performance preference (the same
      *                              will be applied to all cores), defaults to "don't set"
      */
-    public setEnergyPerformancePreference(performancePreference?: string) {
+    public setEnergyPerformancePreference(performancePreference?: string): void {
         if (performancePreference === undefined) {
             return;
         }
 
+        // core.energyPerformancePreference.isWritable() is not enough to check if file is writable, returns true and write results in "EINVAL: invalid argument"
+        // the path is indeed writable, but does not accept the supplied value and only works with certain values
+        // checking if value can be written, assuming that write is not possible if it failed once, to avoid repeated access errors
+        if (this.unsupportedEnergyPreferenceValues.includes(performancePreference)) {
+            return;
+        }
+
         for (const core of this.cores) {
-            if (!core.energyPerformancePreference.isAvailable() || !core.energyPerformanceAvailablePreferences.isAvailable()) { continue; }
-            if (core.coreIndex !== 0 && !core.online.readValue()) { return; }
+            if (
+                !core.energyPerformancePreference.isAvailable() ||
+                !core.energyPerformanceAvailablePreferences.isAvailable() ||
+                !core.energyPerformancePreference.isWritable()
+            ) {
+                continue;
+            }
+            if (core.coreIndex !== 0 && !core.online.readValue()) {
+                return;
+            }
             if (core.energyPerformanceAvailablePreferences.readValue().includes(performancePreference)) {
-                core.energyPerformancePreference.writeValue(performancePreference);
+                try {
+                    core.energyPerformancePreference.writeValue(performancePreference);
+                } catch (_err: unknown) {
+                    console.error(
+                        `CpuController: setEnergyPerformancePreference: ${performancePreference} is not supported.`,
+                    );
+                    this.unsupportedEnergyPreferenceValues.push(performancePreference);
+                    break;
+                }
             }
         }
     }

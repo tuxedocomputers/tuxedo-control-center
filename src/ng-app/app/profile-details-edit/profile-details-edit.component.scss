@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,122 +16,127 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-.profile-details-edit {
-    margin: 0 10px 10px 10px;
 
-    .sub-header
-    {
-        font-size: 1.15em;
-        font-weight: bold;
-    }
+.backlight-settings-edit {
+    overflow-x: hidden;
 
-    .profile-title {
-        position: fixed;
-        top: 10px;
-        right: 40px;
-        z-index: 100;
+    display: block;
+    position: absolute;
+    top: 10px;
+    bottom: 25px;
+    right: 5px;
+    left: 0px;
+    margin: 0px;
+    padding: 0px;
+    overflow-y: scroll;
+    user-select: none;
 
-        height: 50px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+    .inner-backlight-settings-edit {
+        margin: 0 10px 10px 10px;
 
-        .save-reset-buttons {
-            --icon-detail: var(--icon-main);
+        .sub-header {
+            font-size: 18px;
+            font-weight: bold;
         }
 
-        .name {
-            width: 400px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            font-size:20px;
+        .profile-title {
+            position: fixed;
+            top: 10px;
+            right: 40px;
+            z-index: 100;
+            padding-top: 10px;
 
-            input {
+            .save-reset-buttons {
+                --icon-detail: var(--icon-main);
+                background-color: var(--foreground-color);
+            }
+
+            .name {
                 width: 400px;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                font-size: 20px;
+
+                input {
+                    width: 400px;
+                }
             }
         }
-    }
 
-    .profile-details-edit-grid {
-        .inactive {
-            opacity: 0.2;
-            pointer-events: none;
+        .profile-details-edit-grid {
+            .inactive {
+                opacity: 0.2;
+                pointer-events: none;
+            }
+
+            header {
+                display: flex;
+                align-items: center;
+
+                width: 100%;
+                text-align: left;
+                font-size: 16px;
+            }
+
+            text.value,
+            content.value {
+                width: 100%;
+                text-align: left;
+                font-weight: bold;
+                font-size: 16px;
+            }
+
+            content.input {
+                width: 100%;
+
+                mat-slider {
+                    width: 100%;
+                    overflow: visible;
+                    margin: 0%;
+                }
+
+                mat-form-field {
+                    width: 100%;
+
+                    &.input-description {
+                        textarea {
+                            resize: none;
+                        }
+                    }
+                }
+            }
+
+            content.toggle-group {
+                text-align: left;
+                direction: rtl;
+            }
+
+            .increment-decrement-buttons {
+                display: flex;
+                padding-right: 20px;
+            }
         }
 
-        header {
+        .tgp-chart-container,
+        .fan-chart-container {
             display: flex;
+            flex-direction: column;
             align-items: center;
 
-            width: 100%;
-            text-align: left;
-            font-size: 1.10em;
-        }
-
-        text.value,
-        content.value {
-            width: 100%;
-            text-align: left;
-            font-weight: bold;
-            font-size: 1.15em;
-        }
-
-        content.input {
-            width: 100%;
-
-            mat-slider {
-                width: 200px;
-            }
-
-            mat-select {
-                width: 200px;
-            }
-
-            mat-form-field {
-                width: 360px;
-
-                &.input-description {
-
-                    textarea {
-                        resize: none;
-                    }
-                }
-            }
-
-            mat-button-toggle-group {
-                transform: scale(0.8);
-                transform-origin: left;
-
-                mat-button-toggle {
-                    font-size: 1.6em;
-                    svg {
-                        width: 40px;
-                        height: 40px;
-
-                        --icon-detail: var(--icon-main);
-                    }
-                }
-            }
-        }
-    }
-
-    .tgp-chart-container,
-    .fan-graph-container {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        //justify-content: center;
-
-        margin-top: 20px;
-        width: 100%;
-
-        app-fan-graph {
-            width: 100%;
             margin-top: 20px;
-        }
-
-        .tgp-chart {
             width: 100%;
+
+            app-fan-chart {
+                width: 100%;
+                margin-top: 20px;
+            }
+
+            app-tgp-chart {
+                width: 100%;
+                margin-top: 20px;
+                height: 150px;
+            }
         }
     }
 }

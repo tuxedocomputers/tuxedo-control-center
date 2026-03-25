@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,36 +16,36 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 import 'jasmine';
-const mock = require('mock-fs');
+const mock: typeof import('mock-fs') = require('mock-fs');
 
 import { CpuController } from './CpuController';
 
-describe('CpuController', () => {
-
+describe('CpuController', (): void => {
     // Mock file structure in memory
-    beforeEach(() => {
+    beforeEach((): void => {
         mock({
             '/sys/devices/system/cpu': {
-                'possible': '0-1',
-                'present': '0-1',
-                'cpu0': {
-                    'online': '1',
-                    cpufreq: { 'scaling_cur_freq': '800000' }
+                possible: '0-1',
+                present: '0-1',
+                cpu0: {
+                    online: '1',
+                    cpufreq: { scaling_cur_freq: '800000' },
                 },
-                'cpu1': {
-                    'online': '1',
-                    cpufreq: { 'scaling_cur_freq': '800000' }
-                }
-            }
+                cpu1: {
+                    online: '1',
+                    cpufreq: { scaling_cur_freq: '800000' },
+                },
+            },
         });
     });
 
-    afterEach(() => {
+    afterEach((): void => {
         mock.restore();
     });
 
-    it('should add paths to properties correctly', () => {
+    it('should add paths to properties correctly', (): void => {
         const cpu = new CpuController('/sys/devices/system/cpu');
         expect(cpu.basePath).toBe('/sys/devices/system/cpu');
         expect(cpu.online.readPath).toBe('/sys/devices/system/cpu/online');

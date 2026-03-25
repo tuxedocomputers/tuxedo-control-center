@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,7 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-export interface ITuxedoIOAPI {
+
+interface ITuxedoIOAPI {
     /**
      * Gets information about the tuxedo-cc-wmi module
      *
@@ -89,7 +90,7 @@ export interface ITuxedoIOAPI {
      * Get names of output ports
      * @returns Array of output port names
      */
-     getOutputPorts(): Array<Array<string>>;
+    getOutputPorts(): Array<Array<string>>;
     /**
      *  Get list of available ODM performance profiles
      *  @returns True if call succeeded, false otherwise
@@ -115,9 +116,8 @@ export interface ITuxedoIOAPI {
      *  in range as listed by a call to TDPInfo
      *  @returns True if call succeeded, false otherwise
      */
-    setTDPValues(tdpValues: Number[]): boolean;
+    setTDPValues(tdpValues: number[]): boolean;
 }
-
 
 export class ModuleInfo {
     version = '';
