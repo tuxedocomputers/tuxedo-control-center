@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,14 +16,21 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { ChangeDetectionStrategy, Component, HostListener, Inject, Output, OnInit, OnDestroy } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { ITccProfile } from 'src/common/models/TccProfile';
+
+import { Component, HostListener, inject, type OnDestroy, type OnInit } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { UtilsService } from '../utils.service';
-import { IGeneralCPUInfo , SysFsService } from '../sys-fs.service';
+// biome-ignore lint: injection token
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Subscription } from 'rxjs';
+import type { IGeneralCPUInfo } from '../../../common/models/ICpuInfos';
+import type { ITccProfile } from '../../../common/models/TccProfile';
+// biome-ignore lint: injection token
 import { CompatibilityService } from '../compatibility.service';
+// biome-ignore lint: injection token
+import { SysFsService } from '../sys-fs.service';
+// biome-ignore lint: injection token
+import { UtilsService } from '../utils.service';
+
 export interface IProfileConflictDialogResult {
     action: string;
     newName: string;
@@ -31,66 +38,72 @@ export interface IProfileConflictDialogResult {
 @Component({
     selector: 'profile-conflict-dialog',
     templateUrl: './profile-conflict-dialog.component.html',
-    styleUrls: ['./profile-conflict-dialog.component.scss']
+    styleUrls: ['./profile-conflict-dialog.component.scss'],
+    standalone: false,
 })
-
-
 export class ProfileConflictComponent implements OnInit, OnDestroy {
-
     public variable;
     public rename = false;
-    public inputNewProfileName: FormControl = new FormControl('', [Validators.required, Validators.minLength(1), Validators.maxLength(50)]);
-    
+    public inputNewProfileName: FormControl = new FormControl('', [
+        Validators.required,
+        Validators.minLength(1),
+        Validators.maxLength(50),
+    ]);
+
     public cpuInfo: IGeneralCPUInfo;
     private subscriptions: Subscription = new Subscription();
-    constructor(@Inject(MAT_DIALOG_DATA) public data: {
-        oldProfile: ITccProfile,
-        newProfile: ITccProfile
-    },  private mdDialogRef: MatDialogRef<ProfileConflictComponent>, 
+
+    public data: {
+        oldProfile: ITccProfile;
+        newProfile: ITccProfile;
+    };
+
+    constructor(
+        private mdDialogRef: MatDialogRef<ProfileConflictComponent>,
         public compat: CompatibilityService,
         private utils: UtilsService,
-        private sysfs: SysFsService
-        ) 
-    { 
+        private sysfs: SysFsService,
+    ) {
+        this.data = inject(MAT_DIALOG_DATA);
+
         mdDialogRef.disableClose = true;
     }
 
-    ngOnInit() 
-    {
-        this.subscriptions.add(this.sysfs.generalCpuInfo.subscribe(cpuInfo => { this.cpuInfo = cpuInfo; }));
-     }
+    ngOnInit() {
+        this.subscriptions.add(
+            this.sysfs.generalCpuInfo.subscribe((cpuInfo) => {
+                this.cpuInfo = cpuInfo;
+            }),
+        );
+    }
 
-    ngOnDestroy() { }
-    
-    // we need those two functions to properly display the overview tiles 
-    // for now they are dublicates of the ones in profile-overview-tile
-    // maybe in the future we will put them in a more centralized spot
-    public get hasMaxFreqWorkaround() { return this.compat.hasMissingMaxFreqBoostWorkaround; }
-    
+    ngOnDestroy() {}
+
+    // we need those two functions to properly display the overview tiles
+    public get hasMaxFreqWorkaround() {
+        return this.compat.hasMissingMaxFreqBoostWorkaround;
+    }
+
     public formatCpuFrequency(frequency: number): string {
         return this.utils.formatCpuFrequency(frequency);
     }
-    
-    public cancel() 
-    {
-        this.close({action:"cancel",newName:""});
+
+    public cancel() {
+        this.close({ action: 'cancel', newName: '' });
     }
 
-    public close(result: IProfileConflictDialogResult) 
-    {
+    public close(result: IProfileConflictDialogResult) {
         this.mdDialogRef.close(result);
     }
 
-    public action(action: string)
-    {
-        let newname = this.inputNewProfileName.value; 
-        this.close({action: action, newName: newname});
+    public action(action: string) {
+        const newname = this.inputNewProfileName.value;
+        this.close({ action: action, newName: newname });
     }
 
     public async submitNewname() {
-        if (this.inputNewProfileName.valid) 
-        {
-            this.action("newName");
+        if (this.inputNewProfileName.valid) {
+            this.action('newName');
         }
     }
 
@@ -98,20 +111,16 @@ export class ProfileConflictComponent implements OnInit, OnDestroy {
         return this.data.oldProfile.name === profileName;
     }
 
-    public renameProfile()
-    {
+    public renameProfile() {
         this.rename = true;
     }
 
-    public cancelRename()
-    {
+    public cancelRename() {
         this.rename = false;
     }
 
-    @HostListener("keydown.esc") 
-    public onEsc() 
-    {
+    @HostListener('keydown.esc')
+    public onEsc() {
         this.cancel();
     }
-
 }

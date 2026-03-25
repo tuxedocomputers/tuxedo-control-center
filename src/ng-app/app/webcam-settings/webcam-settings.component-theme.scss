@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,18 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
- @import '~@angular/material/theming';
 
- @mixin profile-details-edit-theme($theme) {
- 
-   $primary: map-get($theme, primary);
-   $accent: map-get($theme, accent);
-   $warn: map-get($theme, warn);
-   $background: map-get($theme, background);
-   
-   .webcam-settings-edit {
-     .webcam-title {
-       background-color: mat-color($background, card);
-     }
-   }
- }
+@mixin profile-details-edit-theme($theme) {
+    $primary: map-get($theme, primary);
+    $accent: map-get($theme, accent);
+    $warn: map-get($theme, warn);
+    $background: map-get($theme, background);
+
+    .webcam-settings-edit {
+        .webcam-title {
+            background-color: mat.m2-get-color-from-palette($background, card);
+        }
+    }
+}

@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -18,6 +18,8 @@
  */
 
 .backlight-settings-edit {
+    overflow-x: hidden;
+
     display: block;
     position: absolute;
     top: 10px;
@@ -38,22 +40,31 @@
     }
 }
 
-.title-row-margin {
-    margin-bottom: 10px !important;
-}
-
 header {
     width: 100%;
     padding-right: 20px;
     text-align: left;
-    font-size: 1.10em;
+    font-size: 16px;
 }
 
 content.value {
     width: 100%;
     text-align: left;
     font-weight: bold;
-    font-size: 1.10em;
+    font-size: 16px;
+}
+
+.value-tile {
+    overflow: visible;
+
+    .increment-decrement-buttons {
+        display: flex;
+        padding-right: 20px;
+    }
+}
+
+.input-tile {
+    overflow: visible;
 }
 
 .align-top-right-container {
@@ -69,8 +80,7 @@ content.value {
 }
 
 .keyboard-visual {
-    margin-bottom: 10px; 
-    margin-top: 10px;
+    margin-bottom: 16px;
 }
 
 .align-slider-components {
@@ -80,35 +90,36 @@ content.value {
     -ms-transform: translateY(-50%);
     transform: translateY(-50%);
     right: 0;
+    width: 100%;
 }
 
 .align-color-picker {
-	position: absolute;
-	right: 0;
+    position: absolute;
+    right: 0;
 }
-
 
 input {
-    width: 6.5rem; 
-    outline-width: 0; 
+    width: 100%;
+    display: flex;
+    margin-top: 12px;
+    margin-bottom: 12px;
+    padding-left: 10px;
+    outline-width: 0;
     cursor: default !important;
-}
-
-.brightness-slider {
-    width: 11rem;
 }
 
 .resize-text {
     display: flex;
     flex-wrap: wrap;
-    max-width: calc(14/18 * 100%);
+    max-width: calc(14 / 18 * 100%);
     margin: 0 auto;
     justify-content: center;
     align-items: center;
     text-align: center;
+    padding-bottom: 16px;
 }
-    
-.keyboardBacklightDescription1, 
+
+.keyboardBacklightDescription1,
 .keyboardBacklightDescription2 {
     display: inline-block;
     margin: 0 0.1rem;
@@ -119,9 +130,15 @@ input {
         flex-wrap: wrap;
     }
 
-    .keyboardBacklightDescription1, 
+    .keyboardBacklightDescription1,
     .keyboardBacklightDescription2 {
         flex-basis: 100%;
         white-space: normal;
     }
+}
+
+.mat-mdc-slider {
+    width: 100%;
+    overflow: visible;
+    margin: 0;
 }

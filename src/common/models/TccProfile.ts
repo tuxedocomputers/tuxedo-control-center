@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -17,8 +17,8 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { DefaultProfileIDs, LegacyDefaultProfileIDs } from "./DefaultProfiles";
-import { ITccFanProfile } from "./TccFanTable";
+import { DefaultProfileIDs, LegacyDefaultProfileIDs } from './DefaultProfiles';
+import type { ITccFanProfile } from './TccFanTable';
 
 export interface ITccProfile {
     id: string;
@@ -58,7 +58,7 @@ export class TccProfile implements ITccProfile {
     }
 }
 
-interface ITccProfileDisplay {
+export interface ITccProfileDisplay {
     brightness: number;
     useBrightness: boolean;
     refreshRate: number;
@@ -92,11 +92,11 @@ interface ITccProfileFanControl {
     customFanCurve: ITccFanProfile;
 }
 
-interface ITccODMProfile {
+export interface ITccODMProfile {
     name: string;
 }
 
-interface ITccODMPowerLimits {
+export interface ITccODMPowerLimits {
     tdpValues: number[];
 }
 

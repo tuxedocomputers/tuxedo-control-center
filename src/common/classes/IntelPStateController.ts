@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,16 +16,24 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import * as path from 'path';
+
+import * as path from 'node:path';
 import { SysFsPropertyBoolean, SysFsPropertyInteger, SysFsPropertyString } from './SysFsProperties';
 
 export class IntelPstateController {
-    constructor(public readonly basePath: string) {}
+    constructor(public readonly basePath: string) {
+        this.noTurbo = new SysFsPropertyBoolean(path.join(basePath, 'no_turbo'));
+        this.maxPerfPct = new SysFsPropertyInteger(path.join(basePath, 'max_perf_pct'));
+        this.minPerfPct = new SysFsPropertyInteger(path.join(basePath, 'min_perf_pct'));
+        this.numPstates = new SysFsPropertyInteger(path.join(basePath, 'num_pstates'));
+        this.status = new SysFsPropertyString(path.join(basePath, 'status'));
+        this.turboPct = new SysFsPropertyInteger(path.join(basePath, 'turbo_pct'));
+    }
 
-    public readonly noTurbo = new SysFsPropertyBoolean(path.join(this.basePath, 'no_turbo'));
-    public readonly maxPerfPct = new SysFsPropertyInteger(path.join(this.basePath, 'max_perf_pct'));
-    public readonly minPerfPct = new SysFsPropertyInteger(path.join(this.basePath, 'min_perf_pct'));
-    public readonly numPstates = new SysFsPropertyInteger(path.join(this.basePath, 'num_pstates'));
-    public readonly status = new SysFsPropertyString(path.join(this.basePath, 'status'));
-    public readonly turboPct = new SysFsPropertyInteger(path.join(this.basePath, 'turbo_pct'));
+    public readonly noTurbo: SysFsPropertyBoolean;
+    public readonly maxPerfPct: SysFsPropertyInteger;
+    public readonly minPerfPct: SysFsPropertyInteger;
+    public readonly numPstates: SysFsPropertyInteger;
+    public readonly status: SysFsPropertyString;
+    public readonly turboPct: SysFsPropertyInteger;
 }

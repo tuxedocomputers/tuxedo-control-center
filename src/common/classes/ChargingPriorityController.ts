@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,16 +16,19 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import * as path from 'path';
-import { SysFsPropertyString, SysFsPropertyStringList } from './SysFsProperties';
+
+import * as path from 'node:path';
 import { SysFsController } from './SysFsController';
+import { SysFsPropertyString, SysFsPropertyStringList } from './SysFsProperties';
 
 export class ChargingPriorityController extends SysFsController {
-
     constructor(public readonly basePath: string) {
         super();
+
+        this.chargingPriosAvailable = new SysFsPropertyStringList(path.join(basePath, 'charging_prios_available'));
+        this.chargingPrio = new SysFsPropertyString(path.join(basePath, 'charging_prio'));
     }
 
-    readonly chargingPriosAvailable = new SysFsPropertyStringList(path.join(this.basePath, 'charging_prios_available'));
-    readonly chargingPrio = new SysFsPropertyString(path.join(this.basePath, 'charging_prio'));
+    public readonly chargingPriosAvailable: SysFsPropertyStringList;
+    public readonly chargingPrio: SysFsPropertyString;
 }

@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,29 +16,45 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Component, OnInit, Input, OnDestroy, ViewChild, Output, EventEmitter } from '@angular/core';
-import { ITccProfile } from '../../../common/models/TccProfile';
-import { UtilsService } from '../utils.service';
-import { ITccSettings } from '../../../common/models/TccSettings';
-import { ConfigService } from '../config.service';
-import { StateService, IStateInfo } from '../state.service';
-import { SysFsService, IGeneralCPUInfo } from '../sys-fs.service';
-import { Subscription, fromEvent } from 'rxjs';
-import { FormGroup, FormBuilder, Validators, FormControl, ValidatorFn, AbstractControl, FormArray } from '@angular/forms';
-import { DBusService } from '../dbus.service';
-import { MatInput } from '@angular/material/input';
+
+import { Component, EventEmitter, Input, type OnDestroy, type OnInit, Output, ViewChild } from '@angular/core';
+// biome-ignore lint: injection token
+import {
+    type AbstractControl,
+    type FormArray,
+    FormBuilder,
+    FormControl,
+    type FormGroup,
+    type ValidatorFn,
+    Validators,
+} from '@angular/forms';
+import type { MatInput } from '@angular/material/input';
+import { Subscription } from 'rxjs';
+import type { IDisplayFreqRes, IDisplayMode } from '../../../common/models/DisplayFreqRes';
+import type { IGeneralCPUInfo } from '../../../common/models/ICpuInfos';
+import { GridParamsProfileSettings, GridParamsSettings, type IGridParams } from '../../../common/models/IGridParams';
+import type { SystemProfileInfo } from '../../../common/models/ISystemProfileInfo';
+import type { ITccFanProfile } from '../../../common/models/TccFanTable';
+import type { ITccProfile, ITccProfileDisplay } from '../../../common/models/TccProfile';
+import type { ITccSettings } from '../../../common/models/TccSettings';
+import type { TDPInfo } from '../../../native-lib/TuxedoIOAPI';
+// biome-ignore lint: injection token
 import { CompatibilityService } from '../compatibility.service';
+// biome-ignore lint: injection token
+import { ConfigService } from '../config.service';
+import { FanCustomChartComponent } from '../fan-custom-chart/fan-custom-chart.component';
+// biome-ignore lint: injection token
+import { type IStateInfo, StateService } from '../state.service';
+// biome-ignore lint: injection token
+import { SysFsService } from '../sys-fs.service';
+// biome-ignore lint: injection token
 import { TccDBusClientService } from '../tcc-dbus-client.service';
-import { TDPInfo } from '../../../native-lib/TuxedoIOAPI';
-import { IDisplayFreqRes, IDisplayMode } from 'src/common/models/DisplayFreqRes';
-import { FanSliderComponent } from '../fan-slider/fan-slider.component';
-import { ITccFanProfile } from 'src/common/models/TccFanTable';
-import { ElectronService } from 'ngx-electron';
-import { SystemProfileInfo } from 'src/common/models/ISystemProfileInfo';
+// biome-ignore lint: injection token
+import { UtilsService } from '../utils.service';
 
 function minControlValidator(comparisonControl: AbstractControl): ValidatorFn {
-    return (thisControl: AbstractControl): { [key: string]: any } | null => {
-        let errors = null;
+    return (thisControl: AbstractControl): { min: number; actual: unknown } | null => {
+        let errors: { min: number; actual: string } = null;
         if (thisControl.value < comparisonControl.value) {
             errors = { min: comparisonControl.value, actual: thisControl.value };
         }
@@ -47,8 +63,8 @@ function minControlValidator(comparisonControl: AbstractControl): ValidatorFn {
 }
 
 function maxControlValidator(comparisonControl: AbstractControl): ValidatorFn {
-    return (thisControl: AbstractControl): { [key: string]: any } | null => {
-        let errors = null;
+    return (thisControl: AbstractControl): { max: number; actual: unknown } | null => {
+        let errors: { max: number; actual: string } = null;
         if (thisControl.value > comparisonControl.value) {
             errors = { max: comparisonControl.value, actual: thisControl.value };
         }
@@ -59,17 +75,20 @@ function maxControlValidator(comparisonControl: AbstractControl): ValidatorFn {
 @Component({
     selector: 'app-profile-details-edit',
     templateUrl: './profile-details-edit.component.html',
-    styleUrls: ['./profile-details-edit.component.scss']
+    styleUrls: ['./profile-details-edit.component.scss'],
+    standalone: false,
 })
 export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
-
     public viewProfile: ITccProfile;
+    public defaultFanProfiles: ITccFanProfile[];
 
     @Input()
-    set profile(profile: ITccProfile) {
+    public set profile(profile: ITccProfile) {
         this.viewProfile = profile;
 
-        if (profile === undefined) { return; }
+        if (profile === undefined) {
+            return;
+        }
 
         // Create form group from profile
         if (this.profileFormGroup === undefined) {
@@ -84,35 +103,25 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             this.selectStateControl.reset(this.state.getProfileStates(this.viewProfile.id));
         }
 
-        this.editProfile = (this.config.getCustomProfileById(profile.id) !== undefined);
+        this.editProfile = this.config.getCustomProfileById(profile.id) !== undefined;
     }
 
     @Input()
-    get profileDirty(): boolean { return this.profileFormGroup.dirty || this.selectStateControl.dirty; }
+    public get profileDirty(): boolean {
+        return this.profileFormGroup.dirty || this.selectStateControl.dirty;
+    }
 
-    @Output() scrollTo = new EventEmitter<number>();
+    @Output() public scrollTo: EventEmitter<number> = new EventEmitter<number>();
 
-    public gridParams = {
-        cols: 9,
-        headerSpan: 4,
-        valueSpan: 2,
-        inputSpan: 3
-    };
-
-    public gridProfileSettings = {
-        cols: 9,
-        headerSpan: 4,
-        valueSpan: 0,
-        inputSpan: 5
-    };
+    public gridParams: IGridParams = GridParamsSettings;
+    public gridParamsProf: IGridParams = GridParamsProfileSettings;
 
     public selectStateControl: FormControl;
     public profileFormGroup: FormGroup;
-    public profileFormProgress = false;
+    public profileFormProgress: boolean = false;
 
     private subscriptions: Subscription = new Subscription();
     private fansMinSpeedSubscription: Subscription = new Subscription();
-    private fansMaxSpeedSubscription: Subscription = new Subscription();
 
     private fansOffAvailableSubscription: Subscription = new Subscription();
 
@@ -123,222 +132,270 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public selectableFrequencies;
 
     public odmProfileNames: string[] = [];
-    public odmProfileToName: Map<string, string> = new Map();
+
     public hasDeviceSystemProfileInfo: boolean;
     public deviceSystemProfileInfo: SystemProfileInfo;
 
     public odmPowerLimitInfos: TDPInfo[] = [];
     public displayModes: IDisplayFreqRes;
-    public isX11: boolean;
+    public isX11: number = -1;
     public refreshRate: number;
 
     private tdpLabels: Map<string, string>;
 
-    public showFanGraphs = false;
-    public showTGPChart = false;
+    public showFanGraphs: boolean = false;
+    public showTGPChart: boolean = false;
 
-    public infoTooltipShowDelay = 700;
+    public infoTooltipShowDelay: number = 700;
 
-    public fansMinSpeed = 0;
-    public fansMaxSpeed = 100;
+    public fansMinSpeed: number = 0;
+    public fansMaxSpeed: number = 100;
 
-    public fansOffAvailable = true;
+    public fansOffAvailable: boolean = true;
 
     public nvidiaPowerCTRLDefaultPowerLimit: number = 0;
+    private nvidiaPowerCTRLMaxPowerLimitEvent: EventEmitter<number> = new EventEmitter();
+    private updateTGPChartEvent: EventEmitter<void> = new EventEmitter();
     public nvidiaPowerCTRLMaxPowerLimit: number = 1000;
     public nvidiaPowerCTRLAvailable: boolean = false;
+    public isUnsupportedConfigurableTGPDevice: boolean = true;
 
     public tempCustomFanCurve: ITccFanProfile = undefined;
 
-    public get hasMaxFreqWorkaround() { return this.compat.hasMissingMaxFreqBoostWorkaround; }
+    public get hasMaxFreqWorkaround(): boolean {
+        return this.compat.hasMissingMaxFreqBoostWorkaround;
+    }
+    public powerLimitSliderIndex: number = undefined;
+    public min: (...values: number[]) => number = Math.min;
 
-    public min = Math.min;
+    @ViewChild('inputName') public inputName: MatInput;
 
-    @ViewChild('inputName') inputName: MatInput;
+    @ViewChild(FanCustomChartComponent)
+    private customChartComponent: FanCustomChartComponent;
 
-    @ViewChild(FanSliderComponent)
-    private sliderComponent: FanSliderComponent;
-    
     constructor(
         private utils: UtilsService,
         private config: ConfigService,
         private state: StateService,
         private sysfs: SysFsService,
         private fb: FormBuilder,
-        private dbus: DBusService,
         private tccDBus: TccDBusClientService,
         public compat: CompatibilityService,
-        private electron: ElectronService
     ) {}
 
-    ngOnInit() {
-        if (this.viewProfile === undefined) { return; }
-        this.subscriptions.add(this.sysfs.generalCpuInfo.subscribe(generalCpuInfo => {
-            this.cpuInfo = generalCpuInfo;
-            this.selectableFrequencies = generalCpuInfo.scalingAvailableFrequencies;
-        }));
+    public ngOnInit(): void {
+        // prevents error messages on forced refresh
+        this.cpuInfo = {
+            availableCores: 0,
+            minFreq: 0,
+            maxFreq: 0,
+            scalingAvailableFrequencies: [],
+            scalingAvailableGovernors: [],
+            energyPerformanceAvailablePreferences: [],
+            reducedAvailableFreq: 0,
+            boost: false,
+        };
+        this.defaultFanProfiles = this.config.getFanProfiles();
+        if (this.viewProfile === undefined) {
+            return;
+        }
+        this.subscriptions.add(
+            this.sysfs.generalCpuInfo.subscribe((generalCpuInfo: IGeneralCPUInfo): void => {
+                // prevents everything from breaking on forced refresh
+                if (generalCpuInfo) {
+                    this.cpuInfo = generalCpuInfo;
+                    this.selectableFrequencies = generalCpuInfo.scalingAvailableFrequencies;
+                }
+            }),
+        );
 
         this.stateInputArray = this.state.getStateInputs();
 
         const odmProfileLEDNames: Map<string, string> = new Map();
-        odmProfileLEDNames.set('power_save', $localize `:@@odmLEDNone:all LEDs off`);
-        odmProfileLEDNames.set('enthusiast', $localize `:@@odmLEDOne:one LED on`);
-        odmProfileLEDNames.set('overboost', $localize `:@@odmLEDTwo:two LEDs on`);
+        odmProfileLEDNames.set('power_save', $localize`:@@odmLEDNone:all LEDs off`);
+        odmProfileLEDNames.set('enthusiast', $localize`:@@odmLEDOne:one LED on`);
+        odmProfileLEDNames.set('overboost', $localize`:@@odmLEDTwo:two LEDs on`);
 
         this.hasDeviceSystemProfileInfo = this.compat.getHasSystemProfileInfo();
         this.deviceSystemProfileInfo = this.compat.getSystemProfileInfo();
 
-        this.subscriptions.add(this.tccDBus.odmProfilesAvailable.subscribe(nextAvailableODMProfiles => {
-            this.odmProfileNames = nextAvailableODMProfiles;
+        this.resetPowerLimitSliderIndex();
 
-            // Update ODM profile name map
-            this.odmProfileToName.clear();
-            for (const profileName of this.odmProfileNames) {
-                if (profileName.length > 0) {
-                    if (this.compat.uwLEDOnlyMode) {
-                        this.odmProfileToName.set(profileName, odmProfileLEDNames.get(profileName));
-                    } else {
-                        this.odmProfileToName.set(profileName, profileName.charAt(0).toUpperCase() + profileName.replace('_', ' ').slice(1));
-                    }
-                }
-            }
-        }));
+        this.subscriptions.add(
+            this.tccDBus.odmProfilesAvailable.subscribe((nextAvailableODMProfiles: string[]): void => {
+                this.odmProfileNames = nextAvailableODMProfiles;
 
-        this.fansMinSpeedSubscription.add(this.tccDBus.fansMinSpeed.subscribe(
-            fansMinSpeed => {
-                if (fansMinSpeed !== undefined) {
+                this.utils.setODMProfileNames(nextAvailableODMProfiles, this.compat.uwLEDOnlyMode, odmProfileLEDNames);
+            }),
+        );
+
+        this.fansMinSpeedSubscription.add(
+            this.tccDBus.fansMinSpeed.subscribe((fansMinSpeed: number): void => {
+                if (fansMinSpeed !== undefined && fansMinSpeed !== -1) {
                     this.fansMinSpeedSubscription.unsubscribe();
                     this.fansMinSpeed = fansMinSpeed;
-                    this.clampCurrentMinimumFanSpeedToHWCapabilities()
+                    this.clampCurrentMinimumFanSpeedToHWCapabilities();
                 }
-            }
-        ));
+            }),
+        );
 
-        this.fansOffAvailableSubscription.add(this.tccDBus.fansOffAvailable.subscribe(
-            fansOffAvailable => {
-                if (fansOffAvailable != undefined) {
+        this.fansOffAvailableSubscription.add(
+            this.tccDBus.fansOffAvailable.subscribe((fansOffAvailable: boolean): void => {
+                if (fansOffAvailable !== undefined) {
                     this.fansOffAvailableSubscription.unsubscribe();
                     this.fansOffAvailable = fansOffAvailable;
-                    this.clampCurrentMinimumFanSpeedToHWCapabilities()
+                    this.clampCurrentMinimumFanSpeedToHWCapabilities();
                 }
-            }
-        ));
-        this.subscriptions.add(this.tccDBus.odmPowerLimits.subscribe(nextODMPowerLimits => {
-            if (JSON.stringify(nextODMPowerLimits) !== JSON.stringify(this.odmPowerLimitInfos)) {
-                this.odmPowerLimitInfos = nextODMPowerLimits;
-            }
-        }));
-
-        this.subscriptions.add(this.tccDBus.displayModes.subscribe(nextdisplayModes => {
-            if (JSON.stringify(nextdisplayModes) !== JSON.stringify(this.displayModes)) {
-                this.displayModes = nextdisplayModes;
-                this.overwriteDefaultRefreshRateValue();
-            }
-        }));
-
-        this.subscriptions.add(this.tccDBus.isX11.subscribe(nextIsX11 => {
-            if (nextIsX11 !== this.isX11) {
-                this.isX11 = nextIsX11;
-            }
-        }));
-
-        this.subscriptions.add(this.tccDBus.nvidiaPowerCTRLDefaultPowerLimit.subscribe(nextNVIDIAPowerCTRLDefaultPowerLimit => {
-            if (nextNVIDIAPowerCTRLDefaultPowerLimit !== undefined && nextNVIDIAPowerCTRLDefaultPowerLimit !== this.nvidiaPowerCTRLDefaultPowerLimit) {
-                this.nvidiaPowerCTRLDefaultPowerLimit = nextNVIDIAPowerCTRLDefaultPowerLimit;
-            }
-        }));
-
-        this.subscriptions.add(this.tccDBus.nvidiaPowerCTRLMaxPowerLimit.subscribe(nextNVIDIAPowerCTRLMaxPowerLimit => {
-            if (nextNVIDIAPowerCTRLMaxPowerLimit !== undefined && nextNVIDIAPowerCTRLMaxPowerLimit !== this.nvidiaPowerCTRLMaxPowerLimit) {
-                this.nvidiaPowerCTRLMaxPowerLimit = nextNVIDIAPowerCTRLMaxPowerLimit;
-            }
-        }));
-
-        this.subscriptions.add(this.tccDBus.nvidiaPowerCTRLAvailable.subscribe(nextNVIDIAPowerCTRLAvailable => {
-            if (nextNVIDIAPowerCTRLAvailable !== this.nvidiaPowerCTRLAvailable) {
-                this.nvidiaPowerCTRLAvailable = nextNVIDIAPowerCTRLAvailable;
-            }
-        }));
-
-        this.tdpLabels = new Map();
-        this.tdpLabels.set('pl1', $localize `:@@tdpLabelsPL1:Sustained Power Limit (PL1)`);
-        this.tdpLabels.set('pl2', $localize `:@@tdpLabelsPL2:Short-term (max. 28 sec) Power Limit (PL2)`);
-        this.tdpLabels.set('pl4', $localize `:@@tdpLabelsPL4:Peak (max. 8 sec) Power Limit (PL4)`);
-
-        const suspendObservable = fromEvent(
-            this.electron.ipcRenderer,
-            "wakeup-from-suspend"
+            }),
         );
         this.subscriptions.add(
-            suspendObservable.subscribe(async () => {
-                // hiding graphs due to https://github.com/chartjs/Chart.js/issues/5387
-                this.showFanGraphs = false;
-                if (this.sliderComponent) {
-                    this.sliderComponent.showFanGraphs = false;
+            this.tccDBus.odmPowerLimits.subscribe((nextODMPowerLimits: TDPInfo[]): void => {
+                if (JSON.stringify(nextODMPowerLimits) !== JSON.stringify(this.odmPowerLimitInfos)) {
+                    this.odmPowerLimitInfos = nextODMPowerLimits;
                 }
-            })
+            }),
         );
+
+        this.subscriptions.add(
+            this.tccDBus.displayModes.subscribe((nextdisplayModes: IDisplayFreqRes): void => {
+                if (JSON.stringify(nextdisplayModes) !== JSON.stringify(this.displayModes)) {
+                    this.displayModes = nextdisplayModes;
+                }
+                this.overwriteDefaultRefreshRateValue();
+            }),
+        );
+
+        this.subscriptions.add(
+            this.tccDBus.isX11.subscribe((nextIsX11: number): void => {
+                if (nextIsX11 !== this.isX11) {
+                    this.isX11 = nextIsX11;
+                }
+            }),
+        );
+
+        this.subscriptions.add(
+            this.tccDBus.nvidiaPowerCTRLDefaultPowerLimit.subscribe((nextNVIDIAPowerCTRLDefaultPowerLimit) => {
+                if (
+                    nextNVIDIAPowerCTRLDefaultPowerLimit !== undefined &&
+                    nextNVIDIAPowerCTRLDefaultPowerLimit !== this.nvidiaPowerCTRLDefaultPowerLimit
+                ) {
+                    this.nvidiaPowerCTRLDefaultPowerLimit = nextNVIDIAPowerCTRLDefaultPowerLimit;
+                }
+            }),
+        );
+
+        this.subscriptions.add(
+            this.tccDBus.nvidiaPowerCTRLMaxPowerLimit.subscribe((nextNVIDIAPowerCTRLMaxPowerLimit) => {
+                if (
+                    nextNVIDIAPowerCTRLMaxPowerLimit !== undefined &&
+                    nextNVIDIAPowerCTRLMaxPowerLimit !== this.nvidiaPowerCTRLMaxPowerLimit
+                ) {
+                    this.nvidiaPowerCTRLMaxPowerLimit = nextNVIDIAPowerCTRLMaxPowerLimit;
+                }
+            }),
+        );
+
+        this.subscriptions.add(
+            this.tccDBus.nvidiaPowerCTRLAvailable.subscribe((nextNVIDIAPowerCTRLAvailable) => {
+                if (nextNVIDIAPowerCTRLAvailable !== this.nvidiaPowerCTRLAvailable) {
+                    this.nvidiaPowerCTRLAvailable = nextNVIDIAPowerCTRLAvailable;
+                }
+            }),
+        );
+
+        this.subscriptions.add(
+            this.tccDBus.isUnsupportedConfigurableTGPDevice.subscribe((nextIsUnsupportedConfigurableTGPDevice) => {
+                if (nextIsUnsupportedConfigurableTGPDevice !== this.isUnsupportedConfigurableTGPDevice) {
+                    this.isUnsupportedConfigurableTGPDevice = nextIsUnsupportedConfigurableTGPDevice;
+                }
+            }),
+        );
+
+        this.tdpLabels = new Map();
+        this.tdpLabels.set('pl1', $localize`:@@tdpLabelsPL1:Sustained Power Limit (PL1)`);
+        this.tdpLabels.set('pl2', $localize`:@@tdpLabelsPL2:Short-term (max. 28 sec) Power Limit (PL2)`);
+        this.tdpLabels.set('pl4', $localize`:@@tdpLabelsPL4:Peak (max. 8 sec) Power Limit (PL4)`);
     }
 
-    public getPowerLimitToName(name: string) {
-        for (let i = 0; i < this.deviceSystemProfileInfo.pl.length; i++)
-        {
-            if (this.deviceSystemProfileInfo.pl[i].odmName === name)
-            {
-                return this.deviceSystemProfileInfo.pl[i].limit + " W";
+    public resetPowerLimitSliderIndex(): void {
+        if (this.hasDeviceSystemProfileInfo) {
+            const profileName: string = this.viewProfile?.odmProfile?.name;
+
+            if (!profileName) {
+                return;
+            }
+
+            for (let i: number = 0; i < this.deviceSystemProfileInfo.pl?.length; i++) {
+                if (this.deviceSystemProfileInfo.pl[i].odmName === profileName) {
+                    this.powerLimitSliderIndex = i;
+                }
             }
         }
     }
 
-    public getODMprofilePowerLimitID() {
-        let profile = this.profile;
-        let profileName = "";
+    public getPowerLimitToName(name: string): string {
+        for (let i: number = 0; i < this.deviceSystemProfileInfo.pl?.length; i++) {
+            if (this.deviceSystemProfileInfo.pl[i].odmName === name) {
+                return `${this.deviceSystemProfileInfo.pl[i].limit} W`;
+            }
+        }
+    }
+
+    public getODMprofilePowerLimitID(): number {
+        let profile: ITccProfile = this.profile;
+        let profileName: string = '';
         if (!profile) {
             profile = this.viewProfile;
         }
         if (!profile) {
             profileName = this.profileFormGroup.controls.odmProfile.value;
-        }
-        else  {
+        } else {
             profileName = profile.odmProfile.name;
         }
-        for (let i = 0; i < this.deviceSystemProfileInfo.pl.length; i++)
-        {
-            if (this.deviceSystemProfileInfo.pl[i].odmName === profileName)
-            {
+        for (let i: number = 0; i < this.deviceSystemProfileInfo.pl?.length; i++) {
+            if (this.deviceSystemProfileInfo.pl[i].odmName === profileName) {
                 return i;
             }
         }
     }
 
-    public sliderODMProfileChange(index: number) {
-        let profileInfo = this.deviceSystemProfileInfo.pl[index].odmName;
+    public sliderODMProfileChange(index: number): void {
+        const profileInfo: string = this.deviceSystemProfileInfo.pl[index].odmName;
         this.profileFormGroup.patchValue({
             odmProfile: { name: profileInfo },
         });
         this.profileFormGroup.markAsDirty();
     }
 
-    private overwriteDefaultRefreshRateValue() {
-        let displayFormGroupValue = this.profileFormGroup.get("display").value;
+    private overwriteDefaultRefreshRateValue(): void {
+        const displayFormGroupValue: ITccProfileDisplay = this.profileFormGroup.get('display').value;
 
         if (displayFormGroupValue.refreshRate === -1) {
-            const refreshRate = this.displayModes.activeMode.refreshRates[0];
+            // todo: adding variable checks to avoid access error
+            const refreshRate: number = this.displayModes.activeMode?.refreshRates[0];
 
             displayFormGroupValue.refreshRate = refreshRate;
             this.profileFormGroup.patchValue({
                 display: displayFormGroupValue,
             });
-
+            this.viewProfile.display = displayFormGroupValue;
             this.refreshRate = refreshRate;
         }
     }
 
-    private clampCurrentMinimumFanSpeedToHWCapabilities() {
+    private clampCurrentMinimumFanSpeedToHWCapabilities(): void {
         if (!this.fansOffAvailable) {
-            let minimumFanspeedValue = this.profileFormGroup.get('fan.minimumFanspeed').value
-            this.profileFormGroup.patchValue({fan: {minimumFanspeed: minimumFanspeedValue < this.fansMinSpeed ? this.fansMinSpeed : minimumFanspeedValue}});
-            this.viewProfile.fan.minimumFanspeed = this.viewProfile.fan.minimumFanspeed < this.fansMinSpeed ? this.fansMinSpeed : this.viewProfile.fan.minimumFanspeed;
+            const minimumFanspeedValue: number = this.profileFormGroup.get('fan.minimumFanspeed').value;
+            this.profileFormGroup.patchValue({
+                fan: {
+                    minimumFanspeed:
+                        minimumFanspeedValue < this.fansMinSpeed ? this.fansMinSpeed : minimumFanspeedValue,
+                },
+            });
+            this.viewProfile.fan.minimumFanspeed =
+                this.viewProfile.fan.minimumFanspeed < this.fansMinSpeed
+                    ? this.fansMinSpeed
+                    : this.viewProfile.fan.minimumFanspeed;
         }
     }
 
@@ -350,14 +407,10 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         return this.config.getSettings();
     }
 
-    public submitFormInput() {
-        if (this.sliderComponent) {
-            const customFanCurveValues =
-                this.sliderComponent.getFanFormGroupValues();
-            this.profileFormGroup
-                .get("fan")
-                .get("customFanCurve")
-                .patchValue(customFanCurveValues);
+    public submitFormInput(): void {
+        if (this.customChartComponent) {
+            const customFanCurveValues: ITccFanProfile = this.customChartComponent.getFanFormGroupValues();
+            this.profileFormGroup.get('fan').get('customFanCurve').patchValue(customFanCurveValues);
         }
 
         this.profileFormProgress = true;
@@ -366,90 +419,90 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         if (this.profileFormGroup.valid) {
             const formProfileData: ITccProfile = this.profileFormGroup.value;
             // Note: state selection disabled on profile edit for now
-            const newProfileStateAssignments = this.selectStateControl.value;
+            const newProfileStateAssignments: string[] = this.selectStateControl.value;
+
             this.config
-                .writeProfile(
-                    this.viewProfile.id,
-                    formProfileData,
-                    newProfileStateAssignments
-                )
-                .then((success) => {
+                .writeProfile(this.viewProfile.id, formProfileData, newProfileStateAssignments)
+                .then((success: boolean): void => {
                     if (success) {
                         this.profileFormGroup.markAsPristine();
                         this.selectStateControl.markAsPristine();
                         this.profile = formProfileData;
+                        this.state.initializeProfileNames();
                     }
                     this.profileFormProgress = false;
                     this.utils.pageDisabled = false;
                 });
         } else {
-            console.error("Form Input invalid");
             this.profileFormProgress = false;
             this.utils.pageDisabled = false;
         }
     }
 
-    public discardFormInput() {
+    public async discardFormInput(): Promise<void> {
         this.profileFormGroup.reset(this.viewProfile);
-        this.selectStateControl.reset(
-            this.state.getProfileStates(this.viewProfile.id)
-        );
+        this.selectStateControl.reset(this.state.getProfileStates(this.viewProfile.id));
         // Also restore brightness to active profile if applicable
-        if (!this.dbus.displayBrightnessNotSupported) {
-            const activeProfile = this.state.getActiveProfile();
+        if (!this.tccDBus.displayBrightnessNotSupportedGnome()) {
+            const activeProfile: ITccProfile = this.state.getActiveProfile();
             if (activeProfile.display.useBrightness) {
-                this.dbus.setDisplayBrightness(
-                    activeProfile.display.brightness
-                );
+                this.tccDBus.setDisplayBrightnessGnome(activeProfile.display.brightness);
             }
         }
 
-        if (this.sliderComponent) {
-            const customFanCurveValues: AbstractControl = this.profileFormGroup
-                .get("fan")
-                .get("customFanCurve");
-            this.sliderComponent.patchFanFormGroup(customFanCurveValues);
+        if (this.customChartComponent) {
+            const customFanCurveValues: ITccFanProfile = this.profileFormGroup.get('fan').get('customFanCurve').value;
+            this.customChartComponent.setFanFormGroupValues(customFanCurveValues);
+            await this.customChartComponent.updateFanChartDataset();
+            this.customChartComponent.updateChart();
         }
 
         this.overwriteDefaultRefreshRateValue();
         this.tempCustomFanCurve = undefined;
+
+        this.resetPowerLimitSliderIndex();
+        this.updateTGPChart();
     }
 
-    public setCustomFanCurve(tempCustomFanCurve: ITccFanProfile) {
+    public setCustomFanCurve(tempCustomFanCurve: ITccFanProfile): void {
         this.tempCustomFanCurve = tempCustomFanCurve;
     }
 
-    public setChartToggleStatus(status: boolean) {
+    public setChartToggleStatus(status: boolean): void {
         this.showFanGraphs = status;
     }
 
-    private createProfileFormGroup(profile: ITccProfile) {
-
+    private createProfileFormGroup(profile: ITccProfile): FormGroup {
         const displayGroup: FormGroup = this.fb.group(profile.display);
         const cpuGroup: FormGroup = this.fb.group(profile.cpu);
         const webcamGroup: FormGroup = this.fb.group(profile.webcam);
         const fanControlGroup: FormGroup = this.fb.group(profile.fan);
         const odmProfileGroup: FormGroup = this.fb.group(profile.odmProfile);
 
-        const odmTDPValuesArray: FormArray = this.fb.array(profile.odmPowerLimits.tdpValues.map(e => this.fb.control(e)));
+        const odmTDPValuesArray: FormArray = this.fb.array(
+            profile.odmPowerLimits.tdpValues.map((e: number): FormControl => this.fb.control(e)),
+        );
         const odmPowerLimits: FormGroup = this.fb.group({
-            tdpValues: odmTDPValuesArray
+            tdpValues: odmTDPValuesArray,
         });
-
         const nvidiaPowerCTRLProfileGroup: FormGroup = this.fb.group(profile.nvidiaPowerCTRLProfile);
 
-        cpuGroup.controls.scalingMinFrequency.setValidators([maxControlValidator(cpuGroup.controls.scalingMaxFrequency)]);
-        cpuGroup.controls.scalingMaxFrequency.setValidators([minControlValidator(cpuGroup.controls.scalingMinFrequency)]);
+        cpuGroup.controls.scalingMinFrequency.setValidators([
+            maxControlValidator(cpuGroup.controls.scalingMaxFrequency),
+        ]);
+        cpuGroup.controls.scalingMaxFrequency.setValidators([
+            minControlValidator(cpuGroup.controls.scalingMinFrequency),
+        ]);
 
-        for (let i = 1; i < odmTDPValuesArray.controls.length; ++i) {
+        for (let i: number = 1; i < odmTDPValuesArray.controls?.length; ++i) {
             odmTDPValuesArray.controls[i].setValidators([minControlValidator(odmTDPValuesArray.controls[i - 1])]);
         }
 
-        for (let i = 0; i < odmTDPValuesArray.controls.length - 1; ++i) {
+        for (let i: number = 0; i < odmTDPValuesArray.controls?.length - 1; ++i) {
             odmTDPValuesArray.controls[i].setValidators([maxControlValidator(odmTDPValuesArray.controls[i + 1])]);
         }
 
-        const fg = this.fb.group({
+        const fg: FormGroup = this.fb.group({
             name: profile.name,
             description: profile.description,
             display: displayGroup,
@@ -458,7 +511,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             fan: fanControlGroup,
             odmProfile: odmProfileGroup,
             odmPowerLimits: odmPowerLimits,
-            nvidiaPowerCTRLProfile: nvidiaPowerCTRLProfileGroup
+            nvidiaPowerCTRLProfile: nvidiaPowerCTRLProfileGroup,
         });
 
         fg.controls.name.setValidators([Validators.required, Validators.minLength(1), Validators.maxLength(50)]);
@@ -467,12 +520,14 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     }
 
     public findClosestValue(value: number, array: number[]): number {
-        if (array === undefined) { return value; }
+        if (array === undefined) {
+            return value;
+        }
 
         let closest: number;
         let closestDiff: number;
         for (const arrayNumber of array) {
-            const diff = Math.abs(value - arrayNumber);
+            const diff: number = Math.abs(value - arrayNumber);
             if (closestDiff === undefined || diff < closestDiff) {
                 closest = arrayNumber;
                 closestDiff = diff;
@@ -481,18 +536,19 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         return closest;
     }
 
-    public sliderMinFreqChange() {
+    public sliderMinFreqChange(): void {
         const cpuGroup: FormGroup = this.profileFormGroup.controls.cpu as FormGroup;
         let newValue: number = cpuGroup.controls.scalingMinFrequency.value;
 
-        // Ensure it's below chosen max value
         if (newValue > cpuGroup.controls.scalingMaxFrequency.value) {
             newValue = cpuGroup.controls.scalingMaxFrequency.value;
         }
 
         // If 'scaling_available_frequencies' exist, ensure it's one of them
         if (this.selectableFrequencies !== undefined) {
-            const minSelectableFrequencies = this.selectableFrequencies.filter(value => value <= cpuGroup.controls.scalingMaxFrequency.value);
+            const minSelectableFrequencies: number[] = this.selectableFrequencies.filter(
+                (value: number): boolean => value <= cpuGroup.controls.scalingMaxFrequency.value,
+            );
             newValue = this.findClosestValue(newValue, minSelectableFrequencies);
         }
 
@@ -501,18 +557,19 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         }
     }
 
-    public sliderMaxFreqChange() {
+    public sliderMaxFreqChange(): void {
         const cpuGroup: FormGroup = this.profileFormGroup.controls.cpu as FormGroup;
         let newValue: number = cpuGroup.controls.scalingMaxFrequency.value;
 
-        // Ensure it's above chosen min value
         if (newValue < cpuGroup.controls.scalingMinFrequency.value) {
             newValue = cpuGroup.controls.scalingMinFrequency.value;
         }
 
         // If 'scaling_available_frequencies' exist, ensure it's one of them
         if (this.selectableFrequencies !== undefined) {
-            const maxSelectableFrequencies = this.selectableFrequencies.filter(value => value >= cpuGroup.controls.scalingMinFrequency.value);
+            const maxSelectableFrequencies: number[] = this.selectableFrequencies.filter(
+                (value: number): boolean => value >= cpuGroup.controls.scalingMinFrequency.value,
+            );
             newValue = this.findClosestValue(newValue, maxSelectableFrequencies);
         }
 
@@ -521,9 +578,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         }
     }
 
-    public sliderMinFanChange() {
-        const { minimumFanspeed, maximumFanspeed } =
-            this.profileFormGroup.controls.fan.value;
+    public sliderMinFanChange(): void {
+        const { minimumFanspeed, maximumFanspeed } = this.profileFormGroup.controls.fan.value;
 
         if (minimumFanspeed > maximumFanspeed) {
             this.profileFormGroup.patchValue({
@@ -532,9 +588,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         }
     }
 
-    public sliderMaxFanChange() {
-        const { minimumFanspeed, maximumFanspeed } =
-            this.profileFormGroup.controls.fan.value;
+    public sliderMaxFanChange(): void {
+        const { minimumFanspeed, maximumFanspeed } = this.profileFormGroup.controls.fan.value;
 
         if (maximumFanspeed < minimumFanspeed) {
             this.profileFormGroup.patchValue({
@@ -542,53 +597,30 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             });
         }
     }
-      
-    get getODMTDPControls() {
+
+    public get getODMTDPControls(): AbstractControl[] {
         const odmPowerLimits: FormGroup = this.profileFormGroup.controls.odmPowerLimits as FormGroup;
         const tdpValues: FormArray = odmPowerLimits.controls.tdpValues as FormArray;
         return tdpValues.controls;
     }
 
     public sliderODMPowerLimitMinValue(sliderIndex: number): number {
-        const odmPowerLimits: FormGroup = this.profileFormGroup.controls.odmPowerLimits as FormGroup;
-        const tdpValues: FormArray = odmPowerLimits.controls.tdpValues as FormArray;
-
-        // Find largest allowed min value
-        let minValue = this.odmPowerLimitInfos[sliderIndex].min;
-
-        /*for (let i = 0; i < sliderIndex; ++i) {
-            if (minValue === undefined || tdpValues.controls[i].value > minValue) {
-                minValue = tdpValues.controls[i].value;
-            }
-        }*/
-
+        const minValue: number = this.odmPowerLimitInfos[sliderIndex].min;
         return minValue;
     }
 
     public sliderODMPowerLimitMaxValue(sliderIndex: number): number {
-        const odmPowerLimits: FormGroup = this.profileFormGroup.controls.odmPowerLimits as FormGroup;
-        const tdpValues: FormArray = odmPowerLimits.controls.tdpValues as FormArray;
-
-        // Find smallest allowed max value
-        let maxValue = this.odmPowerLimitInfos[sliderIndex].max;
-
-        /*for (let i = sliderIndex + 1; i < tdpValues.controls.length; ++i) {
-            if (maxValue === undefined || tdpValues.controls[i].value < maxValue) {
-                maxValue = tdpValues.controls[i].value;
-            }
-        }*/
-
+        const maxValue: number = this.odmPowerLimitInfos[sliderIndex].max;
         return maxValue;
     }
 
-    public sliderODMPowerLimitChange(movedSliderIndex: number) {
+    public sliderODMPowerLimitChange(movedSliderIndex: number): void {
         const odmPowerLimits: FormGroup = this.profileFormGroup.controls.odmPowerLimits as FormGroup;
         const tdpValues: FormArray = odmPowerLimits.controls.tdpValues as FormArray;
         let newValue: number = tdpValues.controls[movedSliderIndex].value;
 
-
-        let minValue = this.sliderODMPowerLimitMinValue(movedSliderIndex);
-        let maxValue = this.sliderODMPowerLimitMaxValue(movedSliderIndex);
+        const minValue: number = this.sliderODMPowerLimitMinValue(movedSliderIndex);
+        const maxValue: number = this.sliderODMPowerLimitMaxValue(movedSliderIndex);
 
         // Ensure new value is above chosen min value
         if (newValue < minValue) {
@@ -596,9 +628,10 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         }
 
         // Adjust lower sliders
-        for (let i = 0; i < movedSliderIndex; ++i) {
+        for (let i: number = 0; i < movedSliderIndex; ++i) {
             if (tdpValues.controls[i].value > newValue) {
                 tdpValues.controls[i].setValue(newValue);
+                tdpValues.controls[i].markAsDirty();
             }
         }
 
@@ -608,54 +641,60 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         }
 
         // Adjust higher sliders
-        for (let i = movedSliderIndex + 1; i < tdpValues.controls.length; ++i) {
+        for (let i: number = movedSliderIndex + 1; i < tdpValues.controls?.length; ++i) {
             if (tdpValues.controls[i].value < newValue) {
                 tdpValues.controls[i].setValue(newValue);
+                tdpValues.controls[i].markAsDirty();
             }
         }
-        
+
         if (newValue !== undefined) {
             tdpValues.controls[movedSliderIndex].setValue(newValue);
 
             // Update LED choice (if available) on first TDP change
             // Note: Deactivated update
-            const updateLEDChoice = false &&
-                movedSliderIndex === 0 &&
-                this.compat.uwLEDOnlyMode
-                // Also make sure three profiles are available
-                this.odmProfileNames.length === 3;
+            const updateLEDChoice: boolean = false && movedSliderIndex === 0 && this.compat.uwLEDOnlyMode;
+            // Also make sure three profiles are available
+            this.odmProfileNames?.length === 3;
 
             if (updateLEDChoice) {
-                const sliderMax = this.odmPowerLimitInfos[movedSliderIndex].max;
-                const sliderMin = this.odmPowerLimitInfos[movedSliderIndex].min;
-                const tdpPercentage = Math.round((newValue - sliderMin) / (sliderMax - sliderMin) * 100);
+                const sliderMax: number = this.odmPowerLimitInfos[movedSliderIndex].max;
+                const sliderMin: number = this.odmPowerLimitInfos[movedSliderIndex].min;
+                const tdpPercentage: number = Math.round(((newValue - sliderMin) / (sliderMax - sliderMin)) * 100);
                 const odmProfileGroup: FormGroup = this.profileFormGroup.controls.odmProfile as FormGroup;
                 const profileNameControl: FormControl = odmProfileGroup.controls.name as FormControl;
                 if (tdpPercentage < 25) {
                     profileNameControl.setValue(this.odmProfileNames[0]);
-                } else if ( tdpPercentage < 75) {
+                } else if (tdpPercentage < 75) {
                     profileNameControl.setValue(this.odmProfileNames[1]);
                 } else {
                     profileNameControl.setValue(this.odmProfileNames[2]);
                 }
             }
         }
-        // to fix bug of not updated validity of middle slider
-        for (let i = 0; i < tdpValues.controls.length; i++) {
+
+        for (let i: number = 0; i < tdpValues.controls.length; i++) {
+            // to fix bug of not updated validity of middle slider
             tdpValues.controls[i].updateValueAndValidity();
-        }
 
+            if (
+                this.viewProfile?.odmPowerLimits?.tdpValues !== undefined &&
+                tdpValues.controls[i].value === this.viewProfile?.odmPowerLimits?.tdpValues[i]
+            ) {
+                tdpValues.controls[i].markAsPristine();
+            }
+        }
     }
 
-    public inputDisplayBrightnessChange(newValue: number) {
-        if (!this.dbus.displayBrightnessNotSupported) {
-            this.dbus.setDisplayBrightness(newValue);
+    public inputDisplayBrightnessChange(newValue: number): void {
+        if (!this.tccDBus.displayBrightnessNotSupportedGnome()) {
+            this.tccDBus.setDisplayBrightnessGnome(newValue);
         }
     }
 
-    public inputDisplayBrightnessOffsetFunc(slider, offset: number) {
-        return () => {
-            let newValue = slider.value + offset;
+    public inputDisplayBrightnessOffset(slider: FormControl, offset: number): () => void {
+        return (): void => {
+            let newValue: number = slider.value + offset;
             if (newValue < 0) {
                 newValue = 0;
             } else if (newValue > 100) {
@@ -663,7 +702,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             }
             slider.setValue(newValue);
             this.inputDisplayBrightnessChange(newValue);
-        }
+        };
     }
 
     public formatCpuFrequency(frequency: number): string {
@@ -671,50 +710,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     }
 
     public getFanProfileNames(): string[] {
-        return this.config.getFanProfiles().map(fanProfile => fanProfile.name);
+        return this.defaultFanProfiles.map((fanProfile: ITccFanProfile): string => fanProfile.name);
     }
-
-    // public getDisplayModesString(): string[]
-    // {
-    //     let displayModesString = [];
-    //     if(!this.displayModes)
-    //     {
-    //         return [undefined];
-    //     }
-    //     let displayModes = this.getDisplayModes();
-    //     for (let i = 0; i < displayModes.length; i++)
-    //     {
-    //         displayModesString.push("" + displayModes[i].xResolution + "x" + displayModes[i].yResolution);
-    //     }
-    //     return displayModesString;
-    // }
-
-    // public getActiveDisplayModeString(): string
-    // {
-    //     if(this.displayModes != undefined)   
-    //    {
-    //     return "" + this.displayModes.activeMode.xResolution + "x" + this.displayModes.activeMode.yResolution;
-    //    } 
-    //    else
-    //    {
-    //     return "";
-    //    }
-    // }
-
-    // public setProfileResolutionByString(event)
-    // {
-    //     if(event && event.value)
-    //     {
-    //         let res = event.value.split("x");
-    //         let xRes = parseInt(res[0]);
-    //         let yRes = parseInt(res[1]);
-    //         this.profileFormGroup.controls.display.markAsDirty();
-    //         let displayObject = {xResolution: 0, yResolution: 0};
-    //         displayObject.xResolution = xRes;
-    //         displayObject.yResolution = yRes;
-    //         this.profileFormGroup.controls.display.patchValue(displayObject);
-    //     }
-    // }
 
     public getDisplayModes(): IDisplayMode[] {
         if (!this.displayModes) {
@@ -723,58 +720,50 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         return this.displayModes.displayModes;
     }
 
-    getRefreshRateNotAvailableTooltipText(): string {
+    public getRefreshRateNotAvailableTooltipText(): string {
         if (this.isX11) {
-            return "";
+            return '';
         } else {
             return $localize`:@@ProfMgrRefreshRatesNotAvailableOnWaylandTooltip:This feature is currently not supported on Wayland`;
         }
     }
 
     public getCurrentResolutionRefreshRates(): number[] {
-        const activeMode = this.displayModes?.activeMode;
-        if (
-            !activeMode ||
-            activeMode.xResolution <= 0 ||
-            activeMode.yResolution <= 0
-        ) {
+        const activeMode: IDisplayMode = this.displayModes?.activeMode;
+        if (!activeMode || activeMode.xResolution <= 0 || activeMode.yResolution <= 0) {
             return [-1];
         }
         const { xResolution, yResolution } = activeMode;
-        const matchingMode = this.getMatchingMode(xResolution, yResolution);
+        const matchingMode: IDisplayMode = this.getMatchingMode(xResolution, yResolution);
         if (!matchingMode) {
             return [-1];
         }
-        return matchingMode.refreshRates.sort((a, b) => b - a);
+        return matchingMode?.refreshRates.sort((a: number, b: number): number => b - a);
     }
 
     public roundValue(value: number): number {
-        return Math.round(value)
+        return Math.round(value);
     }
 
-    private getMatchingMode(
-        xResolution: number,
-        yResolution: number
-    ): IDisplayMode | undefined {
-        return this.displayModes?.displayModes.find((mode) => {
-            return (
-                mode.xResolution === xResolution &&
-                mode.yResolution === yResolution
-            );
+    public roundDownToNearestMultiple(value: number, multiple: number): number {
+        return value - (value % multiple);
+    }
+
+    private getMatchingMode(xResolution: number, yResolution: number): IDisplayMode | undefined {
+        return this.displayModes?.displayModes.find((mode: IDisplayMode): boolean => {
+            return mode.xResolution === xResolution && mode.yResolution === yResolution;
         });
     }
-    
+
     // returns currently active refresh rate
-    public getActiveRefreshRate(): number
-    {
-        if(!this.displayModes)
-        {
+    public getActiveRefreshRate(): number {
+        if (!this.displayModes) {
             return undefined;
         }
-        return this.displayModes.activeMode.refreshRates[0];
+        return this.displayModes.activeMode?.refreshRates[0];
     }
 
-    public governorSelectionChange() {
+    public governorSelectionChange(): void {
         // Energy performance preference setting chosen based on governor
         const cpuGroup: FormGroup = this.profileFormGroup.controls.cpu as FormGroup;
         if (cpuGroup.controls.governor.value === 'performance') {
@@ -785,39 +774,38 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     }
 
     public stateButtonTooltip(stateTooltip: string, stateValue: string): string {
-        const strAlreadySet = $localize `:@@cProfMgrDetailsStateSelectButtonAlreadySet: (already set)`;
+        const strAlreadySet: string = $localize`:@@cProfMgrDetailsStateSelectButtonAlreadySet: (already set)`;
         return stateTooltip + (this.getSettings().stateMap[stateValue] === this.viewProfile.id ? strAlreadySet : '');
     }
 
     private buttonRepeatTimer: NodeJS.Timeout;
-    public buttonRepeatDown(action: () => void) {
-        if (this.buttonRepeatTimer !== undefined) { clearInterval(this.buttonRepeatTimer); }
+    public buttonRepeatDown(action: () => void): void {
+        if (this.buttonRepeatTimer !== undefined) {
+            clearInterval(this.buttonRepeatTimer);
+        }
         const repeatDelayMS = 200;
 
         action();
-        
-        this.buttonRepeatTimer = setInterval(() => {
+
+        this.buttonRepeatTimer = setInterval((): void => {
             action();
         }, repeatDelayMS);
     }
 
-    public buttonRepeatUp() {
+    public buttonRepeatUp(): void {
         clearInterval(this.buttonRepeatTimer);
     }
 
-    public modifySliderInputFunc(slider, offset: number, min: number, max: number, hackTrigger?, hackArg?) {
-        return () => {
-            this.modifySliderInput(slider, offset, min, max);
-            /*
-             * Note: hackTrigger added as workaround for change event not triggering on
-             *       setValue, should be removed as soon as it works again.
-             */
-            if (hackTrigger !== undefined) { hackTrigger.call(this, hackArg); }
-        }
-    }
-
-    public modifySliderInput(slider, offset: number, min: number, max: number) {
-            let newValue = slider.value += offset;
+    public modifySliderInput(
+        slider: FormControl,
+        offset: number,
+        min: number,
+        max: number,
+        updateFunction?: any,
+        updateFunctionArg?: any,
+    ): () => void {
+        return (): void => {
+            let newValue: number = slider.value + offset;
             if (newValue < min) {
                 newValue = min;
             } else if (newValue > max) {
@@ -825,10 +813,43 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             }
             slider.setValue(newValue);
             slider.markAsDirty();
+
+            if (updateFunction !== undefined) {
+                updateFunction.call(this, updateFunctionArg);
+            }
+        };
+    }
+
+    // only for odm slider that use deviceSystemProfileInfo from ISystemProfileInfo
+    public modifyDeviceSpecificODMSlider(offset: number): () => void {
+        return (): void => {
+            const profileName = this.deviceSystemProfileInfo.pl[this.powerLimitSliderIndex].odmName;
+            let newIndex: number;
+
+            for (let i: number = 0; i < this.deviceSystemProfileInfo.pl?.length; i++) {
+                if (this.deviceSystemProfileInfo.pl[i].odmName === profileName) {
+                    newIndex = i;
+                }
+            }
+
+            if (newIndex === undefined) {
+                return;
+            }
+
+            newIndex += offset;
+            newIndex = Math.max(0, Math.min(this.deviceSystemProfileInfo.pl?.length - 1, newIndex));
+
+            this.profileFormGroup.patchValue({
+                odmProfile: { name: this.deviceSystemProfileInfo.pl[newIndex].odmName },
+            });
+            this.profileFormGroup.markAsDirty();
+
+            this.powerLimitSliderIndex = newIndex;
+        };
     }
 
     @ViewChild('fancontrolHeader') fancontrolHeaderE;
-    public toggleFanGraphs() {
+    public toggleFanGraphs(): void {
         if (!this.showFanGraphs) {
             this.showFanGraphs = true;
             this.scrollTo.emit(this.fancontrolHeaderE.nativeElement.offsetTop - 50);
@@ -848,8 +869,8 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         }
     }
 
-    public odmTDPLabel(tdpDescriptor: string) {
-        const result = this.tdpLabels.get(tdpDescriptor);
+    public odmTDPLabel(tdpDescriptor: string): string {
+        const result: string = this.tdpLabels.get(tdpDescriptor);
         if (result === undefined) {
             return tdpDescriptor;
         } else {
@@ -857,35 +878,37 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         }
     }
 
-    public buttonODMPowerLimitUndo(sliderIndex: number) {
+    public buttonODMPowerLimitUndo(sliderIndex: number): void {
         const odmPowerLimits: FormGroup = this.profileFormGroup.controls.odmPowerLimits as FormGroup;
         const tdpValues: FormArray = odmPowerLimits.controls.tdpValues as FormArray;
         tdpValues.controls[sliderIndex].reset(this.viewProfile.odmPowerLimits.tdpValues[sliderIndex]);
-        const wantedValue = tdpValues.controls[sliderIndex].value;
+        const wantedValue: number = tdpValues.controls[sliderIndex].value;
         this.sliderODMPowerLimitChange(sliderIndex);
-        const correctedValue = tdpValues.controls[sliderIndex].value;
+        const correctedValue: number = tdpValues.controls[sliderIndex].value;
         if (correctedValue !== wantedValue) {
             tdpValues.controls[sliderIndex].markAsDirty();
         }
     }
 
-    private setFormGroupValue(groupName, value): boolean {
-        let valueChanged = false;
-        if (JSON.stringify(value) !== JSON.stringify(this.viewProfile[groupName])) {
-            valueChanged = true;
-        }
-        this.profileFormGroup.get(groupName).setValue(value);
-        if (valueChanged) {
-            this.profileFormGroup.get(groupName).markAsDirty();
-        }
-        return valueChanged;
+    public setCustomChartDirty(): void {
+        this.profileFormGroup.get('fan').get('customFanCurve').markAsDirty();
     }
 
-    setVerticalSliderDirty() {
-        this.profileFormGroup.get("fan").get("customFanCurve").markAsDirty();
+    public nvidiaPowerCTRLMaxPowerLimitChange(): void {
+        this.nvidiaPowerCTRLMaxPowerLimitEvent.emit(this.nvidiaPowerCTRLMaxPowerLimit);
     }
 
-    ngOnDestroy() {
+    public updateTGPChart(): void {
+        this.updateTGPChartEvent.emit();
+    }
+
+    public ngOnDestroy(): void {
         this.subscriptions.unsubscribe();
+        if (!this.fansMinSpeedSubscription.closed) {
+            this.fansMinSpeedSubscription.unsubscribe();
+        }
+        if (!this.fansOffAvailableSubscription.closed) {
+            this.fansOffAvailableSubscription.unsubscribe();
+        }
     }
 }

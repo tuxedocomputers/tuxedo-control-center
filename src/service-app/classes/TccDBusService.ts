@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,53 +16,61 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { DaemonWorker } from './DaemonWorker';
-import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
-import { TccDBusInterface, TccDBusData, TccDBusOptions } from './TccDBusInterface';
-import * as dbus from 'dbus-next';
 
+import * as dbus from 'dbus-next';
 import { TuxedoIOAPI } from '../../native-lib/TuxedoIOAPI';
+import { DaemonWorker } from './DaemonWorker';
+import { type TccDBusData, TccDBusInterface, TccDBusOptions } from './TccDBusInterface';
+import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
 export class TccDBusService extends DaemonWorker {
-
     private interface: TccDBusInterface;
-    private readonly path = '/com/tuxedocomputers/tccd';
+    private readonly path: string = '/com/tuxedocomputers/tccd';
 
     private bus: dbus.MessageBus;
 
-    private started = false;
+    private started: boolean = false;
 
-    constructor(tccd: TuxedoControlCenterDaemon, private dbusData: TccDBusData) {
-        super(1500, tccd);
+    constructor(
+        tccd: TuxedoControlCenterDaemon,
+        private dbusData: TccDBusData,
+    ) {
+        super(1500, 'TccDbusServiceWorker', tccd);
+        this.dbusData.dbusAvailable = true;
 
         const options: TccDBusOptions = new TccDBusOptions();
-        options.triggerStateCheck = async () => { this.tccd.triggerStateCheck(); }
+        options.triggerStateCheck = async (): Promise<void> => {
+            this.tccd.triggerStateCheck();
+        };
         options.chargingWorker = this.tccd.getChargingWorker();
 
         try {
             this.bus = dbus.systemBus();
             this.interface = new TccDBusInterface(dbusData, options);
-        } catch (err) {
-            this.tccd.logLine('TccDBusService: Error initializing DBus service => ' + err);
+        } catch (err: unknown) {
+            console.error(`TccDBusService: Error initializing DBus service => ${err}`);
         }
     }
 
-    public onStart(): void {
+    public async onStart(): Promise<void> {
         if (!this.started) {
-            this.bus.requestName('com.tuxedocomputers.tccd', 0).then(name => {
-                try {
-                    this.bus.export(this.path, this.interface);
-                    this.started = true;
-                } catch (err) {
-                    this.tccd.logLine('TccDBusService: Error exporting service => ' + err);
-                }
-            }).catch(err => {
-                this.tccd.logLine('TccDBusInterface: Failed to request bus name => ' + err);
-            });
+            this.bus
+                .requestName('com.tuxedocomputers.tccd', 0)
+                .then((_name: number): void => {
+                    try {
+                        this.bus.export(this.path, this.interface);
+                        this.started = true;
+                    } catch (err: unknown) {
+                        console.error(`TccDBusService: Error exporting service => ${err}`);
+                    }
+                })
+                .catch((err: unknown): void => {
+                    console.error(`TccDBusService: Failed to request bus name => ${err}`);
+                });
         }
     }
 
-    public onWork(): void {
+    public async onWork(): Promise<void> {
         // Make sure wmiAvailability info is updated. Is done here until it gets its own worker.
         this.dbusData.tuxedoWmiAvailable = TuxedoIOAPI.wmiAvailable();
 
@@ -71,11 +79,13 @@ export class TccDBusService extends DaemonWorker {
         }
     }
 
-    public onExit(): void {
+    public async onExit(): Promise<void> {
+        this.dbusData.dbusAvailable = false;
+
         try {
             this.bus.unexport(this.path, this.interface);
-        } catch (err) {
-            this.tccd.logLine('TccDBusService: Error unexporting interface => ' + err);
+        } catch (err: unknown) {
+            console.error(`TccDBusService: onExit failed => ${err}`);
         }
     }
 }

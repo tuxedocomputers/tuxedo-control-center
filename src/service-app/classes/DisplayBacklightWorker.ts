@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,48 +16,49 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { DaemonWorker } from './DaemonWorker';
-import { DisplayBacklightController } from '../../common/classes/DisplayBacklightController';
 
-import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
+import { DisplayBacklightController } from '../../common/classes/DisplayBacklightController';
+import type { ITccProfile } from '../../common/models/TccProfile';
+import { DaemonWorker } from './DaemonWorker';
+import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
 export class DisplayBacklightWorker extends DaemonWorker {
-
     private controllers: DisplayBacklightController[];
-    private basePath = '/sys/class/backlight';
+    private basePath: string = '/sys/class/backlight';
 
     constructor(tccd: TuxedoControlCenterDaemon) {
-        super(3000, tccd);
+        super(3000, 'DisplayBacklightWorker', tccd);
     }
 
     /**
      * Looks for and updates the list of available sysfs backlight drivers
      */
     private findDrivers(): void {
-        const displayDrivers = DisplayBacklightController.getDeviceList(this.basePath);
+        const displayDrivers: string[] = DisplayBacklightController.getDeviceList(this.basePath);
         this.controllers = [];
-        displayDrivers.forEach((driverName) => {
+        displayDrivers.forEach((driverName: string): void => {
             this.controllers.push(new DisplayBacklightController(this.basePath, driverName));
         });
     }
 
-    public onStart(): void {
-        const currentProfile = this.activeProfile;
+    public async onStart(): Promise<void> {
+        const currentProfile: ITccProfile = this.activeProfile;
 
-        // Write brightness percentage to driver(s)
         if (currentProfile.display.useBrightness && currentProfile.display.brightness !== undefined) {
-            const brightnessPercent = currentProfile.display.brightness;
+            const brightnessPercent: number = currentProfile.display.brightness;
             this.writeBrightness(brightnessPercent);
 
             // Recheck workaround for late loaded drivers and drivers that are not ready although
             // already presenting an interface
-            setTimeout(() => { this.writeBrightness(brightnessPercent, true) }, 2000);
+            setTimeout((): void => {
+                this.writeBrightness(brightnessPercent, true);
+            }, 2000);
         }
     }
 
-    public onWork(): void { }
+    public async onWork(): Promise<void> {}
 
-    public onExit(): void { }
+    public async onExit(): Promise<void> {}
 
     private writeBrightness(brightnessPercent: number, recheck?: boolean): void {
         this.findDrivers();
@@ -65,24 +66,26 @@ export class DisplayBacklightWorker extends DaemonWorker {
         for (const controller of this.controllers) {
             let brightnessRaw: number;
             try {
-                const maxBrightness = controller.maxBrightness.readValue();
-                const currentBrightnessRaw = controller.brightness.readValue();
+                const maxBrightness: number = controller.maxBrightness.readValue();
+                const currentBrightnessRaw: number = controller.brightness.readValue();
                 brightnessRaw = Math.round((brightnessPercent * maxBrightness) / 100);
 
-                if (recheck && (currentBrightnessRaw !== brightnessRaw)) {
-                    this.tccd.logLine('DisplayBacklightWorker: Brightness not as expected for '
-                        + controller.driver + ', applying value again..');
+                if (recheck && currentBrightnessRaw !== brightnessRaw) {
+                    this.tccd.logLine(
+                        `DisplayBacklightWorker: Brightness not as expected for ${controller.driver}, applying value again`,
+                    );
                 }
                 if (!recheck) {
-                    this.tccd.logLine('Set display brightness to '
-                        + brightnessPercent + '% (' + brightnessRaw + ') on ' + controller.driver);
+                    this.tccd.logLine(
+                        `Set display brightness to ${brightnessPercent}% (${brightnessRaw}) on ${controller.driver}`,
+                    );
                 }
-                
-                controller.brightness.writeValue(brightnessRaw);
 
-            } catch (err) {
-                this.tccd.logLine('Failed to set display brightness to '
-                    + brightnessPercent + '% (' + brightnessRaw + ') on ' + controller.driver);
+                controller.brightness.writeValue(brightnessRaw);
+            } catch (err: unknown) {
+                console.error(
+                    `DisplayBacklightWorker: Failed to set display brightness to ${brightnessPercent}% ('${brightnessRaw}') on ${controller.driver} => ${err}`,
+                );
             }
         }
     }

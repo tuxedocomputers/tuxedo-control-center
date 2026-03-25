@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2021-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,56 +16,52 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { DaemonWorker } from './DaemonWorker';
-import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
-import { TuxedoIOAPI as ioAPI, TDPInfo} from '../../native-lib/TuxedoIOAPI';
+import type { ITccODMPowerLimits } from '../../common/models/TccProfile';
+import { TuxedoIOAPI as ioAPI, type TDPInfo } from '../../native-lib/TuxedoIOAPI';
+import { DaemonWorker } from './DaemonWorker';
+import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
 export class ODMPowerLimitWorker extends DaemonWorker {
-
     constructor(tccd: TuxedoControlCenterDaemon) {
-        super(5000, tccd);
+        super(5000, 'ODMPowerlimitWorker', tccd);
     }
 
-    public onStart(): void {
-        let odmPowerLimitSettings = this.activeProfile.odmPowerLimits;
+    public async onStart(): Promise<void> {
+        let odmPowerLimitSettings: ITccODMPowerLimits = this.activeProfile.odmPowerLimits;
         if (odmPowerLimitSettings === undefined) {
-            odmPowerLimitSettings = { tdpValues: [] }
+            odmPowerLimitSettings = { tdpValues: [] };
         }
 
-        let tdpInfo: TDPInfo[] = [];
-        if (ioAPI.getTDPInfo(tdpInfo) && tdpInfo.length > 0) {
+        const tdpInfo: TDPInfo[] = [];
+        if (ioAPI.getTDPInfo(tdpInfo) && tdpInfo?.length > 0) {
             let newTDPValues: number[] = [];
             // If set in profile use these
-            if (odmPowerLimitSettings.tdpValues && odmPowerLimitSettings.tdpValues.length > 0) {
+            if (odmPowerLimitSettings.tdpValues && odmPowerLimitSettings.tdpValues?.length > 0) {
                 newTDPValues = odmPowerLimitSettings.tdpValues;
             }
-    
-            if (newTDPValues.length === 0) {
+
+            if (newTDPValues?.length === 0) {
                 // Default to max values
-                newTDPValues = tdpInfo.map(tdpEntry => tdpEntry.max);
+                newTDPValues = tdpInfo.map((tdpEntry: TDPInfo): number => tdpEntry.max);
             }
-    
-            this.tccd.logLine('ODMPowerLimitWorker: Set ODM TDPs '
-                + JSON.stringify(newTDPValues.map(tdpValue => tdpValue + ' W')));
-            const writeSuccess = ioAPI.setTDPValues(newTDPValues);
+
+            this.tccd.logLine(
+                `ODMPowerLimitWorker: Setting ODM TDPs ${JSON.stringify(newTDPValues.map((tdpValue: number): string => `${tdpValue} W`))}`,
+            );
+            const writeSuccess: boolean = ioAPI.setTDPValues(newTDPValues);
             if (writeSuccess) {
-                for (let i = 0; i < tdpInfo.length && i < newTDPValues.length; ++i) {
+                for (let i: number = 0; i < tdpInfo?.length && i < newTDPValues?.length; ++i) {
                     tdpInfo[i].current = newTDPValues[i];
                 }
             } else {
                 this.tccd.logLine('ODMPowerLimitWorker: Failed to write TDP values');
             }
-            
         }
         this.tccd.dbusData.odmPowerLimitsJSON = JSON.stringify(tdpInfo);
     }
 
-    public onWork(): void {
+    public async onWork(): Promise<void> {}
 
-    }
-
-    public onExit(): void {
-
-    }
+    public async onExit(): Promise<void> {}
 }

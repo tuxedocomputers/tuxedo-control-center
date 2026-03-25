@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -17,26 +17,25 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, Inject, OnInit } from "@angular/core";
-import { FormControl } from "@angular/forms";
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import {
-    DialogChoiceComponent,
-    WaitingDialogData,
-} from "../dialog-choice/dialog-choice.component";
+import { Component, inject } from '@angular/core';
+import { FormControl } from '@angular/forms';
+// biome-ignore lint: injection token
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import type { DialogChoiceComponent, WaitingDialogData } from '../dialog-choice/dialog-choice.component';
 
 @Component({
-    selector: "app-dialog-waiting",
-    templateUrl: "./dialog-waiting.component.html",
-    styleUrls: ["./dialog-waiting.component.scss"],
+    selector: 'app-dialog-waiting',
+    templateUrl: './dialog-waiting.component.html',
+    styleUrls: ['./dialog-waiting.component.scss'],
+    standalone: false,
 })
 export class DialogWaitingComponent {
     public ctrlCheckboxNoBother: FormControl;
+    public data: WaitingDialogData;
 
-    constructor(
-        public dialogRef: MatDialogRef<DialogChoiceComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: WaitingDialogData
-    ) {
+    constructor(public dialogRef: MatDialogRef<DialogChoiceComponent>) {
+        this.data = inject(MAT_DIALOG_DATA);
+
         this.ctrlCheckboxNoBother = new FormControl(false);
     }
 }

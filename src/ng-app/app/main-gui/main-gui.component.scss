@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,69 +16,45 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 .tcc-mat-toolbar {
     min-height: 40px;
 }
 
 .title-row {
-    height:40px;
+    height: 40px;
     -webkit-app-region: drag;
     display: flex;
     justify-content: space-between;
     flex-flow: nowrap;
     align-items: center;
 
-    background-color: #252525;
-    
+    background-color: var(--foreground-color);
+
     #title-left {
         display: flex;
         justify-content: space-between;
         align-items: center;
 
         #title-logo {
-            height:26px;
+            height: 26px;
         }
 
         #title-text {
             font-size: 16px;
-            margin-left:16px;
-            color:#F5F5F5;
+            margin-left: 16px;
+            color: var(--text-color);
         }
-
-        /*#title-lang {
-            display: flex;
-            flex-flow: column nowrap;
-            -webkit-app-region: no-drag;
-            img {
-                cursor: pointer;
-                max-height: 20px;
-                width: 20px;
-            }
-        }*/
     }
-
-    /*#main-title {
-        .logo {
-            width: 80px;
-        }
-
-        .text {
-            padding-left: 10px;
-        }
-    }*/
 
     #title-right {
         -webkit-app-region: no-drag;
         svg {
-            width:14px;
-            margin-left:16px;
+            width: 14px;
+            margin-left: 16px;
             cursor: pointer;
         }
     }
-
-    /*i {
-        -webkit-app-region: no-drag;
-    }*/
 }
 
 .main-sidenav-container {
@@ -98,7 +74,7 @@
     --sidenav-width: 240px;
     width: var(--sidenav-width);
     // height: 100%;
-    margin-top:10px;
+    margin-top: 10px;
 
     .sidenav-top {
         mat-list-item {
@@ -128,20 +104,21 @@
         mat-nav-list {
             flex: 50%;
 
-            padding-top: 0px;
+            padding: 0px;
 
             mat-list-item {
                 width: var(--sidenav-width) / 2;
                 height: 60px;
                 content {
                     width: 100%;
-                    height: 75%;
+                    height: 85%;
                     display: flex;
                     flex-direction: column;
                     justify-content: space-between;
                     align-items: center;
 
                     mat-icon {
+                        padding-top: 3%;
                         transform-origin: center center;
                         transform: scale(2);
                     }
@@ -154,7 +131,6 @@
 .main-sidenav-content {
     padding: 10px;
     margin: 0;
-    //bottom: 20px;
     overflow-y: auto;
 }
 
@@ -168,4 +144,9 @@
             margin-right: 16px;
         }
     }
+}
+
+:host ::ng-deep .mdc-list .mdc-list-item .mdc-list-item__content {
+    padding: 0px;
+    overflow: visible;
 }

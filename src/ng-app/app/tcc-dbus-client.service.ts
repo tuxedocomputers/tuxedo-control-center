@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2024 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,289 +16,434 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Injectable, OnDestroy } from '@angular/core';
-import { TccDBusController } from '../../common/classes/TccDBusController';
-import { BehaviorSubject, Subject } from 'rxjs';
-import { FanData } from '../../service-app/classes/TccDBusInterface';
-import { ITccProfile, TccProfile } from '../../common/models/TccProfile';
-import { UtilsService } from './utils.service';
-import { ITccSettings, KeyboardBacklightCapabilitiesInterface, KeyboardBacklightStateInterface } from '../../common/models/TccSettings';
-import { TDPInfo } from '../../native-lib/TuxedoIOAPI';
-import { ICpuPower } from 'src/common/models/TccPowerSettings';
-import { IdGpuInfo, IiGpuInfo } from 'src/common/models/TccGpuValues';
-import { IDisplayFreqRes } from '../../common/models/DisplayFreqRes';
-import { TUXEDODevice } from 'src/common/models/DefaultProfiles';
 
-export interface IDBusFanData {
-  cpu: FanData;
-  gpu1: FanData;
-  gpu2: FanData;
-}
+import { Injectable, type OnDestroy } from '@angular/core';
+import { BehaviorSubject, Subject } from 'rxjs';
+import type { TUXEDODevice } from '../../common/models/DefaultProfiles';
+import type { IDisplayFreqRes } from '../../common/models/DisplayFreqRes';
+import type { DbusFunctionEntry } from '../../common/models/IDbus';
+import { FanData, type IDBusFanData } from '../../common/models/IFanData';
+import type { IdGpuInfo, IiGpuInfo } from '../../common/models/TccGpuValues';
+import type { ICpuPower } from '../../common/models/TccPowerSettings';
+import type { ITccProfile, TccProfile } from '../../common/models/TccProfile';
+import type {
+    ITccSettings,
+    KeyboardBacklightCapabilitiesInterface,
+    KeyboardBacklightStateInterface,
+} from '../../common/models/TccSettings';
+import type { IDbusClientAPI } from '../../e-app/preloadAPIs/DbusClientAPI';
+import type { TDPInfo } from '../../native-lib/TuxedoIOAPI';
+// biome-ignore lint: deb does build with type, but creates constructor dependency injection error
+import { UtilsService } from './utils.service';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root',
 })
 export class TccDBusClientService implements OnDestroy {
+    private isAvailable: boolean = true; // todo: may not be required
+    private timeout: NodeJS.Timeout;
+    private updateInterval: number = 500;
 
-  private tccDBusInterface: TccDBusController;
-  private isAvailable: boolean;
-  private timeout: NodeJS.Timeout;
-  private updateInterval = 500;
+    public available: Subject<boolean> = new Subject<boolean>(); // todo: may not be required
+    public dbusAvailable: Subject<boolean> = new Subject<boolean>();
+    public isDbusAvailable: boolean = false;
+    public tuxedoWmiAvailable: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+    public fanHwmonAvailable: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(true);
+    public dataLoaded: boolean = false;
+    public fanData: BehaviorSubject<IDBusFanData> = new BehaviorSubject<IDBusFanData>({
+        cpu: new FanData(),
+        gpu1: new FanData(),
+        gpu2: new FanData(),
+    });
 
-  public available = new Subject<boolean>();
-  public tuxedoWmiAvailable = new BehaviorSubject<boolean>(true);
-  public fanHwmonAvailable = new BehaviorSubject<boolean>(true);
-  public dataLoaded = false;
-  public fanData = new BehaviorSubject<IDBusFanData>({cpu: new FanData(), gpu1: new FanData(), gpu2: new FanData() });
+    public webcamSWAvailable: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(undefined);
+    public webcamSWStatus: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(undefined);
 
-  public webcamSWAvailable = new BehaviorSubject<boolean>(undefined);
-  public webcamSWStatus = new BehaviorSubject<boolean>(undefined);
+    public forceYUV420OutputSwitchAvailable: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
+    public chargingProfilesAvailable: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
 
-  public forceYUV420OutputSwitchAvailable = new BehaviorSubject<boolean>(false);
-  public chargingProfilesAvailable = new BehaviorSubject<string[]>([]);
+    public odmProfilesAvailable: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
+    public odmPowerLimits: BehaviorSubject<TDPInfo[]> = new BehaviorSubject<TDPInfo[]>([]);
 
-  public odmProfilesAvailable = new BehaviorSubject<string[]>([]);
-  public odmPowerLimits = new BehaviorSubject<TDPInfo[]>([]);
+    public customProfiles: BehaviorSubject<ITccProfile[]> = new BehaviorSubject<ITccProfile[]>([]);
+    public defaultProfiles: BehaviorSubject<ITccProfile[]> = new BehaviorSubject<ITccProfile[]>([]);
+    public defaultValuesProfile: BehaviorSubject<ITccProfile> = new BehaviorSubject<ITccProfile>(undefined);
+    private previousCustomProfilesJSON: string = '';
+    private previousDefaultProfilesJSON: string = '';
+    private previousDefaultValuesProfileJSON: string = '';
 
-  public customProfiles = new BehaviorSubject<ITccProfile[]>([]);
-  public defaultProfiles = new BehaviorSubject<ITccProfile[]>([]);
-  public defaultValuesProfile = new BehaviorSubject<ITccProfile>(undefined);
-  private previousCustomProfilesJSON = '';
-  private previousDefaultProfilesJSON = '';
-  private previousDefaultValuesProfileJSON = '';
+    public activeProfile: BehaviorSubject<TccProfile> = new BehaviorSubject<TccProfile>(undefined);
+    private previousActiveProfileJSON: string = '';
 
-  public activeProfile = new BehaviorSubject<TccProfile>(undefined);
-  private previousActiveProfileJSON = '';
+    public settings: BehaviorSubject<ITccSettings> = new BehaviorSubject<ITccSettings>(undefined);
+    private previousSettingsJSON: string = '';
 
-  public settings = new BehaviorSubject<ITccSettings>(undefined);
-  private previousSettingsJSON = '';
+    public keyboardBacklightCapabilities: BehaviorSubject<KeyboardBacklightCapabilitiesInterface> =
+        new BehaviorSubject<KeyboardBacklightCapabilitiesInterface>(undefined);
+    public keyboardBacklightStates: BehaviorSubject<Array<KeyboardBacklightStateInterface>> = new BehaviorSubject<
+        Array<KeyboardBacklightStateInterface>
+    >(undefined);
 
-  public keyboardBacklightCapabilities = new BehaviorSubject<KeyboardBacklightCapabilitiesInterface>(undefined);
-  public keyboardBacklightStates = new BehaviorSubject<Array<KeyboardBacklightStateInterface>>(undefined);
+    public fansMinSpeed: BehaviorSubject<number> = new BehaviorSubject<number>(undefined);
+    public fansOffAvailable: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(undefined);
 
-  public fansMinSpeed = new BehaviorSubject<number>(undefined);
-  public fansOffAvailable = new BehaviorSubject<boolean>(undefined);
+    public dGpuInfo: BehaviorSubject<IdGpuInfo> = new BehaviorSubject<IdGpuInfo>(undefined);
+    public iGpuInfo: BehaviorSubject<IiGpuInfo> = new BehaviorSubject<IiGpuInfo>(undefined);
+    public cpuPower: BehaviorSubject<ICpuPower> = new BehaviorSubject<ICpuPower>(undefined);
+    public sensorDataCollectionStatus: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(undefined);
 
-  public dGpuInfo = new BehaviorSubject<IdGpuInfo>(undefined);
-  public iGpuInfo = new BehaviorSubject<IiGpuInfo>(undefined);
-  public cpuPower = new BehaviorSubject<ICpuPower>(undefined);
-  public sensorDataCollectionStatus = new BehaviorSubject<boolean>(undefined);
+    public primeState: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
 
-  public primeState = new BehaviorSubject<string>(undefined);
+    public displayModes: BehaviorSubject<IDisplayFreqRes> = new BehaviorSubject<IDisplayFreqRes>(undefined);
+    public refreshRateSupported: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(undefined);
+    public nvidiaPowerCTRLDefaultPowerLimit: BehaviorSubject<number> = new BehaviorSubject<number>(undefined);
+    public nvidiaPowerCTRLMaxPowerLimit: BehaviorSubject<number> = new BehaviorSubject<number>(undefined);
+    public nvidiaPowerCTRLAvailable: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(undefined);
+    public isUnsupportedConfigurableTGPDevice: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(undefined);
 
-  public displayModes = new BehaviorSubject<IDisplayFreqRes>(undefined);
-  public isX11 = new BehaviorSubject<boolean>(undefined);
-  public refreshRateSupported = new BehaviorSubject<boolean>(undefined);
-  public device: TUXEDODevice;
+    public isX11: BehaviorSubject<number> = new BehaviorSubject<number>(-1);
+    public device: TUXEDODevice = 0;
+    public hasAquaris: boolean = true;
 
-  public nvidiaPowerCTRLDefaultPowerLimit = new BehaviorSubject<number>(undefined);
-  public nvidiaPowerCTRLMaxPowerLimit = new BehaviorSubject<number>(undefined);
-  public nvidiaPowerCTRLAvailable = new BehaviorSubject<boolean>(undefined);
+    private dbusFunctionMap: Map<BehaviorSubject<any>, DbusFunctionEntry> = new Map<
+        BehaviorSubject<any>,
+        DbusFunctionEntry
+    >([
+        [
+            this.fanData,
+            {
+                dbusFunctionName: 'getFanData',
+                dbusFunction: (): Promise<string> => window.dbusAPI.getFanData(),
+            },
+        ],
+        [
+            this.isX11,
+            {
+                dbusFunctionName: 'getIsX11',
+                dbusFunction: (): Promise<number> => window.dbusAPI.getIsX11(),
+            },
+        ],
+        [
+            this.primeState,
+            {
+                dbusFunctionName: 'getPrimeState',
+                dbusFunction: (): Promise<string> => window.dbusAPI.getPrimeState(),
+            },
+        ],
+        [
+            this.iGpuInfo,
+            {
+                dbusFunctionName: 'getIGpuInfoValuesJSON',
+                dbusFunction: (): Promise<string> => window.dbusAPI.getIGpuInfoValuesJSON(),
+            },
+        ],
+        [
+            this.dGpuInfo,
+            {
+                dbusFunctionName: 'getDGpuInfoValuesJSON',
+                dbusFunction: (): Promise<string> => window.dbusAPI.getDGpuInfoValuesJSON(),
+            },
+        ],
+        [
+            this.cpuPower,
+            {
+                dbusFunctionName: 'getCpuPowerValuesJSON',
+                dbusFunction: (): Promise<string> => window.dbusAPI.getCpuPowerValuesJSON(),
+            },
+        ],
+        [
+            this.displayModes,
+            {
+                dbusFunctionName: 'getDisplayModesJSON',
+                dbusFunction: (): Promise<string> => window.dbusAPI.getDisplayModesJSON(),
+            },
+        ],
+        [
+            this.keyboardBacklightCapabilities,
+            {
+                dbusFunctionName: 'getKeyboardBacklightCapabilitiesJSON',
+                dbusFunction: (): Promise<string> => window.dbusAPI.getKeyboardBacklightCapabilitiesJSON(),
+            },
+        ],
+        [
+            this.keyboardBacklightStates,
+            {
+                dbusFunctionName: 'getKeyboardBacklightStatesJSON',
+                dbusFunction: (): Promise<string> => window.dbusAPI.getKeyboardBacklightStatesJSON(),
+            },
+        ],
 
-  constructor(private utils: UtilsService) {
-    this.tccDBusInterface = new TccDBusController();
-    this.periodicUpdate();
-    this.timeout = setInterval(() => { this.periodicUpdate(); }, this.updateInterval);
-  }
+        [
+            this.fansMinSpeed,
+            {
+                dbusFunctionName: 'getFansMinSpeed',
+                dbusFunction: (): Promise<number> => window.dbusAPI.getFansMinSpeed(),
+            },
+        ],
+        [
+            this.fansOffAvailable,
+            {
+                dbusFunctionName: 'getFansOffAvailable',
+                dbusFunction: (): Promise<boolean> => window.dbusAPI.getFansOffAvailable(),
+            },
+        ],
 
-  ngOnDestroy() {
-    // Cleanup
-    if (this.timeout !== undefined) {
-      clearInterval(this.timeout);
+        [
+            this.nvidiaPowerCTRLDefaultPowerLimit,
+            {
+                dbusFunctionName: 'getNVIDIAPowerCTRLDefaultPowerLimit',
+                dbusFunction: (): Promise<number> => window.dbusAPI.getNVIDIAPowerCTRLDefaultPowerLimit(),
+            },
+        ],
+        [
+            this.nvidiaPowerCTRLMaxPowerLimit,
+            {
+                dbusFunctionName: 'getNVIDIAPowerCTRLMaxPowerLimit',
+                dbusFunction: (): Promise<number> => window.dbusAPI.getNVIDIAPowerCTRLMaxPowerLimit(),
+            },
+        ],
+        [
+            this.nvidiaPowerCTRLAvailable,
+            {
+                dbusFunctionName: 'getNVIDIAPowerCTRLAvailable',
+                dbusFunction: (): Promise<boolean> => window.dbusAPI.getNVIDIAPowerCTRLAvailable(),
+            },
+        ],
+        [
+            this.isUnsupportedConfigurableTGPDevice,
+            {
+                dbusFunctionName: 'getIsUnsupportedConfigurableTGPDevice',
+                dbusFunction: (): Promise<boolean> => window.dbusAPI.getIsUnsupportedConfigurableTGPDevice(),
+            },
+        ],
+        [
+            this.tuxedoWmiAvailable,
+            {
+                dbusFunctionName: 'tuxedoWmiAvailable',
+                dbusFunction: (): Promise<boolean> => window.dbusAPI.tuxedoWmiAvailable(),
+            },
+        ],
+        [
+            this.fanHwmonAvailable,
+            {
+                dbusFunctionName: 'fanHwmonAvailable',
+                dbusFunction: (): Promise<boolean> => window.dbusAPI.fanHwmonAvailable(),
+            },
+        ],
+        [
+            this.sensorDataCollectionStatus,
+            {
+                dbusFunctionName: 'getSensorDataCollectionStatus',
+                dbusFunction: (): Promise<boolean> => window.dbusAPI.getSensorDataCollectionStatus(),
+            },
+        ],
+        [
+            this.chargingProfilesAvailable,
+            {
+                dbusFunctionName: 'getChargingProfilesAvailable',
+                dbusFunction: (): Promise<string[]> => window.dbusAPI.getChargingProfilesAvailable(),
+            },
+        ],
+        [
+            this.webcamSWAvailable,
+            {
+                dbusFunctionName: 'webcamSWAvailable',
+                dbusFunction: (): Promise<boolean> => window.dbusAPI.webcamSWAvailable(),
+            },
+        ],
+        [
+            this.webcamSWStatus,
+            {
+                dbusFunctionName: 'getWebcamSWStatus',
+                dbusFunction: (): Promise<boolean> => window.dbusAPI.getWebcamSWStatus(),
+            },
+        ],
+        [
+            this.forceYUV420OutputSwitchAvailable,
+            {
+                dbusFunctionName: 'getForceYUV420OutputSwitchAvailable',
+                dbusFunction: (): Promise<boolean> => window.dbusAPI.getForceYUV420OutputSwitchAvailable(),
+            },
+        ],
+    ]);
+
+    constructor(private utils: UtilsService) {
+        this.updateTuxedoDevice();
+        this.dbusUpdate();
+        this.timeout = setInterval((): void => {
+            this.dbusUpdate();
+        }, this.updateInterval);
     }
-    this.tccDBusInterface.disconnect();
-  }
-  
-  private async periodicUpdate() {
-    const previousValue = this.isAvailable;
-    // Check if still available
-    if (this.isAvailable) {
-      this.isAvailable = await this.tccDBusInterface.dbusAvailable();
-    } else {
-      // If not available try to init again
-      this.isAvailable = await this.tccDBusInterface.init();
-    }
-    // Publish availability as necessary
-    if (this.isAvailable !== previousValue) { this.available.next(this.isAvailable); }
 
-    if (!this.isAvailable) {
-        return;
+    // Display Brightness Gnome Workarounds
+    displayBrightnessNotSupportedGnome(): boolean {
+        return window.ipc.displayBrightnessNotSupportedGnome();
     }
 
-    // Read and publish data (note: atm polled)
-    const wmiAvailability = await this.tccDBusInterface.tuxedoWmiAvailable();
-    this.tuxedoWmiAvailable.next(wmiAvailability);
-
-    const fanHwmonAvailability = await this.tccDBusInterface.fanHwmonAvailable();
-    this.fanHwmonAvailable.next(fanHwmonAvailability)
-
-    const fanData: IDBusFanData = {
-      cpu: await this.tccDBusInterface.getFanDataCPU(),
-      gpu1: await this.tccDBusInterface.getFanDataGPU1(),
-      gpu2: await this.tccDBusInterface.getFanDataGPU2()
-    };
-    this.fanData.next(fanData);
-
-    const dGpuInfoValuesJSON = await this.tccDBusInterface.getDGpuInfoValuesJSON();
-    const iGpuInfoValuesJSON = await this.tccDBusInterface.getIGpuInfoValuesJSON();
-
-    if (dGpuInfoValuesJSON) {
-        this.dGpuInfo.next(JSON.parse(dGpuInfoValuesJSON));
+    async setDisplayBrightnessGnome(valuePercent: number): Promise<void> {
+        return window.ipc.setDisplayBrightnessGnome(valuePercent);
     }
 
-    if (iGpuInfoValuesJSON) {
-        this.iGpuInfo.next(JSON.parse(iGpuInfoValuesJSON));
+    private async updateTuxedoDevice(): Promise<void> {
+        const deviceJSON: string = await window.dbusAPI.getDeviceJSON();
+        if (deviceJSON) {
+            this.device = JSON.parse(deviceJSON);
+        }
     }
 
-    const deviceJSON = await this.tccDBusInterface.getDeviceJSON();
-    if (deviceJSON) {
-        this.device = JSON.parse(deviceJSON);
-    }
-
-    
-
-    this.sensorDataCollectionStatus.next(await this.tccDBusInterface.getSensorDataCollectionStatus())
-
-    this.chargingProfilesAvailable.next(
-        await this.tccDBusInterface.getChargingProfilesAvailable()
-    );
-    
-    this.primeState.next(await this.tccDBusInterface.getPrimeState())
-
-
-    const cpuPowerValuesJSON = await this.tccDBusInterface.getCpuPowerValuesJSON();
-    if (cpuPowerValuesJSON) {
-        this.cpuPower.next(JSON.parse(cpuPowerValuesJSON));
-    }
-
-    this.webcamSWAvailable.next(await this.tccDBusInterface.webcamSWAvailable());
-    this.webcamSWStatus.next(await this.tccDBusInterface.getWebcamSWStatus());
-
-    this.forceYUV420OutputSwitchAvailable.next(await this.tccDBusInterface.getForceYUV420OutputSwitchAvailable());
-
-    const nextODMProfilesAvailable = await this.tccDBusInterface.odmProfilesAvailable();
-    this.odmProfilesAvailable.next(nextODMProfilesAvailable !== undefined ? nextODMProfilesAvailable : []);
-    const nextODMPowerLimits = await this.tccDBusInterface.odmPowerLimits();
-    this.odmPowerLimits.next(nextODMPowerLimits !== undefined ? nextODMPowerLimits : []);
-    // Retrieve and parse profiles
-    const activeProfileJSON: string = await this.tccDBusInterface.getActiveProfileJSON();
-    if (activeProfileJSON !== undefined) {
-        if (activeProfileJSON === undefined) { console.log('tcc-dbus-client.service: unexpected error => no active profile'); }
+    private async updateBehaviorSubject(
+        behaviorSubject: BehaviorSubject<any>,
+        dbusFunctionName: string,
+        dbusFunction: () => Promise<any>,
+    ): Promise<void> {
         try {
-            const activeProfile: TccProfile = JSON.parse(activeProfileJSON);
-            // this.utils.fillDefaultValuesProfile(activeProfile);
-            if (this.previousActiveProfileJSON !== activeProfileJSON) {
-                this.utils.fillDefaultProfileTexts(activeProfile);
-                this.activeProfile.next(activeProfile);
-                this.previousActiveProfileJSON = activeProfileJSON;
+            const data: string | string[] | boolean | number = await dbusFunction();
+
+            if (data === undefined || data === '') {
+                console.log(`tcc-dbus-client: ${dbusFunctionName} did not return data and returned "${data}" instead`);
+                behaviorSubject.next(undefined);
+                return;
             }
-        } catch { console.log('tcc-dbus-client.service: unexpected error parsing profile'); }
+
+            if (typeof data === 'string') {
+                behaviorSubject.next(JSON.parse(data));
+            } else {
+                behaviorSubject.next(data);
+            }
+        } catch (err: unknown) {
+            console.error(`tcc-dbus-client: ${dbusFunctionName} failed => ${err}`);
+        }
     }
 
-    const defaultProfilesJSON: string = await this.tccDBusInterface.getDefaultProfilesJSON();
-    const defaultValuesProfileJSON: string = await this.tccDBusInterface.getDefaultValuesProfileJSON();
-    const customProfilesJSON: string = await this.tccDBusInterface.getCustomProfilesJSON();
-    if (defaultProfilesJSON !== undefined && defaultValuesProfileJSON !== undefined && customProfilesJSON !== undefined) {
-        try {
-            if (this.previousDefaultProfilesJSON !== defaultProfilesJSON) {
-                this.defaultProfiles.next(JSON.parse(defaultProfilesJSON));
-                this.previousDefaultProfilesJSON = defaultProfilesJSON;
-            }
-            if (this.previousCustomProfilesJSON !== customProfilesJSON) {
-                this.customProfiles.next(JSON.parse(customProfilesJSON));
-                this.previousCustomProfilesJSON = customProfilesJSON;
-            }
-            if (this.previousDefaultValuesProfileJSON !== defaultValuesProfileJSON) {
-                this.defaultValuesProfile.next(JSON.parse(defaultValuesProfileJSON));
-                this.previousDefaultValuesProfileJSON = defaultValuesProfileJSON;
-            }
-        } catch (err) {
-            console.log('tcc-dbus-client.service: unexpected error parsing profile lists => ' + err);
+    public async getDbusData(): Promise<void> {
+        const promiseArray: Promise<void>[] = Array.from(this.dbusFunctionMap.entries()).map(
+            ([behaviorSubject, { dbusFunctionName, dbusFunction }]: [
+                BehaviorSubject<any>,
+                DbusFunctionEntry,
+            ]): Promise<void> => {
+                return this.updateBehaviorSubject(behaviorSubject, dbusFunctionName, dbusFunction);
+            },
+        );
+        await Promise.all(promiseArray);
+    }
+
+    private async dbusUpdate(): Promise<void> {
+        const dbusAvailable: boolean = await window.dbusAPI.dbusAvailable();
+
+        this.dbusAvailable.next(dbusAvailable);
+        this.isDbusAvailable = dbusAvailable;
+
+        if (!dbusAvailable) {
+            console.error('tcc-dbus-client: dbusUpdate: dbus not available');
+            return;
         }
 
-        this.dataLoaded = true;
-    }
-    const settingsJSON: string = await this.tccDBusInterface.getSettingsJSON();
-    if (settingsJSON !== undefined) {
-        try {
-            if (this.previousSettingsJSON !== settingsJSON) {
-                this.settings.next(JSON.parse(settingsJSON));
-                this.previousSettingsJSON = settingsJSON;
+        await this.getDbusData();
+        this.hasAquaris = await window.comp.getHasAquaris();
+
+        const nextODMProfilesAvailable: string[] = await window.dbusAPI.odmProfilesAvailable();
+        this.odmProfilesAvailable.next(nextODMProfilesAvailable !== undefined ? nextODMProfilesAvailable : []);
+        // TODO
+        const nextODMPowerLimitsJSON: string = await window.dbusAPI.odmPowerLimitsJSON();
+        if (nextODMPowerLimitsJSON) {
+            const nextODMPowerLimits: TDPInfo[] = JSON.parse(nextODMPowerLimitsJSON);
+            this.odmPowerLimits.next(nextODMPowerLimits !== undefined ? nextODMPowerLimits : []);
+        }
+
+        // Retrieve and parse profiles
+        const activeProfileJSON: string = await window.dbusAPI.getActiveProfileJSON();
+        if (activeProfileJSON !== undefined) {
+            if (activeProfileJSON === undefined) {
+                console.log('tcc-dbus-client: dbusUpdate: unexpected error => no active profile');
             }
-        } catch (err) { console.log('tcc-dbus-client.service: unexpected error parsing settings => ' + err); }
-    }
-    const displayModesJSON: string = await this.tccDBusInterface.getDisplayModesJSON();
-    if(displayModesJSON !== undefined)
-    {
-        try
-        {
-            this.displayModes.next(JSON.parse(displayModesJSON));
-        } 
-        catch (err)
-        {
-            console.log('tcc-dbus-client.service: unexpected error parsing display modes => ' + err);
+            try {
+                const activeProfile: TccProfile = JSON.parse(activeProfileJSON);
+                // this.utils.fillDefaultValuesProfile(activeProfile);
+                if (this.previousActiveProfileJSON !== activeProfileJSON) {
+                    this.utils.fillDefaultProfileTexts(activeProfile);
+                    this.activeProfile.next(activeProfile);
+                    this.previousActiveProfileJSON = activeProfileJSON;
+                }
+            } catch (err: unknown) {
+                console.error(`tcc-dbus-client: dbusUpdate: unexpected error parsing profile => ${err}`);
+            }
+        }
+
+        const defaultProfilesJSON: string = await window.dbusAPI.getDefaultProfilesJSON();
+        const defaultValuesProfileJSON: string = await window.dbusAPI.getDefaultValuesProfileJSON();
+        const customProfilesJSON: string = await window.dbusAPI.getCustomProfilesJSON();
+        if (
+            defaultProfilesJSON !== undefined &&
+            defaultValuesProfileJSON !== undefined &&
+            customProfilesJSON !== undefined
+        ) {
+            try {
+                if (this.previousDefaultProfilesJSON !== defaultProfilesJSON) {
+                    this.defaultProfiles.next(JSON.parse(defaultProfilesJSON));
+                    this.previousDefaultProfilesJSON = defaultProfilesJSON;
+                }
+                if (this.previousCustomProfilesJSON !== customProfilesJSON) {
+                    this.customProfiles.next(JSON.parse(customProfilesJSON));
+                    this.previousCustomProfilesJSON = customProfilesJSON;
+                }
+                if (this.previousDefaultValuesProfileJSON !== defaultValuesProfileJSON) {
+                    this.defaultValuesProfile.next(JSON.parse(defaultValuesProfileJSON));
+                    this.previousDefaultValuesProfileJSON = defaultValuesProfileJSON;
+                }
+            } catch (err: unknown) {
+                console.error(`tcc-dbus-client: dbusUpdate: unexpected error parsing profile lists => ${err}`);
+            }
+
+            this.dataLoaded = true;
+        }
+        const settingsJSON: string = await window.dbusAPI.getSettingsJSON();
+        if (settingsJSON !== undefined) {
+            try {
+                if (this.previousSettingsJSON !== settingsJSON) {
+                    this.settings.next(JSON.parse(settingsJSON));
+                    this.previousSettingsJSON = settingsJSON;
+                }
+            } catch (err: unknown) {
+                console.error(`tcc-dbus-client: dbusUpdate: unexpected error parsing settings => ${err}`);
+            }
         }
     }
-    else
-    {
-        this.displayModes.next(undefined);
-    }
-    const isX11 = await this.tccDBusInterface.getIsX11();
-    this.isX11.next(isX11);
 
-    const keyboardBacklightCapabilitiesJSON: string = await this.tccDBusInterface.getKeyboardBacklightCapabilitiesJSON();
-    if (keyboardBacklightCapabilitiesJSON !== undefined) {
-        try {
-            this.keyboardBacklightCapabilities.next(JSON.parse(keyboardBacklightCapabilitiesJSON));
-        } catch { console.log('tcc-dbus-client.service: unexpected error parsing keyboard backlight capabilities'); }
+    public setKeyboardBacklightStates(keyboardBacklightStates: Array<KeyboardBacklightStateInterface>): void {
+        window.dbusAPI.setKeyboardBacklightStatesJSON(JSON.stringify(keyboardBacklightStates));
     }
 
-    const keyboardBacklightStatesJSON: string = await this.tccDBusInterface.getKeyboardBacklightStatesJSON();
-    if (keyboardBacklightStatesJSON !== undefined) {
-        try {
-            this.keyboardBacklightStates.next(JSON.parse(keyboardBacklightStatesJSON));
-        } catch { console.log('tcc-dbus-client.service: unexpected error parsing keyboard backlight states'); }
+    public async triggerUpdate(): Promise<void> {
+        await this.dbusUpdate();
     }
 
-    this.fansMinSpeed.next(await this.tccDBusInterface.getFansMinSpeed());
-    this.fansOffAvailable.next(await this.tccDBusInterface.getFansOffAvailable());
-
-    this.nvidiaPowerCTRLDefaultPowerLimit.next(await this.tccDBusInterface.getNVIDIAPowerCTRLDefaultPowerLimit());
-    this.nvidiaPowerCTRLMaxPowerLimit.next(await this.tccDBusInterface.getNVIDIAPowerCTRLMaxPowerLimit());
-    this.nvidiaPowerCTRLAvailable.next(await this.tccDBusInterface.getNVIDIAPowerCTRLAvailable());
-  }
-
-  public setKeyboardBacklightStates(keyboardBacklightStates: Array<KeyboardBacklightStateInterface>) {
-    this.tccDBusInterface.setKeyboardBacklightStatesJSON(JSON.stringify(keyboardBacklightStates));
-  }
-
-  public async triggerUpdate() {
-    await this.periodicUpdate();
-  }
-
-  public async setTempProfile(profileName: string) {
-    const result = await this.tccDBusInterface.dbusAvailable() && await this.tccDBusInterface.setTempProfileName(profileName);
-    return result;
-  }
-
-  public async setTempProfileById(profileId: string) {
-    const result = await this.tccDBusInterface.dbusAvailable() && await this.tccDBusInterface.setTempProfileById(profileId);
-    return result;
-  }
-
-  public async setSensorDataCollectionStatus(status: boolean): Promise<void> {
-    await this.tccDBusInterface.dbusAvailable() && await this.tccDBusInterface.setSensorDataCollectionStatus(status)
-  }
-
-  public async setDGpuD0Metrics(status: boolean): Promise<void> {
-    await this.tccDBusInterface.dbusAvailable() && await this.tccDBusInterface.setDGpuD0Metrics(status)
-  }
-
-  public getInterface(): TccDBusController | undefined {
-    if (this.isAvailable) {
-        return this.tccDBusInterface;
-    } else {
-        return undefined;
+    ngOnDestroy(): void {
+        // Cleanup
+        if (this.timeout !== undefined) {
+            clearInterval(this.timeout);
+        }
     }
-  }
+
+    public async setTempProfileById(profileId: string): Promise<boolean> {
+        const result: boolean =
+            (await window.dbusAPI.dbusAvailable()) && (await window.dbusAPI.setTempProfileById(profileId));
+        return result;
+    }
+
+    public async setSensorDataCollectionStatus(status: boolean): Promise<void> {
+        (await window.dbusAPI.dbusAvailable()) && (await window.dbusAPI.setSensorDataCollectionStatus(status));
+    }
+
+    public async setDGpuD0Metrics(status: boolean): Promise<void> {
+        (await window.dbusAPI.dbusAvailable()) && (await window.dbusAPI.setDGpuD0Metrics(status));
+    }
+
+    // TODO do we still need this?
+    public getInterface(): IDbusClientAPI | undefined {
+        if (this.isAvailable) {
+            return window.dbusAPI;
+        } else {
+            return undefined;
+        }
+    }
 }

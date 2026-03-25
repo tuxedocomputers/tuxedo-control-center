@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 export interface ITccFanProfile {
     name?: string;
     tableCPU?: ITccFanTableEntry[];
@@ -29,7 +30,7 @@ export interface ITccFanTableEntry {
 
 export const defaultFanProfiles: ITccFanProfile[] = [
     {
-        name: "Silent",
+        name: 'Silent',
         tableCPU: [
             { temp: 0, speed: 0 },
             { temp: 1, speed: 0 },
@@ -238,7 +239,7 @@ export const defaultFanProfiles: ITccFanProfile[] = [
         ],
     },
     {
-        name: "Quiet",
+        name: 'Quiet',
         tableCPU: [
             { temp: 0, speed: 0 },
             { temp: 1, speed: 0 },
@@ -447,7 +448,7 @@ export const defaultFanProfiles: ITccFanProfile[] = [
         ],
     },
     {
-        name: "Balanced",
+        name: 'Balanced',
         tableCPU: [
             { temp: 0, speed: 0 },
             { temp: 1, speed: 0 },
@@ -656,7 +657,7 @@ export const defaultFanProfiles: ITccFanProfile[] = [
         ],
     },
     {
-        name: "Cool",
+        name: 'Cool',
         tableCPU: [
             { temp: 0, speed: 0 },
             { temp: 1, speed: 0 },
@@ -865,7 +866,7 @@ export const defaultFanProfiles: ITccFanProfile[] = [
         ],
     },
     {
-        name: "Freezy",
+        name: 'Freezy',
         tableCPU: [
             { temp: 0, speed: 20 },
             { temp: 1, speed: 20 },
@@ -1074,7 +1075,7 @@ export const defaultFanProfiles: ITccFanProfile[] = [
         ],
     },
     {
-        name: "Custom",
+        name: 'Custom',
     },
 ];
 

@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,44 +16,44 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { DaemonWorker } from './DaemonWorker';
-import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
-import { ProfileStates } from '../../common/models/TccSettings';
+
 import { determineState } from '../../common/classes/StateUtils';
+import type { ProfileStates } from '../../common/models/TccSettings';
+import { DaemonWorker } from './DaemonWorker';
+import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
 export class StateSwitcherWorker extends DaemonWorker {
-
     private currentState: ProfileStates;
     private currentStateProfileId: string;
 
-    private refreshProfile = false;
+    private refreshProfile: boolean = false;
 
     constructor(tccd: TuxedoControlCenterDaemon) {
-        super(2000, tccd);
+        super(2000, 'StateSwitcherWorker', tccd);
     }
 
     /** Reset state */
-    public reset() {
+    public reset(): void {
         this.currentState = undefined;
     }
 
     /** Refresh profile application */
-    public reapplyProfile() {
+    public reapplyProfile(): void {
         this.refreshProfile = true;
     }
 
-    public onStart(): void {
+    public async onStart(): Promise<void> {
         // Check state and switch profile if appropriate
-        const newState = determineState();
+        const newState: ProfileStates = determineState();
 
         if (newState !== this.currentState) {
             this.currentState = newState;
-            const newActiveProfileId = this.tccd.settings.stateMap[newState.toString()];
+            const newActiveProfileId: string = this.tccd.settings.stateMap[newState.toString()];
             this.currentStateProfileId = newActiveProfileId;
             if (newActiveProfileId !== undefined) {
                 this.tccd.setCurrentProfileById(newActiveProfileId);
             } else {
-                this.tccd.logLine('StateSwitcherWorker: Undefined state mapping for ' + newState.toString());
+                this.tccd.logLine(`StateSwitcherWorker: Undefined state mapping for ${newState.toString()}`);
             }
 
             this.tccd.updateDBusActiveProfileData();
@@ -62,13 +62,13 @@ export class StateSwitcherWorker extends DaemonWorker {
         }
     }
 
-    public onWork(): void {
+    public async onWork(): Promise<void> {
         // Check state and switch profile if appropriate
-        const newState = determineState();
-        const oldActiveProfileId = this.tccd.activeProfile.id;
-        const oldActiveProfileName = this.tccd.activeProfile.name;
+        const newState: ProfileStates = determineState();
+        const oldActiveProfileId: string = this.tccd.activeProfile.id;
+        const oldActiveProfileName: string = this.tccd.activeProfile.name;
 
-        const newStateProfileId = this.tccd.settings.stateMap[newState.toString()];
+        const newStateProfileId: string = this.tccd.settings.stateMap[newState.toString()];
 
         if (newState !== this.currentState || newStateProfileId !== this.currentStateProfileId) {
             /*
@@ -84,20 +84,32 @@ export class StateSwitcherWorker extends DaemonWorker {
             this.currentState = newState;
             this.currentStateProfileId = newStateProfileId;
             if (newStateProfileId === undefined) {
-                this.tccd.logLine('StateSwitcherWorker: Undefined state mapping for ' + newState.toString());
+                this.tccd.logLine(`StateSwitcherWorker: Undefined state mapping for ${newState.toString()}`);
             } else {
                 this.tccd.setCurrentProfileById(newStateProfileId);
             }
         } else {
             // If state didn't change, a manual temporary profile can still be set
-            if (this.tccd.dbusData.tempProfileName !== undefined && this.tccd.dbusData.tempProfileName !== oldActiveProfileName) {
+            if (
+                this.tccd.dbusData.tempProfileName !== undefined &&
+                this.tccd.dbusData.tempProfileName !== '' &&
+                this.tccd.dbusData.tempProfileName !== oldActiveProfileName
+            ) {
                 if (this.tccd.setCurrentProfileByName(this.tccd.dbusData.tempProfileName)) {
-                    this.tccd.logLine(`StateSwitcherWorker: Temp profile '${this.tccd.getCurrentProfile().name}' (${this.tccd.getCurrentProfile().id}) selected`);
+                    this.tccd.logLine(
+                        `StateSwitcherWorker: Temp profile '${this.tccd.getCurrentProfile().name}' (${this.tccd.getCurrentProfile().id}) selected`,
+                    );
                 }
             }
-            if (this.tccd.dbusData.tempProfileId !== undefined && this.tccd.dbusData.tempProfileId !== oldActiveProfileId) {
+            if (
+                this.tccd.dbusData.tempProfileId !== undefined &&
+                this.tccd.dbusData.tempProfileId !== '' &&
+                this.tccd.dbusData.tempProfileId !== oldActiveProfileId
+            ) {
                 if (this.tccd.setCurrentProfileById(this.tccd.dbusData.tempProfileId)) {
-                    this.tccd.logLine(`StateSwitcherWorker: Temp profile '${this.tccd.getCurrentProfile().name}' (${this.tccd.getCurrentProfile().id}) selected`);
+                    this.tccd.logLine(
+                        `StateSwitcherWorker: Temp profile '${this.tccd.getCurrentProfile().name}' (${this.tccd.getCurrentProfile().id}) selected`,
+                    );
                     this.tccd.dbusData.tempProfileName = undefined;
                 }
             }
@@ -112,8 +124,7 @@ export class StateSwitcherWorker extends DaemonWorker {
         }
     }
 
-    public onExit(): void {
+    public async onExit(): Promise<void> {
         // Do nothing
     }
-
 }

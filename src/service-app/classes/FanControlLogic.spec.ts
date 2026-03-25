@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2024 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,6 +16,7 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
+
 import 'jasmine';
 import { ValueBuffer } from './FanControlLogic';
 
@@ -24,56 +25,42 @@ class TestValues {
     public result: number;
 }
 
-describe('FanLogic ValueBuffer', () => {
-
+describe('FanLogic ValueBuffer', (): void => {
     let buffer: ValueBuffer;
 
-    let testData: TestValues[] = [];
+    const testData: TestValues[] = [];
     testData.push({
-        testValues: [
-            63, 39, 34, 92, 93, 85,
-            59,  2, 19, 97, 79, 54,
-            74
-        ],
-        result: 65
+        testValues: [63, 39, 34, 92, 93, 85, 59, 2, 19, 97, 79, 54, 74],
+        result: 65,
     });
 
     testData.push({
-        testValues: [
-            77, 22, 68, 41, 82, 92,
-            21, 61, 13, 22, 23, 26,
-            31
-        ],
-        result: 39
+        testValues: [77, 22, 68, 41, 82, 92, 21, 61, 13, 22, 23, 26, 31],
+        result: 39,
     });
 
     testData.push({
-        testValues: [
-            26, 62, 87, 61, 16, 97,
-            74,  2, 77, 91, 64, 80,
-            73
-        ],
-        result: 70
+        testValues: [26, 62, 87, 61, 16, 97, 74, 2, 77, 91, 64, 80, 73],
+        result: 70,
     });
 
-    beforeEach(() => {
+    beforeEach((): void => {
         buffer = new ValueBuffer();
     });
 
-    afterEach(() => {
-    });
+    afterEach((): void => {});
 
-    it('should handle sample test data cases', () => {
-        for (let data of testData) {
+    it('should handle sample test data cases', (): void => {
+        for (const data of testData) {
             buffer = new ValueBuffer();
-            for (let value of data.testValues) {
+            for (const value of data.testValues) {
                 buffer.addValue(value);
             }
             expect(buffer.getFilteredValue()).toBe(data.result);
         }
     });
 
-    it('should handle not completely filled buffer', () => {
+    it('should handle not completely filled buffer', (): void => {
         buffer.addValue(20);
         expect(buffer.getFilteredValue()).toBe(20);
         buffer.addValue(40);
@@ -92,14 +79,14 @@ describe('FanLogic ValueBuffer', () => {
         expect(buffer.getFilteredValue()).toBe(50);
     });
 
-    it('should roll the buffer', () => {
+    it('should roll the buffer', (): void => {
         // Fill with 0-12
-        for (let i = 0; i < 13; ++i) {
+        for (let i: number = 0; i < 13; ++i) {
             buffer.addValue(i);
         }
 
         // Overwrite all but one with 5s
-        for (let i = 0; i < 12; ++i) {
+        for (let i: number = 0; i < 12; ++i) {
             buffer.addValue(5);
         }
         expect(buffer.getBufferCopy()[0]).toBe(12);
@@ -110,34 +97,38 @@ describe('FanLogic ValueBuffer', () => {
         expect(buffer.getBufferCopy()).toEqual(Array(13).fill(5));
     });
 
-    it('should work as previous implementation', () => {
+    it('should work as previous implementation', (): void => {
         let referenceBuffer: OriginalValueBuffer;
 
         // Let's do 100 tests
-        for (let i = 0; i < 100; ++i) {
+        for (let i: number = 0; i < 100; ++i) {
             buffer = new ValueBuffer();
             referenceBuffer = new OriginalValueBuffer();
 
             // ...of random length
-            const nrValues = Math.floor(Math.random() * 15) + 1;
-            for (let j = 0; j < nrValues; ++j) {
+            const nrValues: number = Math.floor(Math.random() * 15) + 1;
+            for (let j: number = 0; j < nrValues; ++j) {
                 // ...and random values
-                const randomTemp = Math.floor(Math.random() * 101);
+                const randomTemp: number = Math.floor(Math.random() * 101);
                 buffer.addValue(randomTemp);
                 referenceBuffer.addValue(randomTemp);
             }
-            expect(buffer.getBufferCopy()).toEqual(referenceBuffer.getBufferCopy());
-            expect(buffer.getFilteredValue()).toEqual(referenceBuffer.getFilteredValue());
+
+            const bufferInfo: string =
+                `for buffer:           ${JSON.stringify(buffer.getBufferCopy())}\n` +
+                `    reference buffer: ${JSON.stringify(referenceBuffer.getBufferCopy())}\n\n`;
+            expect(buffer.getBufferCopy()).withContext(bufferInfo).toEqual(referenceBuffer.getBufferCopy());
+            expect(buffer.getFilteredValue()).withContext(bufferInfo).toEqual(referenceBuffer.getFilteredValue());
         }
     });
 });
 
 class OriginalValueBuffer {
     private bufferData: Array<number>;
-    private bufferMaxSize = 13; // Buffer max size
+    private bufferMaxSize: number = 13; // Buffer max size
 
     constructor() {
-        this.bufferData = new Array();
+        this.bufferData = [];
     }
 
     public addValue(value: number): void {
@@ -152,8 +143,8 @@ class OriginalValueBuffer {
         // Note (bufferMaxSize - usedSize) / 2 values are ignored on either side
         const usedSize = 7;
 
-        const copy = Array.from(this.bufferData);
-        copy.sort((a, b) => a - b);
+        const copy: number[] = Array.from(this.bufferData);
+        copy.sort((a: number, b: number): number => a - b);
 
         while (copy.length >= usedSize + 2) {
             copy.shift();
@@ -161,7 +152,9 @@ class OriginalValueBuffer {
         }
 
         // Calculate average from rest of array
-        const averageValue = Math.round(copy.reduce((accVal, currentValue) => accVal + currentValue) / copy.length);
+        const averageValue: number = Math.round(
+            copy.reduce((accVal: number, currentValue: number): number => accVal + currentValue) / copy.length,
+        );
         return averageValue;
     }
 

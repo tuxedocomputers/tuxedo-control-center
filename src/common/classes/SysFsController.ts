@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,23 +16,27 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import * as fs from 'fs';
+
+// biome-ignore lint: "node:fs" wasn't found because this file is in the common folder
+const fs: typeof import('fs') = require('fs');
+
+import type { Dirent } from 'node:fs';
 
 export abstract class SysFsController {
-
     public static getDeviceList(sourceDir: string): string[] {
         try {
-            return fs.readdirSync(sourceDir, { withFileTypes: true })
-                .map(dirent => dirent.name);
-        } catch (err) {
+            return fs.readdirSync(sourceDir, { withFileTypes: true }).map((dirent: Dirent): string => dirent.name);
+        } catch (err: unknown) {
+            console.error(`SysFsController: getDeviceList failed => ${err}`);
             return [];
         }
     }
 
-    public static getDeviceListDirent(sourceDir: string): fs.Dirent[] {
+    public static getDeviceListDirent(sourceDir: string): Dirent[] {
         try {
             return fs.readdirSync(sourceDir, { withFileTypes: true });
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error(`SysFsController: getDeviceListDirent failed => ${err}`);
             return [];
         }
     }

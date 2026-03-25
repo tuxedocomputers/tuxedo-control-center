@@ -1,5 +1,5 @@
 <!--
-Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
 
 This file is part of TUXEDO Control Center.
 
@@ -16,11 +16,12 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
+
 <mat-toolbar class="tcc-mat-toolbar" *ngIf="useTCCTitleBar">
     <mat-toolbar-row class="title-row">
         <div id="title-left">
-            <img src="./assets/taskbar_icon_free.svg" id="title-logo">
-            <span id="title-text" i18n>TUXEDO Control Center</span>
+            <img src="./assets/taskbar_icon_free.svg" id="title-logo" />
+            <span id="title-text" i18n="@@menuTuxedoControlCenter">TUXEDO Control Center</span>
         </div>
         <div id="title-right">
             <svg viewBox="0 0 376 376" (click)="buttonMinimize()">
@@ -51,9 +52,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <mat-divider></mat-divider>
                 <mat-list-item routerLink="profile-manager" routerLinkActive="true">
                     <content>
-                        <mat-icon><svg viewBox="0 0 512 512">
+                        <mat-icon>
+                            <svg viewBox="0 0 512 512">
                                 <use href="./assets/images/icon_allprofiles.svg#Icon"></use>
-                            </svg></mat-icon>
+                            </svg>
+                        </mat-icon>
                         <ng-container i18n="@@menuProfiles">Profiles</ng-container>
                     </content>
                 </mat-list-item>
@@ -61,9 +64,11 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                 <mat-list-item routerLink="tools" routerLinkActive="true">
                     <content>
-                        <mat-icon><svg viewBox="0 0 512 512">
+                        <mat-icon>
+                            <svg viewBox="0 0 512 512">
                                 <use href="./assets/images/icon_tools.svg#Icon"></use>
-                            </svg></mat-icon>
+                            </svg>
+                        </mat-icon>
                         <ng-container i18n="@@menuTools">Tools</ng-container>
                     </content>
                 </mat-list-item>
@@ -71,28 +76,29 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 
                 <mat-list-item routerLink="aquaris-control" routerLinkActive="true" *ngIf="compat.hasAquaris">
                     <content>
-                        <mat-icon><svg viewBox="0 0 512 512">
+                        <mat-icon>
+                            <svg viewBox="0 0 512 512">
                                 <use href="./assets/images/icon_aquaris.svg#Icon"></use>
-                            </svg></mat-icon>
+                            </svg>
+                        </mat-icon>
                         <ng-container i18n="@@menuAquaris">Aquaris</ng-container>
                     </content>
                 </mat-list-item>
                 <mat-divider *ngIf="compat.hasAquaris"></mat-divider>
 
-                <mat-list-item style="cursor: default;" [disableRipple]="true">
+                <mat-list-item style="cursor: default" [disableRipple]="true">
                     <content>
                         <ng-container i18n="@@menuUsedProfilesLabel">Used profiles</ng-container>
                     </content>
                 </mat-list-item>
-                <mat-list-item [routerLink]="getProfileLink(state)"
-                    routerLinkActive="true" *ngFor="let state of getStateInputs()">
+                <mat-list-item [routerLink]="getProfileLink(state)" routerLinkActive="true" *ngFor="let state of getStateInputs()">
                     <content>
                         <mat-icon>
                             <svg viewBox="0 0 512 512">
                                 <use attr.href="./assets/images/{{ state.icon }}"></use>
                             </svg>
                         </mat-icon>
-                        <span class="profile-name">{{ getStateProfileName(state) }}</span>
+                        <div class="profile-name">{{ getStateProfileName(state) }}</div>
                     </content>
                 </mat-list-item>
                 <mat-divider></mat-divider>
@@ -104,18 +110,22 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <mat-divider></mat-divider>
                 <mat-list-item routerLinkActive="true" (click)="buttonToggleLanguage()">
                     <content>
-                        <mat-icon><svg viewBox="0 0 512 512">
+                        <mat-icon>
+                            <svg viewBox="0 0 512 512">
                                 <use href="./assets/images/icon_language.svg#Icon"></use>
-                            </svg></mat-icon>
+                            </svg>
+                        </mat-icon>
                         {{ buttonLanguageLabel }}
                     </content>
                 </mat-list-item>
                 <mat-divider></mat-divider>
                 <mat-list-item routerLink="support" routerLinkActive="true">
                     <content>
-                        <mat-icon><svg viewBox="0 0 512 512">
+                        <mat-icon>
+                            <svg viewBox="0 0 512 512">
                                 <use href="./assets/images/icon_help.svg#Icon"></use>
-                            </svg></mat-icon>
+                            </svg>
+                        </mat-icon>
                         <ng-container i18n="@@menuSupport">Support</ng-container>
                     </content>
                 </mat-list-item>
@@ -125,19 +135,23 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <mat-divider></mat-divider>
                 <mat-list-item routerLink="global-settings" routerLinkActive="true">
                     <content>
-                        <mat-icon><svg viewBox="0 0 512 512">
+                        <mat-icon>
+                            <svg viewBox="0 0 512 512">
                                 <use href="./assets/images/icon_settings.svg#Icon"></use>
-                            </svg></mat-icon>
-                        <ng-container i18n>Settings</ng-container>
+                            </svg>
+                        </mat-icon>
+                        <ng-container i18n="@@menuSettings">Settings</ng-container>
                     </content>
                 </mat-list-item>
                 <mat-divider></mat-divider>
                 <mat-list-item routerLink="info" routerLinkActive="true">
                     <content>
-                        <mat-icon><svg viewBox="0 0 512 512">
+                        <mat-icon>
+                            <svg viewBox="0 0 512 512">
                                 <use href="./assets/images/icon_info.svg#Icon"></use>
-                            </svg></mat-icon>
-                        <ng-container i18n>Info</ng-container>
+                            </svg>
+                        </mat-icon>
+                        <ng-container i18n="@@menuInfo">Info</ng-container>
                     </content>
                 </mat-list-item>
             </mat-nav-list>

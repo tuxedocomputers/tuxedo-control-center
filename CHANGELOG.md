@@ -1,5 +1,40 @@
 # Changelog
 
+## [] - UNRELEASED
+### Added
+- Wayland check for GPU selection
+- Systeminfos file size check
+- Missing increment/decrement buttons in edit profile
+- Dev dependencies (esbuild, prettier formatter and biome linter)
+
+### Changed
+- Major internal frameworks updates
+  - Electron 41
+  - Angular 21
+  - Node 24
+  - Material design 3
+  - chart.js 4
+- Major internal restructure due to above changes (Electron context isolation, GUI adjustments for Angular/Material etc.)
+- Fan control
+  - Custom fan control draggable points GUI (instead of sliders)
+  - Fan control CPU optimization
+- Settings content width adjusts with window size
+- Various aspects of GUI (font, font size, framing)
+- Custom battery thresholds (where available) now using dropdowns (previously sliders)
+- Async tccd background workers
+- Extended error handling and logging
+
+### Fixed
+- Dashboard fan speed now always reflects sensor value, previously only showed set fan speed when fan control was active
+- Dashboard now hides values when none are available (for example during suspend/wakeup)
+- Crash of tccd due to EC timeout
+- Access errors for keyboard backlight
+- Fan speed for dGPU not shown in certain cases
+- Global settings checkbox not representing actual state
+- Cases of GPU selection in tray being incorrectly shown/hidden
+- D-Bus related access errors
+- Refreshrate worker trying to use empty values
+
 ## [2.1.23] - 2026-02-05
 ### Added
 - Additional ID for Gemini 17 Gen4 Intel devices

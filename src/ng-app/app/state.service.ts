@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,106 +16,144 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Injectable, OnDestroy } from '@angular/core';
-import { determineState } from '../../common/classes/StateUtils';
-import { ProfileStates, ITccSettings } from '../../common/models/TccSettings';
-import { BehaviorSubject, Observable, Subject, Subscription } from 'rxjs';
-import { ITccProfile } from '../../common/models/TccProfile';
-import { ConfigService } from './config.service';
-import { TccDBusClientService } from './tcc-dbus-client.service';
 
+import { Injectable, type OnDestroy } from '@angular/core';
+import { type BehaviorSubject, type Observable, Subject, Subscription } from 'rxjs';
+import type { ITccProfile } from '../../common/models/TccProfile';
+import { type ITccSettings, ProfileStates } from '../../common/models/TccSettings';
+// biome-ignore lint: deb does build with type, but creates constructor dependency injection error
+import { ConfigService } from './config.service';
+// biome-ignore lint: deb does build with type, but creates constructor dependency injection error
+import { TccDBusClientService } from './tcc-dbus-client.service';
+// biome-ignore lint: deb does build with type, but creates constructor dependency injection error
+import { UtilsService } from './utils.service';
 
 export interface IStateInfo {
-  label: string;
-  tooltip: string;
-  icon: string;
-  value: string;
+    label: string;
+    tooltip: string;
+    icon: string;
+    value: string;
 }
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root',
 })
 export class StateService implements OnDestroy {
+    private updateInterval: NodeJS.Timeout;
+    private currentSettings: ITccSettings;
+    private subscriptions: Subscription = new Subscription();
+    private stateSubject: Subject<ProfileStates>;
+    public stateObserver: Observable<ProfileStates>;
 
-  private updateInterval: NodeJS.Timeout;
-  private currentSettings: ITccSettings;
-  private subscriptions: Subscription = new Subscription();
+    public activeProfile: BehaviorSubject<ITccProfile>;
 
-  private activeState: ProfileStates;
-  private stateSubject: Subject<ProfileStates>;
-  public stateObserver: Observable<ProfileStates>;
+    public stateInputMap: Map<string, IStateInfo> = new Map<string, IStateInfo>();
+    public stateInputArray: IStateInfo[];
 
-  public activeProfile: BehaviorSubject<ITccProfile>;
+    private batteryProfileName: string = '';
+    private chargingProfileName: string = '';
+    private batteryProfileId: string = '';
+    private chargingProfileId: string = '';
 
-  public stateInputMap = new Map<string, IStateInfo>();
-  public stateInputArray: IStateInfo[];
+    constructor(
+        private config: ConfigService,
+        // biome-ignore lint: biome says that parameter is never read, but removing tccdbus creates an error
+        private tccdbus: TccDBusClientService,
+        private utils: UtilsService,
+        private dbus: TccDBusClientService,
+    ) {
+        this.activeProfile = tccdbus.activeProfile;
 
-  constructor(private config: ConfigService, private tccdbus: TccDBusClientService) {
-    this.activeProfile = tccdbus.activeProfile;
+        this.stateSubject = new Subject<ProfileStates>();
+        this.stateObserver = this.stateSubject.asObservable();
 
-    this.stateSubject = new Subject<ProfileStates>();
-    this.stateObserver = this.stateSubject.asObservable();
+        this.currentSettings = this.config.getSettings();
+        this.subscriptions.add(
+            this.config.observeSettings.subscribe((newSettings: ITccSettings): void => {
+                this.currentSettings = newSettings;
+            }),
+        );
 
-    this.currentSettings = this.config.getSettings();
-    this.subscriptions.add(this.config.observeSettings.subscribe(newSettings => {
-      this.currentSettings = newSettings;
-    }));
-
-    this.pollActiveState();
-    this.updateInterval = setInterval(() => {
-      this.pollActiveState();
-    }, 500);
-
-    this.stateInputMap
-      .set(ProfileStates.AC.toString(), {
-        label: $localize `:@@stateLabelMains:Mains`,
-        tooltip: $localize `:@@stateTooltipMains:Mains power adaptor`,
-        icon: 'icon_pluggedin.svg#Icon',
-        value: ProfileStates.AC.toString()
-      })
-      .set(ProfileStates.BAT.toString(), {
-        label: $localize `:@@stateLabelBattery:Battery`,
-        tooltip: $localize `:@@stateTooltipBattery:Battery powered`,
-        icon: 'icon_batterymode.svg#Icon',
-        value: ProfileStates.BAT.toString()
-      });
-    this.stateInputArray = Array.from(this.stateInputMap.values());
-  }
-
-  public getStateInputs(): IStateInfo[] {
-    return this.stateInputArray;
-  }
-
-  public getActiveState(): ProfileStates {
-    return this.activeState;
-  }
-
-  public getActiveProfile(): ITccProfile {
-    return this.activeProfile.getValue();
-  }
-
-  /**
-   * Get the array of state names that the profile is activated for
-   */
-  public getProfileStates(profileId: string): string[] {
-    // Filter on value (profile id) and map on key (state)
-    return Object.entries(this.currentSettings.stateMap)
-            .filter(entry => entry[1] === profileId)
-            .map(entry => entry[0]);
-  }
-
-  private pollActiveState(): void {
-    const newState = determineState();
-    if (newState !== this.activeState) {
-      this.activeState = newState;
-      this.stateSubject.next(newState);
+        this.stateInputMap
+            .set(ProfileStates.AC.toString(), {
+                label: $localize`:@@stateLabelMains:Mains`,
+                tooltip: $localize`:@@stateTooltipMains:Mains power adaptor`,
+                icon: 'icon_pluggedin.svg#Icon',
+                value: ProfileStates.AC.toString(),
+            })
+            .set(ProfileStates.BAT.toString(), {
+                label: $localize`:@@stateLabelBattery:Battery`,
+                tooltip: $localize`:@@stateTooltipBattery:Battery powered`,
+                icon: 'icon_batterymode.svg#Icon',
+                value: ProfileStates.BAT.toString(),
+            });
+        this.stateInputArray = Array.from(this.stateInputMap.values());
     }
-  }
 
-  ngOnDestroy() {
-    this.subscriptions.unsubscribe();
-    if (this.updateInterval) {
-      clearInterval(this.updateInterval);
+    public getStateInputs(): IStateInfo[] {
+        return this.stateInputArray;
     }
-  }
+
+    public getActiveProfile(): ITccProfile {
+        return this.activeProfile.getValue();
+    }
+
+    /**
+     * Get the array of state names that the profile is activated for
+     */
+    public getProfileStates(profileId: string): string[] {
+        // Filter on value (profile id) and map on key (state)
+        return Object.entries(this.currentSettings.stateMap)
+            .filter((entry: [string, unknown]): boolean => entry[1] === profileId)
+            .map((entry: [string, unknown]): string => entry[0]);
+    }
+
+    private getProfileName(profileId: string): string {
+        const defaultProfileName: string = this.utils.getDefaultProfileName(profileId);
+        if (defaultProfileName !== undefined) {
+            return defaultProfileName;
+        } else {
+            const profile: ITccProfile = this.config.getProfileById(profileId);
+            if (profile !== undefined) {
+                return profile.name;
+            } else {
+                return undefined;
+            }
+        }
+    }
+
+    async initializeProfileNames(): Promise<void> {
+        await this.dbus.triggerUpdate();
+
+        const settings: ITccSettings = this.config.getSettings();
+
+        this.chargingProfileId = settings.stateMap[ProfileStates.AC];
+        this.batteryProfileId = settings.stateMap[ProfileStates.BAT];
+
+        this.chargingProfileName = this.getProfileName(this.chargingProfileId);
+        this.batteryProfileName = this.getProfileName(this.batteryProfileId);
+    }
+
+    public getCurrentChargingProfileName(): string {
+        return this.chargingProfileName;
+    }
+
+    public getCurrentBatteryProfileName(): string {
+        return this.batteryProfileName;
+    }
+
+    public getCurrentChargingProfileId(): string {
+        return this.chargingProfileId;
+    }
+
+    public getCurrentBatteryProfileId(): string {
+        return this.batteryProfileId;
+    }
+
+    public ngOnDestroy(): void {
+        this.subscriptions.unsubscribe();
+        if (this.updateInterval) {
+            clearInterval(this.updateInterval);
+        }
+    }
 }

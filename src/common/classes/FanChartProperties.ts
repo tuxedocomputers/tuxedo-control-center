@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -17,88 +17,117 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { ChartDataSets, ChartOptions } from "chart.js";
-import { Color } from "ng2-charts";
-import "@angular/localize/init";
+import type {
+    BubbleDataPoint,
+    CartesianScaleTypeRegistry,
+    ChartDataset,
+    ChartTypeRegistry,
+    CoreInteractionOptions,
+    Point,
+    ScaleOptionsByType,
+    Tick,
+} from 'chart.js';
+import type { _DeepPartialObject } from 'node_modules/chart.js/dist/types/utils';
+import { formatTemp } from './FanUtils';
 
-const graphOptions: ChartOptions = {
-    animation: {
-        duration: 300,
-    },
-    responsive: true,
-    maintainAspectRatio: false,
-    tooltips: {
-        callbacks: {
-            label: (item, data) => {
-                return (
-                    data.datasets[item.datasetIndex].label + " " + item.yLabel
-                );
-            },
-        },
-    },
-    scales: {
-        yAxes: [
-            {
-                ticks: {
-                    beginAtZero: true,
-                    suggestedMax: 100,
-                    callback: (value: number) => {
-                        if (value % 20 === 0) {
-                            return value;
-                        } else {
-                            return null;
-                        }
-                    },
-                },
-            },
-        ],
-        xAxes: [
-            {
-                ticks: {
-                    beginAtZero: true,
-                    autoSkip: false,
-                    callback: (value, index) => {
-                        if (index % 5 === 0) {
-                            return value;
-                        } else {
-                            return null;
-                        }
-                    },
-                },
-            },
-        ],
-    },
+export const chartInteraction: _DeepPartialObject<CoreInteractionOptions> = {
+    mode: 'index',
+    intersect: false,
 };
 
-const fantableDatasets: ChartDataSets[] = [
-    {
-        label: $localize`:@@cProfMgrDetailsFanChartCPULabel:CPU Fan`,
-        data: [],
-        spanGaps: true,
-        lineTension: 0.1,
-        steppedLine: true,
-        showLine: true,
-        pointRadius: 2,
-    },
-    {
-        label: $localize`:@@cProfMgrDetailsFanChartGPULabel:GPU Fan`,
-        data: [],
-        spanGaps: true,
-        lineTension: 0.1,
-        steppedLine: true,
-        showLine: true,
-        pointRadius: 2,
-    },
-];
+export const chartAnimation = {
+    duration: 300,
+};
 
-const graphColors: Color[] = [
-    {
-        borderColor: "rgba(120, 120, 120, 0.4)",
-        backgroundColor: "rgba(10, 10, 10, 0.4)",
-    },
-    {
-        borderColor: "rgba(227, 0, 22, 0.3)",
-        backgroundColor: "rgba(227, 0, 22, 0.3)",
-    },
-];
-export { graphOptions, fantableDatasets, graphColors };
+export const chartResponsive = true;
+export const chartMaintainAspectRatio = false;
+
+export function createLineChartDataset(
+    primaryLabel: string,
+    primaryData: { x: number; y: number }[],
+    secondaryLabel?: string,
+    secondaryData?: { x: number; y: number }[],
+): ChartDataset<keyof ChartTypeRegistry, (number | [number, number] | Point | BubbleDataPoint)[]>[] {
+    const baseDataset = {
+        spanGaps: true,
+        showLine: true,
+        pointRadius: 2,
+        fill: true,
+    };
+
+    const primaryDataset = {
+        label: primaryLabel,
+        data: primaryData,
+        borderColor: 'rgba(227, 0, 22, 0.3)',
+        backgroundColor: 'rgba(227, 0, 22, 0.3)',
+        ...baseDataset,
+    };
+
+    if (secondaryLabel) {
+        const secondaryDataset = {
+            label: secondaryLabel,
+            data: secondaryData,
+            borderColor: 'rgba(120, 120, 120, 0.4)',
+            backgroundColor: 'rgba(10, 10, 10, 0.4)',
+            ...baseDataset,
+        };
+
+        return [primaryDataset, secondaryDataset];
+    }
+
+    return [primaryDataset];
+}
+
+export function createBarChartDataset(
+    primaryLabel: string,
+    primaryData: number[],
+    secondaryLabel: string,
+    secondaryData: number[],
+): ChartDataset<keyof ChartTypeRegistry, (number | [number, number] | Point | BubbleDataPoint)[]>[] {
+    return [
+        {
+            label: primaryLabel,
+            backgroundColor: 'rgba(227, 0, 22, 0.3)',
+            data: primaryData,
+        },
+        {
+            label: secondaryLabel,
+            backgroundColor: 'rgba(10, 10, 10, 0.4)',
+            data: secondaryData,
+        },
+    ];
+}
+
+export function createLineChartScales(
+    fahrenheit: boolean,
+    textColor: string,
+    max?: number,
+): _DeepPartialObject<{
+    [key: string]: ScaleOptionsByType<'radialLinear' | keyof CartesianScaleTypeRegistry>;
+}> {
+    return {
+        x: {
+            type: 'linear',
+            min: 0,
+            max: max ? max : 100,
+            ticks: {
+                color: textColor,
+
+                callback: (value: number, _index: number, _ticks: Tick[]): string => {
+                    return formatTemp(value, fahrenheit);
+                },
+            },
+        },
+        y: {
+            min: 0,
+            max: 100,
+            ticks: {
+                color: textColor,
+
+                callback: (value: number, _index: number, _ticks: Tick[]): string => {
+                    return `${value} %`;
+                },
+            },
+        },
+    };
+}

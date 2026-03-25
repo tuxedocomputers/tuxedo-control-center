@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,213 +16,110 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-@import '~@angular/material/theming';
 
-@mixin tcc-gauge-theme($theme) {
-    $primary: map-get($theme, primary);
-    $accent: map-get($theme, accent);
-    $warn: map-get($theme, warn);
-    $foreground: map-get($theme, foreground);
-    $background: map-get($theme, background);
+.tcc-gauge {
+    position: relative;
+    width: 180px;
+    height: 180px;
 
-    $gauge-value-text-color: mat-color($foreground, text);
-    $gauge-unit-text-color: mat-color($foreground, disabled-text);
-    $gauge-legend-text-color: mat-color($foreground, disabled-text);
+    mwl-gauge {
+        position: absolute;
+        top: 0;
+        left: 0;
 
-    $gauge-icon-color: mat-color($foreground, disabled-text);
-    $gauge-background-color: mat-color($background, status-bar);
+        width: 100%;
+        height: 100%;
 
-    .tcc-gauge {
-        position: relative;
-        width: 180px;
-        height: 180px;
-
-        mwl-gauge {
-            position: absolute;
-            top: 0;
-            left: 0;
-
-            width: 100%;
-            height: 100%;
-
-            .dial {
-                stroke-width: 3px;
-                stroke: $gauge-background-color;
-            }
-
-            .value {
-                //transform: scale(0.92);
-                transform-origin: center;
-                stroke-width: 3px;
-                stroke: #e22131;
-                opacity: .7;
-                //stroke: #00E333;
-                stroke-linecap: round;
-            }
-
-            .value-text {
-                fill: $gauge-value-text-color;
-                transform: translateY(0px);
-                font-size: 1.8em;
-                transform-origin: center center;
-            }
-
+        .dial {
+            stroke-width: 3px;
+            stroke: var(--gauge-legend-color);
         }
 
-        &.not-available mwl-gauge .value-text {
-            font-size: 1.2em;
-            opacity: 0.3;
-        }
-
-        .custom-value-text {
-            position: absolute;
-            bottom: 57px;
-            left: 0;
-            width: 100%;
-            text-align: center;
-
-            fill: $gauge-value-text-color;
-            // transform: translateY(0px);
-            font-size: 3.2em;
-            // transform-origin: center center;
-        }
-
-        &.not-available .custom-value-text {
-            bottom: 70px;
-            font-size: 2.0em;
-            opacity: 0.3;
-        }
-
-        .unit-text {
-            position: absolute;
-            bottom: 43px;
-            left: 0;
-            width: 100%;
-
-            text-align: center;
-
-            color: $gauge-unit-text-color;
-            font-weight: bold;
-        }
-
-        .icon {
-            position: absolute;
-            top: 27px;
-            left: 0;
-            width: 100%;
-            height: 35px;
-
-            color: $gauge-icon-color;
-            --icon-detail: var(--icon-main);
-        }
-
-        .legend {
-            position: absolute;
-            bottom: 5px;
-            left: 0;
-
-            display: flex;
-            flex-flow: row nowrap;
-            justify-content: center;
-            align-items: center;
-
-            width: 100%;
-            height: 30px;
-
-            border-radius: 20px;
-            background-color: $gauge-background-color;
-            opacity: 1.0;
-
-            border-width: 5px;
-            border-style: solid;
-            border-color: mat-color($background, card);
-
-            .text {
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                
-                margin-left: 10px;
-                margin-right: 10px;
-
-                color: $gauge-legend-text-color;
-                font-weight: bold;
-
-                &.small {
-                    transform:scale(1.2);
-                }
-            }
+        .value {
+            transform-origin: center;
+            stroke-width: 3px;
+            stroke: var(--gauge-red);
+            opacity: 0.7;
+            stroke-linecap: round;
         }
     }
 
-    $tcc-info-bar-border-color: $gauge-background-color;
-    $tcc-info-bar-background-color: $gauge-background-color;
-    $tcc-info-bar-color-disabled: mat-color($foreground, disabled-text);
-    $tcc-info-bar-width: 270px;
-    $tcc-info-bar-height: 30px;
+    &.not-available mwl-gauge .value-text {
+        font-size: 20px;
+    }
 
-    .tcc-info-bar {
-        width: $tcc-info-bar-width;
-        height: $tcc-info-bar-height;
+    .custom-value-text {
+        position: absolute;
+        bottom: 57px;
+        left: 0;
+        width: 100%;
+        text-align: center;
+        font-size: 3.2em;
+    }
 
-        border-width: 2px;
-        border-style: solid;
+    &.not-available .custom-value-text {
+        bottom: 70px;
+        font-size: 2em;
+    }
+
+    .unit-text {
+        position: absolute;
+        bottom: 43px;
+        left: 0;
+        width: 100%;
+
+        text-align: center;
+
+        color: var(--gauge-metric-text-color);
+        font-weight: bold;
+    }
+
+    .icon {
+        position: absolute;
+        top: 27px;
+        left: 0;
+        width: 100%;
+        height: 35px;
+
+        color: var(--gauge-icon-color);
+        --icon-detail: var(--icon-main);
+    }
+
+    .legend {
+        position: absolute;
+        bottom: 5px;
+        left: 0;
+
+        display: flex;
+        flex-flow: row nowrap;
+        justify-content: center;
+        align-items: center;
+
+        width: 100%;
+        height: 30px;
+
         border-radius: 20px;
-        border-color: $tcc-info-bar-border-color;
+        background-color: var(--gauge-legend-color);
+        opacity: 1;
 
-        padding: 2px;
+        border-width: 5px;
+        border-style: solid;
+        border-color: var(--foreground-color);
 
-        >* {
-            border-radius: inherit;
+        .text {
+            white-space: nowrap;
             overflow: hidden;
-        }
+            text-overflow: ellipsis;
 
-        .label {
-            background-color: $tcc-info-bar-background-color;
-        }
+            margin-left: 10px;
+            margin-right: 10px;
 
-        .color-disabled {
-            color: $tcc-info-bar-color-disabled;
-        }
-    }
+            color: var(--gauge-legend-text-color);
+            font-weight: bold;
 
-    $progress-inactive-color: $tcc-info-bar-background-color;
-
-    .tcc-progress {
-        position: relative;
-
-        mat-progress-bar {
-            width: 100%;
-            height: 100%;
-
-            border-radius: inherit;
-
-            .mat-progress-bar-fill::after {
-                background: $tcc-info-bar-background-color;
+            &.small {
+                transform: scale(1.2);
             }
-
-            &.disabled .mat-progress-bar-fill::after {
-                background: $progress-inactive-color;
-            }
-
-            .mat-progress-bar-buffer {
-                background-color: rgba(255, 255, 255, 0);
-            }
-
-            .mat-progress-bar-background {
-                opacity: 0;
-            }
-        }
-
-        .label-text {
-            position: absolute;
-            top: 5px;
-            
-            width: 100%;
-
-            text-align: center;
-
-            //font-weight: bold;
         }
     }
 }

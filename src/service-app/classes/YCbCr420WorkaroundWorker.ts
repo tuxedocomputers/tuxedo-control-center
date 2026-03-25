@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -17,38 +17,37 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import * as fs from 'fs';
-
-import { DaemonWorker } from './DaemonWorker';
-import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
+import * as fs from 'node:fs';
 import { fileOK } from '../../common/classes/Utils';
+import { DaemonWorker } from './DaemonWorker';
+import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
 export class YCbCr420WorkaroundWorker extends DaemonWorker {
     constructor(tccd: TuxedoControlCenterDaemon) {
-        super(100000, tccd);
+        // todo: only run worker once, no timeout should be required
+        super(100000, 'YCbCr420WorkaroundWorker', tccd);
 
-        if (this.tccd.settings.ycbcr420Workaround.length > 0) {
-            let card: number = 0;
-            let port: string = Object.keys(this.tccd.settings.ycbcr420Workaround[card])[0];
-            let path: string = "/sys/kernel/debug/dri/" + card + "/" + port + "/force_yuv420_output";
+        if (this.tccd.settings.ycbcr420Workaround?.length > 0) {
+            const card: number = 0;
+            const port: string = Object.keys(this.tccd.settings.ycbcr420Workaround[card])[0];
+            const path: string = `/sys/kernel/debug/dri/${card}/${port}/force_yuv420_output`;
             this.tccd.dbusData.forceYUV420OutputSwitchAvailable = fileOK(path);
-        }
-        else {
+        } else {
             this.tccd.dbusData.forceYUV420OutputSwitchAvailable = false;
         }
     }
 
-    public onStart(): void {
+    public async onStart(): Promise<void> {
         let settings_changed: boolean = false;
 
-        for (let card = 0; card < this.tccd.settings.ycbcr420Workaround.length; card++) {
-            for (let port in this.tccd.settings.ycbcr420Workaround[card]) {
-                let path: string = "/sys/kernel/debug/dri/" + card + "/" + port + "/force_yuv420_output"
+        for (let card: number = 0; card < this.tccd.settings.ycbcr420Workaround?.length; card++) {
+            for (const port in this.tccd.settings.ycbcr420Workaround[card]) {
+                const path: string = `/sys/kernel/debug/dri/${card}/${port}/force_yuv420_output`;
                 if (fileOK(path)) {
-                    let oldValue: boolean = (fs.readFileSync(path).toString(undefined, undefined, 1) === "1");
-                    if (oldValue != this.tccd.settings.ycbcr420Workaround[card][port]) {
+                    const oldValue: boolean = fs.readFileSync(path).toString(undefined, undefined, 1) === '1';
+                    if (oldValue !== this.tccd.settings.ycbcr420Workaround[card][port]) {
                         settings_changed = true;
-                        fs.appendFileSync(path, this.tccd.settings.ycbcr420Workaround[card][port]? "1" : "0");
+                        fs.appendFileSync(path, this.tccd.settings.ycbcr420Workaround[card][port] ? '1' : '0');
                     }
                 }
             }
@@ -59,11 +58,11 @@ export class YCbCr420WorkaroundWorker extends DaemonWorker {
         }
     }
 
-    public onWork(): void {
+    public async onWork(): Promise<void> {
         //noop
     }
 
-    public onExit(): void {
+    public async onExit(): Promise<void> {
         //noop
     }
 }

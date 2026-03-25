@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2021-2025 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,67 +16,64 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { DaemonWorker } from "./DaemonWorker";
-import { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
 
-import { TuxedoIOAPI as ioAPI, ObjWrapper } from "../../native-lib/TuxedoIOAPI";
-
-import {
-    SysFsPropertyString,
-    SysFsPropertyStringList,
-} from "../../common/classes/SysFsProperties";
+import { SysFsPropertyString, SysFsPropertyStringList } from '../../common/classes/SysFsProperties';
 import { TUXEDODevice } from '../../common/models/DefaultProfiles';
+import type { ITccODMProfile } from '../../common/models/TccProfile';
+import { TuxedoIOAPI as ioAPI, type ObjWrapper } from '../../native-lib/TuxedoIOAPI';
+import { DaemonWorker } from './DaemonWorker';
+import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
 export class ODMProfileWorker extends DaemonWorker {
-    private static tuxedoPlatformProfile = new SysFsPropertyString(
-        "/sys/bus/platform/devices/tuxedo_platform_profile/platform_profile"
+    private static tuxedoPlatformProfile: SysFsPropertyString = new SysFsPropertyString(
+        '/sys/bus/platform/devices/tuxedo_platform_profile/platform_profile',
     );
-    private static tuxedoPlatformProfileChoices = new SysFsPropertyStringList(
-        "/sys/bus/platform/devices/tuxedo_platform_profile/platform_profile_choices"
+    private static tuxedoPlatformProfileChoices: SysFsPropertyStringList = new SysFsPropertyStringList(
+        '/sys/bus/platform/devices/tuxedo_platform_profile/platform_profile_choices',
     );
 
-    private static platformProfile = new SysFsPropertyString(
-        "/sys/firmware/acpi/platform_profile"
+    private static platformProfile: SysFsPropertyString = new SysFsPropertyString(
+        '/sys/firmware/acpi/platform_profile',
     );
-    private static platformProfileChoices = new SysFsPropertyStringList(
-        "/sys/firmware/acpi/platform_profile_choices"
+    private static platformProfileChoices: SysFsPropertyStringList = new SysFsPropertyStringList(
+        '/sys/firmware/acpi/platform_profile_choices',
     );
 
     constructor(tccd: TuxedoControlCenterDaemon) {
-        super(10000, tccd);
+        super(10000, 'ODMProfileWorker', tccd);
     }
 
-    public onStart(): void {
+    public async onStart(): Promise<void> {
         const dev = this.tccd.identifyDevice();
 
         if (
             ODMProfileWorker.tuxedoPlatformProfile.isAvailable() &&
             ODMProfileWorker.tuxedoPlatformProfileChoices.isAvailable()
         ) {
+            console.log('ODMProfileWorker: Tuxedo platform profile available');
             this.ODM(ODMProfileWorker.tuxedoPlatformProfile, ODMProfileWorker.tuxedoPlatformProfileChoices);
         } else if (
             !ODMProfileWorker.hasQuirkNoPlatformProfile(dev) &&
             ODMProfileWorker.platformProfile.isAvailable() &&
             ODMProfileWorker.platformProfileChoices.isAvailable()
         ) {
+            console.log('ODMProfileWorker: Platform profile available');
             this.ODM(ODMProfileWorker.platformProfile, ODMProfileWorker.platformProfileChoices);
         } else {
+            console.log('ODMProfileWorker: Using tuxedo-io');
             this.fallbackODM();
         }
     }
 
-    public onWork(): void {}
+    public async onWork(): Promise<void> {}
 
-    public onExit(): void {}
+    public async onExit(): Promise<void> {}
 
-    public ODM(
-        platformProfile: SysFsPropertyString,
-        platformProfileChoices: SysFsPropertyStringList
-    ): void {
-        const availableProfiles = platformProfileChoices.readValueNT();
+    public ODM(platformProfile: SysFsPropertyString, platformProfileChoices: SysFsPropertyStringList): void {
+        const availableProfiles: string[] = platformProfileChoices.readValueNT();
         this.tccd.dbusData.odmProfilesAvailable = availableProfiles;
 
-        let chosenODMProfileName = this.getODMProfileName();
+        const chosenODMProfileName: string = this.getODMProfileName();
         if (availableProfiles.includes(chosenODMProfileName)) {
             platformProfile.writeValue(chosenODMProfileName);
         }
@@ -84,34 +81,27 @@ export class ODMProfileWorker extends DaemonWorker {
 
     private fallbackODM(): void {
         const availableProfiles: ObjWrapper<string[]> = { value: [] };
-        const odmProfilesAvailable =
-            ioAPI.getAvailableODMPerformanceProfiles(availableProfiles);
+        const odmProfilesAvailable: boolean = ioAPI.getAvailableODMPerformanceProfiles(availableProfiles);
         if (odmProfilesAvailable) {
-            let chosenODMProfileName = this.getODMProfileName();
+            let chosenODMProfileName: string = this.getODMProfileName();
 
             // If saved profile name does not match available ones
             // attempt to get the default profile name
             if (!availableProfiles.value.includes(chosenODMProfileName)) {
-                const defaultProfileName: ObjWrapper<string> = { value: "" };
+                const defaultProfileName: ObjWrapper<string> = { value: '' };
                 ioAPI.getDefaultODMPerformanceProfile(defaultProfileName);
                 chosenODMProfileName = defaultProfileName.value;
             }
 
             // Make sure a valid one could be found before proceeding, otherwise abort
             if (availableProfiles.value.includes(chosenODMProfileName)) {
-                this.tccd.logLine(
-                    "Set ODM profile '" + chosenODMProfileName + "' "
-                );
+                this.tccd.logLine(`ODMProfileWorker: Setting ODM profile '${chosenODMProfileName}'`);
                 if (!ioAPI.setODMPerformanceProfile(chosenODMProfileName)) {
-                    this.tccd.logLine(
-                        "ODMProfileWorker: Failed to apply profile"
-                    );
+                    this.tccd.logLine('ODMProfileWorker: Failed to apply profile');
                 }
             } else {
                 this.tccd.logLine(
-                    "ODMProfileWorker: Unexpected error, default profile name '" +
-                        chosenODMProfileName +
-                        "' not valid"
+                    `ODMProfileWorker: Unexpected error, default profile name '${chosenODMProfileName}' not valid`,
                 );
             }
         }
@@ -120,7 +110,7 @@ export class ODMProfileWorker extends DaemonWorker {
     }
 
     private getODMProfileName(): string {
-        const odmProfileSettings = this.activeProfile.odmProfile;
+        const odmProfileSettings: ITccODMProfile = this.activeProfile.odmProfile;
         let chosenODMProfileName: string;
         if (odmProfileSettings !== undefined) {
             chosenODMProfileName = odmProfileSettings.name;
@@ -129,32 +119,28 @@ export class ODMProfileWorker extends DaemonWorker {
     }
 
     private static hasQuirkNoPlatformProfile(dev: TUXEDODevice): boolean {
-
-        const quirkNoPlatformProfile = [
-            TUXEDODevice.IBPG10AMD,
-            TUXEDODevice.IBM15A10
-        ].includes(dev);
+        const quirkNoPlatformProfile = [TUXEDODevice.IBPG10AMD, TUXEDODevice.IBM15A10].includes(dev);
 
         return quirkNoPlatformProfile;
     }
 
     public static getDefaultODMPerformanceProfile(dev: TUXEDODevice): string {
         if (
-            this.tuxedoPlatformProfile.isAvailable() &&
-            this.tuxedoPlatformProfileChoices.isAvailable()
+            ODMProfileWorker.tuxedoPlatformProfile.isAvailable() &&
+            ODMProfileWorker.tuxedoPlatformProfileChoices.isAvailable()
         ) {
-            const availableProfiles = this.tuxedoPlatformProfileChoices.readValueNT();
-            if (availableProfiles !== undefined && availableProfiles.length > 0) {
-                return availableProfiles[availableProfiles.length-1];
+            const availableProfiles: string[] = ODMProfileWorker.tuxedoPlatformProfileChoices.readValueNT();
+            if (availableProfiles !== undefined && availableProfiles?.length > 0) {
+                return availableProfiles[availableProfiles?.length - 1];
             }
         } else if (
             !ODMProfileWorker.hasQuirkNoPlatformProfile(dev) &&
             ODMProfileWorker.platformProfile.isAvailable() &&
             ODMProfileWorker.platformProfileChoices.isAvailable()
         ) {
-            const availableProfiles = this.platformProfileChoices.readValueNT();
-            if (availableProfiles !== undefined && availableProfiles.length > 0) {
-                return availableProfiles[availableProfiles.length-1];
+            const availableProfiles: string[] = ODMProfileWorker.platformProfileChoices.readValueNT();
+            if (availableProfiles !== undefined && availableProfiles?.length > 0) {
+                return availableProfiles[availableProfiles?.length - 1];
             }
         } else {
             const defaultODMProfileName: ObjWrapper<string> = { value: '' };
@@ -166,10 +152,10 @@ export class ODMProfileWorker extends DaemonWorker {
 
     public static getAvailableODMPerformanceProfiles(dev: TUXEDODevice): string[] {
         if (
-            this.tuxedoPlatformProfile.isAvailable() &&
-            this.tuxedoPlatformProfileChoices.isAvailable()
+            ODMProfileWorker.tuxedoPlatformProfile.isAvailable() &&
+            ODMProfileWorker.tuxedoPlatformProfileChoices.isAvailable()
         ) {
-            const availableProfiles = this.tuxedoPlatformProfileChoices.readValueNT();
+            const availableProfiles: string[] = ODMProfileWorker.tuxedoPlatformProfileChoices.readValueNT();
             if (availableProfiles !== undefined) {
                 return availableProfiles;
             }
@@ -178,14 +164,14 @@ export class ODMProfileWorker extends DaemonWorker {
             ODMProfileWorker.platformProfile.isAvailable() &&
             ODMProfileWorker.platformProfileChoices.isAvailable()
         ) {
-            const availableProfiles = this.platformProfileChoices.readValueNT();
+            const availableProfiles: string[] = ODMProfileWorker.platformProfileChoices.readValueNT();
             if (availableProfiles !== undefined) {
                 return availableProfiles;
             }
         } else {
-                const availableODMProfiles: ObjWrapper<string[]> = { value: [] };
-                ioAPI.getAvailableODMPerformanceProfiles(availableODMProfiles);
-                return availableODMProfiles.value;
+            const availableODMProfiles: ObjWrapper<string[]> = { value: [] };
+            ioAPI.getAvailableODMPerformanceProfiles(availableODMProfiles);
+            return availableODMProfiles.value;
         }
 
         return [];

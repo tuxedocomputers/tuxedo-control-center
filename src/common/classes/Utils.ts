@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -17,38 +17,43 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { exec, execSync } from "child_process";
-import * as fs from "fs";
+import type { Dirent } from 'node:fs';
 
-export function getDirectories(source: string) {
+const fs: typeof import('fs') = require('node:fs');
+const child_process: typeof import('child_process') = require('node:child_process');
+
+export function getDirectories(source: string): string[] {
     try {
         return fs
             .readdirSync(source, { withFileTypes: true })
-            .filter((dirent) => dirent.isDirectory())
-            .map((dirent) => dirent.name);
-    } catch (err) {
+            .filter((dirent: Dirent): boolean => dirent.isDirectory())
+            .map((dirent: Dirent): string => dirent.name);
+    } catch (err: unknown) {
+        console.error(`Utils: getDirectories failed => ${err}`);
         return [];
     }
 }
 
-export function getFiles(source) {
+export function getFiles(source: string): string[] {
     try {
         return fs
             .readdirSync(source, { withFileTypes: true })
-            .filter((dirent) => dirent.isFile())
-            .map((dirent) => dirent.name);
-    } catch (err) {
+            .filter((dirent: Dirent): boolean => dirent.isFile())
+            .map((dirent: Dirent): string => dirent.name);
+    } catch (err: unknown) {
+        console.error(`Utils: getFiles failed => ${err}`);
         return [];
     }
 }
 
-export function getSymbolicLinks(source: string) {
+export function getSymbolicLinks(source: string): string[] {
     try {
         return fs
             .readdirSync(source, { withFileTypes: true })
-            .filter((dirent) => dirent.isSymbolicLink())
-            .map((dirent) => dirent.name);
-    } catch (err) {
+            .filter((dirent: Dirent): boolean => dirent.isSymbolicLink())
+            .map((dirent: Dirent): string => dirent.name);
+    } catch (err: unknown) {
+        console.error(`Utils: getSymbolicLinks failed => ${err}`);
         return [];
     }
 }
@@ -61,7 +66,7 @@ export function findClosestValue(value: number, array: number[]): number {
     let closest: number;
     let closestDiff: number;
     for (const arrayNumber of array) {
-        const diff = Math.abs(value - arrayNumber);
+        const diff: number = Math.abs(value - arrayNumber);
         if (closestDiff === undefined || diff < closestDiff) {
             closest = arrayNumber;
             closestDiff = diff;
@@ -70,57 +75,74 @@ export function findClosestValue(value: number, array: number[]): number {
     return closest;
 }
 
+// todo: check if fileOK/fileOKAsync can be put into init to avoid periodic file access
+// if errors appear after file was indeed ok but afterwards isn't, it needs error handling instead of checking status every time
 export function fileOK(path: string): boolean {
     try {
-        fs.accessSync(
-            path,
-            fs.constants.F_OK | fs.constants.R_OK | fs.constants.W_OK
-        );
-        return true;
-    } catch (err) {
+        const exists: boolean = fs.existsSync(path);
+
+        if (exists) {
+            fs.accessSync(path, fs.constants.F_OK | fs.constants.R_OK | fs.constants.W_OK);
+            return true;
+        }
+        return false;
+    } catch (err: unknown) {
+        console.error(`Utils: fileOK failed => ${err}`);
         return false;
     }
 }
 
+// async file access implementation requires an error to be thrown, thus no error logging for this special case
 export async function fileOKAsync(path: string): Promise<boolean> {
     try {
-        await fs.promises.access(
-            path,
-            fs.constants.F_OK | fs.constants.R_OK | fs.constants.W_OK
-        );
-        return true;
-    } catch (err) {
+        const exists: boolean = await fs.promises
+            .stat(path)
+            .then((): boolean => true)
+            .catch((): boolean => false);
+
+        if (exists) {
+            return await fs.promises
+                .access(path, fs.constants.F_OK | fs.constants.R_OK | fs.constants.W_OK)
+                .then((): boolean => true)
+                .catch((): boolean => false);
+        }
+        return false;
+    } catch (err: unknown) {
+        console.error(`Utils: fileOKAsync failed => ${err}`);
         return false;
     }
 }
 
-export function delay(ms: number) {
-    return new Promise((resolve) => setTimeout(resolve, ms));
+export function delay(ms: number): Promise<void> {
+    return new Promise<void>((resolve: () => void): NodeJS.Timeout => setTimeout(resolve, ms));
 }
 
-// seperate exec cmd functionality because tccd can not access electron
-export async function execCommandAsync(command: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-        exec(command, (error, stdout, stderr) => {
-            if (error) {
-                console.error("Async Exec CMD failed: ", error);
-                resolve("");
-            } else {
-                resolve(stdout.trim());
-            }
-        });
-    });
+export async function execCommandAsync(command: string, logging?: boolean): Promise<string> {
+    return new Promise(
+        (resolve: (value: string | PromiseLike<string>) => void, _reject: (reason?: unknown) => void): void => {
+            child_process.exec(command, (err: unknown, stdout: string, _stderr: string): void => {
+                if (err) {
+                    if (logging ?? true) {
+                        console.error(`Utils: execCommandAsync failed => ${err}`);
+                    }
+                    resolve('');
+                } else {
+                    resolve(stdout.trim());
+                }
+            });
+        },
+    );
 }
 
 export function execCommandSync(command: string): string {
     try {
-        return execSync(command).toString();
-    } catch (err) {
-        console.error("Sync Exec CMD failed: ", err);
+        return child_process.execSync(command).toString();
+    } catch (err: unknown) {
+        console.error(`Utils: execCommandSync failed => ${err}`);
         return undefined;
     }
 }
 
 export function countLines(input: string): number {
-    return input.split("\n").filter((str) => str !== "").length;
+    return input.split('\n').filter((str: string): boolean => str !== '')?.length;
 }

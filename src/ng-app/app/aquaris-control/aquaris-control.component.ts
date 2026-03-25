@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,13 +16,17 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { AfterContentInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { ElectronService } from 'ngx-electron';
-import { aquarisAPIHandle, ClientAPI } from '../../../e-app/AquarisAPI';
+
+import { type AfterContentInit, Component, type OnDestroy, type OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { DeviceInfo as AquarisDeviceInfo, RGBState } from '../../../e-app/LCT21001';
-import { MatDialog } from '@angular/material/dialog';
+// biome-ignore lint: injection token
+import { MatDialog, type MatDialogRef } from '@angular/material/dialog';
+import type { AquarisState } from '../../../common/models/IAquarisAPI';
+import { type DeviceInfo as AquarisDeviceInfo, RGBState } from '../../../e-app/LCT21001';
+import type { IAquarisClientAPI } from '../../../e-app/preloadAPIs/AquarisClientAPI';
+import type { ConfirmDialogResult } from '../dialog-confirm/dialog-confirm.component';
 import { DialogInputTextComponent } from '../dialog-input-text/dialog-input-text.component';
+// biome-ignore lint: injection token
 import { UtilsService } from '../utils.service';
 
 interface FanPreset {
@@ -33,80 +37,83 @@ interface FanPreset {
 @Component({
     selector: 'app-aquaris-control',
     templateUrl: './aquaris-control.component.html',
-    styleUrls: ['./aquaris-control.component.scss']
+    styleUrls: ['./aquaris-control.component.scss'],
+    standalone: false,
 })
 export class AquarisControlComponent implements OnInit, AfterContentInit, OnDestroy {
-
-    private aquaris: ClientAPI;
+    private aquaris: IAquarisClientAPI = window.aquarisAPI;
 
     private connectedTimeout: NodeJS.Timeout;
 
     public deviceList: AquarisDeviceInfo[] = [];
-    public deviceNameMap = new Map<string, string>();
+    public deviceNameMap: Map<string, string> = new Map<string, string>();
 
-    public stateInitialized = false;
+    public stateInitialized: boolean = false;
 
-    public ctrlDeviceList = new FormControl();
+    public ctrlDeviceList: FormControl = new FormControl();
     public selectedDeviceUUID: string;
 
-    public ctrlLedToggle = new FormControl();
-    public ctrlLedRed = new FormControl();
-    public ctrlLedGreen = new FormControl;
-    public ctrlLedBlue = new FormControl();
+    public ctrlLedToggle: FormControl = new FormControl();
+    public ctrlLedRed: FormControl = new FormControl();
+    public ctrlLedGreen: FormControl = new FormControl();
+    public ctrlLedBlue: FormControl = new FormControl();
 
-    public selectedLedTab = 0;
-    public ctrlLedBreathe = new FormControl();
-    public ctrlLedStaticOrRainbow = new FormControl();
+    public selectedLedTab: number = 0;
+    public ctrlLedBreathe: FormControl = new FormControl();
+    public ctrlLedStaticOrRainbow: FormControl = new FormControl();
 
     public chosenColorHex;
 
-    public ctrlFanToggle = new FormControl();
-    public ctrlFanDutyCycle = new FormControl();
-    public ctrlFanDutyCycleTextInput = new FormControl();
+    public ctrlFanToggle: FormControl = new FormControl();
+    public ctrlFanDutyCycle: FormControl = new FormControl();
+    public ctrlFanDutyCycleTextInput: FormControl = new FormControl();
 
     public fanPresets: Map<string, FanPreset> = new Map();
 
-    public ctrlPumpToggle = new FormControl();
-    public ctrlPumpDutyCycle = new FormControl();
-    public ctrlPumpVoltage = new FormControl();
+    public ctrlPumpToggle: FormControl = new FormControl();
+    public ctrlPumpDutyCycle: FormControl = new FormControl();
+    public ctrlPumpVoltage: FormControl = new FormControl();
 
     public fwVersion: string = '';
 
-    public showPumpControls = false;
+    public showPumpControls: boolean = false;
 
-    public readonly TAB_COLORPICKER = 0;
-    public readonly TAB_ANIMATION = 1;
+    public readonly TAB_COLORPICKER: number = 0;
+    public readonly TAB_ANIMATION: number = 1;
 
-    public hasBluetooth = true;
-    
+    public hasBluetooth: boolean = true;
+
     constructor(
-        private electron: ElectronService,
         public dialog: MatDialog,
-        private utils: UtilsService) {
-        this.fanPresets.set('slow', {
-            name: $localize `:@@aqFanPresetSlowLabel:Slow`,
-            value: 50
-        }).set('medium', {
-            name: $localize `:@@aqFanPresetMediumLabel:Medium`,
-            value: 65
-        }).set('fast', {
-            name: $localize `:@@aqFanPresetFastLabel:Fast`,
-            value: 80
-        });
-        this.aquaris = new ClientAPI(this.electron.ipcRenderer, aquarisAPIHandle);
+        private utils: UtilsService,
+    ) {
+        this.fanPresets
+            .set('slow', {
+                name: $localize`:@@aqFanPresetSlowLabel:Slow`,
+                value: 50,
+            })
+            .set('medium', {
+                name: $localize`:@@aqFanPresetMediumLabel:Medium`,
+                value: 65,
+            })
+            .set('fast', {
+                name: $localize`:@@aqFanPresetFastLabel:Fast`,
+                value: 80,
+            });
+        this.aquaris = window.aquarisAPI;
     }
 
-    ngOnInit() {
-        setTimeout(async () => {
-            this.electron.ipcRenderer.send("show-tcc-window");
+    public ngOnInit(): void {
+        setTimeout(async (): Promise<void> => {
+            window.ipc.showTccWindow();
         }, 200);
     }
 
-    ngAfterContentInit(): void {
+    public ngAfterContentInit(): void {
         this.initCommunication();
     }
 
-    async initCommunication() {
+    private async initCommunication(): Promise<void> {
         this.deviceNameMap = await this.getUserDeviceNames();
         this.isConnected = await this.aquaris.isConnected();
         if (!this.isConnected) {
@@ -115,18 +122,20 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
         await this.updateState();
         await this.periodicUpdate();
 
-        this.connectedTimeout = setInterval(async () => { await this.periodicUpdate(); }, 3000);
+        this.connectedTimeout = setInterval(async (): Promise<void> => {
+            await this.periodicUpdate();
+        }, 3000);
     }
 
-    ngOnDestroy() {
+    public ngOnDestroy(): void {
         if (this.connectedTimeout !== undefined) {
             clearInterval(this.connectedTimeout);
         }
     }
 
-    public isUpdatingDevices = false;
+    public isUpdatingDevices: boolean = false;
 
-    private async discoverUpdate() {
+    private async discoverUpdate(): Promise<void> {
         this.isUpdatingDevices = true;
         this.deviceList = await this.aquaris.getDevices();
 
@@ -140,12 +149,12 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
         this.isUpdatingDevices = false;
     }
 
-    private findDefaultSelectedDevice() {
-        let defaultDeviceUUID;
+    private findDefaultSelectedDevice(): string {
+        let defaultDeviceUUID: string;
 
         // First default list selection: first device with an assigned name
-        let uuidWithAssignedName;
-        for (let device of this.deviceList) {
+        let uuidWithAssignedName: string;
+        for (const device of this.deviceList) {
             if (this.deviceNameMap.get(device.uuid) !== undefined) {
                 uuidWithAssignedName = device.uuid;
                 break;
@@ -157,9 +166,9 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
 
         // Second default list selection: last connected device
         if (defaultDeviceUUID === undefined) {
-            let lastConnectedUUID = localStorage.getItem('aquarisLastConnected');
+            const lastConnectedUUID: string = localStorage.getItem('aquarisLastConnected');
             if (lastConnectedUUID !== null) {
-                for (let device of this.deviceList) {
+                for (const device of this.deviceList) {
                     if (device.uuid === lastConnectedUUID) {
                         defaultDeviceUUID = lastConnectedUUID;
                         break;
@@ -171,24 +180,24 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
         return defaultDeviceUUID;
     }
 
-    public rgbToHex(red: number, green: number, blue: number) {
-        return '#' + red.toString(16).padStart(2, '0') + green.toString(16).padStart(2, '0') + blue.toString(16).padStart(2, '0');
+    public rgbToHex(red: number, green: number, blue: number): string {
+        return `#${red.toString(16).padStart(2, '0')}${green.toString(16).padStart(2, '0')}${blue.toString(16).padStart(2, '0')}`;
     }
 
-    public hexToRed(hex: string) {
-        return parseInt(hex.slice(1, 3), 16);
+    public hexToRed(hex: string): number {
+        return Number.parseInt(hex.slice(1, 3), 16);
     }
 
-    public hexToGreen(hex: string) {
-        return parseInt(hex.slice(3, 5), 16);
+    public hexToGreen(hex: string): number {
+        return Number.parseInt(hex.slice(3, 5), 16);
     }
 
-    public hexToBlue(hex: string) {
-        return parseInt(hex.slice(5, 7), 16);
+    public hexToBlue(hex: string): number {
+        return Number.parseInt(hex.slice(5, 7), 16);
     }
 
-    private async updateState() {
-        const state = await this.aquaris.getState();
+    private async updateState(): Promise<void> {
+        const state: AquarisState = await this.aquaris.getState();
         if (state !== undefined) {
             if (this.isConnected) {
                 this.selectedDeviceUUID = state.deviceUUID;
@@ -199,7 +208,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
             this.ctrlLedGreen.setValue(state.green);
             this.ctrlLedBlue.setValue(state.blue);
             this.chosenColorHex = this.rgbToHex(state.red, state.green, state.blue);
-            
+
             this.ctrlFanToggle.setValue(state.fanOn);
             this.ctrlFanDutyCycle.setValue(state.fanDutyCycle);
 
@@ -234,7 +243,7 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
         }
     }
 
-    private async periodicUpdate() {
+    private async periodicUpdate(): Promise<void> {
         this.isConnected = await this.aquaris.isConnected();
         this.hasBluetooth = await this.aquaris.hasBluetooth();
 
@@ -243,10 +252,10 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
         }
     }
 
-    public inputColor() {
-        const red = this.hexToRed(this.chosenColorHex);
-        const green = this.hexToGreen(this.chosenColorHex);
-        const blue = this.hexToBlue(this.chosenColorHex);
+    public inputColor(): void {
+        const red: number = this.hexToRed(this.chosenColorHex);
+        const green: number = this.hexToGreen(this.chosenColorHex);
+        const blue: number = this.hexToBlue(this.chosenColorHex);
 
         this.ctrlLedRed.setValue(red);
         this.ctrlLedGreen.setValue(green);
@@ -254,14 +263,14 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
         this.ledUpdate(red, green, blue);
     }
 
-    public inputSlider(red: number, green: number, blue: number) {
+    public inputSlider(red: number, green: number, blue: number): void {
         this.chosenColorHex = this.rgbToHex(red, green, blue);
         this.ledUpdate(red, green, blue);
     }
 
-    public async ledUpdate(red: number, green: number, blue: number) {
-        const ledToggle = this.ctrlLedToggle.value;
-        let ledMode;
+    public async ledUpdate(red: number, green: number, blue: number): Promise<void> {
+        const ledToggle: boolean = this.ctrlLedToggle.value;
+        let ledMode: RGBState;
         const isBreathing = this.ctrlLedBreathe.value as boolean;
         const staticOrRainbow = this.ctrlLedStaticOrRainbow.value as string;
         if (staticOrRainbow === 'static') {
@@ -285,15 +294,15 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
                 } else {
                     await this.aquaris.writeRGBOff();
                 }
-            } catch (err) {
-                console.log('failed writing led state => ' + err);
+            } catch (err: unknown) {
+                console.error(`aquaris-control: failed writing led state => ${err}`);
             }
             await this.triggerSave();
         }
     }
 
-    public async sliderFanInput(fanSpeed: number) {
-        const fanToggle = this.ctrlFanToggle.value;
+    public async sliderFanInput(fanSpeed: number): Promise<void> {
+        const fanToggle: boolean = this.ctrlFanToggle.value;
 
         if (this.isConnected) {
             try {
@@ -302,8 +311,8 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
                 } else {
                     await this.aquaris.writeFanOff();
                 }
-            } catch (err) {
-                console.log('failed writing fan state => ' + err);
+            } catch (err: unknown) {
+                console.error(`aquaris-control: failed writing fan state => ${err}`);
             }
             await this.triggerSave();
         }
@@ -312,36 +321,31 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
             this.ctrlFanDutyCycleTextInput.reset();
         }
     }
-
-    public async sliderFanChange(fanSpeed: number) {
-
-    }
-
-    public async selectFanPreset(fanPresetId: string) {
+    public async selectFanPreset(fanPresetId: string): Promise<void> {
         const fanPreset = this.fanPresets.get(fanPresetId);
 
         if (fanPreset.value !== undefined) {
-            await this.setCustomFanSpeed(fanPreset.value)
+            await this.setCustomFanSpeed(fanPreset.value);
         }
     }
 
-    public async setCustomFanSpeed(speed: number) {
+    public async setCustomFanSpeed(speed: number): Promise<void> {
         this.ctrlFanDutyCycle.setValue(speed);
         await this.sliderFanInput(speed);
     }
 
-    public async fanSpeedTextInput() {
-        const textSpeed = parseInt(this.ctrlFanDutyCycleTextInput.value);
-        if (!isNaN(textSpeed) && textSpeed >= 0 && textSpeed <= 100) {
+    public async fanSpeedTextInput(): Promise<void> {
+        const textSpeed: number = Number.parseInt(this.ctrlFanDutyCycleTextInput.value, 10);
+        if (!Number.isNaN(textSpeed) && textSpeed >= 0 && textSpeed <= 100) {
             await this.setCustomFanSpeed(textSpeed);
             this.ctrlFanDutyCycleTextInput.reset();
         }
     }
 
-    public async pumpInput() {
-        const pumpToggle = this.ctrlPumpToggle.value;
-        const dutyCycle = parseInt(this.ctrlPumpDutyCycle.value);
-        const voltage = parseInt(this.ctrlPumpVoltage.value);
+    public async pumpInput(): Promise<void> {
+        const pumpToggle: boolean = this.ctrlPumpToggle.value;
+        const dutyCycle: number = Number.parseInt(this.ctrlPumpDutyCycle.value, 10);
+        const voltage: number = Number.parseInt(this.ctrlPumpVoltage.value, 10);
 
         if (this.isConnected) {
             try {
@@ -350,22 +354,22 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
                 } else {
                     await this.aquaris.writePumpOff();
                 }
-            } catch (err) {
-                console.log('failed writing pump state => ' + err);
+            } catch (err: unknown) {
+                console.error(`aquaris-control: writePumpMode failed => ${err}`);
             }
             await this.triggerSave();
         }
     }
 
-    public isConnecting = false;
-    public isConnected = false;
+    public isConnecting: boolean = false;
+    public isConnected: boolean = false;
 
-    public async connectionToggle() {
+    public async connectionToggle(): Promise<void> {
         if (this.isConnecting || this.isDisconnecting) {
             return;
         }
 
-        const deviceUUID = this.selectedDeviceUUID;
+        const deviceUUID: string = this.selectedDeviceUUID;
 
         if (!this.isConnected) {
             await this.buttonConnect(deviceUUID);
@@ -374,24 +378,24 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
         }
     }
 
-    public aquarisInfoUrlHref = $localize `:@@aqDialogConnectLinkHref:https\://www.tuxedocomputers.com/en/TUXEDO-Aquaris.tuxedo`;
+    public aquarisInfoUrlHref: string = $localize`:@@aqDialogConnectLinkHref:https\://www.tuxedocomputers.com/en/TUXEDO-Aquaris.tuxedo`;
 
-    public async buttonConnect(deviceUUID: string) {
+    public async buttonConnect(deviceUUID: string): Promise<void> {
         if (deviceUUID === undefined) {
             return;
         }
 
-        const connectNoticeDisable = localStorage.getItem('connectNoticeDisable');
+        const connectNoticeDisable: string = localStorage.getItem('connectNoticeDisable');
         if (connectNoticeDisable === null || connectNoticeDisable === 'false') {
-            const askToClose = await this.utils.confirmDialog({
-                title: $localize `:@@aqDialogConnectTitle:Are you ready to connect to your Aquaris?`,
-                description: $localize `:@@aqDialogConnectDescription:Please ensure that your Aquaris' watercooling tubes are plugged into your TUXEDO before pressing the 'Connect' button!`,
-                linkLabel: $localize `:@@aqDialogConnectLinkLabel:Instructions`,
+            const askToClose: ConfirmDialogResult = await this.utils.confirmDialog({
+                title: $localize`:@@aqDialogConnectTitle:Are you ready to connect to your Aquaris?`,
+                description: $localize`:@@aqDialogConnectDescription:Please ensure that your Aquaris' watercooling tubes are plugged into your TUXEDO before pressing the 'Connect' button!`,
+                linkLabel: $localize`:@@aqDialogConnectLinkLabel:Instructions`,
                 linkHref: this.aquarisInfoUrlHref,
-                buttonAbortLabel: $localize `:@@aqDialogButtonAbortConnectLabel:Do not connect`,
-                buttonConfirmLabel: $localize `:@@aqDialogButtonConfirmConnectLabel:Connect`,
-                checkboxNoBotherLabel: $localize `:@@aqDialogCheckboxNoBotherLabel:Don't ask again`,
-                showCheckboxNoBother: true
+                buttonAbortLabel: $localize`:@@aqDialogButtonAbortConnectLabel:Do not connect`,
+                buttonConfirmLabel: $localize`:@@aqDialogButtonConfirmConnectLabel:Connect`,
+                checkboxNoBotherLabel: $localize`:@@aqDialogCheckboxNoBotherLabel:Don't ask again`,
+                showCheckboxNoBother: true,
             });
             if (askToClose.noBother) {
                 localStorage.setItem('connectNoticeDisable', 'true');
@@ -401,16 +405,21 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
 
         this.isConnecting = true;
 
-        const sleep = (ms: number) => { return new Promise(resolve => setTimeout(resolve, ms)); }
-        while (this.isUpdatingDevices) { await sleep(10); }
+        const sleep: (ms: number) => Promise<void> = (ms: number): Promise<void> => {
+            return new Promise<void>((resolve: () => void): NodeJS.Timeout => setTimeout(resolve, ms));
+        };
+
+        while (this.isUpdatingDevices) {
+            await sleep(10);
+        }
 
         try {
             await this.aquaris.connect(deviceUUID);
             this.isConnected = await this.aquaris.isConnected();
             await this.updateState();
             localStorage.setItem('aquarisLastConnected', deviceUUID);
-        } catch (err) {
-            console.log('connect failed => ' + err);
+        } catch (err: unknown) {
+            console.error(`aquaris-control: buttonConnect failed => ${err}`);
             await this.aquaris.disconnect();
             this.isConnected = false;
         } finally {
@@ -418,20 +427,20 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
         }
     }
 
-    public isDisconnecting = false;
+    public isDisconnecting: boolean = false;
 
-    public async buttonDisconnect() {
-        const disconnectNoticeDisable = localStorage.getItem('disconnectNoticeDisable');
+    public async buttonDisconnect(): Promise<void> {
+        const disconnectNoticeDisable: string = localStorage.getItem('disconnectNoticeDisable');
         if (disconnectNoticeDisable === null || disconnectNoticeDisable === 'false') {
-            const askToClose = await this.utils.confirmDialog({
-                title: $localize `:@@aqDialogDisconnectTitle:Do you want to disconnect your Aquaris?`,
-                description: $localize `:@@aqDialogDisconnectDescription:Please ensure to follow our instructions carefully in case you want to unplug your Aquaris from your TUXEDO.`,
-                linkLabel: $localize `:@@aqDialogDisconnectLinkLabel:Instructions`,
-                linkHref: $localize `:@@aqDialogDisconnectLinkHref:https\://www.tuxedocomputers.com/en/TUXEDO-Aquaris.tuxedo`,
-                buttonAbortLabel: $localize `:@@aqDialogButtonAbortLabel:Stay connected`,
-                buttonConfirmLabel: $localize `:@@aqDialogButtonConfirmLabel:Disconnect`,
-                checkboxNoBotherLabel: $localize `:@@aqDialogCheckboxNoBotherLabel:Don't ask again`,
-                showCheckboxNoBother: true
+            const askToClose: ConfirmDialogResult = await this.utils.confirmDialog({
+                title: $localize`:@@aqDialogDisconnectTitle:Do you want to disconnect your Aquaris?`,
+                description: $localize`:@@aqDialogDisconnectDescription:Please ensure to follow our instructions carefully in case you want to unplug your Aquaris from your TUXEDO.`,
+                linkLabel: $localize`:@@aqDialogDisconnectLinkLabel:Instructions`,
+                linkHref: $localize`:@@aqDialogDisconnectLinkHref:https\://www.tuxedocomputers.com/en/TUXEDO-Aquaris.tuxedo`,
+                buttonAbortLabel: $localize`:@@aqDialogButtonAbortLabel:Stay connected`,
+                buttonConfirmLabel: $localize`:@@aqDialogButtonConfirmLabel:Disconnect`,
+                checkboxNoBotherLabel: $localize`:@@aqDialogCheckboxNoBotherLabel:Don't ask again`,
+                showCheckboxNoBother: true,
             });
             if (askToClose.noBother) {
                 localStorage.setItem('disconnectNoticeDisable', 'true');
@@ -450,46 +459,46 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
             } else {
                 this.ctrlDeviceList.setValue([this.selectedDeviceUUID]);
             }
-        } catch (err) {
-            console.log('disconnect failed => ' + err);
+        } catch (err: unknown) {
+            console.error(`aquaris-control: disconnect failed => ${err}`);
         } finally {
             this.isDisconnecting = false;
         }
     }
 
-    public async buttonLedStop() {
+    public async buttonLedStop(): Promise<void> {
         await this.aquaris.writeRGBOff();
     }
 
-    public async buttonFanStop() {
+    public async buttonFanStop(): Promise<void> {
         await this.aquaris.writeFanOff();
     }
-    
-    public async buttonPumpStop() {
+
+    public async buttonPumpStop(): Promise<void> {
         await this.aquaris.writePumpOff();
     }
 
-    public selectDevice(deviceUUID) {
+    public selectDevice(deviceUUID: string): void {
         this.selectedDeviceUUID = deviceUUID;
     }
 
     public connectedStatusString(): string {
         if (!this.hasBluetooth) {
-            return $localize `:aqConnectionStatusNoBluetooth:Bluetooth not available`;
+            return $localize`:@@aqConnectionStatusNoBluetooth:Bluetooth not available`;
         } else if (this.isConnecting) {
-            return $localize `:aqConnectionStatusConnecting:Connecting...`;
+            return $localize`:@@aqConnectionStatusConnecting:Connecting...`;
         } else if (this.isDisconnecting) {
-            return $localize `:aqConnectionStatusDisconnecting:Disconnecting...`;
+            return $localize`:@@aqConnectionStatusDisconnecting:Disconnecting...`;
         } else if (this.isConnected) {
-            return $localize `:aqConnectionStatusConnectedTo:Connected to`;
+            return $localize`:@@aqConnectionStatusConnectedTo:Connected to`;
         } else {
-            return $localize `:aqConnectionStatusLookingForDevices:Looking for devices...`;
+            return $localize`:@@aqConnectionStatusLookingForDevices:Looking for devices...`;
         }
     }
 
-    public connectedDisplayName() {
-        const chosenName = this.deviceNameMap.get(this.selectedDeviceUUID);
-        let displayName;
+    public connectedDisplayName(): string {
+        const chosenName: string = this.deviceNameMap.get(this.selectedDeviceUUID);
+        let displayName: string;
         if (chosenName === undefined) {
             displayName = this.selectedDeviceUUID;
         } else {
@@ -500,95 +509,102 @@ export class AquarisControlComponent implements OnInit, AfterContentInit, OnDest
     }
 
     private buttonRepeatTimer: NodeJS.Timeout;
-    public buttonRepeatDown(action: () => void) {
-        if (this.buttonRepeatTimer !== undefined) { clearInterval(this.buttonRepeatTimer); }
+    public buttonRepeatDown(action: () => void): void {
+        if (this.buttonRepeatTimer !== undefined) {
+            clearInterval(this.buttonRepeatTimer);
+        }
         const repeatDelayMS = 200;
 
         action();
-        
-        this.buttonRepeatTimer = setInterval(() => {
+
+        this.buttonRepeatTimer = setInterval((): void => {
             action();
         }, repeatDelayMS);
     }
 
-    public buttonRepeatUp() {
+    public buttonRepeatUp(): void {
         clearInterval(this.buttonRepeatTimer);
     }
 
-    public modifyFanSliderInputFunc(slider, offset: number, min: number, max: number) {
-        return () => {
+    public modifyFanSliderInputFunc(slider: FormControl, offset: number, min: number, max: number): () => void {
+        return (): void => {
             this.modifySliderInput(slider, offset, min, max);
             this.sliderFanInput(slider.value);
+        };
+    }
+
+    public modifySliderInput(slider: FormControl, offset: number, min: number, max: number): void {
+        let newValue: number = slider.value + offset;
+        if (newValue < min) {
+            newValue = min;
+        } else if (newValue > max) {
+            newValue = max;
         }
+        slider.setValue(newValue);
     }
 
-    public modifySliderInput(slider, offset: number, min: number, max: number) {
-            let newValue = slider.value += offset;
-            if (newValue < min) {
-                newValue = min;
-            } else if (newValue > max) {
-                newValue = max;
-            }
-            slider.setValue(newValue);
-    }
-
-    public async getUserDeviceNames() {
-        let deviceNamesSerialized = localStorage.getItem('aquarisUserDeviceNames');
+    public async getUserDeviceNames(): Promise<Map<string, string>> {
+        const deviceNamesSerialized: string = localStorage.getItem('aquarisUserDeviceNames');
         let deviceNames: Map<string, string>;
         if (deviceNamesSerialized === null) {
             deviceNames = new Map<string, string>();
         } else {
             deviceNames = new Map(JSON.parse(deviceNamesSerialized));
         }
-        
+
         return deviceNames;
     }
 
-    public async setUserDeviceNames(deviceNames: Map<string, string>) {
+    public async setUserDeviceNames(deviceNames: Map<string, string>): Promise<void> {
         localStorage.setItem('aquarisUserDeviceNames', JSON.stringify(Array.from(deviceNames.entries())));
     }
 
-    public async inputTextDialog() {
-        if (!this.isConnected || this.isConnecting || this.isDisconnecting) { return; }
+    public async inputTextDialog(): Promise<void> {
+        if (!this.isConnected || this.isConnecting || this.isDisconnecting) {
+            return;
+        }
 
-        const deviceNamesCheck = await this.getUserDeviceNames();
-        const chosenName = deviceNamesCheck.get(this.selectedDeviceUUID);
-        const hasName = chosenName !== undefined;
-        const dialogRef = this.dialog.open(DialogInputTextComponent, {
+        const deviceNamesCheck: Map<string, string> = await this.getUserDeviceNames();
+        const chosenName: string = deviceNamesCheck.get(this.selectedDeviceUUID);
+        const hasName: boolean = chosenName !== undefined;
+        const dialogRef: MatDialogRef<DialogInputTextComponent, string> = this.dialog.open(DialogInputTextComponent, {
             minWidth: 350,
             data: {
-                title: $localize `:@@aqDialogSelectNameTitle:Device name`,
-                description: $localize `:@@aqDialogSelectNameDescription:A descriptive name for the device`,
-                prefill: hasName ? chosenName : ''
-            }
+                title: $localize`:@@aqDialogSelectNameTitle:Device name`,
+                description: $localize`:@@aqDialogSelectNameDescription:A descriptive name for the device`,
+                prefill: hasName ? chosenName : '',
+            },
         });
-        return dialogRef.afterClosed().toPromise().then(async chosenName => {
-            if (chosenName !== undefined) {
-                const deviceNames = await this.getUserDeviceNames();
-                if (chosenName.trim() === '') {
-                    deviceNames.delete(this.selectedDeviceUUID);
-                } else {                    
-                    deviceNames.set(this.selectedDeviceUUID, chosenName);
+        return dialogRef
+            .afterClosed()
+            .toPromise()
+            .then(async (chosenName) => {
+                if (chosenName !== undefined) {
+                    const deviceNames: Map<string, string> = await this.getUserDeviceNames();
+                    if (chosenName.trim() === '') {
+                        deviceNames.delete(this.selectedDeviceUUID);
+                    } else {
+                        deviceNames.set(this.selectedDeviceUUID, chosenName);
+                    }
+                    await this.setUserDeviceNames(deviceNames);
+                    this.deviceNameMap = deviceNames;
                 }
-                await this.setUserDeviceNames(deviceNames);
-                this.deviceNameMap = deviceNames;
-            }
-        });
+            });
     }
 
-    private saveOnTheWay = false;
+    private saveOnTheWay: boolean = false;
 
-    public async triggerSave() {
+    public async triggerSave(): Promise<void> {
         if (!this.saveOnTheWay && this.isConnected && !this.isConnecting && !this.isDisconnecting) {
             this.saveOnTheWay = true;
             const waitForSaveMs = 1000;
-            await new Promise(resolve => setTimeout(resolve, waitForSaveMs));
+            await new Promise<void>((resolve: () => void): NodeJS.Timeout => setTimeout(resolve, waitForSaveMs));
             await this.aquaris.saveState();
             this.saveOnTheWay = false;
         }
     }
 
-    public async openExternalUrl(url: string) {
-        await this.electron.shell.openExternal(url);
+    public async openExternalUrl(url: string): Promise<void> {
+        await this.utils.openExternal(url);
     }
 }

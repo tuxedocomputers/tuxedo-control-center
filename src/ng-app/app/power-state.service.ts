@@ -1,56 +1,43 @@
-import { Injectable } from "@angular/core";
-import { AvailabilityService } from "src/common/classes/availability.service";
-import * as path from "path";
-import { amdDGpuDeviceIdString } from "src/common/classes/DeviceIDs";
-import { UtilsService } from "./utils.service";
+/*!
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ *
+ * This file is part of TUXEDO Control Center.
+ *
+ * TUXEDO Control Center is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TUXEDO Control Center is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+import { Injectable } from '@angular/core';
 
 @Injectable({
-    providedIn: "root",
+    providedIn: 'root',
 })
 export class PowerStateService {
     private busPath: string;
 
-    constructor(
-        public availability: AvailabilityService,
-        private utils: UtilsService
-    ) {
-        if (this.availability.getNvidiaDGpuCount() === 1) {
-            this.busPath = this.getBusPath("nvidia");
-        } else if (this.availability.getAmdDGpuCount() === 1) {
-            this.busPath = this.getBusPath("amd");
+    constructor() {
+        if (window.power.getNvidiaDGpuCount() === 1) {
+            this.busPath = this.getBusPath('nvidia');
+        } else if (window.power.getAmdDGpuCount() === 1) {
+            this.busPath = this.getBusPath('amd');
         }
     }
 
     private getBusPath(driver: string): string {
-        let devicePattern: string;
-
-        if (driver === "nvidia") {
-            devicePattern = "DRIVER=nvidia";
-        } else if (driver === "amd") {
-            devicePattern = "PCI_ID=" + amdDGpuDeviceIdString;
-        }
-
-        if (devicePattern) {
-            const grepCmd = `grep -lx '${devicePattern}' /sys/bus/pci/devices/*/uevent | sed 's|/uevent||'`;
-            return this.utils.execCmdSync(grepCmd).trim();
-        }
-        return undefined;
+        return window.power.getBusPath(driver);
     }
 
     public async getDGpuPowerState(): Promise<string> {
-        if (this.busPath) {
-            try {
-                const powerStatePath = path.join(this.busPath, "power_state");
-                const powerState = await this.utils.readTextFile(
-                    powerStatePath
-                );
-
-                return powerState.trim();
-            } catch (err) {
-                console.error("Failed to get power state of GPU: ", err);
-            }
-        }
-
-        return "-1";
+        return window.power.getDGpuPowerState(this.busPath);
     }
 }

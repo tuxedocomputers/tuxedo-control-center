@@ -1,5 +1,5 @@
 <!--
-Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
 
 This file is part of TUXEDO Control Center.
 
@@ -16,91 +16,86 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<br />
+
 <mat-toolbar>
-    <!--div class="header-divider"-->
-    <mat-toolbar-row *ngIf="!inputActive && !currentProfile" class="title" style="display: flex; justify-content: space-between">
+    <!-- TITLE -->
+    <mat-toolbar-row *ngIf="!inputActive && !currentProfile" class="title profile-options">
         <span>
             <ng-container i18n="@@cProfMgrTitle">Profiles</ng-container>
         </span>
-        <span>
-            <div class="import-export-buttons mat-button-toggle-group">
-                <span i18n-matTooltip="@@cProfMgrButtonImportTooltip" matTooltip="Import Profile Settings">
-                    <button  (click)="importProfiles()" >
+
+        <div>
+            <span class="info-options">
+                <mat-button-toggle-group [(ngModel)]="viewDetails">
+                    <mat-button-toggle [value]="false">
                         <svg viewBox="0 0 512 512">
-                            <use href="./assets/images/icon_download.svg#Icon"></use>
-                            </svg>
-                    </button>
-                </span>
-                <span i18n-matTooltip="@@cProfMgrButtonExportTooltip" matTooltip="Export Profile Settings">
-                    <button (click)="exportProfiles()" >
+                            <use href="./assets/images/icon_info.svg#Icon"></use>
+                        </svg>
+                    </mat-button-toggle>
+                    <mat-button-toggle [value]="true">
                         <svg viewBox="0 0 512 512">
-                            <use href="./assets/images/icon_save.svg#Icon"></use>
-                            </svg>
+                            <use href="./assets/images/icon_dashboard.svg#Icon"></use>
+                        </svg>
+                    </mat-button-toggle>
+                </mat-button-toggle-group>
+            </span>
+            <span>
+                <mat-button-toggle-group [(ngModel)]="inputProfileFilter">
+                    <mat-button-toggle value="all" i18n="@@cProfMgrFilterAll">All</mat-button-toggle>
+                    <mat-button-toggle value="default" i18n="@@cProfMgrFilterPreset">Preset</mat-button-toggle>
+                    <mat-button-toggle value="custom" i18n="@@cProfMgrFilterCustom">Custom</mat-button-toggle>
+                    <mat-button-toggle value="used" i18n="@@cProfMgrFilterUsed">In use</mat-button-toggle>
+                </mat-button-toggle-group>
+            </span>
+
+            <div class="menu-button">
+                <button type="button" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                    <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                    <button type="button" mat-menu-item (click)="exportProfiles()">
+                        <mat-icon>save</mat-icon>
+
+                        <span i18n="@@cProfMgrExportSettings">Export profile settings</span>
                     </button>
-                </span>
+                    <button type="button" mat-menu-item (click)="importProfiles()">
+                        <mat-icon>file_upload</mat-icon>
+
+                        <span i18n="@@cProfMgrImportSettings">Import profile settings</span>
+                    </button>
+                </mat-menu>
             </div>
-        </span>
-        <span>
-            <mat-button-toggle-group [(ngModel)]="viewDetails">
-                <mat-button-toggle [value]="false"><svg viewBox="0 0 512 512"><use href="./assets/images/icon_info.svg#Icon"></use></svg></mat-button-toggle>
-                <mat-button-toggle [value]="true"><svg viewBox="0 0 512 512"><use href="./assets/images/icon_dashboard.svg#Icon"></use></svg></mat-button-toggle>
-            </mat-button-toggle-group>
-            <mat-button-toggle-group [(ngModel)]="inputProfileFilter">
-                <mat-button-toggle value="all" i18n="@@cProfMgrFilterAll">All</mat-button-toggle>
-                <mat-button-toggle value="default" i18n="@@cProfMgrFilterPreset">Preset</mat-button-toggle>
-                <mat-button-toggle value="custom" i18n="@@cProfMgrFilterCustom">Custom</mat-button-toggle>
-                <mat-button-toggle value="used" i18n="@@cProfMgrFilterUsed">In use</mat-button-toggle>
-            </mat-button-toggle-group>
-        </span>
-        
+        </div>
     </mat-toolbar-row>
 
-    
-    <mat-toolbar-row *ngIf="!inputActive && currentProfile" style="padding-top: 20px; padding-bottom: 20px;">
-        <span style="flex: 1 1 auto"></span>
-    </mat-toolbar-row>
-
-    <mat-toolbar-row *ngIf="inputActive" style="padding-top: 20px; padding-bottom: 20px;">
+    <!-- NEW PROFILE -->
+    <mat-toolbar-row *ngIf="inputActive">
         <form (ngSubmit)="onInputSubmit()">
             <mat-form-field class="profile-name-input">
                 <mat-label>{{ inputProfileNameLabel }}</mat-label>
                 <input matInput #inputFocus="matInput" type="text" [formControl]="inputProfileName" (keyup.esc)="cancelInput()" placeholder="Profile name" minLength="1" maxLength="50" />
             </mat-form-field>
-            <button mat-raised-button color="primary" i18n [disabled]="profileNameExist(inputFocus.value)">Save</button>
-            <button mat-raised-button color="basic" (click)="cancelInput()" i18n>Cancel</button>
+            <button type="button" mat-stroked-button color="primary" i18n="@@cProfMgrSave" [disabled]="profileNameExist(inputFocus.value)">Save</button>
+            <button type="button" mat-stroked-button color="basic" (click)="cancelInput()" i18n="@@cProfMgrCancel">Cancel</button>
         </form>
     </mat-toolbar-row>
-
-    <!--/div-->
-
-    <!-- Description message -->
-    <!-- PSEUDO-CODE: If (currentsite == profile-overview) then show message, else hide -->
-    <!--div class="desc">Klicken Sie ein Profil an, um es auszuwählen oder zu bearbeiten.</div-->
-
 </mat-toolbar>
-<div class="profile-manager-content" [ngClass]="{'offset': !currentProfile}" #profileManagerContent>
-    <div style="width: 100%; display: flex; flex-wrap: wrap" *ngIf="!currentProfile">
-        <app-profile-overview-tile
-            *ngFor="let profile of getProfilesForList()"
-            [profile]="profile"
-            [hoverEffect]="false"
-            [active]="isProfileActive(profile.id)"
-            [used]="isProfileUsed(profile.id)"
-            (copyClick)="copyProfile($event)"
-            [showDetails]="viewDetails">
-        </app-profile-overview-tile>
-        <app-profile-overview-tile
-            *ngIf="['all', 'custom'].includes(inputProfileFilter)"
-            [addProfileTile]="true"
-            [hoverEffect]="true"
-            (click)="buttonNew.click()">
-        </app-profile-overview-tile>
+
+<div class="profile-manager-content" [ngClass]="{ offset: !currentProfile }" #profileManagerContent>
+    <div class="inner-profile-manager-content">
+        <div *ngIf="!currentProfile">
+            <app-profile-overview-tile
+                *ngFor="let profile of getProfilesForList()"
+                [profile]="profile"
+                [hoverEffect]="false"
+                [active]="isProfileActive(profile.id)"
+                [used]="isProfileUsed(profile.id)"
+                (copyClick)="copyProfile($event)"
+                [showDetails]="viewDetails">
+            </app-profile-overview-tile>
+            <app-profile-overview-tile *ngIf="['all', 'custom'].includes(inputProfileFilter)" [addProfileTile]="true" [hoverEffect]="true" (click)="buttonNew.click()"> </app-profile-overview-tile>
+        </div>
     </div>
-    <app-profile-details-edit #profileDetailsEdit
-        *ngIf="currentProfile !== undefined"
-        [profile]="currentProfile"
-        (scrollTo)="profileManagerContent.scrollTo({ top: $event, behavior: 'smooth' });">
-    </app-profile-details-edit>
-    <br />
 </div>
+<app-profile-details-edit #profileDetailsEdit *ngIf="currentProfile !== undefined" [profile]="currentProfile" (scrollTo)="profileManagerContent.scrollTo({ top: $event, behavior: 'smooth' })">
+</app-profile-details-edit>

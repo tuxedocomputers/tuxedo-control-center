@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,42 +16,30 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Component, HostBinding, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
-import { ElectronService } from 'ngx-electron';
-import { fromEvent, Subscription } from 'rxjs';
+
+import { Component, type OnDestroy, type OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
+// biome-ignore lint: injection token
 import { UtilsService } from './utils.service';
-import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: 'app-root',
     templateUrl: './app.component.html',
-    styleUrls: ['./app.component.scss']
+    styleUrls: ['./app.component.scss'],
+    standalone: false,
 })
 export class AppComponent implements OnInit, OnDestroy {
-
-    @HostBinding('class') componentThemeCssClass;
-
     private subscriptions: Subscription = new Subscription();
 
-    constructor(
-        private utils: UtilsService,
-        private electron: ElectronService,
-        private cdref: ChangeDetectorRef
-    ) {}
+    constructor(private utils: UtilsService) {}
 
     ngOnInit(): void {
-        this.subscriptions.add(this.utils.themeClass.subscribe(themeClassName => { this.componentThemeCssClass = themeClassName; }));
-
         // Register light/dark update from main process
-        const observeBrightnessMode = fromEvent(this.electron.ipcRenderer, 'update-brightness-mode');
-        this.subscriptions.add(observeBrightnessMode.subscribe(() => this.utils.updateBrightnessMode()));
-
+        window.ipc.onUpdateBrightnessMode(async (): Promise<void> => {
+            this.utils.updateBrightnessMode();
+        });
         // Trigger manual update for initial state
         this.utils.updateBrightnessMode();
-    }
-
-    ngAfterContentChecked() {
-        this.cdref.detectChanges();
     }
 
     ngOnDestroy(): void {

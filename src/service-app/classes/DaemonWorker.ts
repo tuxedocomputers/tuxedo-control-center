@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,37 +16,43 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { ITccSettings } from '../../common/models/TccSettings';
-import { ITccProfile } from '../../common/models/TccProfile';
-import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
+
+import type { ITccProfile } from '../../common/models/TccProfile';
+import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
 export abstract class DaemonWorker {
-
     constructor(
         public readonly timeout: number,
+        public readonly name: string,
         // Also inject the state (i.e configs etc..)
-        protected tccd: TuxedoControlCenterDaemon) {}
+        protected tccd: TuxedoControlCenterDaemon,
+    ) {}
 
-    public timer: NodeJS.Timer;
+    public timer: NodeJS.Timeout;
 
     protected previousProfile: ITccProfile;
     protected activeProfile: ITccProfile;
 
-    protected abstract onStart(): void;
-    protected abstract onWork(): void;
-    protected abstract onExit(): void;
+    protected abstract onStart(): Promise<void>;
+    protected abstract onWork(): Promise<void>;
+    protected abstract onExit(): Promise<void>;
 
-    public start(): void { this.triggerWork(this.onStart); }
-    public work(): void { this.triggerWork(this.onWork); }
-    public exit(): void { this.triggerWork(this.onExit); }
+    public async start(): Promise<void> {
+        await this.triggerWork(this.onStart);
+    }
+    public async work(): Promise<void> {
+        await this.triggerWork(this.onWork);
+    }
+    public async exit(): Promise<void> {
+        await this.triggerWork(this.onExit);
+    }
 
     public updateProfile(activeProfile: ITccProfile): void {
         this.activeProfile = activeProfile;
     }
 
-    private triggerWork(eventFunction: () => void): void {
-        eventFunction.call(this);
+    private async triggerWork(eventFunction: () => Promise<void>): Promise<void> {
+        await eventFunction.call(this);
         this.previousProfile = this.activeProfile;
     }
-
 }

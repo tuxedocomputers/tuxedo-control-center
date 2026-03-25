@@ -1,6 +1,25 @@
-import { LegacyDefaultProfileIDs } from "../DefaultProfiles";
-import { customFanPreset } from "../TccFanTable";
-import { ITccProfile } from "../TccProfile";
+/*!
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ *
+ * This file is part of TUXEDO Control Center.
+ *
+ * TUXEDO Control Center is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TUXEDO Control Center is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+import { LegacyDefaultProfileIDs } from '../DefaultProfiles';
+import { customFanPreset } from '../TccFanTable';
+import type { ITccProfile } from '../TccProfile';
 
 export const defaultProfiles: ITccProfile[] = [
     {
@@ -14,7 +33,7 @@ export const defaultProfiles: ITccProfile[] = [
             useRefRate: false,
             xResolution: -1,
             yResolution: -1,
-            useResolution: false
+            useResolution: false,
         },
         cpu: {
             onlineCores: undefined,
@@ -23,11 +42,11 @@ export const defaultProfiles: ITccProfile[] = [
             scalingMaxFrequency: undefined,
             governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
             energyPerformancePreference: 'balance_performance',
-            noTurbo: false
+            noTurbo: false,
         },
         webcam: {
             status: true,
-            useStatus: true
+            useStatus: true,
         },
         fan: {
             useControl: true,
@@ -39,7 +58,7 @@ export const defaultProfiles: ITccProfile[] = [
         },
         odmProfile: { name: undefined },
         odmPowerLimits: { tdpValues: [] },
-        nvidiaPowerCTRLProfile: { cTGPOffset: undefined }
+        nvidiaPowerCTRLProfile: { cTGPOffset: undefined },
     },
     {
         id: LegacyDefaultProfileIDs.CoolAndBreezy,
@@ -52,20 +71,20 @@ export const defaultProfiles: ITccProfile[] = [
             useRefRate: false,
             xResolution: -1,
             yResolution: -1,
-            useResolution: false
+            useResolution: false,
         },
         cpu: {
             onlineCores: undefined,
             useMaxPerfGov: false,
             scalingMinFrequency: undefined,
-            scalingMaxFrequency: -1,
+            scalingMaxFrequency: undefined,
             governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
             energyPerformancePreference: 'balance_performance',
-            noTurbo: false
+            noTurbo: false,
         },
         webcam: {
             status: true,
-            useStatus: true
+            useStatus: true,
         },
         fan: {
             useControl: true,
@@ -77,7 +96,7 @@ export const defaultProfiles: ITccProfile[] = [
         },
         odmProfile: { name: undefined },
         odmPowerLimits: { tdpValues: [] },
-        nvidiaPowerCTRLProfile: { cTGPOffset: 0 }
+        nvidiaPowerCTRLProfile: { cTGPOffset: 0 },
     },
     {
         id: LegacyDefaultProfileIDs.PowersaveExtreme,
@@ -90,7 +109,7 @@ export const defaultProfiles: ITccProfile[] = [
             useRefRate: false,
             xResolution: -1,
             yResolution: -1,
-            useResolution: false
+            useResolution: false,
         },
         cpu: {
             onlineCores: undefined,
@@ -99,11 +118,11 @@ export const defaultProfiles: ITccProfile[] = [
             scalingMaxFrequency: 0,
             governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
             energyPerformancePreference: 'balance_performance',
-            noTurbo: false
+            noTurbo: false,
         },
         webcam: {
             status: true,
-            useStatus: true
+            useStatus: true,
         },
         fan: {
             useControl: true,
@@ -115,8 +134,8 @@ export const defaultProfiles: ITccProfile[] = [
         },
         odmProfile: { name: undefined },
         odmPowerLimits: { tdpValues: [] },
-        nvidiaPowerCTRLProfile: { cTGPOffset: 0 }
-    }
+        nvidiaPowerCTRLProfile: { cTGPOffset: 0 },
+    },
 ];
 
 export const defaultCustomProfileXP1508UHD: ITccProfile = {
@@ -130,7 +149,7 @@ export const defaultCustomProfileXP1508UHD: ITccProfile = {
         useRefRate: false,
         xResolution: -1,
         yResolution: -1,
-        useResolution: false
+        useResolution: false,
     },
     cpu: {
         onlineCores: undefined,
@@ -139,11 +158,11 @@ export const defaultCustomProfileXP1508UHD: ITccProfile = {
         scalingMaxFrequency: 1200000,
         governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
         energyPerformancePreference: 'balance_performance',
-        noTurbo: false
+        noTurbo: false,
     },
     webcam: {
         status: true,
-        useStatus: true
+        useStatus: true,
     },
     fan: {
         useControl: true,
@@ -155,5 +174,5 @@ export const defaultCustomProfileXP1508UHD: ITccProfile = {
     },
     odmProfile: { name: undefined },
     odmPowerLimits: { tdpValues: [] },
-    nvidiaPowerCTRLProfile: { cTGPOffset: undefined }
+    nvidiaPowerCTRLProfile: { cTGPOffset: undefined },
 };

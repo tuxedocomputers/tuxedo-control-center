@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -17,65 +17,64 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import {
-    Component,
-    EventEmitter,
-    HostListener,
-    Input,
-    OnInit,
-    Output,
-} from "@angular/core";
-import { KeyboardBacklightCapabilitiesInterface } from "src/common/models/TccSettings";
+import { Component, EventEmitter, HostListener, Input, type OnInit, Output } from '@angular/core';
+import type { KeyboardBacklightCapabilitiesInterface } from '../../../common/models/TccSettings';
 
 @Component({
-    selector: "app-keyboard-visual",
-    templateUrl: "./keyboard-visual.component.html",
-    styleUrls: ["./keyboard-visual.component.scss"],
+    selector: 'app-keyboard-visual',
+    templateUrl: './keyboard-visual.component.html',
+    styleUrls: ['./keyboard-visual.component.scss'],
+    standalone: false,
 })
 export class KeyboardVisualComponent implements OnInit {
     @Input()
-    keyboardBacklightCapabilities: KeyboardBacklightCapabilitiesInterface;
-    @Input() chosenColorHex: Array<string>;
-    @Output() selectedZonesChange = new EventEmitter<number[]>();
+    public keyboardBacklightCapabilities: KeyboardBacklightCapabilitiesInterface;
+    @Input() public chosenColorHex: Array<string>;
+    @Output() public selectedZonesChange: EventEmitter<number[]> = new EventEmitter<number[]>();
     public selectedZones: Array<number> = [];
     public divHeight: number;
-    private viewInitialized = false;
+    private viewInitialized: boolean = false;
 
-    constructor() {}
-
-    ngOnInit(): void {
+    public ngOnInit(): void {
         this.selectedZones = Array.from(
             { length: this.keyboardBacklightCapabilities.zones },
-            (_, i) => i
+            (_: unknown, i: number): number => i,
         );
         this.selectedZonesChange.emit(this.selectedZones);
     }
 
-    ngAfterViewInit() {
+    public ngAfterViewInit(): void {
         this.viewInitialized = true;
         this.updateHeight();
     }
 
-    @HostListener("window:resize")
-    onResize() {
+    @HostListener('window:resize')
+    public onResize(): void {
         this.updateHeight();
     }
 
-    updateHeight() {
+    public updateHeight(): void {
         if (this.viewInitialized) {
             let el: HTMLElement;
             if (this.keyboardBacklightCapabilities.zones === 4) {
-                el = document.getElementById("Svg4Zones");
+                el = document.getElementById('Svg4Zones');
             } else {
-                el = document.getElementById("Svg1+3Zones");
+                el = document.getElementById('Svg1+3Zones');
             }
-            const rect = el.getBoundingClientRect();
-            this.divHeight = rect.height;
+
+            if (el) {
+                const rect: DOMRect = el.getBoundingClientRect();
+                this.divHeight = rect.height;
+                return;
+            }
+            console.error('keyboard-visual: updateHeight: failed to get document element');
+            // todo: further error handling, if code reaches here it means that tuxedo-drivers is properly
+            // installed but there is no backlight hardware to control
         }
     }
 
     private addOrRemoveSelectedZones(num: number): number[] {
-        const index = this.selectedZones.indexOf(num);
+        const index: number = this.selectedZones.indexOf(num);
 
         if (index !== -1) {
             this.selectedZones.splice(index, 1);
@@ -86,7 +85,7 @@ export class KeyboardVisualComponent implements OnInit {
     }
 
     public getSvgHeight(): number {
-        const zones = this.keyboardBacklightCapabilities.zones;
+        const zones: number = this.keyboardBacklightCapabilities.zones;
 
         if (zones === 1 || zones > 4) {
             return 205;
@@ -95,7 +94,7 @@ export class KeyboardVisualComponent implements OnInit {
     }
 
     public getSvgWidth(): number {
-        const zones = this.keyboardBacklightCapabilities.zones;
+        const zones: number = this.keyboardBacklightCapabilities.zones;
 
         if (zones === 1 || zones > 4) {
             return 728;
@@ -104,17 +103,17 @@ export class KeyboardVisualComponent implements OnInit {
     }
 
     public calculateTranslateValue(zone: number): string {
-        const zones = this.keyboardBacklightCapabilities.zones;
+        const zones: number = this.keyboardBacklightCapabilities.zones;
 
         if (zones === 3) {
             return `${832.61151 + zone * 16}, 535.06891`;
         } else {
-            return "832.61151, 535.06891";
+            return '832.61151, 535.06891';
         }
     }
 
     public updateZoneOpacity(event: MouseEvent, zone: number): void {
-        const zones = this.keyboardBacklightCapabilities.zones;
+        const zones: number = this.keyboardBacklightCapabilities.zones;
 
         if (zones === 1 || zones > 4) {
             return;
@@ -125,17 +124,15 @@ export class KeyboardVisualComponent implements OnInit {
         }
 
         this.selectedZonesChange.emit(this.addOrRemoveSelectedZones(zone));
-        const gElements = document.querySelectorAll("g.key-group");
-        gElements.forEach((g: SVGGraphicsElement) => {
-            const isSelected = this.selectedZones.includes(
-                parseInt(g.dataset.zone)
-            );
+        const gElements: NodeListOf<Element> = document.querySelectorAll('g.key-group');
+        gElements.forEach((g: SVGGraphicsElement): void => {
+            const isSelected: boolean = this.selectedZones.includes(Number.parseInt(g.dataset.zone, 10));
             if (isSelected) {
-                g.classList.remove("unselected");
-                g.classList.add("selected");
+                g.classList.remove('unselected');
+                g.classList.add('selected');
             } else {
-                g.classList.add("unselected");
-                g.classList.remove("selected");
+                g.classList.add('unselected');
+                g.classList.remove('selected');
             }
         });
     }

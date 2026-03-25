@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,30 +16,34 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Component, Inject } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+
+import { Component, inject } from '@angular/core';
+// biome-ignore lint: injection token
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 export interface InputDialogData {
-    title: string,
-    heading: string,
-    description: string,
-    prefill: string,
-    buttonAbortLabel: string,
-    buttonConfirmLabel: string
+    title: string;
+    heading?: string;
+    description: string;
+    prefill: string;
+    buttonAbortLabel: string;
+    buttonConfirmLabel: string;
 }
 
 @Component({
     selector: 'app-dialog-input-text',
     templateUrl: './dialog-input-text.component.html',
-    styleUrls: ['./dialog-input-text.component.scss']
+    styleUrls: ['./dialog-input-text.component.scss'],
+    standalone: false,
 })
 export class DialogInputTextComponent {
+    public data: InputDialogData;
 
-    constructor(
-        public dialogRef: MatDialogRef<DialogInputTextComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: InputDialogData) {}
+    constructor(public dialogRef: MatDialogRef<DialogInputTextComponent>) {
+        this.data = inject(MAT_DIALOG_DATA);
+    }
 
-    closeDialog(result?: string) {
+    public closeDialog(result?: string): void {
         this.dialogRef.close(result);
     }
 }

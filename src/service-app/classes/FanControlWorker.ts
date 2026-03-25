@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2021 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,664 +16,379 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { DaemonWorker } from "./DaemonWorker";
-import { TuxedoControlCenterDaemon } from "./TuxedoControlCenterDaemon";
-import {
-    SysFsPropertyInteger,
-    SysFsPropertyString,
-} from "../../common/classes/SysFsProperties";
-import {
-    TuxedoIOAPI as ioAPI,
-    TuxedoIOAPI,
-    ObjWrapper,
-} from "../../native-lib/TuxedoIOAPI";
-import { FanControlLogic, FAN_LOGIC } from "./FanControlLogic";
-import { interpolatePointsArray } from "../../common/classes/FanUtils";
-import {
-    ITccFanProfile,
-    ITccFanTableEntry,
-    customFanPreset,
-} from "../../common/models/TccFanTable";
-import { exec } from "child_process";
-import * as path from "path";
-import * as fs from "fs";
-import { ITccProfile } from "../../common/models/TccProfile";
-import { TUXEDODevice } from "../../common/models/DefaultProfiles";
+
+import type { TUXEDODevice } from '../../common/models/DefaultProfiles';
+import { FanData } from '../../common/models/IFanData';
+import type { ITccFanProfile, ITccFanTableEntry } from '../../common/models/TccFanTable';
+import { ModuleInfo, TuxedoIOAPI } from '../../native-lib/TuxedoIOAPI';
+import { DaemonWorker } from './DaemonWorker';
+import type { FanControlBaseClass } from './FanControlBaseClass';
+import type { FanControlLogic } from './FanControlLogic';
+import { FanControlPwm } from './FanControlPwm';
+import { FanControlTuxedoIO } from './FanControlTuxedoIO';
+import { FanControlTuxi } from './FanControlTuxi';
+import { getCurrentCustomProfile } from './FanControlUtils';
+import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
 export class FanControlWorker extends DaemonWorker {
-    private fans: Map<number, FanControlLogic>;
-    private cpuLogic = new FanControlLogic(
-        this.tccd.getCurrentFanProfile(),
-        FAN_LOGIC.CPU
-    );
-    private gpu1Logic = new FanControlLogic(
-        this.tccd.getCurrentFanProfile(),
-        FAN_LOGIC.GPU
-    );
-    private gpu2Logic = new FanControlLogic(
-        this.tccd.getCurrentFanProfile(),
-        FAN_LOGIC.GPU
-    );
+    private fanApi: FanControlBaseClass;
+    private mapStatus: boolean = false;
 
-    private controlAvailableMessage = false;
+    private fanReadAvailable: boolean;
+    private fanWriteAvailable: boolean;
 
-    private modeSameSpeed = false;
-
-    private fansOffAvailable: boolean = true;
-    private fansMinSpeedHWLimit: number = 0;
-
-    private platformAvailable: boolean;
-    private platformPath: string =
-        "/sys/bus/platform/devices/tuxedo_fan_control";
-
-    private hwmonPath: string;
-
-    private hwmonPwmAvailable: boolean;
-    private hwmonPwmPath: string;
-
-    private hwmonTuxiAvailable: boolean;
-    private hwmonTuxiPath: string;
-
-    private previousFanProfile: ITccFanProfile;
-    private previousFanSpeeds: { min: number; max: number; offset: number } = {
-        min: -1,
-        max: -1,
-        offset: -1,
-    };
-    private previousCustomCurve: {
+    public previousCustomCurve: {
         tableCPU: ITccFanTableEntry[];
         tableGPU: ITccFanTableEntry[];
     } = {
         tableCPU: [],
         tableGPU: [],
     };
+    private previousTempValues: Map<number, number> = new Map();
+    private retryFanInitCounter: number = 5;
+    private dbusData: {
+        fans: {
+            temp: { timestamp: number; temp: number };
+            speed: { timestamp: number; speed: number };
+        }[];
+    } = {
+        fans: Array.from(
+            { length: 3 },
+            (): {
+                temp: { timestamp: number; temp: number };
+                speed: { timestamp: number; speed: number };
+            } => ({
+                temp: {
+                    timestamp: -1,
+                    temp: -1,
+                },
+                speed: {
+                    timestamp: -1,
+                    speed: -1,
+                },
+            }),
+        ),
+    };
+    private tuxedoDevice: TUXEDODevice;
+    private fanCheckCounter: number = 0;
+    private isUniwill: boolean = false;
 
-    constructor(tccd: TuxedoControlCenterDaemon) {
-        super(1000, tccd);
+    constructor(tccd: TuxedoControlCenterDaemon, tuxedoDevice: TUXEDODevice) {
+        super(1000, 'FanControlWorker', tccd);
+        this.tuxedoDevice = tuxedoDevice;
+        this.updateDbusData();
     }
 
-    public async onStart(): Promise<void> {
-        await this.setupTuxi();
-
-        if (this.hwmonTuxiAvailable) {
-            console.log("Using tuxi hwmon");
-        }
-        if (!this.hwmonTuxiAvailable) {
-            await this.setupPwm();
-
-            if (this.hwmonPwmAvailable) {
-                console.log("Using pwm hwmon");
-            }
-            if (!this.hwmonPwmAvailable) {
-                this.setupTuxedoIO();
-            }
-        }
-    }
-
-    public onWork(): void {
-        if (
-            this.platformAvailable &&
-            (this.hwmonTuxiPath || this.hwmonPwmPath)
-        ) {
-            this.fanControl(this.hwmonPath);
+    public async onStart(retry?: boolean): Promise<void> {
+        if (retry !== true) {
+            this.retryFanInitCounter = 5;
         }
 
-        if (
-            !this.platformAvailable &&
-            (this.hwmonTuxiPath || this.hwmonPwmPath)
-        ) {
-            this.dashboardHwmonMetrics(this.hwmonPath);
-        }
+        this.mapStatus = false;
 
-        if (
-            !this.platformAvailable &&
-            !(this.hwmonTuxiPath || this.hwmonPwmPath)
-        ) {
-            this.fallbackFanControl();
-        }
-    }
+        if (!this.fanApi) {
+            const fanControlClasses: {
+                class: FanControlTuxi | FanControlPwm | FanControlTuxedoIO;
+                name: string;
+            }[] = [
+                { class: new FanControlTuxi(this.tccd, this.tuxedoDevice), name: 'tuxi' },
+                { class: new FanControlPwm(this.tccd), name: 'pwm' },
+                { class: new FanControlTuxedoIO(this.tccd), name: 'tuxedo-io' },
+            ];
 
-    public onExit(): void {
-        if (this.getFanControlStatus()) {
-            ioAPI.setFansAuto(); // required to avoid high fan speed on wakeup for certain devices
-            ioAPI.setEnableModeSet(false); //FIXME Dummy function, tuxedo-io always sets the manual bit
-        }
-
-        if (this.platformAvailable) {
-            this.setHwmonPwmEnable(2);
-        }
-    }
-
-    private async setupTuxi() {
-        this.hwmonPath = this.hwmonTuxiPath = await this.getHwmonTuxiPath();
-        this.hwmonTuxiAvailable = fs.existsSync(this.hwmonTuxiPath);
-
-        if (this.hwmonTuxiAvailable) {
-            this.platformAvailable = fs.existsSync(this.platformPath);
-            if (this.platformAvailable) {
-                this.setHwmonPwmEnable(1);
-                this.initFanControl();
-            }
-        }
-    }
-    private async setupPwm() {
-        this.hwmonPath = this.hwmonPwmPath = await this.getHwmonPwmPath();
-        this.hwmonPwmAvailable = fs.existsSync(this.hwmonPwmPath);
-
-        if (this.hwmonPwmAvailable) {
-            const dev = this.tccd.identifyDevice();
-            if (dev !== TUXEDODevice.SIRIUS1601 && dev !== TUXEDODevice.SIRIUS1602) {
-                this.platformAvailable = fs.existsSync(this.platformPath);
+            for (const { class: fanClass, name } of fanControlClasses) {
+                this.fanApi = fanClass;
+                if (await this.initializeFanControl(this.fanApi, name)) {
+                    if (name === 'tuxedo-io') {
+                        this.setActiveInterface();
+                    }
+                    return;
+                }
             }
 
-            if (this.platformAvailable) {
-                this.setHwmonPwmEnable(1);
-                this.initFanControl();
+            this.fanApi = null;
+            console.log('FanControlWorker: onStart: Fan API not available');
+        }
+    }
+
+    private setActiveInterface() {
+        // todo: tuxedo-drivers currently has 2 issues
+        // - ec does set a different fan speed after one or more hours
+        // - fan speed does change after writing a value
+        // writing fan speed with tccd worker for all uniwill devices as a temporary solution, but
+        // increasing the usage of tuxedo-drivers can increase cpu usage
+
+        const modInfo = new ModuleInfo();
+
+        if (TuxedoIOAPI.wmiAvailable()) {
+            const status = TuxedoIOAPI.getModuleInfo(modInfo);
+
+            if (!status) {
+                console.error('FanControlWorker: setActiveInterface failed');
+                return;
             }
+
+            this.isUniwill = modInfo.activeInterface === 'uniwill';
+        } else {
+            console.error('FanControlWorker: setActiveInterface: wmi not available');
         }
     }
 
-    private initFanControl() {
-        // todo: discern between fan types
-        // code assumes there is one fan per device (CPU, iGPU, dGPU)
-        const files = fs.readdirSync(this.platformPath);
-        const fanFiles = this.getFanFiles(files);
+    public async onWork(): Promise<void> {
+        try {
+            if (this.fanApi === undefined || this.fanApi === null) {
+                return;
+            }
 
-        if (fanFiles.length > 0) {
-            console.log(`Found ${fanFiles.length} hwmon fans`);
-            this.tccd.dbusData.fanHwmonAvailable = true;
+            const fanControlEnabled: boolean = this.tccd.settings.fanControlEnabled;
+            const sensorCollection: boolean = this.tccd.dbusData.sensorDataCollectionStatus;
+
+            await this.checkFanApiAvailable();
+            if (this.fanReadAvailable) {
+                await this.checkFanControlAvailable(fanControlEnabled);
+
+                if (this.fanApi && this.mapStatus && (fanControlEnabled || sensorCollection)) {
+                    await this.updateFanControlValues(fanControlEnabled);
+                }
+            }
+
+            if (this.fanCheckCounter < 20) {
+                await this.checkNumberFansAvailable();
+                this.fanCheckCounter += 1;
+            }
+        } catch (err: unknown) {
+            console.log(`FanControlWorker: onWork failed => ${err}`);
         }
-
-        this.mapLogicToFans(fanFiles.length);
     }
 
-    // 1 = manual mode, 2 = auto mode
-    setHwmonPwmEnable(status: number) {
-        const pwmfiles = fs.readdirSync(this.platformPath);
-        const fanFiles = this.getFanFiles(pwmfiles);
+    public async onExit(): Promise<void> {
+        await this.fanApi.exit();
+    }
 
-        for (const fanFile of fanFiles) {
-            const fanPwm = this.getPropertyInteger(
-                this.platformPath,
-                fanFile,
-                "_pwm_enable"
+    private async initializeFanControl(
+        fanApiInstance: FanControlBaseClass,
+        name?: string,
+        resetFanMap?: boolean,
+    ): Promise<boolean> {
+        [this.fanReadAvailable, this.fanWriteAvailable] = await fanApiInstance.checkAvailable();
+        if (this.fanReadAvailable) {
+            if (name) {
+                console.log(`FanControlWorker: initializeFanControl: ${name} available`);
+            }
+            await this.initializeFanControlApi(this.tccd.settings.fanControlEnabled, resetFanMap);
+            await this.setFanProfile();
+            const numberFans: number = await fanApiInstance.getNumberFans();
+
+            if (numberFans === 1) {
+                console.log(`FanControlWorker: initializeFanControl: Detected ${numberFans} fan`);
+            } else {
+                console.log(`FanControlWorker: initializeFanControl: Detected ${numberFans} fans`);
+            }
+            return true;
+        }
+        return false;
+    }
+
+    private async checkNumberFansAvailable(): Promise<void> {
+        const numberFansAvailable: number = await this.fanApi.getNumberFansAvailable();
+        const numberFans: number = await this.fanApi.getNumberFans();
+
+        if (numberFansAvailable !== numberFans) {
+            console.log(
+                `FanControlWorker: checkNumberFansAvailable: Check failed (${numberFansAvailable} !== ${numberFans}), retrying`,
             );
-            fanPwm.writeValue(status);
+            await this.initializeFanControl(this.fanApi, undefined, true);
         }
     }
 
-    private setupTuxedoIO() {
-        this.initHardwareCapabilities();
-        this.initFallbackFanControl();
+    private async setPreviousFans(): Promise<void> {
+        const numberInterfaces: number = await this.fanApi.getNumberFanInterfaces();
 
-        const useFanControl = this.getFanControlStatus();
-
-        if (useFanControl) {
-            ioAPI.setEnableModeSet(true); // FIXME Dummy function, tuxedo-io always sets the manual bit
+        for (let i: number = 0; i <= numberInterfaces; i++) {
+            this.previousTempValues.set(i, -1);
         }
     }
 
-    private initHardwareCapabilities(): void {
-        this.fansOffAvailable = ioAPI.getFansOffAvailable();
-        this.fansMinSpeedHWLimit = ioAPI.getFansMinSpeed();
-
-        this.tccd.dbusData.fansOffAvailable = this.fansOffAvailable;
-        this.tccd.dbusData.fansMinSpeed = this.fansMinSpeedHWLimit;
-    }
-
-    private initFallbackFanControl(): void {
-        const nrFans = ioAPI.getNumberFans();
-
-        if (this.fans === undefined || this.fans.size !== nrFans) {
-            console.log("Using tuxedo-io");
-            this.mapLogicToFans(nrFans);
+    private async checkFanApiAvailable(): Promise<void> {
+        const fanApiUnavailable: boolean = this.fanApi === undefined || this.fanApi === null;
+        if (fanApiUnavailable && this.retryFanInitCounter > 0) {
+            console.log('FanControlWorker: checkFanApiAvailable: Fan API not defined, retrying initialization');
+            this.retryFanInitCounter = this.retryFanInitCounter - 1;
+            this.onStart(true);
+            return;
         }
 
-        if (nrFans !== 0) {
-            this.updateFanLogic();
+        if (fanApiUnavailable && this.retryFanInitCounter === 0) {
+            console.log('FanControlWorker: checkFanApiAvailable: Fan API initialization failed');
+            this.retryFanInitCounter = this.retryFanInitCounter - 1;
         }
     }
 
-    private getCustomFanCurve(profile: ITccProfile) {
-        if (profile.fan.customFanCurve === undefined) {
-            return customFanPreset;
-        }
-        return profile.fan.customFanCurve;
-    }
+    private async checkFanControlAvailable(fanControlEnabled: boolean): Promise<void> {
+        if (this.fanApi) {
+            if (this.mapStatus === false) {
+                console.log('FanControlWorker: checkFanControlAvailable: No fans found, retrying initialization');
+                await this.initializeFanControlApi(fanControlEnabled);
+                await this.setFanProfile();
 
-    private mapLogicToFans(nrFans: number): void {
-        this.fans = new Map();
-        if (nrFans >= 1) {
-            this.fans.set(1, this.cpuLogic);
-        }
-        if (nrFans >= 2) {
-            this.fans.set(2, this.gpu1Logic);
-        }
-        if (nrFans >= 3) {
-            this.fans.set(3, this.gpu2Logic);
+                const numberFans: number = await this.fanApi.getNumberFans();
+                if (numberFans === 1) {
+                    console.log(`FanControlWorker: checkFanControlAvailable: Detected ${numberFans} fan`);
+                } else {
+                    console.log(`FanControlWorker: checkFanControlAvailable: Detected ${numberFans} fans`);
+                }
+            }
         }
     }
 
-    private getCurrentCustomProfile() {
-        const customFanCurve = this.getCustomFanCurve(this.activeProfile);
-        const tableCPU = interpolatePointsArray(customFanCurve.tableCPU);
-        const tableGPU = interpolatePointsArray(customFanCurve.tableGPU);
-        const tccFanTable = (temp: number, i: number) => ({
-            temp: i,
-            speed: temp,
-        });
-        const tccFanProfile: ITccFanProfile = {
-            name: "Custom",
-            tableCPU: tableCPU.map(tccFanTable),
-            tableGPU: tableGPU.map(tccFanTable),
-        };
-        return tccFanProfile;
+    private async initializeFanControlApi(fanControlEnabled: boolean, resetFanMap?: boolean): Promise<void> {
+        await this.fanApi.initFanControl(this.fanWriteAvailable, fanControlEnabled);
+        const numberInterfaces: number = await this.fanApi.getNumberFanInterfaces();
+
+        if (numberInterfaces) {
+            this.mapStatus = await this.fanApi.mapLogicToFans(numberInterfaces, resetFanMap);
+            await this.setPreviousFans();
+            return;
+        }
+        console.log('FanControlWorker: initializeFanControlApi: No fan interfaces found');
     }
 
-    private isEqual(first: ITccFanProfile, second: ITccFanProfile): boolean {
+    public async isEqual(first: ITccFanProfile, second: ITccFanProfile): Promise<boolean> {
         return JSON.stringify(first) === JSON.stringify(second);
     }
 
-    private setFanProfileValues(currentFanProfile: ITccFanProfile) {
-        for (const fanNumber of this.fans.keys()) {
-            if (this.activeProfile.fan.fanProfile == "Custom") {
-                this.fans.get(fanNumber).minimumFanspeed = 0;
-                this.fans.get(fanNumber).maximumFanspeed = 100;
-                this.fans.get(fanNumber).offsetFanspeed = 0;
+    private async setFanProfile(): Promise<void> {
+        const fanProfile: string = this.activeProfile.fan.fanProfile;
+        const isCustomProfile: boolean = fanProfile === 'Custom';
 
-                this.fans.get(fanNumber).setFanProfile(currentFanProfile);
-            }
+        const currentFanProfile: ITccFanProfile = isCustomProfile
+            ? await getCurrentCustomProfile(this.activeProfile)
+            : this.tccd.getCurrentFanProfile(this.activeProfile);
 
-            if (this.activeProfile.fan.fanProfile != "Custom") {
-                this.fans.get(fanNumber).minimumFanspeed =
-                    this.activeProfile.fan.minimumFanspeed;
-                this.fans.get(fanNumber).maximumFanspeed =
-                    this.activeProfile.fan.maximumFanspeed;
-                this.fans.get(fanNumber).offsetFanspeed =
-                    this.activeProfile.fan.offsetFanspeed;
-
-                this.fans.get(fanNumber).setFanProfile(currentFanProfile);
-            }
-        }
+        console.log('FanControlWorker: setFanProfile: Setting fan profile');
+        await this.fanApi.setFanProfileValues(this.activeProfile, currentFanProfile);
     }
 
-    private setPreviousValues(currentFanProfile: ITccFanProfile): void {
-        const customFanCurve = this.getCustomFanCurve(this.activeProfile);
-
-        this.previousCustomCurve = {
-            tableCPU: customFanCurve.tableCPU,
-            tableGPU: customFanCurve.tableGPU,
-        };
-
-        this.previousFanSpeeds = {
-            min: this.activeProfile.fan.minimumFanspeed,
-            max: this.activeProfile.fan.maximumFanspeed,
-            offset: this.activeProfile.fan.offsetFanspeed,
-        };
-
-        this.previousFanProfile = currentFanProfile;
+    private async updateTempLogic(fans: Map<number, FanControlLogic>, fanNumber: number) {
+        const fanIndex = fanNumber - 1;
+        const fanLogic = fans.get(fanNumber);
+        const temp = await this.getTemperature(fanIndex);
+        fanLogic.reportTemperature(temp);
+        return { fanLogic, fanIndex, temp };
     }
 
-    private isCustomProfileChanged(): boolean {
-        const { customFanCurve } = this.activeProfile.fan;
+    private async setFansWithMaxSpeed(fans: Map<number, FanControlLogic>) {
+        const fanNumbers = Array.from(fans.keys());
 
-        return !this.isEqual(this.previousCustomCurve, customFanCurve);
-    }
+        const fanInformationArray: {
+            fanLogic: FanControlLogic;
+            fanIndex: number;
+            temp: number;
+        }[] = await Promise.all(
+            fanNumbers.map(async (fanNumber: number) => {
+                return await this.updateTempLogic(fans, fanNumber);
+            }),
+        );
 
-    private isMinMaxOffsetChanged(): boolean {
-        return (
-            this.previousFanSpeeds.min !==
-                this.activeProfile.fan.minimumFanspeed ||
-            this.previousFanSpeeds.max !==
-                this.activeProfile.fan.maximumFanspeed ||
-            this.previousFanSpeeds.offset !==
-                this.activeProfile.fan.offsetFanspeed
+        const speedArray: number[] = fanInformationArray.map(({ fanLogic }) => fanLogic.getSpeedPercent());
+        const maxSpeed = Math.max(...speedArray);
+
+        await Promise.all(
+            fanInformationArray.map(async ({ fanLogic, fanIndex, temp }) => {
+                await this.updateFanDbusData(fanIndex, fanLogic, maxSpeed, temp);
+            }),
         );
     }
 
-    private isProfileNameChanged(fanProfile: string): boolean {
-        return (
-            this.previousFanProfile?.name !== fanProfile ||
-            this.previousFanProfile === undefined
-        );
-    }
+    private async updateFanControlValues(fanControlEnabled: boolean): Promise<void> {
+        const fans: Map<number, FanControlLogic> = await this.fanApi.getFans();
 
-    private updateFanLogic(currentTemp?: number): void {
-        const fanProfile = this.activeProfile.fan.fanProfile;
-        const isCustomProfile = fanProfile === "Custom";
-        const isCustomProfileChanged = this.isCustomProfileChanged();
-        const isMinMaxOffsetChanged = this.isMinMaxOffsetChanged();
-        const isProfileNameChanged = this.isProfileNameChanged(fanProfile);
-
-        if (
-            isProfileNameChanged ||
-            isCustomProfileChanged ||
-            isMinMaxOffsetChanged
-        ) {
-            const currentFanProfile = isCustomProfile
-                ? this.getCurrentCustomProfile()
-                : this.tccd.getCurrentFanProfile(this.activeProfile);
-
-            this.setFanProfileValues(currentFanProfile);
-            this.setPreviousValues(currentFanProfile);
-        }
-
-        if (this.platformAvailable) {
-            for (const fanNumber of this.fans.keys()) {
-                const fanLogic = this.fans.get(fanNumber);
-
-                fanLogic.reportTemperature(currentTemp / 1000);
-                const fanSpeed = fanLogic.getSpeedPercent();
-
-                // todo: discern between fans
-                this.setHwmonFan(fanNumber, fanSpeed);
-            }
-        }
-    }
-
-    private setHwmonFan(fanNumber: number, tempSpeed: number): void {
-        const fanPwm = this.getPropertyInteger(
-            this.platformPath,
-            "fan" + fanNumber.toString(),
-            "_pwm"
-        );
-
-        fanPwm.writeValue(Math.round((tempSpeed / 100) * 255));
-    }
-
-    private fallbackFanControl(): void {
-        this.initFallbackFanControl();
-
-        const fanTemps: number[] = [];
-        const fanSpeedsRead: number[] = [];
-        const fanSpeedsSet: number[] = new Array<number>(this.fans.size);
-        const fanTimestamps: number[] = [];
-        const tempSensorAvailable: boolean[] = [];
-
-        const fanCtrlUnavailableCondition =
-            !TuxedoIOAPI.wmiAvailable() || this.fans.size === 0;
-        if (fanCtrlUnavailableCondition) {
-            if (this.controlAvailableMessage === false) {
-                this.tccd.logLine("FanControlWorker: Control unavailable");
-            }
-            this.controlAvailableMessage = true;
+        if (fans.size === 0) {
+            console.log('FanControlWorker: updateFanControlValues: No fans found, retrying initialization');
+            await this.initializeFanControlApi(fanControlEnabled);
             return;
-        } else {
-            if (this.controlAvailableMessage === true) {
-                this.tccd.logLine("FanControlWorker: Control resumed");
-            }
-            this.controlAvailableMessage = false;
         }
 
-        const useFanControl = this.getFanControlStatus();
-
-        // Decide on a fan control approach
-        // Per default fans are controlled using the 'same speed' approach setting the same speed for all fans chosen
-        // from the max speed decided by each individual fan logic
-        // Using the 'same speed' approach is necessary for uniwill devices since the fans on some
-        // devices can not be controlled individually.
-        this.modeSameSpeed = true;
-
-        // For each fan read and process sensor values
-        for (const fanNumber of this.fans.keys()) {
-            const fanIndex: number = fanNumber - 1;
-
-            const fanLogic = this.fans.get(fanNumber);
-
-            // Read and store sensor values
-            const currentTemperatureCelsius: ObjWrapper<number> = { value: 0 };
-            const tempReadSuccess = ioAPI.getFanTemperature(
-                fanIndex,
-                currentTemperatureCelsius
-            );
-            const currentSpeedPercent: ObjWrapper<number> = { value: 0 };
-            // const speedReadSuccess = ioAPI.getFanSpeedPercent(fanIndex, currentSpeedPercent);
-
-            tempSensorAvailable.push(tempReadSuccess);
-            fanTimestamps.push(Date.now());
-            fanSpeedsRead.push(currentSpeedPercent.value);
-            if (tempSensorAvailable[fanIndex]) {
-                fanTemps.push(currentTemperatureCelsius.value);
-            } else {
-                fanTemps.push(-1);
-            }
-
-            // If there is temp sensor value report temperature to logic
-            // Also, fill fanSpeedsSet
-            if (tempSensorAvailable[fanIndex]) {
-                fanLogic.reportTemperature(currentTemperatureCelsius.value);
-                const calculatedSpeed = fanLogic.getSpeedPercent();
-                fanSpeedsSet[fanIndex] = calculatedSpeed;
-            } else {
-                // Non existant sensor or wmi interface unavailable
-                // Set "set speed" to zero to not affect the max value
-                fanSpeedsSet[fanIndex] = 0;
-            }
-        }
-
-        // Write fan speeds
-        if (useFanControl) {
-            const highestSpeed = fanSpeedsSet.reduce(
-                (prev, cur) => (cur > prev ? cur : prev),
-                0
-            );
-
-            for (const fanNumber of this.fans.keys()) {
-                const fanIndex = fanNumber - 1;
-                // Use highest speed decided by fan logic for current fan if "same speed" mode
-                // or there is no sensor specific to this fan
-                if (this.modeSameSpeed || !tempSensorAvailable[fanIndex]) {
-                    fanSpeedsSet[fanIndex] = highestSpeed;
-                }
-                // Always write a fan speed previously decided
-                ioAPI.setFanSpeedPercent(fanIndex, fanSpeedsSet[fanIndex]);
-            }
-        }
-
-        // Publish the data on the dbus whether written by this control or values read from hw interface
-        for (const fanNumber of this.fans.keys()) {
-            const i = fanNumber - 1;
-            let currentSpeed: number;
-
-            if (fanTemps[i] === -1) {
-                currentSpeed = -1;
-            } else if (useFanControl) {
-                currentSpeed = fanSpeedsSet[i];
-            } else {
-                currentSpeed = fanSpeedsRead[i];
-            }
-
-            this.tccd.dbusData.fans[i].temp.set(fanTimestamps[i], fanTemps[i]);
-            this.tccd.dbusData.fans[i].speed.set(
-                fanTimestamps[i],
-                currentSpeed
-            );
-        }
-    }
-    private async getHwmonTuxiPath(): Promise<string | undefined> {
-        return await execCommand(
-            "grep -rl '^tuxedo_tuxi_sensors$' /sys/class/hwmon/*/name | sed 's|/name$||'"
-        );
+        await this.fanApi.clearTempValues();
+        await this.setFansWithMaxSpeed(fans);
     }
 
-    private async getHwmonPwmPath(): Promise<string | undefined> {
-        return await execCommand(
-            "grep -rl '^tuxedo$' /sys/class/hwmon/*/name | sed 's|/name$||'"
-        );
-    }
+    private async writeFanSpeed(fanLogic: FanControlLogic, fanIndex: number, calculatedSpeed: number): Promise<void> {
+        if (!fanLogic) return;
 
-    private getFilteredAndMappedFiles(
-        files: string[],
-        pattern: RegExp
-    ): string[] {
-        return Array.from(
-            new Set(
-                files
-                    .filter((entry) => entry.match(pattern))
-                    .map((entry) => entry.split("_")[0])
-            )
-        );
-    }
-
-    private isPropertiesAvailable(
-        ...props: (SysFsPropertyInteger | SysFsPropertyString)[]
-    ): boolean {
-        return props.every((prop) => prop.isAvailable());
-    }
-
-    private getLabelIndex(label: string): number | undefined {
-        const labels = ["cpu0", "gpu0", "gpu1"];
-        return labels.indexOf(label);
-    }
-
-    private getPropertyInteger(
-        hwmonPath: string,
-        fileName: string,
-        suffix: string
-    ): SysFsPropertyInteger {
-        return new SysFsPropertyInteger(
-            path.join(hwmonPath, fileName + suffix)
-        );
-    }
-
-    private getPropertyString(
-        hwmonPath: string,
-        fileName: string,
-        suffix: string
-    ): SysFsPropertyString {
-        return new SysFsPropertyString(path.join(hwmonPath, fileName + suffix));
-    }
-
-    private updateFanSpeed(index: number, input: number, max: number): void {
-        this.tccd.dbusData.fans[index].speed.set(
-            Date.now(),
-            Math.round((Math.min(input, max) / max) * 100)
-        );
-    }
-
-    private updateFanTemp(index: number, input: number): void {
-        this.tccd.dbusData.fans[index].temp.set(
-            Date.now(),
-            Math.round(input / 1000)
-        );
-    }
-
-    // todo: refactor code
-    private dashboardHwmonMetrics(hwmonPath: string) {
-        const files = fs.readdirSync(hwmonPath);
-        const fanFiles = this.getFanFiles(files);
-        const tempFiles = this.getTempFiles(files);
-
-        this.handleFanControl(hwmonPath, fanFiles);
-        this.handleTempControl(hwmonPath, tempFiles);
-    }
-
-    private fanControl(hwmonPath: string): void {
-        const files = fs.readdirSync(hwmonPath);
-        const fanFiles = this.getFanFiles(files);
-        const tempFiles = this.getTempFiles(files);
-        this.handleFanControl(hwmonPath, fanFiles);
-        // todo: differentiate between cpu and gpu temps, using cpu temp for now
-        const tempValue = this.handleTempControl(hwmonPath, tempFiles);
-
-        if (this.platformAvailable) {
-            this.updateFanLogic(tempValue);
-        }
-    }
-
-    private getFanFiles(files: string[]): string[] {
-        return this.getFilteredAndMappedFiles(files, /^fan\d/);
-    }
-
-    private getTempFiles(files: string[]): string[] {
-        return this.getFilteredAndMappedFiles(files, /^temp\d/);
-    }
-
-    private handleFanControl(hwmonPath: string, files: string[]) {
-        for (const fanFile of files) {
-            const fanInput = this.getPropertyInteger(
-                hwmonPath,
-                fanFile,
-                "_input"
-            );
-            const fanLabel = this.getPropertyString(
-                hwmonPath,
-                fanFile,
-                "_label"
-            );
-            const fanMin = this.getPropertyInteger(hwmonPath, fanFile, "_min");
-            const fanMax = this.getPropertyInteger(hwmonPath, fanFile, "_max");
-
+        if (this.tccd.settings.fanControlEnabled) {
             if (
-                this.isPropertiesAvailable(fanInput, fanLabel, fanMin, fanMax)
+                (this.isUniwill && calculatedSpeed > -1) ||
+                (this.previousTempValues.get(fanIndex) !== calculatedSpeed && calculatedSpeed > -1)
             ) {
-                const input = fanInput.readValueNT();
-                const label = fanLabel.readValueNT();
-                const max = fanMax.readValueNT();
-
-                const index = this.getLabelIndex(label);
-
-                if (index !== undefined && index !== -1) {
-                    this.updateFanSpeed(index, input, max);
-                }
+                await this.fanApi.writeFanSpeed(fanIndex, calculatedSpeed);
+                this.previousTempValues.set(fanIndex, calculatedSpeed);
             }
         }
     }
 
-    private handleTempControl(hwmonPath: string, files: string[]) {
-        // todo: differentiate between cpu and gpu temps, using cpu temp for now
-        let tempValue: number;
-
-        for (const tempFile of files) {
-            const tempInput = this.getPropertyInteger(
-                hwmonPath,
-                tempFile,
-                "_input"
-            );
-            const tempLabel = this.getPropertyString(
-                hwmonPath,
-                tempFile,
-                "_label"
-            );
-
-            if (this.isPropertiesAvailable(tempInput, tempLabel)) {
-                const input = tempInput.readValueNT();
-                const label = tempLabel.readValueNT();
-
-                if (label == "cpu0") {
-                    tempValue = input;
-                }
-
-                const index = this.getLabelIndex(label);
-
-                if (index !== undefined && index !== -1) {
-                    this.updateFanTemp(index, input);
-                }
+    private async updateFanDbusData(
+        fanIndex: number,
+        fanLogic: FanControlLogic,
+        calculatedSpeed: number,
+        temperature: number,
+    ): Promise<void> {
+        if (temperature > -1) {
+            if (this.fanWriteAvailable) {
+                await this.writeFanSpeed(fanLogic, fanIndex, calculatedSpeed);
             }
-        }
 
-        return tempValue;
-    }
+            if (this.tccd.dbusData.sensorDataCollectionStatus) {
+                const currentSpeedPercent: number = await this.fanApi.getFanSpeedPercent(fanIndex);
 
-    private getFanControlStatus(): boolean {
-        /*const dmi = new DMIController('/sys/class/dmi/id');
-        const boardName = dmi.boardName.readValueNT();
-        // when adding or removing devices here don't forget to also alter hasFanControl() from compatibility.service.ts from tcc
-        if (boardName === "GMxRGxx") {
-            return false;
-        }*/
-        return this.tccd.settings.fanControlEnabled;
-    }
-}
-
-async function execCommand(command: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-        exec(command, (error, stdout, stderr) => {
-            if (error || stderr) {
-                resolve(undefined);
+                await this.setFanDbusData(fanIndex, temperature, currentSpeedPercent);
             } else {
-                resolve(stdout.trim());
+                await this.setFanDbusData(fanIndex, temperature, -1);
             }
-        });
-    });
+        } else {
+            console.log('FanControlWorker: updateFanDbusData: Invalid temperature');
+        }
+    }
+
+    private async getTemperature(fanIndex: number): Promise<number> {
+        return this.tccd.settings.fanControlEnabled || this.tccd.dbusData.sensorDataCollectionStatus
+            ? await this.fanApi.getFanTemperature(fanIndex)
+            : -1;
+    }
+
+    private async setFanDbusData(fanIndex: number, currentFanTemp: number, currentSpeedPercent: number): Promise<void> {
+        this.dbusData.fans[fanIndex].temp = {
+            timestamp: Date.now(),
+            temp: currentFanTemp,
+        };
+        this.dbusData.fans[fanIndex].speed = {
+            timestamp: Date.now(),
+            speed: currentSpeedPercent,
+        };
+        this.updateDbusData();
+    }
+
+    private updateDbusData(): void {
+        const cpu = new FanData(
+            this.dbusData.fans[0].temp.timestamp,
+            this.dbusData.fans[0].speed.speed,
+            this.dbusData.fans[0].temp.temp,
+        );
+        const gpu1 = new FanData(
+            this.dbusData.fans[1].temp.timestamp,
+            this.dbusData.fans[1].speed.speed,
+            this.dbusData.fans[1].temp.temp,
+        );
+        const gpu2 = new FanData(
+            this.dbusData.fans[2].temp.timestamp,
+            this.dbusData.fans[2].speed.speed,
+            this.dbusData.fans[2].temp.temp,
+        );
+        const fanData: { cpu: FanData; gpu1: FanData; gpu2: FanData } = {
+            cpu: cpu,
+            gpu1: gpu1,
+            gpu2: gpu2,
+        };
+        this.tccd.dbusData.fanData = JSON.stringify(fanData);
+    }
 }

@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -25,4 +25,4 @@ import { TuxedoControlCenterDaemon } from './classes/TuxedoControlCenterDaemon';
 const tccd = new TuxedoControlCenterDaemon();
 
 // Start program
-tccd.main().catch((err) => tccd.catchError(err));
+tccd.main().catch((err: unknown): void => console.error(`main failed => ${err}`));

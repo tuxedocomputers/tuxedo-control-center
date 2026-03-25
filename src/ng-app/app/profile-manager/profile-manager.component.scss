@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,62 +16,24 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-mat-toolbar {
-    
-    mat-toolbar-row {
+
+.title {
+    div {
+        height: 100%;
+        display: flex;
         align-items: center;
-        button {
-            margin-right: 10px;
-        }
+    }
 
-        mat-button-toggle-group, .import-export-buttons {
-            transform: scale(0.7);
-            transform-origin: right;
-
-            svg {
-                width: 40px;
-                height: 40px;
-                --icon-detail: var(--icon-main);
-            }
-        }
-
-        form {
-            transform: scale(0.8);
-            transform-origin: bottom left;
-        }
+    svg {
+        width: 40px;
+        height: 40px;
+        --icon-detail: var(--icon-main);
     }
 }
-.import-export-buttons
-{
-    box-shadow: none;
-    button 
-     {
-        margin : 0 !important;
-        background: none;
-        border: 0;
-        cursor: pointer;
-     }
-
-} 
 
 .profile-name-input {
     width: 250px;
     margin-right: 10px;
-}
-
-.desc {
-    margin-top: 20px;
-    font-size: 16px;
-    opacity: 0.7;    
-}
-
-.header-divider {
-    border-bottom: 1px solid;
-    border-color: rgba($color: #000000, $alpha: 0.12);
-}
-
-.mat-toolbar {
-    background: none;
 }
 
 .profile-manager-content {
@@ -80,11 +42,43 @@ mat-toolbar {
     bottom: 25px;
     right: 5px;
     left: 0px;
-    margin: 0px;
     padding: 0px;
-    overflow-y: auto;
+    overflow-y: scroll;
+
+    .inner-profile-manager-content {
+        margin: 0 10px 10px 10px;
+    }
 
     &.offset {
         top: 100px;
     }
+
+    div {
+        display: flex;
+        align-items: stretch;
+        flex-wrap: wrap;
+    }
+}
+
+mat-toolbar {
+    background: none;
+    padding-top: 10px;
+
+    .profile-options {
+        justify-content: space-between;
+        padding-right: 0px;
+    }
+
+    .menu-button {
+        padding-left: 30px;
+        padding-right: 20px;
+    }
+
+    .info-options {
+        padding-right: 30px;
+    }
+}
+
+app-profile-overview-tile {
+    padding: 8px;
 }

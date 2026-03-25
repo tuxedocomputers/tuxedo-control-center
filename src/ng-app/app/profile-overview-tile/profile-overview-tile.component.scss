@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,12 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-.profile-overview-tile{
+
+.profile-overview-tile {
     position: relative;
     z-index: 10;
 
-    width: 215px;
-    margin: 8px;
+    height: 100%;
+    width: 225px;
     padding: 10px;
     padding-top: 0px;
     padding-bottom: 15px;
@@ -45,7 +46,7 @@
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;
-            margin:auto;
+            margin: auto;
         }
     }
 
@@ -55,7 +56,8 @@
         justify-content: space-between;
 
         .description {
-            height: 110px;
+            height: 100%;
+            min-height: 120px;
             text-align: center;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -99,16 +101,11 @@
     }
 
     .status-flexbox {
-        display: flex;
-        flex-wrap: wrap;
+        display: block;
         margin-top: 20px;
 
         .status-component {
-            width: 50%;
-
             display: flex;
-            flex-flow: column;
-            justify-content: flex-start;
             align-items: center;
 
             .status-icon-container {
@@ -118,12 +115,8 @@
                     width: inherit;
                     height: inherit;
                 }
-    
-                --icon-detail: var(--icon-main);
-            }
 
-            .status-info {
-                transform: translateY(-5px);
+                --icon-detail: var(--icon-main);
             }
 
             &.inactive {

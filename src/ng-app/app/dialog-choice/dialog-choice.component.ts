@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -17,10 +17,10 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, Inject } from "@angular/core";
-import { FormControl } from "@angular/forms";
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { ElectronService } from "ngx-electron";
+import { Component, inject } from '@angular/core';
+import { FormControl } from '@angular/forms';
+// biome-ignore lint: injection token
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 export interface ChoiceDialogData {
     title: string;
@@ -49,31 +49,32 @@ export interface ConfirmChoiceResult {
 }
 
 @Component({
-    selector: "app-dialog-choice",
-    templateUrl: "./dialog-choice.component.html",
-    styleUrls: ["./dialog-choice.component.scss"],
+    selector: 'app-dialog-choice',
+    templateUrl: './dialog-choice.component.html',
+    styleUrls: ['./dialog-choice.component.scss'],
+    standalone: false,
 })
 export class DialogChoiceComponent {
     public ctrlCheckboxNoBother: FormControl;
+    public data: ChoiceDialogData;
 
-    constructor(
-        private electron: ElectronService,
-        public dialogRef: MatDialogRef<DialogChoiceComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: ChoiceDialogData
-    ) {
-        if (data.checkboxNoBotherLabel === undefined) {
-            data.checkboxNoBotherLabel = "";
+    constructor(public dialogRef: MatDialogRef<DialogChoiceComponent>) {
+        this.data = inject(MAT_DIALOG_DATA);
+
+        if (this.data.checkboxNoBotherLabel === undefined) {
+            this.data.checkboxNoBotherLabel = '';
         }
-        if (data.showCheckboxNoBother === undefined) {
-            data.showCheckboxNoBother = false;
+        if (this.data.showCheckboxNoBother === undefined) {
+            this.data.showCheckboxNoBother = false;
         }
+
         this.ctrlCheckboxNoBother = new FormControl(false);
     }
 
-    closeDialog(result?: string) {
+    public closeDialog(result?: string): void {
         let dialogResult: ConfirmChoiceResult;
         const noBotherValue = this.ctrlCheckboxNoBother.value as boolean;
-        if (result != undefined) {
+        if (result !== undefined) {
             dialogResult = {
                 value: result,
                 noBother: noBotherValue,
@@ -86,8 +87,7 @@ export class DialogChoiceComponent {
         }
         this.dialogRef.close(dialogResult);
     }
-
-    public async openExternalUrl(url: string) {
-        await this.electron.shell.openExternal(url);
+    public async openExternalUrl(url: string): Promise<void> {
+        window.ipc.openExternal(url);
     }
 }

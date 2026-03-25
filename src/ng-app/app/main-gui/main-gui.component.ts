@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,66 +16,107 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { ElectronService } from 'ngx-electron';
-import { Subscription } from 'rxjs';
-import { ITccProfile } from '../../../common/models/TccProfile';
-import { ITccSettings } from '../../../common/models/TccSettings';
-import { CompatibilityService } from '../compatibility.service';
-import { ConfigService } from '../config.service';
-import { IStateInfo, StateService } from '../state.service';
-import { UtilsService } from '../utils.service';
+
+import { Component, type OnDestroy, type OnInit } from '@angular/core';
+// biome-ignore lint: injection token
 import { ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
+import type { ITccProfile } from '../../../common/models/TccProfile';
+import { ProfileStates } from '../../../common/models/TccSettings';
+// biome-ignore lint: injection token
+import { CompatibilityService } from '../compatibility.service';
+// biome-ignore lint: injection token
+import { type IStateInfo, StateService } from '../state.service';
+// biome-ignore lint: injection token
+import { TccDBusClientService } from '../tcc-dbus-client.service';
+// biome-ignore lint: injection token
+import { UtilsService } from '../utils.service';
 
 @Component({
-  selector: 'app-main-gui',
-  templateUrl: './main-gui.component.html',
-  styleUrls: ['./main-gui.component.scss']
+    selector: 'app-main-gui',
+    templateUrl: './main-gui.component.html',
+    styleUrls: ['./main-gui.component.scss'],
+    standalone: false,
 })
 export class MainGuiComponent implements OnInit, OnDestroy {
-
     public profileSelect: string;
     public activeProfileName: string;
-
     private subscriptions: Subscription = new Subscription();
-
-    public useTCCTitleBar = false;
+    public useTCCTitleBar: boolean = false;
+    private dbusDead: boolean = false;
 
     public dataLoaded: boolean;
+    private retryCount: number = 0;
 
     constructor(
-        private electron: ElectronService,
-        private config: ConfigService,
         private state: StateService,
         private utils: UtilsService,
         public compat: CompatibilityService,
         private route: ActivatedRoute,
-        ) {
-            const data = this.route.snapshot.data;
-            this.dataLoaded = data.loaded === true;
-        }
+        private dbus: TccDBusClientService,
+    ) {
+        const data = this.route.snapshot.data;
+        this.dataLoaded = data.loaded === true;
+    }
 
     public buttonLanguageLabel: string;
 
     public ngOnInit(): void {
-
         this.updateLanguageName();
-        this.getSettings();
-        // this.subscriptions.add(this.config.observeSettings.subscribe(newSettings => { this.getSettings(); }));
-        this.subscriptions.add(this.state.activeProfile.subscribe(activeProfile => { this.getSettings(); }));
+        this.state.initializeProfileNames();
 
         if (!this.dataLoaded) {
-            this.electron.remote.dialog.showMessageBox(
-                this.electron.remote.getCurrentWindow(),
-                {
-                  title: $localize `:@@msgboxTitleServiceUnavailable:Service unavailable`,
-                  message: $localize `:@@msgboxMessageServiceUnavailable:Communication with tccd service is unavailable, please restart service and try again.`,
-                  type: 'error',
-                  buttons: ['ok']
-                }
-              );
-              this.electron.remote.getCurrentWindow().close();
+            console.error('main-gui: ngOnInit: dbus data not available');
+            this.retryCount = 0;
+
+            this.subscriptions.add(
+                this.dbus.dbusAvailable.subscribe((dbusAvailable: boolean): void => {
+                    this.retryCount += 1;
+
+                    if (!dbusAvailable && this.retryCount > 3) {
+                        alert(
+                            $localize`:@@msgboxMessageServiceUnavailable:The background service tccd is not available. Please check the corresponding system logs or restart this service manually.`,
+                        );
+                        this.subscriptions.unsubscribe();
+                        this.utils.quit();
+                    }
+
+                    if (!this.dbus.dataLoaded && this.retryCount > 3) {
+                        alert(
+                            $localize`:@@msgboxMessagDataUnavailable:Profiles are not available. Please check the corresponding system logs or restart tccd manually.`,
+                        );
+                        this.subscriptions.unsubscribe();
+                        this.utils.quit();
+                    }
+
+                    if (dbusAvailable && this.dbus.dataLoaded) {
+                        console.log('main-gui: ngOnInit: dbus data available');
+                        this.subscriptions.unsubscribe();
+                    }
+                }),
+            );
         }
+
+        window.ipc.onDbusDead((): void => {
+            if (!this.dbusDead) {
+                this.dbusDead = true;
+                // TODO which behaviour makes the most sense?
+                this.utils.pageDisabled = true;
+                // TODO add tooltip on disabled page that dbus is unavailable
+                this.checkIfDbusIsBack();
+            }
+        });
+    }
+
+    private async checkIfDbusIsBack(): Promise<void> {
+        setTimeout(async (): Promise<void> => {
+            if (await window.dbusAPI.dbusAvailable()) {
+                this.dbusDead = false;
+                this.utils.pageDisabled = false;
+            } else {
+                this.checkIfDbusIsBack();
+            }
+        }, 100);
     }
 
     public ngOnDestroy(): void {
@@ -83,21 +124,14 @@ export class MainGuiComponent implements OnInit, OnDestroy {
     }
 
     public buttonExit(): void {
-        this.electron.remote.getCurrentWindow().close();
+        this.utils.closeWindow();
     }
 
     public buttonMinimize(): void {
-        this.electron.remote.getCurrentWindow().minimize();
+        this.utils.minimizeWindow();
     }
 
-    public getSettings(): ITccSettings {
-        if (this.state.getActiveProfile()) {
-            this.activeProfileName = this.state.getActiveProfile().name;
-        }
-        return this.config.getSettings();
-    }
-
-    public changeLanguage(languageId: string) {
+    public changeLanguage(languageId: string): void {
         if (languageId !== this.getCurrentLanguageId()) {
             this.utils.changeLanguage(languageId);
         }
@@ -107,22 +141,34 @@ export class MainGuiComponent implements OnInit, OnDestroy {
         return this.utils.getCurrentLanguageId();
     }
 
-    public getLanguagesMenuArray() {
+    public getLanguagesMenuArray(): { id: string; label: string; img: string }[] {
         return this.utils.getLanguagesMenuArray();
     }
 
-    public getLanguageData(langId: string) {
+    public getLanguageData(langId: string): string {
         return this.utils.getLanguageData(langId);
     }
 
-    public buttonToggleLanguage() {
-        this.electron.ipcRenderer.send("close-webcam-preview");
-        this.utils.changeLanguage(this.utils.getLanguagesMenuArray().find(lang => lang.id !== this.utils.getCurrentLanguageId()).id);
+    public buttonToggleLanguage(): void {
+        window.webcamAPI.closeWebcamPreview();
+        this.utils.changeLanguage(
+            this.utils
+                .getLanguagesMenuArray()
+                .find(
+                    (lang: { id: string; label: string; img: string }): boolean =>
+                        lang.id !== this.utils.getCurrentLanguageId(),
+                ).id,
+        );
         this.updateLanguageName();
     }
 
     public updateLanguageName(): void {
-        this.buttonLanguageLabel = this.utils.getLanguagesMenuArray().find(lang => lang.id !== this.utils.getCurrentLanguageId()).label;
+        this.buttonLanguageLabel = this.utils
+            .getLanguagesMenuArray()
+            .find(
+                (lang: { id: string; label: string; img: string }): boolean =>
+                    lang.id !== this.utils.getCurrentLanguageId(),
+            ).label;
     }
 
     public getStateInputs(): IStateInfo[] {
@@ -133,29 +179,23 @@ export class MainGuiComponent implements OnInit, OnDestroy {
         return this.state.getActiveProfile();
     }
 
-    public getStateProfileName(state: IStateInfo) {
-        if (!this.getSettings()) {
-            return undefined
+    public getStateProfileName(state: IStateInfo): string {
+        if (state.value === ProfileStates.AC) {
+            return this.state.getCurrentChargingProfileName();
         }
 
-        const stateProfileId = this.getSettings().stateMap[state.value];
-        const defaultProfileName = this.utils.getDefaultProfileName(stateProfileId);
-        if (defaultProfileName !== undefined) {
-            return defaultProfileName;
-        } else {
-            const profile = this.config.getProfileById(stateProfileId);
-            if (profile !== undefined) {
-                return profile.name;
-            } else {
-                return undefined;
-            }
+        if (state.value === ProfileStates.BAT) {
+            return this.state.getCurrentBatteryProfileName();
         }
     }
 
-    public getProfileLink(state: any) {
-        if (!this.getSettings()) {
-            return 'profile-manager/'
+    public getProfileLink(state: IStateInfo): string {
+        if (state.value === ProfileStates.AC) {
+            return `profile-manager/${this.state.getCurrentChargingProfileId()}`;
         }
-        return 'profile-manager/' + this.getSettings()?.stateMap[state.value]
+
+        if (state.value === ProfileStates.BAT) {
+            return `profile-manager/${this.state.getCurrentBatteryProfileId()}`;
+        }
     }
 }

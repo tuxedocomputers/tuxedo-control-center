@@ -1,3 +1,22 @@
+/*!
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ *
+ * This file is part of TUXEDO Control Center.
+ *
+ * TUXEDO Control Center is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TUXEDO Control Center is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
 .global-settings {
     display: block;
     position: absolute;
@@ -8,28 +27,53 @@
     margin: 0px;
     padding: 0px;
     overflow-y: scroll;
-}
 
-.inner-global-settings {
-    margin: 0 10px 10px 10px;
-}
+    .inner-global-settings {
+        margin: 0 10px 10px 10px;
 
-header {
-    width: 100%;
-    padding-right: 20px;
-    text-align: left;
-    font-size: 1.15em;
-}
+        .title {
+            font-size: 24px;
+        }
 
-content.value {
-    width: 100%;
-    text-align: left;
-    font-weight: bold;
-    font-size: 1.15em;
-}
+        .panel-title {
+            font-size: 18px;
+        }
 
-content.input {
-    flex: 1;
+        .description {
+            font-size: 16px;
+
+            padding-top: 16px;
+            padding-bottom: 16px;
+            text-align: center;
+        }
+
+        .content {
+            .description {
+                font-size: 16px;
+                text-align: left;
+                padding-top: 0px;
+                font-style: oblique;
+            }
+
+            .input {
+                flex: 1;
+            }
+
+            .header {
+                width: 100%;
+                text-align: left;
+                font-size: 16px;
+                font-weight: bold;
+            }
+
+            .value {
+                width: 100%;
+                text-align: left;
+                font-weight: bold;
+                font-size: 16px;
+            }
+        }
+    }
 }
 
 .margin-top {
@@ -47,8 +91,14 @@ content.input {
 .theme-settings-content {
     display: flex;
     justify-content: space-around;
+    margin-bottom: 16px;
+    margin-top: 16px;
 }
 
 .hide {
     display: none;
+}
+
+mat-grid-tile {
+    overflow: visible;
 }

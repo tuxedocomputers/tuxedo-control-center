@@ -1,6 +1,4 @@
 {
     "spec_dir": "./src/service-app",
-    "spec_files": [
-        "**/*spec.ts"
-    ]
+    "spec_files": ["**/*spec.ts"]
 }

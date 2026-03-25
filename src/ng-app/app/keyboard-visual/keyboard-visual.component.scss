@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,31 +16,32 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
- 
+
 .keyboard {
-    width: calc(14/18 * 100%); 
+    width: calc(14 / 18 * 100%);
     margin: 0 auto;
+    height: 100% !important;
 }
 
 .key-group {
-    stroke:darkslategrey;
+    stroke: darkslategrey;
     &.key-background-unselected .key_outline {
-        stroke:darkslategrey;
+        stroke: darkslategrey;
     }
     &.key-background-selected .key_outline {
-        stroke:slategrey;
+        stroke: slategrey;
     }
     &:hover {
         &.key-background-selected .key_outline,
         &.key-background-unselected .key_outline {
-            stroke:LightGrey;
+            stroke: LightGrey;
         }
     }
 }
 
 .unselected {
     opacity: 0.2;
-  }
+}
 
 .selected {
     opacity: 1;

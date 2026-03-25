@@ -1,5 +1,5 @@
 <!--
-Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
 
 This file is part of TUXEDO Control Center.
 
@@ -18,195 +18,157 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
 
 <div class="header">
-    <h1 mat-dialog-title i18n="@@@cProfMgrConflictWindowTitle"> Importing Conflict </h1>
+    <h1 mat-dialog-title i18n="@@cProfMgrConflictWindowTitle">Import conflict</h1>
 </div>
-<div mat-dialog-content >
-    <!--<p class="dialog-message"> There has been an ID conflict between the following two profiles: </p>
-    -->
-    <!--
-        add names of old and new profile and a few infos maybe
-        just copying the html and css of the profile overview etc sadly didn't turn out to be 
-        that easy. So I need to think about something!
+<div mat-dialog-content>
+    <div i18n="@@cProfMgrConflictDescription">A profile with this name already exists. How would you like to proceed?</div>
 
-        Alright, looking at default profiles, I will display the following information:
+    <div class="profile-compare-box">
+        <div class="profile-old">
+            <h1 class="profile" i18n="@@cProfMgrConflictTitleOldProfile">Old profile</h1>
 
-        profile.name: string
-        profile.description: string 
-         if profile.display.useBrightness: boolean
-            then profile.display.brightness: int
-
-        cpu: {
-        onlineCores: undefined,
-        useMaxPerfGov: false,
-        scalingMinFrequency: undefined,
-        scalingMaxFrequency: undefined,
-        governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
-        energyPerformancePreference: 'balance_performance',
-        noTurbo: false
-
-        webcam: {
-        status: true,
-        useStatus: true
-    },
-    fan: {
-        useControl: true,
-        fanProfile: 'Silent',
-        minimumFanspeed: 0,
-        maximumFanspeed: 100,
-        offsetFanspeed: 0
-    },
-
-    => das lassen wir weg
-    odmProfile: { name: undefined },
-    odmPowerLimits: { tdpValues: [5, 10, 15] }
-    -->
-<div class="profile-compare-box">
-    <div style="float:left;">  
-        
-        <h1 class="profile_old_new" i18n="@@@cProfMgrConflictTitleOldProfile"> Old Profile </h1>
-
-        <mat-card class="profile-overview-tile"> 
-            <header>
-                <p class="profile-name"> {{ data.oldProfile.name }} </p>
-            </header>
-            <div class="content">
-                <p class="description">  {{ data.oldProfile.description }} </p>
-            </div>
+            <mat-card class="profile-overview-tile">
+                <header>
+                    <p class="profile-name">{{ data.oldProfile.name }}</p>
+                </header>
+                <div class="content">
+                    <p class="description">{{ data.oldProfile.description }}</p>
+                </div>
                 <div class="status-flexbox">
-
-        
                     <div class="status-component" [class.inactive]="!(data.oldProfile.cpu.onlineCores > 0)">
-                        <svg class="status-icon-container" viewBox="0 0 512 512" >
+                        <svg class="status-icon-container" viewBox="0 0 512 512">
                             <use href="./assets/images/icon_cpu.svg#Icon"></use>
                         </svg>
-                        <p *ngIf="data.oldProfile.cpu.onlineCores > 0" class="status-info"> {{ data.oldProfile.cpu.onlineCores }} Cores </p>
-        
+                        <p *ngIf="data.oldProfile.cpu.onlineCores > 0" class="status-info">{{ data.oldProfile.cpu.onlineCores }} Cores</p>
                     </div>
 
-
                     <div class="status-component" [class.inactive]="!(data.oldProfile.cpu.onlineCores > 0)">
-                        <svg class="status-icon-container" viewBox="0 0 512 512" >
+                        <svg class="status-icon-container" viewBox="0 0 512 512">
                             <use href="./assets/images/icon_speedometer.svg#Icon"></use>
                         </svg>
-                        <p class="status-info" *ngIf="!data.oldProfile.cpu.useMaxPerfGov && (!this.hasMaxFreqWorkaround || data.oldProfile.cpu.scalingMaxFrequency < this.cpuInfo.maxFreq)">{{ formatCpuFrequency(data.oldProfile.cpu.scalingMinFrequency) }} - {{ formatCpuFrequency(data.oldProfile.cpu.scalingMaxFrequency) }} GHz</p>
-                        <p class="status-info" *ngIf="!data.oldProfile.cpu.useMaxPerfGov && !(!this.hasMaxFreqWorkaround || data.oldProfile.cpu.scalingMaxFrequency < this.cpuInfo.maxFreq)">{{ formatCpuFrequency(data.oldProfile.cpu.scalingMinFrequency) }} - Boost</p>
+                        <p class="status-info" *ngIf="!data.oldProfile.cpu.useMaxPerfGov && (!this.hasMaxFreqWorkaround || data.oldProfile.cpu.scalingMaxFrequency < this.cpuInfo.maxFreq)">
+                            {{ formatCpuFrequency(data.oldProfile.cpu.scalingMinFrequency) }} - {{ formatCpuFrequency(data.oldProfile.cpu.scalingMaxFrequency) }} GHz
+                        </p>
+                        <p class="status-info" *ngIf="!data.oldProfile.cpu.useMaxPerfGov && !(!this.hasMaxFreqWorkaround || data.oldProfile.cpu.scalingMaxFrequency < this.cpuInfo.maxFreq)">
+                            {{ formatCpuFrequency(data.oldProfile.cpu.scalingMinFrequency) }} - Boost
+                        </p>
                         <p class="status-info" *ngIf="data.oldProfile.cpu.useMaxPerfGov" i18n="@@cProfMgrOverviewMaxPerf">Max performance</p>
                     </div>
 
-                    <div class="status-component" [class.inactive]="!data.oldProfile.cpu.governor">
-                        <svg class="status-icon-container" viewBox="0 0 512 512" >
+                    <div class="status-component" [class.inactive]="!data.oldProfile.odmProfile.name" *ngIf="compat.hasODMProfileControl && !compat.uwLEDOnlyMode && !compat.getHasSystemProfileInfo()">
+                        <svg class="status-icon-container" viewBox="0 0 512 512">
                             <use href="./assets/images/icon_gear.svg#Icon"></use>
                         </svg>
-                        <p *ngIf="data.oldProfile.cpu.governor" class="status-info"> {{ data.oldProfile.cpu.governor}} </p>
-        
+                        <p *ngIf="data.oldProfile.odmProfile.name" class="status-info">{{ utils.getODMProfileName(data.oldProfile.odmProfile.name) }}</p>
                     </div>
 
-                    <div class="status-component" [class.inactive]="!data.oldProfile.fan.useControl" >
-                        <svg class="status-icon-container" viewBox="0 0 512 512" >
+                    <div class="status-component" [class.inactive]="!data.oldProfile.fan.useControl">
+                        <svg class="status-icon-container" viewBox="0 0 512 512">
                             <use href="./assets/images/icon_fan.svg#Icon"></use>
                         </svg>
-                        <p *ngIf="data.oldProfile.fan.useControl" class="status-info"> {{ data.oldProfile.fan.fanProfile }} </p>
-        
+                        <p *ngIf="data.oldProfile.fan.useControl" class="status-info">{{ utils.getFanProfileName(data.oldProfile.fan.fanProfile) }}</p>
                     </div>
                     <div class="status-component" [class.inactive]="!data.oldProfile.display.useBrightness">
-                        <svg class="status-icon-container" viewBox="0 0 512 512" >
+                        <svg class="status-icon-container" viewBox="0 0 512 512">
                             <use href="./assets/images/icon_monitor.svg#Icon"></use>
                         </svg>
-                        <p *ngIf="data.oldProfile.display.useBrightness" class="status-info"> {{ data.oldProfile.display.brightness }} </p>
+                        <p *ngIf="data.oldProfile.display.useBrightness" class="status-info">{{ data.oldProfile.display.brightness }} %</p>
                     </div>
                     <div class="status-component" [class.inactive]="!data.oldProfile.webcam.status">
-                        <svg class="status-icon-container" viewBox="0 0 512 512" >
+                        <svg class="status-icon-container" viewBox="0 0 512 512">
                             <use href="./assets/images/icon_webcam.svg#Icon"></use>
                         </svg>
-                        <p class="status-info" *ngIf="data.oldProfile.webcam.useStatus && data.oldProfile.webcam.status"> on </p>
-                        <p class="status-info" *ngIf="!data.oldProfile.webcam.useStatus && data.oldProfile.webcam.status"> off </p>
+                        <p class="status-info" *ngIf="data.oldProfile.webcam.useStatus && data.oldProfile.webcam.status" i18n="@@cProfMgrOverviewWebcamStatusOn">On</p>
+                        <p class="status-info" *ngIf="!data.oldProfile.webcam.useStatus && data.oldProfile.webcam.status" i18n="@@cProfMgrOverviewWebcamStatusOff">Off</p>
                     </div>
-        
-
                 </div>
-        </mat-card>
-    </div>
+            </mat-card>
+        </div>
 
-    <div style="float:right;">
-        <h1 class="profile_old_new" i18n="@@@cProfMgrConflictTitleNewProfile"> New Profile </h1>
-        <mat-card class="profile-overview-tile"> 
-            <header>
-                <p class="profile-name"> {{ data.newProfile.name }} </p>
-            </header>
-            <div class="content">
-                <p class="description">  {{ data.newProfile.description }} </p>
-            </div>
+        <div class="profile-new">
+            <h1 class="profile" i18n="@@cProfMgrConflictTitleNewProfile">New profile</h1>
+            <mat-card class="profile-overview-tile">
+                <header>
+                    <p class="profile-name">{{ data.newProfile.name }}</p>
+                </header>
+                <div class="content">
+                    <p class="description">{{ data.newProfile.description }}</p>
+                </div>
                 <div class="status-flexbox">
-
-        
                     <div class="status-component" [class.inactive]="!(data.newProfile.cpu.onlineCores > 0)">
-                        <svg class="status-icon-container" viewBox="0 0 512 512" >
+                        <svg class="status-icon-container" viewBox="0 0 512 512">
                             <use href="./assets/images/icon_cpu.svg#Icon"></use>
                         </svg>
-                        <p *ngIf="data.newProfile.cpu.onlineCores > 0" class="status-info"> {{ data.newProfile.cpu.onlineCores }} Cores </p>
-        
+                        <p *ngIf="data.newProfile.cpu.onlineCores > 0" class="status-info">{{ data.newProfile.cpu.onlineCores }} Cores</p>
                     </div>
-
 
                     <div class="status-component" [class.inactive]="!(data.newProfile.cpu.onlineCores > 0)">
-                        <svg class="status-icon-container" viewBox="0 0 512 512" >
+                        <svg class="status-icon-container" viewBox="0 0 512 512">
                             <use href="./assets/images/icon_speedometer.svg#Icon"></use>
                         </svg>
-                        <span *ngIf="!data.newProfile.cpu.useMaxPerfGov && (!this.hasMaxFreqWorkaround || data.newProfile.cpu.scalingMaxFrequency < this.cpuInfo.maxFreq)">{{ formatCpuFrequency(data.newProfile.cpu.scalingMinFrequency) }} - {{ formatCpuFrequency(data.newProfile.cpu.scalingMaxFrequency) }} GHz</span>
-                        <span *ngIf="!data.newProfile.cpu.useMaxPerfGov && !(!this.hasMaxFreqWorkaround || data.newProfile.cpu.scalingMaxFrequency < this.cpuInfo.maxFreq)">{{ formatCpuFrequency(data.newProfile.cpu.scalingMinFrequency) }} - Boost</span>
-                        <span *ngIf="data.newProfile.cpu.useMaxPerfGov" i18n="@@cProfMgrOverviewMaxPerf">Max performance</span>
+                        <span class="status-info" *ngIf="!data.newProfile.cpu.useMaxPerfGov && (!this.hasMaxFreqWorkaround || data.newProfile.cpu.scalingMaxFrequency < this.cpuInfo.maxFreq)"
+                            >{{ formatCpuFrequency(data.newProfile.cpu.scalingMinFrequency) }} - {{ formatCpuFrequency(data.newProfile.cpu.scalingMaxFrequency) }} GHz</span
+                        >
+                        <span class="status-info" *ngIf="!data.newProfile.cpu.useMaxPerfGov && !(!this.hasMaxFreqWorkaround || data.newProfile.cpu.scalingMaxFrequency < this.cpuInfo.maxFreq)"
+                            >{{ formatCpuFrequency(data.newProfile.cpu.scalingMinFrequency) }} - Boost</span
+                        >
+                        <span class="status-info" *ngIf="data.newProfile.cpu.useMaxPerfGov" i18n="@@cProfMgrOverviewMaxPerf">Max performance</span>
                     </div>
 
-                    <div class="status-component" [class.inactive]="!data.newProfile.cpu.governor">
-                        <svg class="status-icon-container" viewBox="0 0 512 512" >
+                    <div class="status-component" [class.inactive]="!data.newProfile.odmProfile.name" *ngIf="compat.hasODMProfileControl && !compat.uwLEDOnlyMode && !compat.getHasSystemProfileInfo()">
+                        <svg class="status-icon-container" viewBox="0 0 512 512">
                             <use href="./assets/images/icon_gear.svg#Icon"></use>
                         </svg>
-                        <p *ngIf="data.newProfile.cpu.governor" class="status-info"> {{ data.newProfile.cpu.governor}} </p>
-        
+                        <p *ngIf="data.newProfile.odmProfile.name" class="status-info">{{ utils.getODMProfileName(data.newProfile.odmProfile.name) }}</p>
                     </div>
 
-                    <div class="status-component" [class.inactive]="!data.newProfile.fan.useControl" >
-                        <svg class="status-icon-container" viewBox="0 0 512 512" >
+                    <div class="status-component" [class.inactive]="!data.newProfile.fan.useControl">
+                        <svg class="status-icon-container" viewBox="0 0 512 512">
                             <use href="./assets/images/icon_fan.svg#Icon"></use>
                         </svg>
-                        <p *ngIf="data.newProfile.fan.useControl" class="status-info"> {{ data.newProfile.fan.fanProfile }} </p>
-        
+                        <p *ngIf="data.newProfile.fan.useControl" class="status-info">{{ utils.getFanProfileName(data.newProfile.fan.fanProfile) }}</p>
                     </div>
                     <div class="status-component" [class.inactive]="!data.newProfile.display.useBrightness">
-                        <svg class="status-icon-container" viewBox="0 0 512 512" >
+                        <svg class="status-icon-container" viewBox="0 0 512 512">
                             <use href="./assets/images/icon_monitor.svg#Icon"></use>
                         </svg>
-                        <p *ngIf="data.newProfile.display.useBrightness" class="status-info"> {{ data.newProfile.display.brightness }} </p>
+                        <p *ngIf="data.newProfile.display.useBrightness" class="status-info">{{ data.newProfile.display.brightness }} %</p>
                     </div>
                     <div class="status-component" [class.inactive]="!data.newProfile.webcam.status">
-                        <svg class="status-icon-container" viewBox="0 0 512 512" >
+                        <svg class="status-icon-container" viewBox="0 0 512 512">
                             <use href="./assets/images/icon_webcam.svg#Icon"></use>
                         </svg>
-                        <p class="status-info"*ngIf="data.newProfile.webcam.useStatus && data.newProfile.webcam.status"> on </p>
-                        <p class="status-info"*ngIf="!data.newProfile.webcam.useStatus && data.newProfile.webcam.status"> off </p>
+                        <p class="status-info" *ngIf="data.newProfile.webcam.useStatus && data.newProfile.webcam.status" i18n="@@cProfMgrOverviewWebcamStatusOn">On</p>
+                        <p class="status-info" *ngIf="!data.newProfile.webcam.useStatus && data.newProfile.webcam.status" i18n="@@cProfMgrOverviewWebcamStatusOff">Off</p>
                     </div>
-        
-
                 </div>
-        </mat-card>
+            </mat-card>
+        </div>
     </div>
-</div>
 
-<div mat-dialog-actions *ngIf="!rename">
-    <button mat-raised-button color="primary" (click)="action('keepOld')" i18n="@@@cProfMgrConflictButtonKeepOld"> Keep Old </button>
-    <button mat-raised-button color="primary" (click)="action('keepNew')" i18n="@@@cProfMgrConflictButtonKeepNew"> Keep New </button>
-    <button mat-raised-button color="primary" (click)="action('keepBoth')" i18n="@@@cProfMgrConflictButtonKeepBoth"> Keep Both </button>
-    <button mat-raised-button color="primary" (click)="renameProfile()" i18n="@@@cProfMgrConflictButtonRename"> Rename Imported Profile </button>
-    <button mat-raised-button color="basic" (click)="cancel()" i18n="@@@cProfMgrConflictButtonCancel"> Cancel </button>
-</div>
+    <div mat-dialog-actions *ngIf="!rename">
+        <button type="button" mat-stroked-button color="primary" (click)="action('keepNew')" i18n="@@cProfMgrConflictButtonKeepNew">Replace existing profile</button>
+        <button type="button" mat-stroked-button color="primary" (click)="renameProfile()" i18n="@@cProfMgrConflictButtonRename">Rename imported profile</button>
+        <button type="button" mat-stroked-button color="basic" (click)="cancel()" i18n="@@cProfMgrConflictButtonCancel">Cancel</button>
+    </div>
 
-<div mat-dialog-actions *ngIf="rename">
+    <div mat-dialog-actions *ngIf="rename">
         <form (ngSubmit)="submitNewname()">
             <mat-form-field class="new-profile-name-input">
-                <mat-label i18n="@@@cProfMgrConflictFormFieldInputNewName"> Input a new name </mat-label>
-                <input matInput #inputFocus="matInput" type="text" [formControl]="inputNewProfileName" (keyup.esc)="cancelInput()" placeholder="New profile name" minLength="1" maxLength="50" />
+                <mat-label i18n="@@cProfMgrConflictFormFieldInputNewName">Input a new name</mat-label>
+                <input
+                    matInput
+                    #inputFocus="matInput"
+                    type="text"
+                    [formControl]="inputNewProfileName"
+                    (keyup.esc)="cancelInput()"
+                    placeholder="New profile name"
+                    i18n-placeholder="@@cProfMgrConflictNewProfileName"
+                    minLength="1"
+                    maxLength="50" />
             </mat-form-field>
-            <button mat-raised-button color="primary" i18n="@@@cProfMgrConflictButtonSave" [disabled]="profileNameExist(inputFocus.value)">Save</button>
-            <button mat-raised-button color="basic" (click)="cancelRename()" i18n="@@@cProfMgrConflictButtonGoBack"> Go back </button>
+            <button type="button" mat-stroked-button color="primary" i18n="@@cProfMgrConflictButtonSave" [disabled]="profileNameExist(inputFocus.value)">Save</button>
+            <button type="button" mat-stroked-button color="basic" (click)="cancelRename()" i18n="@@cProfMgrConflictButtonGoBack">Go back</button>
         </form>
+    </div>
 </div>

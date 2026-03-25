@@ -1,7 +1,26 @@
+/*!
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ *
+ * This file is part of TUXEDO Control Center.
+ *
+ * TUXEDO Control Center is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TUXEDO Control Center is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+ */
 
-import * as fsp from 'fs/promises';
+import * as child_process from 'node:child_process';
+import * as fsp from 'node:fs/promises';
 import * as util from 'util';
-import * as child_process from 'child_process';
+
 const exec = util.promisify(child_process.exec);
 
 function printResult(topic: string, success: boolean) {
@@ -28,7 +47,6 @@ async function checkRelease(versionToCheck?: string): Promise<boolean> {
 
         printResult('Version in package.json', releaseVersion === mainPackageJSON.version);
         printResult('Version in src/package.json', releaseVersion === startPackageJSON.version);
-
     } catch (err) {
         console.log('Failed to process package.json => ' + err);
         return false;
@@ -37,7 +55,7 @@ async function checkRelease(versionToCheck?: string): Promise<boolean> {
     // Check last changelog version entry
     try {
         const changelog = (await fsp.readFile('CHANGELOG.md')).toString();
-        let result = changelog.match(/\[(.*?)\]/);
+        const result = changelog.match(/\[(.*?)\]/);
         printResult('Version in changelog', releaseVersion === result[1]);
     } catch (err) {
         console.log('Failed to process changelog => ' + err);
@@ -48,11 +66,11 @@ async function checkRelease(versionToCheck?: string): Promise<boolean> {
     let tagCheck = true;
     try {
         const searchedTagName = `v${releaseVersion}`;
-        let result = await exec(`git tag -l "${searchedTagName}" -n1`);
-        let match = result.stdout.match(/^(\S*)\s*(.*)/);
+        const result = await exec(`git tag -l "${searchedTagName}" -n1`);
+        const match = result.stdout.match(/^(\S*)\s*(.*)/);
         if (match.length >= 3) {
-            let tagName = match[1].trim();
-            let tagMessage = match[2].trim();
+            const tagName = match[1].trim();
+            const tagMessage = match[2].trim();
 
             if (tagName !== searchedTagName) {
                 tagCheck = false;
@@ -61,7 +79,6 @@ async function checkRelease(versionToCheck?: string): Promise<boolean> {
             if (tagMessage !== `Version ${releaseVersion}`) {
                 tagCheck = false;
             }
-
         } else {
             tagCheck = false;
         }
@@ -76,7 +93,7 @@ async function checkRelease(versionToCheck?: string): Promise<boolean> {
     return true;
 }
 
-checkRelease().then(success => {
+checkRelease().then((success) => {
     if (success) {
         process.exit(0);
     } else {

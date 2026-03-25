@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2024 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,7 +16,8 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
+
+import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
 export abstract class DaemonListener {
     constructor(protected tccd: TuxedoControlCenterDaemon) {}

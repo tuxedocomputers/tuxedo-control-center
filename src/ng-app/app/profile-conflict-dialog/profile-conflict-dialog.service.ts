@@ -1,7 +1,5 @@
-
-
 /*!
- * Copyright (c) 2019-2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -20,58 +18,57 @@
  */
 
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ProfileConflictComponent, IProfileConflictDialogResult } from "./profile-conflict-dialog.component";
-import { map, max, take } from 'rxjs/operators';
-import { ITccProfile } from 'src/common/models/TccProfile';
-
-
-
+// biome-ignore lint: deb does build with type, but creates constructor not compatible with dependency injection error
+import { MatDialog, type MatDialogRef } from '@angular/material/dialog';
+import type { Observable } from 'rxjs';
+import { map, take } from 'rxjs/operators';
+import type { ITccProfile } from '../../../common/models/TccProfile';
+import { type IProfileConflictDialogResult, ProfileConflictComponent } from './profile-conflict-dialog.component';
 
 @Injectable()
-export class ProfileConflictDialogService {  
-  
-    constructor(private dialog: MatDialog) { }  
+export class ProfileConflictDialogService {
+    constructor(private dialog: MatDialog) {}
     dialogRef: MatDialogRef<ProfileConflictComponent>;
-  
-  private open(oldProfile: ITccProfile, newProfile: ITccProfile) 
-  {
-    this.dialogRef = this.dialog.open(ProfileConflictComponent, {    
-        data: {
-          oldProfile: oldProfile,
-          newProfile: newProfile
-        }
-   }); 
-  }    
 
-
-
-  private closed(): Observable<IProfileConflictDialogResult> 
-  {
-    return this.dialogRef.afterClosed().pipe(take(1), map(res => {
-        return res;
-      }
-    ));
-  }
-
-  public async openConflictModal(oldProfile: ITccProfile, importedProfile: ITccProfile,)
-    {
-        return new Promise<IProfileConflictDialogResult>((resolve, reject) => {
-            this.open(oldProfile,importedProfile);
-
-            this.closed().subscribe(confirmed => {
-                if (confirmed) {
-                  resolve(confirmed);
-                }
-                else
-                {
-                    reject({"action":"canceled","newName":""});
-                }
-             });
-
+    private open(oldProfile: ITccProfile, newProfile: ITccProfile): void {
+        this.dialogRef = this.dialog.open(ProfileConflictComponent, {
+            data: {
+                oldProfile: oldProfile,
+                newProfile: newProfile,
+            },
+            minWidth: 800,
+            maxWidth: 800,
         });
     }
 
+    private closed(): Observable<IProfileConflictDialogResult> {
+        return this.dialogRef.afterClosed().pipe(
+            take(1),
+            map((res: IProfileConflictDialogResult): IProfileConflictDialogResult => {
+                return res;
+            }),
+        );
+    }
 
+    public async openConflictModal(
+        oldProfile: ITccProfile,
+        importedProfile: ITccProfile,
+    ): Promise<IProfileConflictDialogResult> {
+        return new Promise<IProfileConflictDialogResult>(
+            (
+                resolve: (value: IProfileConflictDialogResult | PromiseLike<IProfileConflictDialogResult>) => void,
+                reject: (reason?: unknown) => void,
+            ): void => {
+                this.open(oldProfile, importedProfile);
+
+                this.closed().subscribe((confirmed: IProfileConflictDialogResult): void => {
+                    if (confirmed) {
+                        resolve(confirmed);
+                    } else {
+                        reject({ action: 'canceled', newName: '' });
+                    }
+                });
+            },
+        );
+    }
 }

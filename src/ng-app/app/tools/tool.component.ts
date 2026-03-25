@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -17,26 +17,28 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, OnInit } from '@angular/core';
+import { Component, type OnInit } from '@angular/core';
+// biome-ignore lint: injection token
 import { ActivatedRoute, Router } from '@angular/router';
+// biome-ignore lint: injection token
 import { CompatibilityService } from '../compatibility.service';
 
 @Component({
     selector: 'app-tools',
     templateUrl: './tools.component.html',
-    styleUrls: ['./tools.component.scss']
+    styleUrls: ['./tools.component.scss'],
+    standalone: false,
 })
 export class ToolsComponent implements OnInit {
     constructor(
         public compat: CompatibilityService,
         private router: Router,
-        private route: ActivatedRoute) {}
+        private route: ActivatedRoute,
+    ) {}
 
-    ngOnInit() {
-        
-    }
+    public ngOnInit(): void {}
 
-    gotoComponent(component: string) {
-        this.router.navigate([ component ], { relativeTo: this.route.parent });
+    public gotoComponent(component: string): void {
+        this.router.navigate([component], { relativeTo: this.route.parent });
     }
 }

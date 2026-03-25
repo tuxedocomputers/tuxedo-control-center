@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -17,29 +17,32 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { Component, OnInit } from '@angular/core';
-import { ConfigService } from '../config.service';
-import { UtilsService } from '../utils.service';
-import { Subscription } from 'rxjs';
-import { TccDBusClientService } from '../tcc-dbus-client.service';
+import { Component, type OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import type { MatCheckboxChange } from '@angular/material/checkbox';
+// biome-ignore lint: injection token
 import { ActivatedRoute, Router } from '@angular/router';
-import { AvailabilityService } from "../../../common/classes/availability.service";
+import { Mutex } from 'async-mutex';
+import { firstValueFrom, Subscription } from 'rxjs';
+import { GridParamsSettings, type IGridParams } from '../../../common/models/IGridParams';
+import type { BrightnessModeString } from '../../../e-app/backendAPIs/brightnessAPI';
+// biome-ignore lint: injection token
+import { ConfigService } from '../config.service';
+// biome-ignore lint: injection token
+import { TccDBusClientService } from '../tcc-dbus-client.service';
+// biome-ignore lint: injection token
+import { UtilsService } from '../utils.service';
 
 @Component({
     selector: 'app-global-settings',
     templateUrl: './global-settings.component.html',
-    styleUrls: ['./global-settings.component.scss']
+    styleUrls: ['./global-settings.component.scss'],
+    standalone: false,
 })
 export class GlobalSettingsComponent implements OnInit {
-    Object = Object;
+    Object: ObjectConstructor = Object;
 
-    public gridParams = {
-        cols: 9,
-        headerSpan: 4,
-        valueSpan: 2,
-        inputSpan: 3
-    };
+    public gridParams: IGridParams = GridParamsSettings;
 
     public cpuSettingsEnabled: boolean = true;
     public fanControlEnabled: boolean = true;
@@ -47,14 +50,18 @@ export class GlobalSettingsComponent implements OnInit {
     public forceYUV420OutputSwitchAvailable: boolean = false;
     public ycbcr420Workaround: Array<Object> = [];
     public temperatureDisplayFahrenheit: boolean;
-    public ctrlBrightnessMode = new FormControl();
+    public ctrlBrightnessMode: FormControl = new FormControl();
 
-    public hasChargingSettings = false;
+    public hasChargingSettings: boolean = false;
 
     private subscriptions: Subscription = new Subscription();
 
-    public primeState: string = "iGPU";
-    public expandPrimeSelect: Boolean = false;
+    public primeState: string = 'iGPU';
+    public expandPrimeSelect: boolean = false;
+    public aptInstalled: boolean = false;
+
+    public chargingProfilesUrlHref: string = $localize`:@@chargingProfilesInfoLinkHref:https\://www.tuxedocomputers.com/en/Battery-charging-profiles-inside-the-TUXEDO-Control-Center.tuxedo`;
+    private mutex: Mutex = new Mutex();
 
     constructor(
         private config: ConfigService,
@@ -62,142 +69,190 @@ export class GlobalSettingsComponent implements OnInit {
         private tccdbus: TccDBusClientService,
         private router: Router,
         private route: ActivatedRoute,
-        public availability: AvailabilityService
-    ) { }
+    ) {}
 
-    ngOnInit() {
-        this.setValuesFromResolverRoute();
-    
-        const routingFromDashboard = this.route.snapshot.paramMap.get("routingFromDashboard");
+    // todo: move this.config.getSettings() into a variable in every function, too many calls
+    public ngOnInit(): void {
+        this.setVariablesWithRouteSnapshot();
+
+        const routingFromDashboard: string = this.route.snapshot.paramMap.get('routingFromDashboard');
         if (routingFromDashboard) {
             this.expandPrimeSelect = true;
         }
 
-        this.subscriptions.add(this.tccdbus.forceYUV420OutputSwitchAvailable.subscribe(
-            forceYUV420OutputSwitchAvailable => { this.forceYUV420OutputSwitchAvailable = forceYUV420OutputSwitchAvailable; }
-        ));
+        this.subscriptions.add(
+            this.tccdbus.forceYUV420OutputSwitchAvailable.subscribe(
+                (forceYUV420OutputSwitchAvailable: boolean): void => {
+                    if (forceYUV420OutputSwitchAvailable) {
+                        this.forceYUV420OutputSwitchAvailable = forceYUV420OutputSwitchAvailable;
+                    }
+                },
+            ),
+        );
 
         this.cpuSettingsEnabled = this.config.getSettings().cpuSettingsEnabled;
-        this.temperatureDisplayFahrenheit = this.config.getSettings().fahrenheit;
+        this.temperatureDisplayFahrenheit = this.config?.getSettings()?.fahrenheit ?? false;
         this.fanControlEnabled = this.config.getSettings().fanControlEnabled;
         this.keyboardBacklightControlEnabled = this.config.getSettings().keyboardBacklightControlEnabled;
-        for (let card = 0; card < this.config.getSettings().ycbcr420Workaround.length; card++) {
+        for (let card: number = 0; card < this.config.getSettings().ycbcr420Workaround?.length; card++) {
             this.ycbcr420Workaround[card] = {};
-            for (let port in this.config.getSettings().ycbcr420Workaround[card]) {
+            for (const port in this.config.getSettings().ycbcr420Workaround[card]) {
                 this.ycbcr420Workaround[card][port] = this.config.getSettings().ycbcr420Workaround[card][port];
             }
         }
 
-        this.utils.getBrightnessMode().then((mode) => { this.ctrlBrightnessMode.setValue(mode) });
+        this.utils.getBrightnessMode().then((mode: BrightnessModeString): void => {
+            this.ctrlBrightnessMode.setValue(mode);
+        });
     }
 
-    setValuesFromResolverRoute() {
+    private setVariablesWithRouteSnapshot(): void {
         const paramMap = this.route.snapshot.paramMap;
         const data = this.route.snapshot.data;
 
-        const routingFromDashboard = paramMap.get("routingFromDashboard");
+        const routingFromDashboard: string = paramMap.get('routingFromDashboard');
         this.expandPrimeSelect = Boolean(routingFromDashboard);
 
-        this.forceYUV420OutputSwitchAvailable =
-            data.forceYUV420OutputSwitchAvailable;
+        this.forceYUV420OutputSwitchAvailable = data.forceYUV420OutputSwitchAvailable;
 
         this.hasChargingSettings =
-            Array.isArray(data.chargingProfilesAvailable) &&
-            data.chargingProfilesAvailable.length > 0;
+            Array.isArray(data.chargingProfilesAvailable) && data.chargingProfilesAvailable?.length > 0;
 
         this.primeState = data.primeSelectAvailable;
-    }
-    
-    onCPUSettingsEnabledChanged(event: any) {
-        this.utils.pageDisabled = true;
 
-        this.config.getSettings().cpuSettingsEnabled = event.checked;
-        
-        this.config.saveSettings().then(success => {
-            if (!success) {
-                this.config.getSettings().cpuSettingsEnabled = !event.checked;
-            }
-            
-            this.cpuSettingsEnabled = this.config.getSettings().cpuSettingsEnabled
-
-            this.utils.pageDisabled = false;
-        });
+        this.aptInstalled = data.aptInstalled;
     }
 
-    onTemperatureDisplayChanged(event: boolean) {
-        this.utils.pageDisabled = true;
-        this.config.getSettings().fahrenheit = event;
-        this.config.saveSettings().then(success => {
-            if (!success) {
-                this.config.getSettings().fahrenheit = !event;
-            }
-            
-            this.temperatureDisplayFahrenheit = this.config.getSettings().fahrenheit
-
-            this.utils.pageDisabled = false;
-        });
-    }
-
-    onFanControlEnabledChanged(event: any) {
-        this.utils.pageDisabled = true;
-
-        this.config.getSettings().fanControlEnabled = event.checked;
-        
-        this.config.saveSettings().then(success => {
-            if (!success) {
-                this.config.getSettings().fanControlEnabled = !event.checked;
-            }
-
-            this.fanControlEnabled = this.config.getSettings().fanControlEnabled;
-
-            this.utils.pageDisabled = false;
-        });
-    }
-
-    onKeyboardBacklightControlEnabledChanged(event: any) {
-        this.utils.pageDisabled = true;
-
-        this.config.getSettings().keyboardBacklightControlEnabled = event.checked;
-        
-        this.config.saveSettings().then(success => {
-            if (!success) {
-                this.config.getSettings().keyboardBacklightControlEnabled = !event.checked;
-            }
-
-            this.keyboardBacklightControlEnabled = this.config.getSettings().keyboardBacklightControlEnabled;
-
-            this.utils.pageDisabled = false;
-        });
-    }
-
-    onYCbCr420WorkaroundChanged(event: any, card: number, port: string) {
-        if (this.config.getSettings().ycbcr420Workaround.length > card && port in this.config.getSettings().ycbcr420Workaround[card]) {
+    public async onCPUSettingsEnabledChanged(event: MatCheckboxChange): Promise<void> {
+        await this.mutex.runExclusive(async (): Promise<void> => {
             this.utils.pageDisabled = true;
 
-            this.config.getSettings().ycbcr420Workaround[card][port] = event.checked;
+            this.config.getSettings().cpuSettingsEnabled = event.checked;
 
-            this.config.saveSettings().then(success => {
+            this.config.saveSettings().then(async (success: boolean): Promise<void> => {
                 if (!success) {
-                    this.config.getSettings().ycbcr420Workaround[card][port] = !event.checked;
-                    this.ycbcr420Workaround[card][port] = !event.checked;
+                    this.config.getSettings().cpuSettingsEnabled = !event.checked;
                 }
 
-                this.ycbcr420Workaround[card][port] = this.config.getSettings().ycbcr420Workaround[card][port];
+                await firstValueFrom(this.tccdbus.dbusAvailable);
+                this.config.updateConfigData();
+
+                this.cpuSettingsEnabled = this.config.getSettings().cpuSettingsEnabled;
 
                 this.utils.pageDisabled = false;
             });
-        }
+        });
     }
 
-    public async onBrightnessModeCtrlChange() {
+    public async onTemperatureDisplayChanged(event: boolean): Promise<void> {
+        await this.mutex.runExclusive(async (): Promise<void> => {
+            this.utils.pageDisabled = true;
+            this.config.getSettings().fahrenheit = event;
+            this.config.saveSettings().then(async (success: boolean): Promise<void> => {
+                if (!success) {
+                    this.config.getSettings().fahrenheit = !event;
+                }
+
+                await firstValueFrom(this.tccdbus.dbusAvailable);
+                this.config.updateConfigData();
+
+                this.temperatureDisplayFahrenheit = this.config?.getSettings()?.fahrenheit ?? false;
+
+                this.utils.pageDisabled = false;
+            });
+        });
+    }
+
+    public async onFanControlEnabledChanged(event: MatCheckboxChange): Promise<void> {
+        await this.mutex.runExclusive(async (): Promise<void> => {
+            this.utils.pageDisabled = true;
+
+            this.config.getSettings().fanControlEnabled = event.checked;
+
+            this.config.saveSettings().then(async (success: boolean): Promise<void> => {
+                if (!success) {
+                    this.config.getSettings().fanControlEnabled = !event.checked;
+                }
+
+                await firstValueFrom(this.tccdbus.dbusAvailable);
+                this.config.updateConfigData();
+
+                this.fanControlEnabled = this.config.getSettings().fanControlEnabled;
+
+                this.utils.pageDisabled = false;
+            });
+        });
+    }
+
+    public async onKeyboardBacklightControlEnabledChanged(event: MatCheckboxChange): Promise<void> {
+        await this.mutex.runExclusive(async (): Promise<void> => {
+            this.utils.pageDisabled = true;
+
+            this.config.getSettings().keyboardBacklightControlEnabled = event.checked;
+
+            this.config.saveSettings().then(async (success: boolean): Promise<void> => {
+                if (!success) {
+                    this.config.getSettings().keyboardBacklightControlEnabled = !event.checked;
+                }
+
+                await firstValueFrom(this.tccdbus.dbusAvailable);
+                this.config.updateConfigData();
+
+                this.keyboardBacklightControlEnabled = this.config.getSettings().keyboardBacklightControlEnabled;
+
+                this.utils.pageDisabled = false;
+            });
+        });
+    }
+
+    public async onYCbCr420WorkaroundChanged(event: MatCheckboxChange, card: number, port: string): Promise<void> {
+        await this.mutex.runExclusive(async (): Promise<void> => {
+            if (
+                this.config.getSettings().ycbcr420Workaround?.length > card &&
+                port in this.config.getSettings().ycbcr420Workaround[card]
+            ) {
+                this.utils.pageDisabled = true;
+
+                this.config.getSettings().ycbcr420Workaround[card][port] = event.checked;
+
+                this.config.saveSettings().then(async (success: boolean): Promise<void> => {
+                    if (!success) {
+                        this.config.getSettings().ycbcr420Workaround[card][port] = !event.checked;
+                        this.ycbcr420Workaround[card][port] = !event.checked;
+                    }
+
+                    await firstValueFrom(this.tccdbus.dbusAvailable);
+                    this.config.updateConfigData();
+
+                    this.ycbcr420Workaround[card][port] = this.config.getSettings().ycbcr420Workaround[card][port];
+
+                    this.utils.pageDisabled = false;
+                });
+            }
+        });
+    }
+
+    public async onBrightnessModeCtrlChange(): Promise<void> {
         await this.utils.setBrightnessMode(this.ctrlBrightnessMode.value);
     }
 
-    public gotoComponent(component: string) {
+    public gotoComponent(component: string): void {
         this.router.navigate([component], { relativeTo: this.route.parent });
     }
 
-    public onPrimeStateChanged(newPrimeState: string) {
+    public onPrimeStateChanged(newPrimeState: string): void {
         this.primeState = newPrimeState;
+    }
+
+    public isDGpuAvailable(): boolean {
+        return window.power.isDGpuAvailable();
+    }
+
+    public isIGpuAvailable(): boolean {
+        return window.power.isIGpuAvailable();
+    }
+
+    public async openExternalUrl(url: string): Promise<void> {
+        await this.utils.openExternal(url);
     }
 }

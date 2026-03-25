@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,55 +16,56 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import * as fs from 'fs';
-import * as process from 'process';
+
+import * as fs from 'node:fs';
+import * as process from 'node:process';
 
 export class SingleProcess {
-
-    constructor(private pidPath: string) { }
+    constructor(private pidPath: string) {}
 
     /**
      * Start process
      */
     protected async start(): Promise<boolean> {
-        return new Promise<boolean>(resolve => {
-            if (this.isRunning()) {
-                resolve(false);
-            } else {
-                const result = this.writePid(process.pid);
-                resolve(result);
-            }
-        });
+        if (this.isRunning()) {
+            return false;
+        } else {
+            const result: boolean = this.writePid(process.pid);
+            return result;
+        }
     }
 
     /**
      * Stop process
      */
     protected async stop(): Promise<boolean> {
-        return new Promise<boolean>(async resolve => {
-            const pid = this.readPid();
+        const pid: number = this.readPid();
 
-            if (!isNaN(pid)) { // If there is a PID in file
-                if (this.isRunning()) {
-                    try {
-                        process.kill(pid, 'SIGINT');
-                    } catch (err) {
-                        resolve(false);
-                    }
+        if (!Number.isNaN(pid)) {
+            // If there is a PID in file
+            if (this.isRunning()) {
+                try {
+                    process.kill(pid, 'SIGINT');
+                } catch (err: unknown) {
+                    console.error(`SingleProcess: stop failed => ${err}`);
+                    return false;
                 }
             }
+        }
 
-            // Stay a while... and listen, if process quits in time
-            const nrRetries = 50;
-            const retryDelay = 100;
-            let count = 0;
-            while (this.isRunning() && count < nrRetries) { await new Promise(done => setTimeout(done, retryDelay)); count += 1; }
-            if (count >= nrRetries) {
-                resolve(false);
-            } else {
-                resolve(true);
-            }
-        });
+        // Stay a while... and listen, if process quits in time
+        const nrRetries: number = 50;
+        const retryDelay: number = 100;
+        let count: number = 0;
+        while (this.isRunning() && count < nrRetries) {
+            await new Promise((done) => setTimeout(done, retryDelay));
+            count += 1;
+        }
+        if (count >= nrRetries) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     /**
@@ -78,7 +79,8 @@ export class SingleProcess {
         try {
             fs.writeFileSync(this.pidPath, pid.toString());
             return true;
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error(`SingleProcess: writePid failed => ${err}`);
             return false;
         }
     }
@@ -90,10 +92,15 @@ export class SingleProcess {
      */
     protected readPid(): number {
         try {
-            const strPid = fs.readFileSync(this.pidPath);
-            const intPid = parseInt(strPid.toString(), 10);
-            return intPid;
-        } catch (err) {
+            const available: boolean = fs.existsSync(this.pidPath);
+            if (available) {
+                const strPid: Buffer = fs.readFileSync(this.pidPath);
+                const intPid: number = Number.parseInt(strPid.toString(), 10);
+                return intPid;
+            }
+            return Number.NaN;
+        } catch (err: unknown) {
+            console.error(`SingleProcess: readPid failed => ${err}`);
             return Number.NaN;
         }
     }
@@ -103,14 +110,17 @@ export class SingleProcess {
      *
      * @returns True if successful, false if not or if the file does not exist
      */
+    /*
     private removePid(): boolean {
         try {
             fs.unlinkSync(this.pidPath);
             return true;
-        } catch (err) {
+        } catch (err: unknown) {
+            console.error(`SingleProcess: removePid failed => ${err}`)
             return false;
         }
     }
+    */
 
     /**
      * Check if process is running
@@ -118,16 +128,16 @@ export class SingleProcess {
      * @returns True if PID file is found and process is running, false otherwise
      */
     private isRunning(): boolean {
-        let isRunning = true;
+        let isRunning: boolean = true;
 
-        const intPid = this.readPid();
-        if (isNaN(intPid)) {
+        const intPid: number = this.readPid();
+        if (Number.isNaN(intPid)) {
             isRunning = false;
         } else {
-            // There is a number in the file, now check if it's really in use
             try {
-                process.kill(intPid, 0);
-            } catch (err) {
+                return fs.existsSync(`/proc/${intPid}`);
+            } catch (err: unknown) {
+                console.error(`SingleProcess: isRunning failed => ${err}`);
                 isRunning = false;
             }
         }

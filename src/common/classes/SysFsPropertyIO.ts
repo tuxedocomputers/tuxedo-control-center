@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2019-2023 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,9 +16,14 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import * as fs from 'fs';
-import { promises as fsp} from 'fs';
-import { ISysFsProperty } from '../models/IDeviceProperty';
+
+// biome-ignore lint: "node:fs" wasn't found because this file is in the common folder
+const fs: typeof import('fs') = require('fs');
+// biome-ignore lint: "node:fs" wasn't found because this file is in the common folder
+const fsp: typeof import('fs').promises = require('fs').promises;
+
+import type { FSWatcher } from 'node:fs';
+import type { ISysFsProperty } from '../models/IDeviceProperty';
 
 /**
  * Base (abstract) IO class for communicating with devices in /sys
@@ -35,8 +40,10 @@ import { ISysFsProperty } from '../models/IDeviceProperty';
  * a class controlling/reading a device.
  */
 export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
-
-    constructor(readonly readPath: string, readonly writePath: string = readPath) {}
+    constructor(
+        readonly readPath: string,
+        readonly writePath: string = readPath,
+    ) {}
 
     protected abstract convertStringToType(value: string): T;
     protected abstract convertTypeToString(value: T): string;
@@ -51,8 +58,8 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
         try {
             const readValue: string = fs.readFileSync(this.readPath, { flag: 'r' }).toString();
             return this.convertStringToType(readValue);
-        } catch (err) {
-            throw Error('Could not read value from path: ' + this.readPath + ' => ' + err);
+        } catch (err: unknown) {
+            throw Error(`SysFsPropertyIO: Could not read value from path: ${this.readPath} => ${err}`);
         }
     }
 
@@ -63,8 +70,8 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
         try {
             const readValue: string = (await fsp.readFile(this.readPath, { flag: 'r' })).toString();
             return this.convertStringToType(readValue);
-        } catch (err) {
-            throw Error('Could not read value from path: ' + this.readPath + ' => ' + err);
+        } catch (err: unknown) {
+            throw Error(`SysFsPropertyIO: Could not read value from path: ${this.readPath} => ${err}`);
         }
     }
 
@@ -78,7 +85,7 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
         try {
             const readValue: string = fs.readFileSync(this.readPath, { flag: 'r' }).toString();
             return this.convertStringToType(readValue);
-        } catch (err) {
+        } catch (_err: unknown) {
             return undefined;
         }
     }
@@ -89,7 +96,7 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
     public async readValueNTA(): Promise<T> {
         try {
             return await this.readValueA();
-        } catch (err) {
+        } catch (_err: unknown) {
             return undefined;
         }
     }
@@ -100,28 +107,28 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
      *
      * @param value Value in the appropriate type to write
      */
-    public writeValue(value: T) {
-        const stringValue = this.convertTypeToString(value);
+    public writeValue(value: T): void {
+        const stringValue: string = this.convertTypeToString(value);
         try {
             if (!fs.existsSync(this.writePath)) {
-                throw Error('Could not write value, no file found: ' + this.writePath);
+                throw Error(`SysFsPropertyIO: Could not write value, no file found: ${this.writePath}`);
             } else {
                 fs.writeFileSync(this.writePath, stringValue, { flag: 'w' });
             }
-        } catch (err) {
-            throw Error('Could not write value \'' + stringValue + '\' to path: ' + this.writePath + ' => ' + err);
+        } catch (err: unknown) {
+            throw Error(`SysFsPropertyIO: Could not write value '${stringValue}' to path: ${this.writePath} => ${err}`);
         }
     }
 
     /**
      * Async version of writeValue
      */
-    public async writeValueA(value: T) {
-        const stringValue = this.convertTypeToString(value);
+    public async writeValueA(value: T): Promise<void> {
+        const stringValue: string = this.convertTypeToString(value);
         try {
             return await fsp.writeFile(this.writePath, stringValue, { flag: 'w' });
-        } catch (err) {
-            throw Error('Could not write value \'' + stringValue + '\' to path: ' + this.writePath + ' => ' + err);
+        } catch (err: unknown) {
+            throw Error(`SysFsPropertyIO: Could not write value '${stringValue}' to path: ${this.writePath} => ${err}`);
         }
     }
 
@@ -136,7 +143,7 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
             } else {
                 return false;
             }
-        } catch (err) {
+        } catch (_err: unknown) {
             return false;
         }
     }
@@ -146,9 +153,10 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
      */
     public isWritable(): boolean {
         try {
+            // file access implementation requires an error to be thrown if check resulted in flag mismatch
             fs.accessSync(this.writePath, fs.constants.W_OK);
             return true;
-        } catch (err) {
+        } catch (_err: unknown) {
             return false;
         }
     }
@@ -158,9 +166,10 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
      */
     public isReadable(): boolean {
         try {
+            // file access implementation requires an error to be thrown if check resulted in flag mismatch
             fs.accessSync(this.readPath, fs.constants.R_OK);
             return true;
-        } catch (err) {
+        } catch (_err: unknown) {
             return false;
         }
     }
@@ -168,11 +177,12 @@ export abstract class SysFsPropertyIO<T> implements ISysFsProperty {
     /**
      * Set a callback on changes to value
      */
-    public setFSWatchListener(listener: (event: "rename" | "change", filename: string) => any): Array<fs.FSWatcher> {
-        if (this.readPath == this.writePath) {
+    public setFSWatchListener(
+        listener: (event: 'rename' | 'change', filename: string) => Array<FSWatcher>,
+    ): Array<FSWatcher> {
+        if (this.readPath === this.writePath) {
             return [fs.watch(this.readPath, listener)];
-        }
-        else {
+        } else {
             return [fs.watch(this.readPath, listener), fs.watch(this.readPath, listener)];
         }
     }

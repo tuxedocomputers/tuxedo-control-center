@@ -1,5 +1,5 @@
 /*!
- * Copyright (c) 2022 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
  *
  * This file is part of TUXEDO Control Center.
  *
@@ -16,28 +16,33 @@
  * You should have received a copy of the GNU General Public License
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
-import * as path from 'path';
-import * as fs from 'fs';
+
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 import * as xliff from 'xliff';
-import { DefaultProfileIDs, IProfileTextMappings, LegacyDefaultProfileIDs } from '../common/models/DefaultProfiles';
+import {
+    DefaultProfileIDs,
+    type IProfileTextMappings,
+    LegacyDefaultProfileIDs,
+} from '../common/models/DefaultProfiles';
 
 /**
  * Loading of angular generated translation files. Workaround
  * to be able to read translatable strings (in render process)
  * from main process.
- * 
+ *
  * Ex:
  * const tr = new NgTranslations();
  * try {
  *    await tr.loadLanguage('de');
  *    console.log('translation example: ' + tr.idToString('profileDescHighPerformance'));
- * } catch (err) {
+ * } catch (err: unknown) {
  *    console.log('Failed loading translation => ' + err);
  *    const fallbackLangId = 'en';
  *    console.log('fallback to \'' + fallbackLangId + '\'');
  *    try {
  *        await tr.loadLanguage('en');
- *    } catch (err) {
+ *    } catch (err: unknown) {
  *        console.log('Failed loading fallback translation => ' + err);
  *    }
  * }
@@ -54,9 +59,9 @@ export class NgTranslations {
             throw new Error('No original loaded');
         }
 
-        let translation: string = undefined;
-        const chosenLangLookup = this.translationMap.get(id);
-        const originalLangLookup = this.translationMapOriginal.get(id);
+        let translation: string;
+        const chosenLangLookup: string = this.translationMap.get(id);
+        const originalLangLookup: string = this.translationMapOriginal.get(id);
 
         if (chosenLangLookup !== undefined) {
             translation = chosenLangLookup;
@@ -67,8 +72,8 @@ export class NgTranslations {
         return translation;
     }
 
-    public async loadLanguage(langId?: string) {
-        const fileName = 'lang.' + langId + '.xlf';
+    public async loadLanguage(langId?: string): Promise<void> {
+        const fileName: string = `lang.${langId}.xlf`;
         if (langId !== undefined) {
             this.translationMap = await this.loadFile(fileName);
         }
@@ -76,31 +81,46 @@ export class NgTranslations {
     }
 
     private loadFile(fileName: string, target?: string): Promise<Map<string, string>> {
-        return new Promise<Map<string, string>>((resolve, reject) => {
-            let xlfPath = path.join(__dirname, '..', '..', 'ng-app', 'en-US', 'assets', 'locale', fileName);
-            fs.readFile(xlfPath, (err, xmlBuffer) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    xliff.xliff12ToJs(xmlBuffer.toString(), (err, jsXlf) => {
-                        if (err) {
-                            reject(err);
-                        } else {
-                            try {
-                                resolve(this.parseJS(jsXlf, target));
-                            } catch (err) {
-                                reject(err);
+        const xlfPath: string = path.join(
+            __dirname,
+            '..',
+            '..',
+            'ng-app',
+            'browser',
+            'en-US',
+            'assets',
+            'locale',
+            fileName,
+        );
+        return new Promise<Map<string, string>>(
+            (
+                resolve: (value: Map<string, string> | PromiseLike<Map<string, string>>) => void,
+                reject: (reason?: unknown) => void,
+            ): void => {
+                fs.readFile(xlfPath, (err: unknown, xmlBuffer: Buffer): void => {
+                    if (err) {
+                        reject(`NgTranslations: loadFile readFile failed => ${err}`);
+                    } else {
+                        xliff.xliff12ToJs(xmlBuffer.toString(), (err: unknown, jsXlf: any): void => {
+                            if (err) {
+                                reject(`NgTranslations: loadFile xliff12ToJs failed => ${err}`);
+                            } else {
+                                try {
+                                    resolve(this.parseJS(jsXlf, target));
+                                } catch (err: unknown) {
+                                    reject(`NgTranslations: loadFile parseJS failed => ${err}`);
+                                }
                             }
-                        }
-                    });
-                }
-            });
-        });
+                        });
+                    }
+                });
+            },
+        );
     }
 
     private parseJS(jsXlfObj: any, property?: string): Map<string, string> {
         const langMap = new Map<string, string>();
-        const entries = jsXlfObj['resources']['ng2.template'];
+        const entries: any = jsXlfObj['resources']['ng2.template'];
         if (property === undefined) {
             property = 'target';
         }
@@ -111,12 +131,23 @@ export class NgTranslations {
     }
 }
 
-export const profileIdToI18nId = new Map<string, IProfileTextMappings>()
-    .set(DefaultProfileIDs.MaxEnergySave, { name: 'profileNamePowersaveExtreme', description: 'profileDescPowersaveExtreme' })
+export const profileIdToI18nId: Map<string, IProfileTextMappings> = new Map<string, IProfileTextMappings>()
+    .set(DefaultProfileIDs.MaxEnergySave, {
+        name: 'profileNamePowersaveExtreme',
+        description: 'profileDescPowersaveExtreme',
+    })
     .set(DefaultProfileIDs.Quiet, { name: 'profileNameQuiet', description: 'profileDescQuiet' })
     .set(DefaultProfileIDs.Office, { name: 'profileNameOffice', description: 'profileDescOffice' })
-    .set(DefaultProfileIDs.HighPerformance, { name: 'profileNameHighPerformance', description: 'profileDescHighPerformance' })
+    .set(DefaultProfileIDs.HighPerformance, {
+        name: 'profileNameHighPerformance',
+        description: 'profileDescHighPerformance',
+    })
     .set(LegacyDefaultProfileIDs.Default, { name: 'profileNameLegacyDefault', description: 'profileDescLegacyDefault' })
-    .set(LegacyDefaultProfileIDs.CoolAndBreezy, { name: 'profileNameLegacyCoolAndBreezy', description: 'profileDescLegacyCoolAndBreezy' })
-    .set(LegacyDefaultProfileIDs.PowersaveExtreme, { name: 'profileNameLegacyPowersaveExtreme', description: 'profileDescLegacyPowersaveExtreme' });
-;
+    .set(LegacyDefaultProfileIDs.CoolAndBreezy, {
+        name: 'profileNameLegacyCoolAndBreezy',
+        description: 'profileDescLegacyCoolAndBreezy',
+    })
+    .set(LegacyDefaultProfileIDs.PowersaveExtreme, {
+        name: 'profileNameLegacyPowersaveExtreme',
+        description: 'profileDescLegacyPowersaveExtreme',
+    });

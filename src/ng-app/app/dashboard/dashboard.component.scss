@@ -1,0 +1,146 @@
+/*!
+ * Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+ *
+ * This file is part of TUXEDO Control Center.
+ *
+ * TUXEDO Control Center is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * TUXEDO Control Center is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+ */
+
+.dashboard {
+    display: block;
+    position: absolute;
+    top: 10px;
+    bottom: 25px;
+    right: 5px;
+    left: 0px;
+    margin: 0px;
+    padding: 0px;
+    overflow-y: scroll;
+}
+
+.inner-dashboard {
+    margin: 0 10px 10px 10px;
+}
+
+.system-monitor-gauges {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-evenly;
+
+    margin: 10px auto 30px auto;
+    padding-bottom: 5px;
+
+    &.bottom {
+        margin-bottom: 30px;
+    }
+}
+
+.active-profile {
+    padding-top: 5px;
+    padding-bottom: 5px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    .text {
+        font-size: 20px;
+        padding-right: 16px;
+    }
+
+    .link {
+        color: var(--icon-detail);
+        font-size: 20px;
+        font-weight: bolder;
+    }
+
+    .button {
+        padding: 0px;
+        --icon-detail: var(--icon-main);
+    }
+}
+
+.active-tcc-profile {
+    padding-bottom: 15px;
+}
+
+.profile-overview {
+    display: flex;
+    flex-flow: row;
+    justify-content: space-evenly;
+    align-items: stretch;
+
+    .column {
+        width: 50%;
+
+        display: flex;
+        flex-flow: column;
+        align-items: center;
+        justify-content: space-between;
+
+        .item {
+            display: flex;
+            flex-flow: column;
+            align-items: center;
+        }
+
+        .title {
+            display: flex;
+            flex-flow: row;
+            align-items: center;
+
+            .text {
+                font-weight: bold;
+            }
+
+            .tcc-icons {
+                --icon-detail: var(--icon-main);
+            }
+        }
+
+        .tcc-gauge.small {
+            transform: scale(0.7);
+
+            .legend {
+                bottom: 20px;
+            }
+        }
+
+        .tcc-gauge.small.active-cores {
+            ::ng-deep .value-text {
+                font-size: 1.8em;
+                transform: translateX(-10px);
+            }
+
+            .unit-text {
+                width: auto;
+                top: 50%;
+                left: 50%;
+                transform: translateX(14px) translateY(-12px);
+
+                font-size: 24px;
+            }
+        }
+
+        .tcc-gauge.small.on-off {
+            ::ng-deep .value-text {
+                font-size: 1.8em;
+            }
+        }
+    }
+}
+
+.gauge-tabs {
+    min-height: 270px;
+}

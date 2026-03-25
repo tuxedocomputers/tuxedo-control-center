@@ -1,5 +1,5 @@
 <!--
-Copyright (c) 2019-2020 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+Copyright (c) 2019-2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
 
 This file is part of TUXEDO Control Center.
 
@@ -16,114 +16,79 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
 -->
-<mat-card class="tcc-card">
-    <mat-card-title class="theme-page-title">
-        <ng-container i18n="@@cInfoInfoPanelTitle">Info</ng-container>
-    </mat-card-title>
-    <hr />
-    
-    <div class="content-container">
-        <svg viewBox="0 0 63.138672 43.930508" class="logo"><use href="./assets/images/tcc_logo_complete.svg#Icon"></use></svg>
-   
-        <mat-divider class="divider-separator"></mat-divider>
 
-        <div>
-            <p i18n="@@cInfoTCCDescriptionTextP1">
-                With the TUXEDO Control Center, we have developed a unique tool for you to control and monitor all
-                safety, performance, energy, comfort, and lifetime functions of your TUXEDO computer.
-            </p>
-            <p i18n="@@cInfoTCCDescriptionTextP2">
-                With premade as well as any number of individually configurable profiles, you have
-                the greatest possible control and adaptability of your TUXEDO device to your needs.
-            </p>
-        </div>
+<div class="info">
+    <div class="inner-info">
+        <mat-card class="tcc-card">
+            <mat-card-title>
+                <div i18n="@@cInfoInfoPanelTitle" class="title">Info</div>
+            </mat-card-title>
 
-        <mat-divider style="position: static; width: 200px; margin: auto; margin-top: 20px; margin-bottom: 20px;"></mat-divider>
+            <hr />
 
-        <table class="updates-table">
-            <tr>
-                <td>
-                    <ng-container i18n>Installed version</ng-container>:
-                </td>
-                <td>
-                    {{ appVersion }}
-                </td>
-            </tr>
-            <tr>
-                <td>&nbsp;</td>
-                <td>&nbsp;</td>
-            </tr>
-        </table>
+            <div class="logo-div">
+                <svg viewBox="0 0 63.138672 43.930508" class="logo">
+                    <use href="./assets/images/tcc_logo_complete.svg#Icon"></use>
+                </svg>
+            </div>
 
-        <!--div class="update-button">
-            <button mat-raised-button color="basic">
-                <strong i18n>Update installieren</strong>
-            </button>
-        </div>
-        <div class="update-button">
-            <button mat-raised-button color="basic">
-                <strong i18n>Allg. Systemupdates</strong>
-            </button>
-        </div-->
-    </div>
+            <hr />
 
-</mat-card>
+            <div class="content-container">
+                <p i18n="@@cInfoTCCDescriptionTextP1">
+                    With the TUXEDO Control Center, we have developed a unique tool for you to control and monitor all safety, performance, energy, comfort, and lifetime functions of your TUXEDO
+                    computer.
+                </p>
+                <p i18n="@@cInfoTCCDescriptionTextP2">
+                    With premade as well as any number of individually configurable profiles, you have the greatest possible control and adaptability of your TUXEDO device to your needs.
+                </p>
+            </div>
 
-<mat-accordion class="tcc-accordion accordion-info">
-    <mat-expansion-panel>
-        <mat-expansion-panel-header>
-            <mat-panel-title>
-                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_logbook.svg#Icon"></use></svg></mat-icon>
-                <ng-container i18n>Changelog</ng-container>
-            </mat-panel-title>
-        </mat-expansion-panel-header>
-        <!--p>
-            <ng-container i18n="@@cInfoCurrentVersionBefore">Current version</ng-container>&nbsp;<strong>{{ appVersion }}</strong>&nbsp;<ng-container i18n="cInfoCurrentVersionAfter">is built upon</ng-container>
-        </p>
-        <table class="versions" cellspacing="0">
-            <tr><td>Node</td><td><strong>{{ nodeVersion }}</strong></td>
-            <tr><td>Electron</td><td><strong>{{ electronVersion }}</strong></td>
-            <tr><td>Angular</td><td><strong>{{ angularVersion }}</strong></td>
-        </table>
-        <br /-->
-        <mat-card class="changelog">
-            <markdown src="assets/CHANGELOG.md"></markdown>
+            <hr />
+
+            <div class="table-div">
+                <table class="updates-table">
+                    <tr>
+                        <td><span i18n="@@cInfoInstalledVersion">Installed version</span>:</td>
+                        <td>
+                            {{ appVersion }}
+                        </td>
+                    </tr>
+                </table>
+            </div>
         </mat-card>
-    </mat-expansion-panel>
 
-    <!--mat-expansion-panel>
-        <mat-expansion-panel-header>
-            <mat-panel-title>
-                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_language.svg#Icon"></use></svg></mat-icon>
-                <ng-container i18n="@@cInfoLanguagePanelTitle">Language</ng-container>
-            </mat-panel-title>
-        </mat-expansion-panel-header>
-        
-        <mat-form-field class="language-select">
-            <mat-select #selectLang [value]="getCurrentLanguageId()">
-                <mat-select-trigger>
-                    <mat-icon><img [src]="'./assets/images/' + getLanguageData(selectLang.value).img" /></mat-icon>
-                    {{ getLanguageData(selectLang.value).label }}
-                </mat-select-trigger>
-                <mat-option
-                    *ngFor="let lang of getLanguagesMenuArray()"
-                    (click)="changeLanguage(lang.id)"
-                    [value]="lang.id">
-                    <mat-icon><img [src]="'./assets/images/' + lang.img" /></mat-icon> {{ lang.label }}
-                </mat-option>
-            </mat-select>
-        </mat-form-field>
-    </mat-expansion-panel-->
+        <mat-accordion class="tcc-accordion accordion-info">
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <mat-icon>
+                            <svg viewBox="0 0 512 512">
+                                <use href="./assets/images/icon_logbook.svg#Icon"></use>
+                            </svg>
+                        </mat-icon>
+                        <div i18n="@@cInfoChangelogTitle" class="panel-title">Changelog</div>
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
 
-    <mat-expansion-panel>
-        <mat-expansion-panel-header>
-            <mat-panel-title>
-                <mat-icon><svg viewBox="0 0 512 512"><use href="./assets/images/icon_imprint.svg#Icon"></use></svg></mat-icon>
-                <ng-container i18n="@@cInfoImprintPanelTitle">Imprint</ng-container>
-            </mat-panel-title>
-        </mat-expansion-panel-header>
-        <mat-divider></mat-divider>
-        <pre><code i18n="@@cInfoImprintText">
+                <mat-card class="changelog">
+                    <markdown src="assets/CHANGELOG.md"></markdown>
+                </mat-card>
+            </mat-expansion-panel>
+
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <mat-icon>
+                            <svg viewBox="0 0 512 512">
+                                <use href="./assets/images/icon_imprint.svg#Icon"></use>
+                            </svg>
+                        </mat-icon>
+                        <div i18n="@@cInfoImprintPanelTitle" class="panel-title">Imprint</div>
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <mat-divider></mat-divider>
+                <pre><code i18n="@@cInfoImprintText">
 TUXEDO Computers GmbH
 
 Alter Postweg 101
@@ -132,14 +97,14 @@ Germany
 
 Telephone: +49 (0) 821 / 8998 2992
 Telefax: +49 (0) 821 / 8998 2999
-E-Mail: tux@tuxedocomputers.com
+E-Mail: tux&#64;tuxedocomputers.com
 VAT No.: DE815420876
 WEEE reg. no.: DE 93420497
 listed in the commercial register of the local court Augsburg
 Commercial register number - Part B of the commercial register - 27755
-        </code></pre>
-        <mat-divider></mat-divider>
-        <pre><code>
+                </code></pre>
+                <mat-divider></mat-divider>
+                <pre><code>
 TUXEDO Control Center is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
 the Free Software Foundation, either version 3 of the License, or
@@ -149,9 +114,10 @@ TUXEDO Control Center is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
 MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
-        </code></pre>
-        <mat-divider></mat-divider>
-    </mat-expansion-panel>
-
-</mat-accordion>
-<br />
+                </code></pre>
+                <mat-divider></mat-divider>
+            </mat-expansion-panel>
+        </mat-accordion>
+        <br />
+    </div>
+</div>

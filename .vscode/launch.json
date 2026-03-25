@@ -8,15 +8,11 @@
             "cwd": "${workspaceRoot}",
             "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
             "windows": {
-              "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
+                "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
             },
-            "runtimeArgs": [
-                "./dist/tuxedo-control-center"
-            ],
+            "runtimeArgs": ["./dist/tuxedo-control-center"],
             "program": "${workspaceRoot}/src/e-app/main.ts",
-            "outFiles": [
-                "${workspaceRoot}/dist/tuxedo-control-center/e-app/e-app/main.js"
-            ],
+            "outFiles": ["${workspaceRoot}/dist/tuxedo-control-center/e-app/e-app/main.js"],
             "sourceMaps": true
         },
         {
@@ -25,11 +21,9 @@
             "request": "launch",
             "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron",
             "windows": {
-            "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
+                "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/electron.cmd"
             },
-            "runtimeArgs": [
-                "${workspaceRoot}/dist/tuxedo-control-center"
-            ],
+            "runtimeArgs": ["${workspaceRoot}/dist/tuxedo-control-center"],
             "webRoot": "${workspaceRoot}/dist",
             "sourceMaps": true,
             "sourceMapPathOverrides": {
