@@ -1,6 +1,6 @@
 # Changelog
 
-## [] - UNRELEASED
+## [3.0.0] - 2026-03-25
 ### Added
 - Wayland check for GPU selection
 - Systeminfos file size check
