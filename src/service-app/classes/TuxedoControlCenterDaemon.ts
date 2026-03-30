@@ -565,7 +565,9 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
                     deviceName === 'STEPOL1XA04' ||
                     deviceName === 'STELLARIS1XI05' ||
                     deviceName === 'STELLARIS16I06' ||
-                    deviceName === 'STELLARIS17I06')
+                    deviceName === 'STELLARIS17I06' ||
+                    deviceName === 'STELLARIS16A07' ||
+                    deviceName === 'STELLARIS16I07')
             ) {
                 showAquarisMenu = true;
             } else {
