@@ -1,5 +1,9 @@
 # Changelog
 
+## [] - UNRELEASED
+### Fixed
+- Missing Aquaris menu on Stellaris Gen7
+
 ## [3.0.0] - 2026-03-25
 ### Added
 - Wayland check for GPU selection
