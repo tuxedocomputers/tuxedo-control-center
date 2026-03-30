@@ -1,6 +1,6 @@
 # Changelog
 
-## [] - UNRELEASED
+## [3.0.1] - 2026-03-30
 ### Fixed
 - Missing Aquaris menu on Stellaris Gen7
 
