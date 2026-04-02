@@ -193,10 +193,8 @@ export class FanControlWorker extends DaemonWorker {
         const numberTempsAvailable: number = await this.fanApi.getNumberTempsAvailable();
         const numberFans: number = await this.fanApi.getNumberFans();
 
-        if (numberTempsAvailable !== numberFans) {
-            console.log(
-                `FanControlWorker: checkNumberFansAvailable: Check failed (${numberTempsAvailable} !== ${numberFans}), retrying`,
-            );
+        if (numberFans === 0) {
+            console.log(`FanControlWorker: checkNumberFansAvailable: Check failed (${numberFans} === 0), retrying`);
             await this.initializeFanControl(this.fanApi, undefined, true);
         }
     }
