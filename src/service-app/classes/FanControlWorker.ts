@@ -73,6 +73,8 @@ export class FanControlWorker extends DaemonWorker {
     private fanCheckCounter: number = 0;
     private isUniwill: boolean = false;
 
+    private nrTempsAvailable: number;
+
     constructor(tccd: TuxedoControlCenterDaemon, tuxedoDevice: TUXEDODevice) {
         super(1000, 'FanControlWorker', tccd);
         this.tuxedoDevice = tuxedoDevice;
@@ -190,7 +192,6 @@ export class FanControlWorker extends DaemonWorker {
     }
 
     private async checkNumberFansAvailable(): Promise<void> {
-        const numberTempsAvailable: number = await this.fanApi.getNumberTempsAvailable();
         const numberFans: number = await this.fanApi.getNumberFans();
 
         if (numberFans === 0) {
@@ -243,6 +244,8 @@ export class FanControlWorker extends DaemonWorker {
         await this.fanApi.initFanControl(this.fanWriteAvailable, fanControlEnabled);
         const numberInterfaces: number = await this.fanApi.getNumberFanInterfaces();
 
+        this.nrTempsAvailable = await this.fanApi.getNumberTempsAvailable();
+
         if (numberInterfaces) {
             this.mapStatus = await this.fanApi.mapLogicToFans(numberInterfaces, resetFanMap);
             await this.setPreviousFans();
@@ -270,7 +273,13 @@ export class FanControlWorker extends DaemonWorker {
     private async updateTempLogic(fans: Map<number, FanControlLogic>, fanNumber: number) {
         const fanIndex = fanNumber - 1;
         const fanLogic = fans.get(fanNumber);
-        const temp = await this.getTemperature(fanIndex);
+        let temp;
+        // Only get temp for fan when a corresponding sensor exists
+        if (fanNumber <= this.nrTempsAvailable) {
+            temp = await this.getTemperature(fanIndex);
+        } else {
+            temp = 0;
+        }
         fanLogic.reportTemperature(temp);
         return { fanLogic, fanIndex, temp };
     }
