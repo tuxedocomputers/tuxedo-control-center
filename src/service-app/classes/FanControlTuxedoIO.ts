@@ -70,7 +70,7 @@ export class FanControlTuxedoIO extends FanControlBaseClass {
         return true;
     }
 
-    public async getNumberFansAvailable(): Promise<number> {
+    public async getNumberTempsAvailable(): Promise<number> {
         const [fanTemp0, fanTemp1, fanTemp2] = await Promise.all([
             this.getFanTemperature(0, false),
             this.getFanTemperature(1, false),

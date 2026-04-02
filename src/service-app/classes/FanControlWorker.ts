@@ -190,12 +190,12 @@ export class FanControlWorker extends DaemonWorker {
     }
 
     private async checkNumberFansAvailable(): Promise<void> {
-        const numberFansAvailable: number = await this.fanApi.getNumberFansAvailable();
+        const numberTempsAvailable: number = await this.fanApi.getNumberTempsAvailable();
         const numberFans: number = await this.fanApi.getNumberFans();
 
-        if (numberFansAvailable !== numberFans) {
+        if (numberTempsAvailable !== numberFans) {
             console.log(
-                `FanControlWorker: checkNumberFansAvailable: Check failed (${numberFansAvailable} !== ${numberFans}), retrying`,
+                `FanControlWorker: checkNumberFansAvailable: Check failed (${numberTempsAvailable} !== ${numberFans}), retrying`,
             );
             await this.initializeFanControl(this.fanApi, undefined, true);
         }
