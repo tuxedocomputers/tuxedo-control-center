@@ -45,20 +45,21 @@ export class FanControlTuxedoIO extends FanControlBaseClass {
     public async mapLogicToFans(numberInterfaces: number, reset?: boolean): Promise<boolean> {
         if (!this.fans || this.fans.size === 0 || reset) {
             this.fans = new Map();
-            const [fanTemp0, fanTemp1, fanTemp2] = await Promise.all([
-                this.getFanTemperature(0, false),
-                this.getFanTemperature(1, false),
-                this.getFanTemperature(2, false),
-            ]);
+            const nrTemps = await this.getNumberTempsAvailable();
 
-            // todo: maybe add change into tuxedo-drivers to return -1 if value not available
-            if (fanTemp0 > 1 && numberInterfaces >= 1) {
+            if (numberInterfaces >= 1) {
                 this.setFan(1, FAN_LOGIC.CPU);
             }
-            if (fanTemp1 > 1 && numberInterfaces >= 2) {
-                this.setFan(2, FAN_LOGIC.GPU);
+
+            if (numberInterfaces >= 2) {
+                if (nrTemps >= 2) {
+                    this.setFan(2, FAN_LOGIC.GPU);
+                } else {
+                    this.setFan(2, FAN_LOGIC.CPU);
+                }
             }
-            if (fanTemp2 > 1 && numberInterfaces >= 3) {
+
+            if (numberInterfaces >= 3) {
                 this.setFan(3, FAN_LOGIC.GPU);
             }
 
