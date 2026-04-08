@@ -154,8 +154,12 @@ export class FanControlWorker extends DaemonWorker {
                 }
             }
 
+            // Re-check in case of late detected temperature sensors, mainly affects logic mapping CPU/GPU
             if (this.fanCheckCounter < 20) {
-                await this.checkNumberFansAvailable();
+                this.nrTempsAvailable = await this.fanApi.getNumberTempsAvailable();
+                if (this.nrTempsAvailable !== 0) {
+                    await this.initializeFanControl(this.fanApi, undefined, true);
+                }
                 this.fanCheckCounter += 1;
             }
         } catch (err: unknown) {
@@ -189,15 +193,6 @@ export class FanControlWorker extends DaemonWorker {
             return true;
         }
         return false;
-    }
-
-    private async checkNumberFansAvailable(): Promise<void> {
-        const numberFans: number = await this.fanApi.getNumberFans();
-
-        if (numberFans === 0) {
-            console.log(`FanControlWorker: checkNumberFansAvailable: Check failed (${numberFans} === 0), retrying`);
-            await this.initializeFanControl(this.fanApi, undefined, true);
-        }
     }
 
     private async setPreviousFans(): Promise<void> {
@@ -245,6 +240,10 @@ export class FanControlWorker extends DaemonWorker {
         const numberInterfaces: number = await this.fanApi.getNumberFanInterfaces();
 
         this.nrTempsAvailable = await this.fanApi.getNumberTempsAvailable();
+        // If temperature sensors are available before logic mapping skip any re-checks
+        if (this.nrTempsAvailable !== 0) {
+            this.fanCheckCounter = Number.MAX_VALUE;
+        }
 
         if (numberInterfaces) {
             this.mapStatus = await this.fanApi.mapLogicToFans(numberInterfaces, resetFanMap);
