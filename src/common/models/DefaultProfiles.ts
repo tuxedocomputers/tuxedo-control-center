@@ -405,6 +405,7 @@ export enum TUXEDODevice {
     IBP14G7_AQF_ARX,
     IBPG8,
     IBPG10AMD,
+    IBPG10INTEL,
     IBM15A10,
     IBM15I10,
     IBM16A10,

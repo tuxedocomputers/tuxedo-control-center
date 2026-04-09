@@ -35,6 +35,7 @@ export class CpuWorker extends DaemonWorker {
      * Skip writing energy performance preference if flag is set
      */
     private noEPPWriteQuirk: boolean;
+    private hasEPPPerformanceQuirk: boolean;
     private device: TUXEDODevice;
 
     constructor(tccd: TuxedoControlCenterDaemon) {
@@ -47,6 +48,14 @@ export class CpuWorker extends DaemonWorker {
         } else {
             this.noEPPWriteQuirk = false;
         }
+
+        // prettier-ignore
+        const eppPerformanceQuirkDevices = [
+            TUXEDODevice.GEMINI17I04,
+            TUXEDODevice.IBPG10INTEL,
+            TUXEDODevice.IBM15I10,
+        ];
+        this.hasEPPPerformanceQuirk = eppPerformanceQuirkDevices.includes(this.device);
     }
 
     public async onStart(): Promise<void> {
@@ -169,8 +178,8 @@ export class CpuWorker extends DaemonWorker {
 
                 this.cpuCtrl.setGovernor(profile.cpu.governor);
                 if (!this.noEPPWriteQuirk) {
-                    if (this.device === TUXEDODevice.GEMINI17I04) {
-                        // Quirk for Gemini Gen4 Intel, needs EPP = performance to allow full frequency range
+                    if (this.hasEPPPerformanceQuirk) {
+                        // Setting for certain devices that need EPP = performance to allow full frequency range
                         this.cpuCtrl.setEnergyPerformancePreference('performance');
                     } else {
                         this.cpuCtrl.setEnergyPerformancePreference(profile.cpu.energyPerformancePreference);

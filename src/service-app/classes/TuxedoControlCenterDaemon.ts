@@ -594,6 +594,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         dmiSKUDeviceMap.set('OMNIA08IMK2', TUXEDODevice.IBPG8);
         dmiSKUDeviceMap.set('IBP14A10MK1 / IBP15A10MK1', TUXEDODevice.IBPG10AMD);
         dmiSKUDeviceMap.set('IIBP14A10MK1 / IBP15A10MK1', TUXEDODevice.IBPG10AMD);
+        dmiSKUDeviceMap.set('IBP15I10MK1', TUXEDODevice.IBPG10INTEL);
         dmiSKUDeviceMap.set('IBM15A10', TUXEDODevice.IBM15A10);
         dmiSKUDeviceMap.set('IBM15I10', TUXEDODevice.IBM15I10);
         dmiSKUDeviceMap.set('IBM16A10', TUXEDODevice.IBM16A10);
