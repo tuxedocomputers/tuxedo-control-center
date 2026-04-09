@@ -252,7 +252,7 @@ export class FanControlHwmon extends FanControlBaseClass {
         return true;
     }
 
-    public async getNumberFansAvailable(): Promise<number> {
+    public async getNumberTempsAvailable(): Promise<number> {
         return this.getNumberFans();
     }
 

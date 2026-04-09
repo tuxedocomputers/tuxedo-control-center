@@ -1,5 +1,11 @@
 # Changelog
 
+## [] - UNRELEASED
+### Fixed
+- Fan control for certain devices (most notably for InfinityBook Pro Gen9 AMD where one fan can get stuck on high speed in certain cases)
+- System profiles support for InifinityBook Max 16 AMD
+- Adjust default frequency limit for InfinityBook Pro Intel and InfinityBook Max Intel to not be limiting
+
 ## [3.0.1] - 2026-03-30
 ### Fixed
 - Missing Aquaris menu on Stellaris Gen7

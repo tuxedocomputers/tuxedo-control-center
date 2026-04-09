@@ -73,6 +73,8 @@ export class FanControlWorker extends DaemonWorker {
     private fanCheckCounter: number = 0;
     private isUniwill: boolean = false;
 
+    private nrTempsAvailable: number;
+
     constructor(tccd: TuxedoControlCenterDaemon, tuxedoDevice: TUXEDODevice) {
         super(1000, 'FanControlWorker', tccd);
         this.tuxedoDevice = tuxedoDevice;
@@ -152,8 +154,12 @@ export class FanControlWorker extends DaemonWorker {
                 }
             }
 
+            // Re-check in case of late detected temperature sensors, mainly affects logic mapping CPU/GPU
             if (this.fanCheckCounter < 20) {
-                await this.checkNumberFansAvailable();
+                this.nrTempsAvailable = await this.fanApi.getNumberTempsAvailable();
+                if (this.nrTempsAvailable !== 0) {
+                    await this.initializeFanControl(this.fanApi, undefined, true);
+                }
                 this.fanCheckCounter += 1;
             }
         } catch (err: unknown) {
@@ -187,18 +193,6 @@ export class FanControlWorker extends DaemonWorker {
             return true;
         }
         return false;
-    }
-
-    private async checkNumberFansAvailable(): Promise<void> {
-        const numberFansAvailable: number = await this.fanApi.getNumberFansAvailable();
-        const numberFans: number = await this.fanApi.getNumberFans();
-
-        if (numberFansAvailable !== numberFans) {
-            console.log(
-                `FanControlWorker: checkNumberFansAvailable: Check failed (${numberFansAvailable} !== ${numberFans}), retrying`,
-            );
-            await this.initializeFanControl(this.fanApi, undefined, true);
-        }
     }
 
     private async setPreviousFans(): Promise<void> {
@@ -245,6 +239,12 @@ export class FanControlWorker extends DaemonWorker {
         await this.fanApi.initFanControl(this.fanWriteAvailable, fanControlEnabled);
         const numberInterfaces: number = await this.fanApi.getNumberFanInterfaces();
 
+        this.nrTempsAvailable = await this.fanApi.getNumberTempsAvailable();
+        // If temperature sensors are available before logic mapping skip any re-checks
+        if (this.nrTempsAvailable !== 0) {
+            this.fanCheckCounter = Number.MAX_VALUE;
+        }
+
         if (numberInterfaces) {
             this.mapStatus = await this.fanApi.mapLogicToFans(numberInterfaces, resetFanMap);
             await this.setPreviousFans();
@@ -272,7 +272,13 @@ export class FanControlWorker extends DaemonWorker {
     private async updateTempLogic(fans: Map<number, FanControlLogic>, fanNumber: number) {
         const fanIndex = fanNumber - 1;
         const fanLogic = fans.get(fanNumber);
-        const temp = await this.getTemperature(fanIndex);
+        let temp;
+        // Only get temp for fan when a corresponding sensor exists
+        if (fanNumber <= this.nrTempsAvailable) {
+            temp = await this.getTemperature(fanIndex);
+        } else {
+            temp = 0;
+        }
         fanLogic.reportTemperature(temp);
         return { fanLogic, fanIndex, temp };
     }
