@@ -1,6 +1,6 @@
 # Changelog
 
-## [] - UNRELEASED
+## [3.0.2] - 2026-04-09
 ### Fixed
 - Fan control for certain devices (most notably for InfinityBook Pro Gen9 AMD where one fan can get stuck on high speed in certain cases)
 - System profiles support for InifinityBook Max 16 AMD
