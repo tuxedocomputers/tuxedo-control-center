@@ -407,6 +407,7 @@ export enum TUXEDODevice {
     IBPG10AMD,
     IBM15A10,
     IBM15I10,
+    IBM16A10,
     AURA14G3,
     AURA15G3,
     POLARIS1XA02,

@@ -119,9 +119,13 @@ export class ODMProfileWorker extends DaemonWorker {
     }
 
     private static hasQuirkNoPlatformProfile(dev: TUXEDODevice): boolean {
-        const quirkNoPlatformProfile = [TUXEDODevice.IBPG10AMD, TUXEDODevice.IBM15A10].includes(dev);
-
-        return quirkNoPlatformProfile;
+        // prettier-ignore
+        const noPlatformProfileDevices = [
+            TUXEDODevice.IBPG10AMD,
+            TUXEDODevice.IBM15A10,
+            TUXEDODevice.IBM16A10,
+        ];
+        return noPlatformProfileDevices.includes(dev);
     }
 
     public static getDefaultODMPerformanceProfile(dev: TUXEDODevice): string {
