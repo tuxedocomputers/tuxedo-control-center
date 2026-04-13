@@ -94,6 +94,7 @@ async function buildDeb(filenameAddition: string): Promise<void> {
         deb: {
             compression: 'xz',
             depends: ['tuxedo-drivers (>= 4.0.0) | tuxedo-keyboard (>= 3.1.2)', 'libayatana-appindicator3-1'],
+            recommends: ['tuxedo-systeminfos'],
             category: 'System',
             afterInstall: './build-src/after_install.sh',
             afterRemove: './build-src/after_remove.sh',
