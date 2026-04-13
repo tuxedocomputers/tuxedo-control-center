@@ -3,7 +3,7 @@
 ## [3.0.2] - 2026-04-09
 ### Fixed
 - Fan control for certain devices (most notably for InfinityBook Pro Gen9 AMD where one fan can get stuck on high speed in certain cases)
-- System profiles support for InifinityBook Max 16 AMD
+- System profiles support for InfinityBook Max 16 AMD
 - Adjust default frequency limit for InfinityBook Pro Intel and InfinityBook Max Intel to not be limiting
 
 ## [3.0.1] - 2026-03-30
