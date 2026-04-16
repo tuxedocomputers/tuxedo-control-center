@@ -72,7 +72,7 @@ export class ChangeCryptPasswordComponent implements OnInit {
         this.show_password_button_text = $localize`:@@cryptButtonShowPassword:Show Passwords`;
     }
 
-    showPassword(): void {
+    public showPassword(): void {
         if (this.buttonType === 'password') {
             this.buttonType = 'text';
             this.show_password_button_text = $localize`:@@cryptButtonHidePassword:Hide Passwords`;
@@ -93,9 +93,9 @@ export class ChangeCryptPasswordComponent implements OnInit {
                 });
 
                 // clearing error status, otherwise input fields are marked as errors after success
-                this.passwordFormGroup.get('cryptPassword').setErrors(null);
-                this.passwordFormGroup.get('newPassword').setErrors(null);
-                this.passwordFormGroup.get('confirmPassword').setErrors(null);
+                this.passwordFormGroup.get('cryptPassword')?.setErrors(null);
+                this.passwordFormGroup.get('newPassword')?.setErrors(null);
+                this.passwordFormGroup.get('confirmPassword')?.setErrors(null);
             }
 
             this.utils.pageDisabled = false;
@@ -103,9 +103,9 @@ export class ChangeCryptPasswordComponent implements OnInit {
     }
 
     private async changeCryptPassword(): Promise<boolean> {
-        const newPassword: string = this.passwordFormGroup.get('newPassword').value;
-        const oldPassword: string = this.passwordFormGroup.get('cryptPassword').value;
-        const confirmPassword: string = this.passwordFormGroup.get('confirmPassword').value;
+        const newPassword: string = this.passwordFormGroup.get('newPassword')?.value;
+        const oldPassword: string = this.passwordFormGroup.get('cryptPassword')?.value;
+        const confirmPassword: string = this.passwordFormGroup.get('confirmPassword')?.value;
 
         if (newPassword === '' || newPassword !== confirmPassword || oldPassword === '') {
             return false;
@@ -124,10 +124,29 @@ export class ChangeCryptPasswordComponent implements OnInit {
         }
     }
 
-    confirmValidation(group: FormGroup): { notSame: boolean } {
-        const pass: string = group.get('newPassword').value;
-        const confirmPass: string = group.get('confirmPassword').value;
+    private confirmValidation(
+        group: FormGroup,
+    ): null | { containsSpecialCharacter: boolean } | { notSame: boolean } | undefined {
+        const password: string = group.get('newPassword')?.value;
+        const confirmPassword: string = group.get('confirmPassword')?.value;
 
-        return pass === confirmPass ? null : { notSame: true };
+        const specialCharacters = ["'", '"', '`', '\\'];
+        const checkSpecialCharacters = (str: string): boolean => {
+            return specialCharacters.some((char) => str?.includes(char));
+        };
+        const containsSpecialCharacter: boolean =
+            checkSpecialCharacters(password) || checkSpecialCharacters(confirmPassword);
+
+        if (password === confirmPassword && !containsSpecialCharacter) {
+            return null;
+        }
+
+        if (containsSpecialCharacter) {
+            return { containsSpecialCharacter: true };
+        }
+
+        if (password !== confirmPassword) {
+            return { notSame: true };
+        }
     }
 }

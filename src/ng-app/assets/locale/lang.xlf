@@ -385,17 +385,24 @@
         </context-group>
       </trans-unit>
       <trans-unit id="cryptPasswordNotMatch" datatype="html">
-        <source> Passwords do not match </source>
+        <source>Passwords do not match</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.html</context>
-          <context context-type="linenumber">77,81</context>
+          <context context-type="linenumber">77,78</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cryptPasswordContainsSpecialCharacter" datatype="html">
+        <source>These characters are not allowed: &apos; &quot; ` \</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.html</context>
+          <context context-type="linenumber">79,84</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cryptButtonSave" datatype="html">
         <source>Save</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.html</context>
-          <context context-type="linenumber">82,86</context>
+          <context context-type="linenumber">85,89</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cryptButtonShowPassword" datatype="html">
