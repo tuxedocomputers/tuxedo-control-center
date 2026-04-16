@@ -67,11 +67,11 @@
         </context-group>
       </trans-unit>
       <trans-unit id="cSupportTicketStepperButtonNext" datatype="html">
-        <source>Next</source>
-        <target state="translated">Next</target>
+        <source> Next </source>
+        <target state="new">Next</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">104,106</context>
+          <context context-type="linenumber">105,107</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cSupportInfoCollection" datatype="html">
@@ -79,7 +79,7 @@
         <target state="new">Step 2: Download and run system info collection program</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">112,113</context>
+          <context context-type="linenumber">114,115</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cSupportSysInfoButtonStart" datatype="html">
@@ -87,7 +87,7 @@
         <target state="translated">Start</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">119,122</context>
+          <context context-type="linenumber">121,124</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cSupportSystemDiagnosticsDone" datatype="html">
@@ -95,7 +95,7 @@
         <target state="new">Step 3: Done</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">125,126</context>
+          <context context-type="linenumber">127,128</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cSupportSysInfoTextDone1" datatype="html">
@@ -103,7 +103,7 @@
         <target state="translated">Your system diagnostics data has been successfully sent.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">126,127</context>
+          <context context-type="linenumber">128,129</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cSupportSysInfoTextDone2" datatype="html">
@@ -111,7 +111,7 @@
         <target state="translated">We will come back to you as soon as this has been evaluated.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">127,129</context>
+          <context context-type="linenumber">129,131</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cSupportRestoreTitle" datatype="html">
@@ -119,7 +119,7 @@
         <target state="new">Restore system</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">144,148</context>
+          <context context-type="linenumber">146,150</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cSupportSystemDiagnosticsTicketNumber" datatype="html">
@@ -135,7 +135,7 @@
         <target state="translated">Ticket number may only contain numbers, starts with 99 and is 9 digits long.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">107,110</context>
+          <context context-type="linenumber">109,112</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cSupportWebfaiCreatorInstallButton" datatype="html">
@@ -143,7 +143,7 @@
         <target state="new">Install WebFAI Creator</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">156,157</context>
+          <context context-type="linenumber">162,163</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cSupportWebfaiCreatorRemoveButton" datatype="html">
@@ -151,7 +151,7 @@
         <target state="new">Remove WebFAI Creator</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">157,158</context>
+          <context context-type="linenumber">163,164</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cSupportWebFAICreatorProgressButton" datatype="html">
@@ -159,7 +159,7 @@
         <target state="translated">Checking</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">158,162</context>
+          <context context-type="linenumber">164,168</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cSupportWebFAICreatorStartButton" datatype="html">
@@ -167,7 +167,7 @@
         <target state="new">Start WebFAI Creator</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">167,170</context>
+          <context context-type="linenumber">174,177</context>
         </context-group>
       </trans-unit>
       <trans-unit id="pMgrImportLabelFileDialoge" datatype="html">
@@ -287,7 +287,7 @@
         <target state="translated">View</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
-          <context context-type="linenumber">37,40</context>
+          <context context-type="linenumber">37,39</context>
         </context-group>
       </trans-unit>
       <trans-unit id="ProfMgrOverviewNewProfile" datatype="html">
@@ -391,7 +391,7 @@
         <target state="translated">Sustained Power Limit (PL1)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">635,637</context>
+          <context context-type="linenumber">653,655</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.ts</context>
@@ -483,7 +483,7 @@
         <target state="new">Activate profile automatically on</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">130,131</context>
+          <context context-type="linenumber">131,132</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsDisplayHeaderLabel" datatype="html">
@@ -491,7 +491,7 @@
         <target state="translated">Display</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">161,165</context>
+          <context context-type="linenumber">162,166</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsSetBrightness" datatype="html">
@@ -499,7 +499,7 @@
         <target state="new">Set brightness on profile activation</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">168,170</context>
+          <context context-type="linenumber">169,171</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsUseBrightnessYes" datatype="html">
@@ -507,11 +507,11 @@
         <target state="translated">yes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">171,172</context>
+          <context context-type="linenumber">172,173</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">260,261</context>
+          <context context-type="linenumber">265,266</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsUseBrightnessNo" datatype="html">
@@ -519,11 +519,11 @@
         <target state="translated">no</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">172,175</context>
+          <context context-type="linenumber">173,176</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">261,264</context>
+          <context context-type="linenumber">266,269</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsBrightnessLabel" datatype="html">
@@ -531,7 +531,7 @@
         <target state="translated">Backlight brightness</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">192,194</context>
+          <context context-type="linenumber">194,196</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsWebcamHeaderLabel" datatype="html">
@@ -539,7 +539,7 @@
         <target state="translated">Webcam</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">572,576</context>
+          <context context-type="linenumber">589,593</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/webcam-settings/webcam-settings.component.html</context>
@@ -551,7 +551,7 @@
         <target state="translated">Webcam status</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">580,582</context>
+          <context context-type="linenumber">597,599</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsWebcamStatusOn" datatype="html">
@@ -559,7 +559,7 @@
         <target state="translated">on</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">584,585</context>
+          <context context-type="linenumber">601,602</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsWebcamStatusOff" datatype="html">
@@ -567,7 +567,7 @@
         <target state="translated">off</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">585,588</context>
+          <context context-type="linenumber">602,605</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsSystemControlHeaderLabel" datatype="html">
@@ -575,7 +575,7 @@
         <target state="translated">System performance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">613,617</context>
+          <context context-type="linenumber">631,635</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsCPUFreqLabel" datatype="html">
@@ -583,7 +583,7 @@
         <target state="translated">CPU frequency control</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">791,794</context>
+          <context context-type="linenumber">817,820</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsNrCoresLabel" datatype="html">
@@ -591,7 +591,7 @@
         <target state="translated">Number of logical cores</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">802,804</context>
+          <context context-type="linenumber">828,830</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsUseMaxPerfGovLabel" datatype="html">
@@ -599,7 +599,7 @@
         <target state="translated">Maximum performance</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">848,850</context>
+          <context context-type="linenumber">877,879</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsUseMaxPerfGovYes" datatype="html">
@@ -607,7 +607,7 @@
         <target state="translated">yes</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">852,853</context>
+          <context context-type="linenumber">881,882</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsUseMaxPerfGovNo" datatype="html">
@@ -615,7 +615,7 @@
         <target state="translated">no</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">853,855</context>
+          <context context-type="linenumber">882,884</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsMinFreqLabel" datatype="html">
@@ -623,7 +623,7 @@
         <target state="translated">Minimum frequency</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">874,876</context>
+          <context context-type="linenumber">904,906</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsMaxFreqLabel" datatype="html">
@@ -631,7 +631,7 @@
         <target state="translated">Maximum frequency</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">972,974</context>
+          <context context-type="linenumber">1005,1007</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsODMProfileLabelLEDInfo" datatype="html">
@@ -655,7 +655,7 @@
         <target state="translated">Set refresh rate on profile activation</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">256,258</context>
+          <context context-type="linenumber">261,263</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsRefRateLabelProfile" datatype="html">
@@ -663,7 +663,7 @@
         <target state="translated">Refresh rate</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">281,284</context>
+          <context context-type="linenumber">287,290</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsFanControlHeaderLabel" datatype="html">
@@ -671,7 +671,7 @@
         <target state="translated">Fan control</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">325,329</context>
+          <context context-type="linenumber">332,336</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsFanProfileLabel" datatype="html">
@@ -679,7 +679,7 @@
         <target state="new">Fan profile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">334,336</context>
+          <context context-type="linenumber">341,343</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsMinFanSpeedLabel" datatype="html">
@@ -687,7 +687,7 @@
         <target state="translated">Minimum fan speed</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">365,367</context>
+          <context context-type="linenumber">373,375</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsMaxFanSpeedLabel" datatype="html">
@@ -695,7 +695,7 @@
         <target state="new">Maximum fan speed</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">421,423</context>
+          <context context-type="linenumber">432,434</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsOffsetFanSpeedLabel" datatype="html">
@@ -703,7 +703,7 @@
         <target state="translated">Offset fan speed</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">477,479</context>
+          <context context-type="linenumber">491,493</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsToggleFanChartsLabel" datatype="html">
@@ -711,7 +711,7 @@
         <target state="translated">Toggle fan table chart</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">549,551</context>
+          <context context-type="linenumber">566,568</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsODMTDPLabel" datatype="html">
@@ -719,11 +719,11 @@
         <target state="new">CPU power limit control</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">618,619</context>
+          <context context-type="linenumber">636,637</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">725,727</context>
+          <context context-type="linenumber">748,750</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsODMProfileLabel" datatype="html">
@@ -731,7 +731,7 @@
         <target state="translated">System profile</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">626,628</context>
+          <context context-type="linenumber">644,646</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsSystemProfileiInfoTooltip" datatype="html">
@@ -739,7 +739,7 @@
         <target state="translated">The system profiles limit the maximal energy consumption of the processors.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">630,632</context>
+          <context context-type="linenumber">648,650</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsNVIDIAPowerCTRLLabel" datatype="html">
@@ -747,7 +747,7 @@
         <target state="new">NVIDIA power control</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">1095,1096</context>
+          <context context-type="linenumber">1131,1132</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsNVIDIAPowerCTRLCTGPLabel" datatype="html">
@@ -755,7 +755,7 @@
         <target state="new">Configurable graphics power (cTGP)</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">1099,1101</context>
+          <context context-type="linenumber">1135,1137</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrDetailsToggleTGPChartLabel" datatype="html">
@@ -763,7 +763,7 @@
         <target state="needs-translated">Toggle TGP chart</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.html</context>
-          <context context-type="linenumber">1166,1168</context>
+          <context context-type="linenumber">1205,1207</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cInfoInfoPanelTitle" datatype="html">
@@ -1904,7 +1904,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">LED Control</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">127,130</context>
+          <context context-type="linenumber">129,132</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqTabLEDColorPickerLabel" datatype="html">
@@ -1912,7 +1912,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Pick color</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">152,154</context>
+          <context context-type="linenumber">154,156</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqTabLEDModeLabel" datatype="html">
@@ -1920,7 +1920,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Mode</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">163,164</context>
+          <context context-type="linenumber">165,166</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqButtonToggleLEDStaticLabel" datatype="html">
@@ -1928,7 +1928,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Single color</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">165,166</context>
+          <context context-type="linenumber">167,168</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqButtonToggleLEDRainbowLabel" datatype="html">
@@ -1936,7 +1936,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Rainbow</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">166,168</context>
+          <context context-type="linenumber">168,170</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqCheckboxLEDBreatheLabel" datatype="html">
@@ -1944,7 +1944,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Breathe</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">169,172</context>
+          <context context-type="linenumber">171,174</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqChooseAquarisText" datatype="html">
@@ -1952,7 +1952,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Please choose your TUXEDO Aquaris and click on the connect button</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">177,178</context>
+          <context context-type="linenumber">179,180</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqButtonConnectLabel" datatype="html">
@@ -1960,7 +1960,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">Connect</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">190,193</context>
+          <context context-type="linenumber">199,202</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqNoBluetoothHeadlineText" datatype="html">
@@ -1968,7 +1968,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">TUXEDO Control Center could not find a Bluetooth connection.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">197,198</context>
+          <context context-type="linenumber">206,207</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqNoBluetoothVerifyText" datatype="html">
@@ -1976,7 +1976,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Please verify that:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">198,200</context>
+          <context context-type="linenumber">207,209</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqNoBluetoothHintTurnedOn" datatype="html">
@@ -1984,7 +1984,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Your Bluetooth adapter is turned on in your system settings.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">200,201</context>
+          <context context-type="linenumber">209,210</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqNoBluetoothHintNotDisabled" datatype="html">
@@ -1992,7 +1992,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Your Bluetooth adapter is not disabled in the UEFI.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">201,202</context>
+          <context context-type="linenumber">210,211</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqNoBluetoothHintIsInstalled" datatype="html">
@@ -2000,7 +2000,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">A Bluetooth adapter is installed in your TUXEDO notebook.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">202,206</context>
+          <context context-type="linenumber">211,215</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqNoDevicesHeadlineText" datatype="html">
@@ -2008,7 +2008,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">TUXEDO Control Center could not find your TUXEDO Aquaris</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">207,208</context>
+          <context context-type="linenumber">216,217</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqNoDevicesVerifyText" datatype="html">
@@ -2016,7 +2016,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Please verify that:</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">208,210</context>
+          <context context-type="linenumber">217,219</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqNoDevicesHintSwitchedOn" datatype="html">
@@ -2024,7 +2024,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Your Aquaris is switched on and the blue LED on the power button is blinking.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">210,211</context>
+          <context context-type="linenumber">219,220</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqNoDevicesHintIsConnected" datatype="html">
@@ -2032,7 +2032,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Your Aquaris is connected to your TUXEDO notebook&apos;s power supply, which is connected to a power outlet.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">211,212</context>
+          <context context-type="linenumber">220,221</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqNoDevicesHintIsPluggedIn" datatype="html">
@@ -2040,7 +2040,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Your Aquaris&apos; power cable is plugged into your TUXEDO notebook.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">212,215</context>
+          <context context-type="linenumber">221,224</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqNoDevicesSuggestDemoMode" datatype="html">
@@ -2048,7 +2048,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">Do not have a TUXEDO Aquaris yet?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">215,216</context>
+          <context context-type="linenumber">224,225</context>
         </context-group>
       </trans-unit>
       <trans-unit id="aqNoDevicesDemoButtonLabel" datatype="html">
@@ -2056,7 +2056,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">Try demo mode</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/aquaris-control/aquaris-control.component.html</context>
-          <context context-type="linenumber">216,220</context>
+          <context context-type="linenumber">225,229</context>
         </context-group>
       </trans-unit>
       <trans-unit id="tomteGuiTomteListErrorPopup" datatype="html">
@@ -2376,7 +2376,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="translated">Reset Configuration to defaults.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">217,218</context>
+          <context context-type="linenumber">218,219</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cTomteGuiTomteConfigurationResetDefaultsButtonlabel" datatype="html">
@@ -2384,7 +2384,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">Reset Tomte to default settings</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tomte-gui/tomte-gui.component.html</context>
-          <context context-type="linenumber">218,225</context>
+          <context context-type="linenumber">219,226</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cTomteGuiTomteConfigurationRebootWarning" datatype="html">
@@ -3739,7 +3739,7 @@ Commercial register number - Part B of the commercial register - 27755
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">114,115</context>
+          <context context-type="linenumber">116,117</context>
         </context-group>
       </trans-unit>
       <trans-unit id="odmLowPower" datatype="html">
@@ -3771,7 +3771,7 @@ Commercial register number - Part B of the commercial register - 27755
         <target state="new">Save</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/charging-settings/charging-settings.component.html</context>
-          <context context-type="linenumber">117,121</context>
+          <context context-type="linenumber">122,126</context>
         </context-group>
       </trans-unit>
       <trans-unit id="chargingDialogInvalidConfigurationTitle" datatype="html">
@@ -3841,7 +3841,7 @@ Commercial register number - Part B of the commercial register - 27755
         </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/support/support.component.html</context>
-          <context context-type="linenumber">150,152</context>
+          <context context-type="linenumber">152,154</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cProfMgrConflictNewProfileName" datatype="html">
