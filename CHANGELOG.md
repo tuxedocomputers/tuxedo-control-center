@@ -1,6 +1,6 @@
 # Changelog
 
-## [] - UNRELEASED
+## [3.0.3] - 2026-04-16
 ### Fixed
 - Hotfix for crypt password change, problematic characters restricted
 
