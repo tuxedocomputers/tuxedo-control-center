@@ -1,5 +1,9 @@
 # Changelog
 
+## [] - UNRELEASED
+### Fixed
+- Hotfix for crypt password change, problematic characters restricted
+
 ## [3.0.2] - 2026-04-09
 ### Fixed
 - Fan control for certain devices (most notably for InfinityBook Pro Gen9 AMD where one fan can get stuck on high speed in certain cases)
