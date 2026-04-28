@@ -749,6 +749,18 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         return value - (value % multiple);
     }
 
+    public roundUpToNearestMultiple(value: number, multiple: number): number {
+        return value + (value % multiple);
+    }
+
+    public roundDownFreq(value: number) {
+        return this.roundDownToNearestMultiple(value, 100000);
+    }
+
+    public roundUpFreq(value: number) {
+        return this.roundUpToNearestMultiple(value, 100000);
+    }
+
     private getMatchingMode(xResolution: number, yResolution: number): IDisplayMode | undefined {
         return this.displayModes?.displayModes.find((mode: IDisplayMode): boolean => {
             return mode.xResolution === xResolution && mode.yResolution === yResolution;
