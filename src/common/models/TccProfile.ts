@@ -72,10 +72,14 @@ interface ITccProfileCpu {
     onlineCores: number;
     useMaxPerfGov: boolean;
     scalingMinFrequency: number;
-    scalingMaxFrequency: number;
+    scalingMaxFrequency: number | FrequencyConfig;
     governor: string; // unused: see CpuWorker.ts->applyCpuProfile(...)
     energyPerformancePreference: string;
     noTurbo: boolean;
+}
+
+export enum FrequencyConfig {
+    ReducedFrequency = -1,
 }
 
 interface ITccProfileWebCam {
