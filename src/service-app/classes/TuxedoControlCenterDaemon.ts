@@ -787,8 +787,14 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             maxFreq += 1000000;
         }
 
-        const reducedAvailableFreq: number =
-            boost === undefined ? cpu.cores[0].getReducedAvailableFreqNT() : cpuInfoMaxFreq;
+        let reducedAvailableFreq: number;
+        if (scalingdriver === ScalingDriver.acpi_cpufreq) {
+            // Boost dependent reduced freq only for acpi_cpufreq
+            reducedAvailableFreq = boost === undefined ? cpu.cores[0].getReducedAvailableFreqNT() : cpuInfoMaxFreq;
+        } else {
+            reducedAvailableFreq = cpu.cores[0].getReducedAvailableFreqNT();
+        }
+
         // Handle defaults
         if (profile.cpu.scalingMaxFrequency === undefined) {
             profile.cpu.scalingMaxFrequency = maxFreq;
