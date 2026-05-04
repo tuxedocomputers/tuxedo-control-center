@@ -119,10 +119,12 @@ export async function createPrimeWindow(langId: string, primeSelectMode: string)
             sandbox: false,
             nodeIntegration: false,
             contextIsolation: true,
+            spellcheck: false,
             preload: path.join(__dirname, '../preload.js'),
         },
         show: false,
     });
+    primeWindow.webContents.session.setSpellCheckerDictionaryDownloadURL('https://example.com/');
 
     // Workaround to set window title
     primeWindow.on('page-title-updated', (event: Event): void => {
@@ -171,10 +173,13 @@ async function createTccWindow(langId: string, module?: string): Promise<void> {
             sandbox: false,
             nodeIntegration: false,
             contextIsolation: true,
+            spellcheck: false,
             preload: path.join(__dirname, '../preload.js'),
         },
         show: false,
     });
+    tccWindow.webContents.session.setSpellCheckerDictionaryDownloadURL('https://example.com/');
+
     // Hide menu bar
     tccWindow.setMenuBarVisibility(false);
     // Workaround to menu bar appearing after full screen state
@@ -231,10 +236,12 @@ export async function createWebcamPreview(langId: string, arg: WebcamConstraints
             sandbox: false,
             nodeIntegration: false,
             contextIsolation: true,
+            spellcheck: false,
             preload: path.join(__dirname, '../preload.js'),
         },
         show: false,
     });
+    webcamWindow.webContents.session.setSpellCheckerDictionaryDownloadURL('https://example.com/');
 
     // Workaround to set window title
     webcamWindow.on('page-title-updated', (event: Event): void => {
