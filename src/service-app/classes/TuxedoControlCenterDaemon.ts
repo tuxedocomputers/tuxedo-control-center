@@ -27,7 +27,7 @@ import { ScalingDriver } from '../../common/classes/LogicalCpuController';
 import { TccPaths } from '../../common/classes/TccPaths';
 import { defaultCustomProfile, TUXEDODevice } from '../../common/models/DefaultProfiles';
 import { customFanPreset, type ITccFanProfile } from '../../common/models/TccFanTable';
-import { generateProfileId, type ITccProfile } from '../../common/models/TccProfile';
+import { FrequencyConfig, generateProfileId, type ITccProfile } from '../../common/models/TccProfile';
 import { type ITccSettings, ProfileStates } from '../../common/models/TccSettings';
 import type { WebcamPreset } from '../../common/models/TccWebcamSettings';
 import { ModuleInfo, type TDPInfo, TuxedoIOAPI } from '../../native-lib/TuxedoIOAPI';
@@ -787,12 +787,18 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             maxFreq += 1000000;
         }
 
-        const reducedAvailableFreq: number =
-            boost === undefined ? cpu.cores[0].getReducedAvailableFreqNT() : cpuInfoMaxFreq;
+        let reducedAvailableFreq: number;
+        if (scalingdriver === ScalingDriver.acpi_cpufreq) {
+            // Boost dependent reduced freq only for acpi_cpufreq
+            reducedAvailableFreq = boost === undefined ? cpu.cores[0].getReducedAvailableFreqNT() : cpuInfoMaxFreq;
+        } else {
+            reducedAvailableFreq = cpu.cores[0].getReducedAvailableFreqNT();
+        }
+
         // Handle defaults
         if (profile.cpu.scalingMaxFrequency === undefined) {
             profile.cpu.scalingMaxFrequency = maxFreq;
-        } else if (profile.cpu.scalingMaxFrequency === -1) {
+        } else if (profile.cpu.scalingMaxFrequency === FrequencyConfig.ReducedFrequency) {
             profile.cpu.scalingMaxFrequency = reducedAvailableFreq;
         }
         // Enforce boundaries

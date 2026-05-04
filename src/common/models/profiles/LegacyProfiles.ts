@@ -19,7 +19,7 @@
 
 import { LegacyDefaultProfileIDs } from '../DefaultProfiles';
 import { customFanPreset } from '../TccFanTable';
-import type { ITccProfile } from '../TccProfile';
+import { FrequencyConfig, type ITccProfile } from '../TccProfile';
 
 export const defaultProfiles: ITccProfile[] = [
     {
@@ -77,7 +77,7 @@ export const defaultProfiles: ITccProfile[] = [
             onlineCores: undefined,
             useMaxPerfGov: false,
             scalingMinFrequency: undefined,
-            scalingMaxFrequency: undefined,
+            scalingMaxFrequency: FrequencyConfig.ReducedFrequency,
             governor: 'powersave', // unused: see CpuWorker.ts->applyCpuProfile(...)
             energyPerformancePreference: 'balance_performance',
             noTurbo: false,
