@@ -1,6 +1,6 @@
 # Changelog
 
-## [] - UNRELEASED
+## [3.0.4] - 2026-05-26
 ### Fixed
 - Profile "Cool and breezy" not having intended max frequency limit
 - Frequency configuration slider min/max values not being able to set lower/upper limit
