@@ -750,7 +750,12 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     }
 
     public roundUpToNearestMultiple(value: number, multiple: number): number {
-        return value + (value % multiple);
+        const remainderForMultiple = value % multiple;
+        if (remainderForMultiple === 0) {
+            return value;
+        } else {
+            return value + (multiple - remainderForMultiple);
+        }
     }
 
     public roundDownFreq(value: number) {
