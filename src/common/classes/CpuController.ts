@@ -27,6 +27,7 @@ import {
     SysFsPropertyString,
 } from './SysFsProperties';
 import { findClosestValue } from './Utils';
+import { FrequencyConfig } from '../models/TccProfile';
 
 export class CpuController {
     constructor(public readonly basePath: string) {
@@ -146,7 +147,7 @@ export class CpuController {
             // Default to max available
             if (setMaxFrequency === undefined) {
                 newMaxFrequency = coreMaxFrequency;
-            } else if (setMaxFrequency === -1) {
+            } else if (setMaxFrequency === FrequencyConfig.ReducedFrequency) {
                 if (this.boost.isAvailable() && scalingDriver === ScalingDriver.acpi_cpufreq) {
                     newMaxFrequency = coreMaxFrequency;
                 } else {

@@ -912,7 +912,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             >{{
                                                 formatCpuFrequency(
                                                     findClosestValue(
-                                                        cpuInfo.boost === undefined || selectableFrequencies === undefined ? cpuInfo.maxFreq : selectableFrequencies[1],
+                                                        cpuInfo.boost === undefined || selectableFrequencies === undefined ? roundUpFreq(cpuInfo.maxFreq) : selectableFrequencies[1],
                                                         selectableFrequencies
                                                     )
                                                 )
@@ -966,8 +966,8 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         <content class="input" [hidden]="inputUseMaxPerfGov.checked || !editProfile">
                                             <mat-slider
                                                 #inputScalingMinFrequency
-                                                [min]="cpuInfo.minFreq"
-                                                [max]="cpuInfo.boost === undefined || selectableFrequencies === undefined ? cpuInfo.maxFreq : selectableFrequencies[1]"
+                                                [min]="roundDownFreq(cpuInfo.minFreq)"
+                                                [max]="cpuInfo.boost === undefined || selectableFrequencies === undefined ? roundUpFreq(cpuInfo.maxFreq) : selectableFrequencies[1]"
                                                 step="100000"
                                                 color="primary">
                                                 <input matSliderThumb formControlName="scalingMinFrequency" (change)="sliderMinFreqChange()" #ngSliderThumb="matSliderThumb" />
@@ -976,13 +976,13 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         <content class="input" [hidden]="!inputUseMaxPerfGov.checked" [ngClass]="{ inactive: true }">
                                             <mat-slider
                                                 #inputScalingMinFrequencyDummy
-                                                [min]="cpuInfo.minFreq"
-                                                [max]="cpuInfo.boost === undefined || selectableFrequencies === undefined ? cpuInfo.maxFreq : selectableFrequencies[1]"
+                                                [min]="roundDownFreq(cpuInfo.minFreq)"
+                                                [max]="cpuInfo.boost === undefined || selectableFrequencies === undefined ? roundUpFreq(cpuInfo.maxFreq) : selectableFrequencies[1]"
                                                 step="100000"
                                                 color="primary">
                                                 <input
                                                     matSliderThumb
-                                                    [value]="cpuInfo.boost === undefined || selectableFrequencies === undefined ? cpuInfo.maxFreq : selectableFrequencies[1]"
+                                                    [value]="cpuInfo.boost === undefined || selectableFrequencies === undefined ? roundUpFreq(cpuInfo.maxFreq) : selectableFrequencies[1]"
                                                     (change)="sliderMinFreqChange()"
                                                     #ngSliderThumb="matSliderThumb" />
                                             </mat-slider>
@@ -1093,19 +1093,19 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                     </mat-grid-tile>
                                     <mat-grid-tile [colspan]="gridParams.input">
                                         <content class="input" [hidden]="inputUseMaxPerfGov.checked || !editProfile">
-                                            <mat-slider #inputScalingMaxFrequency [min]="cpuInfo.minFreq" [max]="roundDownToNearestMultiple(cpuInfo.maxFreq, 100000)" step="100000" color="primary">
+                                            <mat-slider #inputScalingMaxFrequency [min]="roundDownFreq(cpuInfo.minFreq)" [max]="roundUpFreq(cpuInfo.maxFreq)" step="100000" color="primary">
                                                 <input matSliderThumb formControlName="scalingMaxFrequency" (change)="sliderMaxFreqChange()" #ngSliderThumb="matSliderThumb" />
                                             </mat-slider>
                                         </content>
                                         <content class="input" [hidden]="!inputUseMaxPerfGov.checked" [ngClass]="{ inactive: true }">
                                             <mat-slider
                                                 #inputScalingMaxFrequencyDummy
-                                                [min]="cpuInfo.minFreq"
-                                                [max]="roundDownToNearestMultiple(cpuInfo.maxFreq, 100000)"
-                                                [value]="roundDownToNearestMultiple(cpuInfo.maxFreq, 100000)"
+                                                [min]="roundDownFreq(cpuInfo.minFreq)"
+                                                [max]="roundUpFreq(cpuInfo.maxFreq)"
+                                                [value]="roundUpFreq(cpuInfo.maxFreq)"
                                                 step="100000"
                                                 color="primary">
-                                                <input matSliderThumb [value]="roundDownToNearestMultiple(cpuInfo.maxFreq, 100000)" (change)="sliderMaxFreqChange()" #ngSliderThumb="matSliderThumb" />
+                                                <input matSliderThumb [value]="roundUpFreq(cpuInfo.maxFreq)" (change)="sliderMaxFreqChange()" #ngSliderThumb="matSliderThumb" />
                                             </mat-slider>
                                         </content>
                                     </mat-grid-tile>
@@ -1116,10 +1116,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             mat-icon-button
                                             color="primary"
                                             (click)="profileFormGroup.get('cpu').get('scalingMaxFrequency').reset(viewProfile.cpu.scalingMaxFrequency)"
-                                            [hidden]="
-                                                roundDownToNearestMultiple(profileFormGroup.get('cpu').get('scalingMaxFrequency').value, 100000) ===
-                                                roundDownToNearestMultiple(viewProfile.cpu.scalingMaxFrequency, 100000)
-                                            ">
+                                            [hidden]="roundUpFreq(profileFormGroup.get('cpu').get('scalingMaxFrequency').value) === roundUpFreq(viewProfile.cpu.scalingMaxFrequency)">
                                             <mat-icon>undo</mat-icon>
                                         </button>
                                     </mat-grid-tile>

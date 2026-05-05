@@ -20,7 +20,7 @@
 import { CpuController } from '../../common/classes/CpuController';
 import { ScalingDriver } from '../../common/classes/LogicalCpuController';
 import { TUXEDODevice } from '../../common/models/DefaultProfiles';
-import type { ITccProfile } from '../../common/models/TccProfile';
+import { FrequencyConfig, type ITccProfile } from '../../common/models/TccProfile';
 import { DaemonWorker } from './DaemonWorker';
 import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
@@ -305,7 +305,7 @@ export class CpuWorker extends DaemonWorker {
                 if (core.scalingMaxFreq.isAvailable() && core.cpuinfoMaxFreq.isAvailable()) {
                     const maxFreq: number = core.scalingMaxFreq.readValue();
                     let maxFreqProfile: number = profile.cpu.scalingMaxFrequency;
-                    if (maxFreqProfile === -1) {
+                    if (maxFreqProfile === FrequencyConfig.ReducedFrequency) {
                         if (this.cpuCtrl.boost.isAvailable() && scalingDriver === ScalingDriver.acpi_cpufreq) {
                             maxFreqProfile = coreMaxFreq;
                         } else {
@@ -397,7 +397,7 @@ export class CpuWorker extends DaemonWorker {
                     cpuFreqValidConfig = false;
                     this.tccd.logLine('CpuWorker: Unexpected value boost => false instead of true');
                 } else if (
-                    (maxFreqProfile === -1 ||
+                    (maxFreqProfile === FrequencyConfig.ReducedFrequency ||
                         (maxSelectableFreq !== undefined && maxFreqProfile <= maxSelectableFreq)) &&
                     currentBoost
                 ) {

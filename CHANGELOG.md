@@ -1,5 +1,11 @@
 # Changelog
 
+## [] - UNRELEASED
+### Fixed
+- Profile "Cool and breezy" not having intended max frequency limit
+- Frequency configuration slider min/max values not being able to set lower/upper limit
+- Stray connection attempts to spellchecker dictionary by disabling (unused) spellchecker
+
 ## [3.0.3] - 2026-04-16
 ### Fixed
 - Hotfix for crypt password change, problematic characters restricted
