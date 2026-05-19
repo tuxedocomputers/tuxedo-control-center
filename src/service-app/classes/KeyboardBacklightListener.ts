@@ -42,6 +42,9 @@ export class KeyboardBacklightListener {
     protected sysDBusUPowerKbdBacklightInterface: dbus.ClientInterface = {} as dbus.ClientInterface;
     protected onStartRetryCount: number = 5;
 
+    private ledWatchInFlight: Map<number, boolean> = new Map();
+    private ledLastKnownColors: Map<number, string> = new Map();
+
     constructor(private tccd: TuxedoControlCenterDaemon) {
         this.init();
     }
@@ -163,45 +166,70 @@ export class KeyboardBacklightListener {
     }
 
     private async initSysFSListener(): Promise<void> {
-        if (this.keyboardBacklightCapabilities.maxRed !== undefined) {
-            for (let i: number = 0; i < this.ledsRGBZones?.length; ++i) {
-                if (this.ledsRGBZones[i]) {
-                    if (await fileOKAsync(`${this.ledsRGBZones[i]}/multi_intensity`)) {
-                        (function (i: number): void {
-                            fs.watch(
-                                `${this.ledsRGBZones[i]}/multi_intensity`,
-                                async function (): Promise<void> {
-                                    if (
-                                        !(await this.sysDBusUPowerProps.Get('org.freedesktop.UPower', 'LidIsClosed'))
-                                            .value
-                                    ) {
-                                        const keyboardBacklightStatesNew: Array<KeyboardBacklightStateInterface> =
-                                            this.tccd.settings.keyboardBacklightStates;
-                                        const colors: number[] = (
-                                            await fs.promises.readFile(`${this.ledsRGBZones[i]}/multi_intensity`)
-                                        )
-                                            .toString()
-                                            .split(' ')
-                                            .map(Number);
-                                        if (keyboardBacklightStatesNew?.[i] && colors) {
-                                            keyboardBacklightStatesNew[i].red = colors[0];
-                                            keyboardBacklightStatesNew[i].green = colors[1];
-                                            keyboardBacklightStatesNew[i].blue = colors[2];
-                                            this.setKeyboardBacklightStates(
-                                                keyboardBacklightStatesNew,
-                                                false,
-                                                true,
-                                                true,
-                                            );
-                                        }
-                                    }
-                                }.bind(this),
-                            );
-                        }).bind(this)(i);
-                    }
-                }
+        if (this.keyboardBacklightCapabilities.maxRed === undefined) return;
+
+        for (let i: number = 0; i < this.ledsRGBZones?.length; ++i) {
+            const ledPath: string | undefined = this.ledsRGBZones[i];
+            if (!ledPath) continue;
+            const multiIntensityPath: string = `${ledPath}/multi_intensity`;
+            if (!(await fileOKAsync(multiIntensityPath))) continue;
+
+            const zoneIndex: number = i;
+
+            try {
+                const initial: string = (await fs.promises.readFile(multiIntensityPath)).toString();
+                this.ledLastKnownColors.set(zoneIndex, this.normalizeColorTriple(initial));
+            } catch (_e: unknown) {
+                // ignore, will be populated on first real event
             }
+
+            fs.watch(multiIntensityPath, async (): Promise<void> => {
+                if (this.ledWatchInFlight.get(zoneIndex)) return;
+                this.ledWatchInFlight.set(zoneIndex, true);
+                try {
+                    if (
+                        (await this.sysDBusUPowerProps.Get('org.freedesktop.UPower', 'LidIsClosed')).value
+                    ) {
+                        return;
+                    }
+
+                    const raw: string = (await fs.promises.readFile(multiIntensityPath)).toString();
+                    const normalized: string = this.normalizeColorTriple(raw);
+                    const previous: string | undefined = this.ledLastKnownColors.get(zoneIndex);
+                    if (normalized === previous) {
+                        return;
+                    }
+                    this.ledLastKnownColors.set(zoneIndex, normalized);
+
+                    const colors: number[] = normalized.split(' ').map(Number);
+                    const keyboardBacklightStatesNew: Array<KeyboardBacklightStateInterface> =
+                        this.tccd.settings.keyboardBacklightStates;
+                    if (keyboardBacklightStatesNew?.[zoneIndex] && colors.length >= 3) {
+                        keyboardBacklightStatesNew[zoneIndex].red = colors[0];
+                        keyboardBacklightStatesNew[zoneIndex].green = colors[1];
+                        keyboardBacklightStatesNew[zoneIndex].blue = colors[2];
+                        await this.setKeyboardBacklightStates(
+                            keyboardBacklightStatesNew,
+                            false,
+                            true,
+                            true,
+                        );
+                    }
+                } catch (err: unknown) {
+                    console.error(`KeyboardBacklightListener: watch handler (${zoneIndex}) failed => ${err}`);
+                } finally {
+                    this.ledWatchInFlight.set(zoneIndex, false);
+                }
+            });
         }
+    }
+
+    private normalizeColorTriple(raw: string): string {
+        const parts: number[] = raw.trim().split(/\s+/).map(Number);
+        if (parts.length < 3 || parts.some((n: number): boolean => Number.isNaN(n))) {
+            return raw.trim();
+        }
+        return `${parts[0]} ${parts[1]} ${parts[2]}`;
     }
 
     // Input from TCC
@@ -363,6 +391,8 @@ export class KeyboardBacklightListener {
                             const red: string = keyboardBacklightStatesNew[i].red.toString();
                             const green: string = keyboardBacklightStatesNew[i].green.toString();
                             const blue: string = keyboardBacklightStatesNew[i].blue.toString();
+
+                            this.ledLastKnownColors.set(i, `${red} ${green} ${blue}`);
 
                             await fs.promises.appendFile(
                                 `${this.ledsRGBZones[i]}/multi_intensity`,
