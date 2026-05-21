@@ -75,7 +75,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 <mat-label>{{ inputProfileNameLabel }}</mat-label>
                 <input matInput #inputFocus="matInput" type="text" [formControl]="inputProfileName" (keyup.esc)="cancelInput()" placeholder="Profile name" minLength="1" maxLength="50" />
             </mat-form-field>
-            <button type="button" mat-stroked-button color="primary" i18n="@@cProfMgrSave" [disabled]="profileNameExist(inputFocus.value)">Save</button>
+            <button type="button" mat-stroked-button color="primary" (click)="onInputSubmit()" i18n="@@cProfMgrSave" [disabled]="profileNameExist(inputFocus.value)">Save</button>
             <button type="button" mat-stroked-button color="basic" (click)="cancelInput()" i18n="@@cProfMgrCancel">Cancel</button>
         </form>
     </mat-toolbar-row>
