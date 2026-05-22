@@ -1,0 +1,94 @@
+# Copyright (c) 2026 TUXEDO Computers GmbH <tux@tuxedocomputers.com>
+#
+# This file is part of TUXEDO Control Center.
+#
+# TUXEDO Control Center is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# TUXEDO Control Center is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
+
+default:
+    image: registry.gitlab.com/tuxedocomputers/development/tuxedo-control-center/package:24.04
+    before_script:
+        - unset CI_PIPELINE_IID # Needed to remove build ID extension from package version
+
+stages:
+    - test
+    - package
+    - test-package
+
+# Condition for release packages
+.rules-release-packages:
+    rules:
+        - if: $CI_COMMIT_TAG
+
+# Condition for test packages
+.rules-test-packages:
+    rules:
+        - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+          when: manual
+
+# Build and run project tests
+test:
+    stage: test
+    rules:
+        - !reference [.rules-test-packages, rules]
+        - !reference [.rules-release-packages, rules]
+    interruptible: true
+    script:
+        - npm ci
+        - npm run build-prod
+        - npm run tests
+
+# Package non-release
+package-other:
+    stage: package
+    interruptible: true
+    rules:
+        - !reference [.rules-test-packages, rules]
+    artifacts:
+        name: 'packages'
+        paths:
+            - dist/packages/*.rpm
+            - dist/packages/*.deb
+    script:
+        - npm ci
+        - npm run build-release autoversion
+
+# Package release
+package-release:
+    stage: package
+    rules:
+        - !reference [.rules-release-packages, rules]
+    artifacts:
+        name: 'packages'
+        paths:
+            - dist/packages/*.rpm
+            - dist/packages/*.deb
+        expire_in: never
+    script:
+        - npm ci
+        - npm run check-release
+        - npm run build-release autoversion
+
+# Check that expected built packages exist
+test-package-exist:
+    stage: test-package
+    parallel:
+        matrix:
+            - PKG_EXT:
+                  - deb
+                  - rpm
+    rules:
+        - !reference [.rules-test-packages, rules]
+        - !reference [.rules-release-packages, rules]
+    script:
+        - find dist/packages -type f -name *.$PKG_EXT | read
