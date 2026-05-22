@@ -65,7 +65,8 @@ async function checkRelease(versionToCheck?: string): Promise<boolean> {
     // Check for presence and content of a git tag
     let tagCheck = true;
     try {
-        const searchedTagName = `v${releaseVersion}`;
+        let searchedTagName = (await exec(`git tag --contains | head -n 1`)).stdout;
+        searchedTagName = searchedTagName.trim();
         const result = await exec(`git tag -l "${searchedTagName}" -n1`);
         const match = result.stdout.match(/^(\S*)\s*(.*)/);
         if (match.length >= 3) {
