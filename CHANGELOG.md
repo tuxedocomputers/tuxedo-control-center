@@ -1,5 +1,12 @@
 # Changelog
 
+## [] - UNRELEASED
+### Changed
+- Systeminfos: Use installed package if available, otherwise download latest version
+
+### Fixed
+- Profile manager save new profile button not working
+
 ## [3.0.4] - 2026-05-26
 ### Fixed
 - Profile "Cool and breezy" not having intended max frequency limit
