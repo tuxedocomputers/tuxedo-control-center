@@ -17,6 +17,8 @@
 
 default:
     image: registry.gitlab.com/tuxedocomputers/development/tuxedo-control-center/package:24.04
+    tags:
+        - size:medium
     before_script:
         - unset CI_PIPELINE_IID # Needed to remove build ID extension from package version
 
