@@ -68,6 +68,13 @@ export interface ITccProfileDisplay {
     useResolution: boolean;
 }
 
+export interface IPerCoreConfig {
+    cpuId: number;
+    online: boolean;
+    scalingMinFrequency: number;
+    scalingMaxFrequency: number;
+}
+
 interface ITccProfileCpu {
     onlineCores: number;
     useMaxPerfGov: boolean;
@@ -76,6 +83,8 @@ interface ITccProfileCpu {
     governor: string; // unused: see CpuWorker.ts->applyCpuProfile(...)
     energyPerformancePreference: string;
     noTurbo: boolean;
+    mode?: 'basic' | 'per-core';
+    perCoreConfig?: IPerCoreConfig[];
 }
 
 export enum FrequencyConfig {
