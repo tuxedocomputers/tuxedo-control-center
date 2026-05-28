@@ -64,18 +64,10 @@ ipcMain.handle('pgms-tomte-installed', (_event: IpcMainInvokeEvent): Promise<boo
     );
 });
 
-ipcMain.handle('pgms-install-tomte', (_event: IpcMainInvokeEvent): Promise<boolean> => {
-    return new Promise<boolean>(
-        (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
-            resolve(pgms.install(tomteName));
-        },
-    );
-});
-
-ipcMain.handle('pgms-uninstall-tomte', (_event: IpcMainInvokeEvent): Promise<boolean> => {
-    return new Promise<boolean>(
-        (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
-            resolve(pgms.remove(tomteName));
+ipcMain.handle('pgms-tomte-version', (_event: IpcMainInvokeEvent): Promise<string> => {
+    return new Promise<string>(
+        (resolve: (value: string | PromiseLike<string>) => void, _reject: (reason?: unknown) => void): void => {
+            resolve(pgms.getVersion(tomteName));
         },
     );
 });

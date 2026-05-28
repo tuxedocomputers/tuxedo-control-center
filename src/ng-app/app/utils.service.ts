@@ -414,4 +414,33 @@ export class UtilsService {
     public getODMProfileName(name: string): string {
         return this.odmProfileNameMap.get(name);
     }
+
+    private parseVersion(version: string): number[] {
+        // remove any prefix or suffix (for example '1:', '+', or '~')
+        return version
+            .replace(/^[^0-9]+/, '')
+            .replace(/[^0-9.]/g, '')
+            .split('.')
+            .map((part) => parseInt(part, 10));
+    }
+
+    public isVersionAtLeast(version: string, targetVersion: string): boolean {
+        const versionParts = this.parseVersion(version);
+        const targetParts = this.parseVersion(targetVersion);
+
+        const maxLength = Math.max(versionParts.length, targetParts.length);
+
+        for (let i = 0; i < maxLength; i++) {
+            const versionPart = versionParts[i] || 0;
+            const targetPart = targetParts[i] || 0;
+
+            if (versionPart > targetPart) {
+                return true;
+            } else if (versionPart < targetPart) {
+                return false;
+            }
+        }
+
+        return true;
+    }
 }

@@ -223,7 +223,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </div>
             </mat-expansion-panel>
 
-            <mat-expansion-panel (click)="gotoComponent('tomte-gui')" hideToggle>
+            <mat-expansion-panel *ngIf="tomteAvailable" (click)="gotoComponent('tomte-gui')" hideToggle>
                 <mat-expansion-panel-header>
                     <mat-panel-title>
                         <mat-icon>

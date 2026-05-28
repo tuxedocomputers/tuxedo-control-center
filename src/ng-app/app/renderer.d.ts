@@ -119,6 +119,7 @@ interface COMP {
 interface PGMS {
     aptInstalled: () => Promise<boolean>;
     tomteInstalled: () => Promise<boolean>;
+    getTomteVersion: () => Promise<string>;
     installTomte: () => Promise<boolean>;
     uninstallTomte: () => Promise<boolean>;
     startTomte: () => Promise<void>;
