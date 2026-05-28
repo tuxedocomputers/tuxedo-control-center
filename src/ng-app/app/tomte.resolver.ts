@@ -19,7 +19,7 @@
 
 import { Injectable } from '@angular/core';
 import type { Resolve } from '@angular/router';
-import { type Observable, from } from 'rxjs';
+import { from, type Observable } from 'rxjs';
 import { filter, first } from 'rxjs/operators';
 
 @Injectable({
@@ -29,6 +29,18 @@ export class TomteInstalledResolver implements Resolve<boolean> {
     resolve(): Observable<boolean> {
         return from(window.pgms.tomteInstalled()).pipe(
             filter((value: boolean): boolean => value !== undefined),
+            first(),
+        );
+    }
+}
+
+@Injectable({
+    providedIn: 'root',
+})
+export class TomteVersionResolver implements Resolve<string> {
+    resolve(): Observable<string> {
+        return from(window.pgms.getTomteVersion()).pipe(
+            filter((value: string): boolean => value !== undefined),
             first(),
         );
     }

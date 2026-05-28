@@ -25,6 +25,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Mutex } from 'async-mutex';
 import { firstValueFrom, Subscription } from 'rxjs';
 import { GridParamsSettings, type IGridParams } from '../../../common/models/IGridParams';
+import type { ITccSettings } from '../../../common/models/TccSettings';
 import type { BrightnessModeString } from '../../../e-app/backendAPIs/brightnessAPI';
 // biome-ignore lint: injection token
 import { ConfigService } from '../config.service';
@@ -59,6 +60,9 @@ export class GlobalSettingsComponent implements OnInit {
     public primeState: string = 'iGPU';
     public expandPrimeSelect: boolean = false;
     public aptInstalled: boolean = false;
+    private tomteVersion: string = '';
+    private tomteInstalled: boolean = false;
+    public tomteAvailable: boolean = false;
 
     public chargingProfilesUrlHref: string = $localize`:@@chargingProfilesInfoLinkHref:https\://www.tuxedocomputers.com/en/Battery-charging-profiles-inside-the-TUXEDO-Control-Center.tuxedo`;
     private mutex: Mutex = new Mutex();
@@ -72,7 +76,7 @@ export class GlobalSettingsComponent implements OnInit {
     ) {}
 
     // todo: move this.config.getSettings() into a variable in every function, too many calls
-    public ngOnInit(): void {
+    public async ngOnInit(): Promise<void> {
         this.setVariablesWithRouteSnapshot();
 
         const routingFromDashboard: string = this.route.snapshot.paramMap.get('routingFromDashboard');
@@ -90,27 +94,34 @@ export class GlobalSettingsComponent implements OnInit {
             ),
         );
 
-        this.cpuSettingsEnabled = this.config.getSettings().cpuSettingsEnabled;
-        this.temperatureDisplayFahrenheit = this.config?.getSettings()?.fahrenheit ?? false;
-        this.fanControlEnabled = this.config.getSettings().fanControlEnabled;
-        this.keyboardBacklightControlEnabled = this.config.getSettings().keyboardBacklightControlEnabled;
-        for (let card: number = 0; card < this.config.getSettings().ycbcr420Workaround?.length; card++) {
+        const settings: ITccSettings = this.config?.getSettings();
+        this.cpuSettingsEnabled = settings?.cpuSettingsEnabled;
+        this.temperatureDisplayFahrenheit = settings?.fahrenheit ?? false;
+        this.fanControlEnabled = settings?.fanControlEnabled;
+        this.keyboardBacklightControlEnabled = settings?.keyboardBacklightControlEnabled;
+
+        for (let card: number = 0; card < settings?.ycbcr420Workaround?.length; card++) {
             this.ycbcr420Workaround[card] = {};
-            for (const port in this.config.getSettings().ycbcr420Workaround[card]) {
-                this.ycbcr420Workaround[card][port] = this.config.getSettings().ycbcr420Workaround[card][port];
+            for (const port in settings?.ycbcr420Workaround[card]) {
+                this.ycbcr420Workaround[card][port] = settings?.ycbcr420Workaround[card][port];
             }
         }
 
         this.utils.getBrightnessMode().then((mode: BrightnessModeString): void => {
             this.ctrlBrightnessMode.setValue(mode);
         });
+
+        if (this.tomteInstalled) {
+            // no tomte menu available in version 3.0.0 and above
+            this.tomteAvailable = !this.utils.isVersionAtLeast(this.tomteVersion, '3.0.0');
+        }
     }
 
     private setVariablesWithRouteSnapshot(): void {
         const paramMap = this.route.snapshot.paramMap;
         const data = this.route.snapshot.data;
 
-        const routingFromDashboard: string = paramMap.get('routingFromDashboard');
+        const routingFromDashboard: string | null = paramMap.get('routingFromDashboard');
         this.expandPrimeSelect = Boolean(routingFromDashboard);
 
         this.forceYUV420OutputSwitchAvailable = data.forceYUV420OutputSwitchAvailable;
@@ -121,6 +132,9 @@ export class GlobalSettingsComponent implements OnInit {
         this.primeState = data.primeSelectAvailable;
 
         this.aptInstalled = data.aptInstalled;
+
+        this.tomteInstalled = data.tomteInstalled;
+        this.tomteVersion = data.tomteVersion;
     }
 
     public async onCPUSettingsEnabledChanged(event: MatCheckboxChange): Promise<void> {

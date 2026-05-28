@@ -198,6 +198,7 @@ contextBridge.exposeInMainWorld('comp', {
 contextBridge.exposeInMainWorld('pgms', {
     aptInstalled: (): Promise<boolean> => ipcRenderer.invoke('pgms-apt-installed'),
     tomteInstalled: (): Promise<boolean> => ipcRenderer.invoke('pgms-tomte-installed'),
+    getTomteVersion: (): Promise<string> => ipcRenderer.invoke('pgms-tomte-version'),
     installTomte: (): Promise<boolean> => ipcRenderer.invoke('pgms-install-tomte'),
     uninstallTomte: (): Promise<boolean> => ipcRenderer.invoke('pgms-uninstall-tomte'),
     startTomte: (): Promise<void> => ipcRenderer.invoke('pgms-start-tomte'),

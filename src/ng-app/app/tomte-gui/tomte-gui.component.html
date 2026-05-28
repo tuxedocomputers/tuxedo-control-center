@@ -43,18 +43,6 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </div>
             </div>
 
-            <div *ngIf="!tomteInstalled && !loadingInformation">
-                <hr />
-                <div class="header" i18n="@@cTomteGuiInstallTomteHeader">Install TUXEDO Tomte</div>
-
-                <div class="content-container centered" *ngIf="aptInstalled">
-                    <p i18n="@@cTomteGuiInstallTomteDescription">Install TUXEDO Tomte now by pressing this button:</p>
-                    <button type="button" mat-stroked-button color="primary" (click)="installTomteButton()" i18n="@@cTomteGuiInstallTomteButtonLabel">Install</button>
-                </div>
-
-                <div i18n="@@cTomteGuiInstallNotInstalled" class="content-container centered" *ngIf="!aptInstalled">Tomte is not installed.</div>
-            </div>
-
             <div *ngIf="loadingInformation">
                 <div [ngClass]="{ 'blur-no-input': false }">
                     <hr />
@@ -65,7 +53,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                 </div>
             </div>
 
-            <div *ngIf="tomteMode && tomteInstalled && !loadingInformation && !showRetryButton">
+            <div *ngIf="tomteMode && !loadingInformation && !showRetryButton">
                 <hr />
                 <div class="header" i18n="@@cTomteGuiTomteOperationModeHeader">Tomte operation mode</div>
 
@@ -137,7 +125,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                     </p>
                 </div>
             </div>
-            <div *ngIf="!jsonError && tomteMode !== 'DONT_CONFIGURE' && !loadingInformation && !showRetryButton && tomteInstalled">
+            <div *ngIf="!jsonError && tomteMode !== 'DONT_CONFIGURE' && !loadingInformation && !showRetryButton">
                 <hr />
                 <div class="header" i18n="@@cTomteGuiTomteConfigurationHeader">Tomte Configuration</div>
                 <div class="content-container centered table">
