@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.0.6] - 2026-05-28
+### Changed
+- Tomte menu not available if version above 3.0.0
+
 ## [3.0.5] - 2026-05-22
 ### Changed
 - Systeminfos: Use installed package if available, otherwise download latest version
