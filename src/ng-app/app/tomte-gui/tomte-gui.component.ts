@@ -55,24 +55,19 @@ export class TomteGuiComponent implements OnInit {
     public tomteModes: string[] = ['AUTOMATIC', 'UPDATES_ONLY', 'DONT_CONFIGURE'];
     public showRetryButton: boolean = false;
     public loadingInformation: boolean = false;
-    public aptInstalled: boolean = false;
-    public tomteInstalled: boolean = false;
 
     constructor(
         private utils: UtilsService,
         private route: ActivatedRoute,
     ) {}
 
-    public ngOnInit(): void {
+    public async ngOnInit(): Promise<void> {
         this.setVariablesWithRouteSnapshot();
         this.tomtelist();
     }
 
     private setVariablesWithRouteSnapshot(): void {
         const data = this.route.snapshot.data;
-
-        this.aptInstalled = data.aptInstalled;
-        this.tomteInstalled = data.tomteInstalled;
     }
 
     public openExternalUrl(url: string): void {
@@ -83,40 +78,36 @@ export class TomteGuiComponent implements OnInit {
         this.showRetryButton = false;
         this.loadingInformation = true;
 
-        this.tomteInstalled = await window.pgms.tomteInstalled();
+        let tomteInformation: ITomteInformation;
 
-        if (this.tomteInstalled) {
-            let tomteInformation: ITomteInformation;
+        for (let i: number = 0; i < 30; i++) {
+            tomteInformation = await window.tomteAPI.getTomteInformation();
 
-            for (let i: number = 0; i < 30; i++) {
-                tomteInformation = await window.tomteAPI.getTomteInformation();
-
-                if (!tomteInformation) {
-                    this.jsonError = true;
-                }
-
-                if (tomteInformation) {
-                    this.jsonError = false;
-                    this.getModuleDescriptions();
-                    break;
-                } else {
-                    if (i === 10) {
-                        this.throwErrorMessage(
-                            $localize`:@@tomteGuiTomteListErrorPopup:Information from command 'tomte list' could not be obtained. Is tomte already running?`,
-                        );
-                    }
-
-                    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-                    if (i === 29) {
-                        this.showRetryButton = true;
-                    }
-                }
+            if (!tomteInformation) {
+                this.jsonError = true;
             }
 
-            this.tomteListArray = tomteInformation?.modules ?? [];
-            this.tomteMode = tomteInformation?.mode ?? '';
+            if (tomteInformation) {
+                this.jsonError = false;
+                this.getModuleDescriptions();
+                break;
+            } else {
+                if (i === 10) {
+                    this.throwErrorMessage(
+                        $localize`:@@tomteGuiTomteListErrorPopup:Information from command 'tomte list' could not be obtained. Is tomte already running?`,
+                    );
+                }
+
+                await new Promise((resolve) => setTimeout(resolve, 1000));
+
+                if (i === 29) {
+                    this.showRetryButton = true;
+                }
+            }
         }
+
+        this.tomteListArray = tomteInformation?.modules ?? [];
+        this.tomteMode = tomteInformation?.mode ?? '';
 
         this.getModuleDescriptions();
         this.loadingInformation = false;
@@ -379,23 +370,5 @@ export class TomteGuiComponent implements OnInit {
 
         this.tomtelist();
         this.utils.pageDisabled = false;
-    }
-
-    /*
-        Tries to install tomte when button is clicked and throws error message if it fails.
-        Not to be confused with the tomteModuleInstallButton() function, which tries to install or uninstall a given module
-    */
-    public async installTomteButton(): Promise<void> {
-        this.utils.pageDisabled = true;
-        const tomteInstalled: boolean = await window.pgms.installTomte();
-
-        if (!tomteInstalled) {
-            this.throwErrorMessage(
-                $localize`:@@tomteGuiInstallErrorMessagePopup:Tomte failed to install. Do you use a tuxedo device and are using the tuxedo repos?`,
-            );
-        }
-
-        this.utils.pageDisabled = false;
-        this.tomtelist();
     }
 }

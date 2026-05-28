@@ -53,6 +53,58 @@ export class ProgramManagementService {
         );
     }
 
+    // the rpm command is also available for Tuxedo OS, but because packages are not installed with rpm, it will throw an error
+    public async getVersion(name: string): Promise<string> {
+        this.isInProgress.set(name, true);
+
+        const isDpkgQueryInstalled: boolean = await this.isInstalled('dpkg-query');
+
+        if (isDpkgQueryInstalled) {
+            return new Promise<string>(
+                (resolve: (value: string | PromiseLike<string>) => void, _reject: (reason?: unknown) => void): void => {
+                    execCmd(`dpkg-query -W -f='\${Version}\n' ${name}`)
+                        .then((version: string): any => {
+                            this.isInProgress.set(name, false);
+                            resolve(version);
+                        })
+                        .catch((err: unknown): void => {
+                            console.error(`pgmsService: getVersion with dpkg-query failed => ${err}`);
+                            this.isInProgress.set(name, false);
+                            resolve('');
+                        });
+                },
+            );
+        }
+
+        const isRpmInstalled: boolean = await this.isInstalled('rpm');
+
+        if (isRpmInstalled) {
+            return new Promise<string>(
+                (resolve: (value: string | PromiseLike<string>) => void, _reject: (reason?: unknown) => void): void => {
+                    execCmd(`rpm -q --qf "%{VERSION}" ${name}`)
+                        .then((version: string): any => {
+                            this.isInProgress.set(name, false);
+                            resolve(version);
+                        })
+                        .catch((err: unknown): void => {
+                            // no error text if rpm exists and package is not installed
+                            if (err) {
+                                console.error(`pgmsService: getVersion with rpm failed => ${err}`);
+                            } else {
+                                console.error(`pgmsService: getVersion with rpm failed`);
+                            }
+
+                            this.isInProgress.set(name, false);
+                            resolve('');
+                        });
+                },
+            );
+        }
+
+        this.isInProgress.set(name, false);
+        return '';
+    }
+
     public async install(name: string): Promise<boolean> {
         this.isInProgress.set(name, true);
 

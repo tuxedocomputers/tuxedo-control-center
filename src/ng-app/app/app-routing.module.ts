@@ -42,7 +42,7 @@ import {
     PrimeSelectAvailableResolver,
 } from './settings.resolver';
 import { SupportComponent } from './support/support.component';
-import { TomteInstalledResolver } from './tomte.resolver';
+import { TomteInstalledResolver, TomteVersionResolver } from './tomte.resolver';
 import { TomteGuiComponent } from './tomte-gui/tomte-gui.component';
 import { ToolsComponent } from './tools/tool.component';
 import { WebcamSettingsGuard } from './webcam.guard';
@@ -100,6 +100,8 @@ const routes: Routes = [
                     chargingProfilesAvailable: ChargingProfilesAvailableResolver,
                     primeSelectAvailable: PrimeSelectAvailableResolver,
                     aptInstalled: AptInstalledResolver,
+                    tomteInstalled: TomteInstalledResolver,
+                    tomteVersion: TomteVersionResolver,
                 },
                 component: GlobalSettingsComponent,
             },
