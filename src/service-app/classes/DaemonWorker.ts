@@ -33,6 +33,8 @@ export abstract class DaemonWorker {
     protected previousProfile: ITccProfile;
     protected activeProfile: ITccProfile;
 
+    private workInFlight: boolean = false;
+
     protected abstract onStart(): Promise<void>;
     protected abstract onWork(): Promise<void>;
     protected abstract onExit(): Promise<void>;
@@ -41,7 +43,15 @@ export abstract class DaemonWorker {
         await this.triggerWork(this.onStart);
     }
     public async work(): Promise<void> {
-        await this.triggerWork(this.onWork);
+        if (this.workInFlight) {
+            return;
+        }
+        this.workInFlight = true;
+        try {
+            await this.triggerWork(this.onWork);
+        } finally {
+            this.workInFlight = false;
+        }
     }
     public async exit(): Promise<void> {
         await this.triggerWork(this.onExit);

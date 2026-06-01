@@ -112,8 +112,46 @@ export class ConfigHandler {
         });
     }
 
+    private settingsWriteInFlight: boolean = false;
+    private settingsWritePending: ITccSettings | undefined;
+    private settingsWriteWaiters: Array<{ resolve: () => void; reject: (err: unknown) => void }> = [];
+
     public async writeSettingsAsync(settings: ITccSettings, filePath: string = this.pathSettings): Promise<void> {
-        await this.writeConfigAsync<ITccSettings>(settings, filePath, { mode: this.settingsFileMod });
+        if (filePath !== this.pathSettings) {
+            await this.writeConfigAsync<ITccSettings>(settings, filePath, { mode: this.settingsFileMod });
+            return;
+        }
+
+        this.settingsWritePending = settings;
+        const waiter: Promise<void> = new Promise<void>((resolve, reject) => {
+            this.settingsWriteWaiters.push({ resolve, reject });
+        });
+
+        if (!this.settingsWriteInFlight) {
+            this.settingsWriteInFlight = true;
+            void this.drainSettingsWrites(filePath);
+        }
+
+        await waiter;
+    }
+
+    private async drainSettingsWrites(filePath: string): Promise<void> {
+        try {
+            while (this.settingsWritePending !== undefined) {
+                const pending: ITccSettings = this.settingsWritePending;
+                this.settingsWritePending = undefined;
+                const waiters = this.settingsWriteWaiters;
+                this.settingsWriteWaiters = [];
+                try {
+                    await this.writeConfigAsync<ITccSettings>(pending, filePath, { mode: this.settingsFileMod });
+                    for (const w of waiters) w.resolve();
+                } catch (err: unknown) {
+                    for (const w of waiters) w.reject(err);
+                }
+            }
+        } finally {
+            this.settingsWriteInFlight = false;
+        }
     }
 
     private recursivelyFillObject(obj: object, defaultObj: object): boolean {
