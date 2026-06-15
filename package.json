@@ -97,7 +97,7 @@
         "@angular/animations": "21.2.5",
         "@angular/cdk": "21.2.3",
         "@angular/cli": "21.2.3",
-        "@angular/common": "21.2.5",
+        "@angular/common": "21.2.17",
         "@angular/compiler-cli": "21.2.5",
         "@angular/language-service": "21.2.5",
         "@angular/material": "21.2.3",
