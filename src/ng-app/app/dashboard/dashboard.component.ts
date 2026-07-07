@@ -527,5 +527,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
         this.subscriptions.unsubscribe();
 
         this.tccdbus.setSensorDataCollectionStatus(false);
+        this.tccdbus.setDGpuD0Metrics(false);
     }
 }

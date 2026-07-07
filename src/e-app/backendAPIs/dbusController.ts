@@ -1107,6 +1107,24 @@ export class TccDBusController {
         }
     }
 
+    async getDGpuD0Metrics(): Promise<boolean> {
+        try {
+            if (this.dbusStatus && this.interface) {
+                return await this.interface.GetDGpuD0Metrics();
+            }
+        } catch (err: unknown) {
+            this.dbusStatus = false;
+
+            if (err instanceof dbus.DBusError) {
+                console.error(`dbusController: getDGpuD0Metrics failed => ${err?.text}`);
+                return false;
+            }
+
+            console.error(`dbusController: getDGpuD0Metrics failed => ${err}`);
+            return false;
+        }
+    }
+
     onModeReapplyPendingChanged(callback_function: () => void): boolean {
         try {
             if (this.dbusStatus && this.interface) {

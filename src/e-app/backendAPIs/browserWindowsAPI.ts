@@ -193,8 +193,9 @@ async function createTccWindow(langId: string, module?: string): Promise<void> {
 
     tccWindow.on('close', async (_event: Event): Promise<void> => {
         await tccDBus.setSensorDataCollectionStatus(false);
+        await tccDBus.setDGpuD0Metrics(false);
 
-        let collectionStatus: boolean;
+        let collectionStatus: boolean | undefined;
         let retryCount: number = 0;
         const maxRetries = 5;
 
@@ -204,9 +205,22 @@ async function createTccWindow(langId: string, module?: string): Promise<void> {
         }
 
         if (collectionStatus !== false) {
-            console.error('Failed to set sensor data collection status after multiple attempts');
+            console.error('browserWindowsAPI: createTccWindow: Failed to set sensor data collection status after multiple attempts');
+        }
+
+        let dGpuD0Status: boolean | undefined;
+        retryCount = 0;
+
+        while (dGpuD0Status !== false && retryCount < maxRetries) {
+            dGpuD0Status = await tccDBus.getDGpuD0Metrics();
+            retryCount++;
+        }
+
+        if (dGpuD0Status !== false) {
+            console.error('browserWindowsAPI: createTccWindow: Failed to set D0 status after multiple attempts');
         }
     });
+
     const indexPath: string = path.join(__dirname, '..', '..', '..', 'ng-app', 'browser', langId, 'index.html');
     if (module !== undefined) {
         await tccWindow.loadFile(indexPath, { hash: `/${module}` });

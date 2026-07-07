@@ -57,6 +57,7 @@ export enum DbusAPIFunctions {
     getDisplayModesJSON = 'getDisplayModesJSON',
     setSensorDataCollectionStatus = 'setSensorDataCollectionStatus',
     setDGpuD0Metrics = 'setDGpuD0Metrics',
+    getDGpuD0Metrics = 'getDGpuD0Metrics',
     dbusAvailable = 'dbusAvailable',
     getChargeStartAvailableThresholds = 'getChargeStartAvailableThresholds',
     getChargeEndAvailableThresholds = 'getChargeEndAvailableThresholds',
