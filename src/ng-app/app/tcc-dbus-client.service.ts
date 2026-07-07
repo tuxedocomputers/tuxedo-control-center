@@ -438,6 +438,11 @@ export class TccDBusClientService implements OnDestroy {
         (await window.dbusAPI.dbusAvailable()) && (await window.dbusAPI.setDGpuD0Metrics(status));
     }
 
+    public async getDGpuD0Metrics(): Promise<boolean> {
+        const result: boolean = (await window.dbusAPI.dbusAvailable()) && (await window.dbusAPI.getDGpuD0Metrics());
+        return result;
+    }
+
     // TODO do we still need this?
     public getInterface(): IDbusClientAPI | undefined {
         if (this.isAvailable) {

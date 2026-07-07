@@ -88,6 +88,7 @@ export const DbusClientAPI = {
         ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.setSensorDataCollectionStatus, status]),
     setDGpuD0Metrics: (status: boolean): Promise<void> =>
         ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.setDGpuD0Metrics, status]),
+    getDGpuD0Metrics: (): Promise<boolean> => ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.getDGpuD0Metrics]),
     dbusAvailable: (): Promise<boolean> => ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.dbusAvailable]),
     getChargeStartAvailableThresholds: (): Promise<number[]> =>
         ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.getChargeStartAvailableThresholds]),
@@ -154,8 +155,9 @@ export interface IDbusClientAPI {
     getPrimeState: () => Promise<string>;
     getCpuPowerValuesJSON: () => Promise<string>;
     getDisplayModesJSON: () => Promise<string>;
-    setSensorDataCollectionStatus: (status) => Promise<boolean>;
-    setDGpuD0Metrics: (status) => Promise<boolean>;
+    setSensorDataCollectionStatus: (status: boolean) => Promise<boolean>;
+    setDGpuD0Metrics: (status: boolean) => Promise<boolean>;
+    getDGpuD0Metrics: () => Promise<boolean>;
     dbusAvailable: () => Promise<boolean>;
     getChargeStartAvailableThresholds: () => Promise<number[]>;
     getChargeEndAvailableThresholds: () => Promise<number[]>;

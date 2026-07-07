@@ -468,6 +468,18 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
         );
     })
 
+    .set(DbusAPIFunctions.getDGpuD0Metrics, (): Promise<boolean> => {
+        return new Promise<boolean>(
+            (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
+                try {
+                    resolve(tccDBus.getDGpuD0Metrics());
+                } catch (err: unknown) {
+                    console.error(`dbusAPI: getDGpuD0Metrics failed => ${err}`);
+                }
+            },
+        );
+    })
+
     .set(DbusAPIFunctions.getChargeStartAvailableThresholds, (): Promise<number[]> => {
         return new Promise<number[]>(
             (resolve: (value: number[] | PromiseLike<number[]>) => void, _reject: (reason?: unknown) => void): void => {

@@ -205,6 +205,11 @@ export class TccDBusInterface extends dbus.interface.Interface {
     }
 
     // biome-ignore lint: function is never read because of dbus
+    private GetDGpuD0Metrics(): boolean {
+        return this.data.d0MetricsUsage;
+    }
+
+    // biome-ignore lint: function is never read because of dbus
     private ConsumeModeReapplyPending(): boolean {
         // Unlikely, but possible race condition.
         // However no harmful impact, it will just cause the screen to flicker twice instead of once.
@@ -465,6 +470,7 @@ TccDBusInterface.configureMembers({
         SetSensorDataCollectionStatus: { inSignature: 'b' },
         GetSensorDataCollectionStatus: { outSignature: 'b' },
         SetDGpuD0Metrics: { inSignature: 'b' },
+        GetDGpuD0Metrics: { outSignature: 'b' },
         GetNVIDIAPowerCTRLDefaultPowerLimit: { outSignature: 'i' },
         GetNVIDIAPowerCTRLMaxPowerLimit: { outSignature: 'i' },
         GetNVIDIAPowerCTRLAvailable: { outSignature: 'b' },
