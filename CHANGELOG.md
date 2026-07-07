@@ -1,5 +1,9 @@
 # Changelog
 
+## [] - UNRELEASED
+### Fixed
+- Accidental wake of discrete GPU when opening Dashboard
+
 ## [3.0.6] - 2026-05-28
 ### Changed
 - Tomte menu not available if version above 3.0.0
