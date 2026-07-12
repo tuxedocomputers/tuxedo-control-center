@@ -17,7 +17,7 @@
         "inc-version-minor": "npm version minor --no-git-tag-version && cd src && npm version minor --no-git-tag-version",
         "inc-version-major": "npm version major --no-git-tag-version && cd src && npm version major --no-git-tag-version",
         "start": "electron ./dist/tuxedo-control-center",
-        "start-tccd-debug": "sudo node --enable-source-maps ./dist/tuxedo-control-center/service-app/service-app/main.js --start",
+        "start-tccd-debug": "sudo node --enable-source-maps ./dist/tuxedo-control-center/service-app/service-app/esbuild.js --start",
         "build-prod": "run-s clean build-electron build-native-prod build-service-prod build-ng-prod copy-files",
         "build-debug": "run-s clean build-electron build-native-debug build-service-debug build-ng-debug copy-files",
         "build-ng-prod": "npm run copy-changelog && ng build --configuration production --aot true --optimization true",
