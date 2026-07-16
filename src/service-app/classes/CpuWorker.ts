@@ -20,7 +20,7 @@
 import { CpuController } from '../../common/classes/CpuController';
 import { ScalingDriver } from '../../common/classes/LogicalCpuController';
 import { TUXEDODevice } from '../../common/models/DefaultProfiles';
-import { FrequencyConfig, type ITccProfile } from '../../common/models/TccProfile';
+import { FrequencyConfig, type IPerCoreConfig, type ITccProfile } from '../../common/models/TccProfile';
 import { DaemonWorker } from './DaemonWorker';
 import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
@@ -172,6 +172,7 @@ export class CpuWorker extends DaemonWorker {
             // Set online status last so that all cores get the same settings
             this.setCpuDefaultConfig();
 
+            // Apply common settings: governor and energy performance preference
             if (!profile.cpu.useMaxPerfGov) {
                 // Note: Hard set governor to default (not included in profiles atm)
                 profile.cpu.governor = this.findDefaultGovernor();
@@ -185,9 +186,6 @@ export class CpuWorker extends DaemonWorker {
                         this.cpuCtrl.setEnergyPerformancePreference(profile.cpu.energyPerformancePreference);
                     }
                 }
-
-                this.cpuCtrl.setGovernorScalingMinFrequency(profile.cpu.scalingMinFrequency);
-                this.cpuCtrl.setGovernorScalingMaxFrequency(profile.cpu.scalingMaxFrequency);
             } else {
                 profile.cpu.governor = this.findPerformanceGovernor();
 
@@ -195,13 +193,21 @@ export class CpuWorker extends DaemonWorker {
                 if (!this.noEPPWriteQuirk) {
                     this.cpuCtrl.setEnergyPerformancePreference('performance');
                 }
-
-                this.cpuCtrl.setGovernorScalingMinFrequency(-2);
-                this.cpuCtrl.setGovernorScalingMaxFrequency(undefined);
             }
 
-            // Finally set the number of online cores
-            this.cpuCtrl.useCores(profile.cpu.onlineCores);
+            // Apply mode-specific frequency and online core settings
+            if (profile.cpu.mode === 'per-core') {
+                this.applyCpuProfilePerCore(profile);
+            } else {
+                if (!profile.cpu.useMaxPerfGov) {
+                    this.cpuCtrl.setGovernorScalingMinFrequency(profile.cpu.scalingMinFrequency);
+                    this.cpuCtrl.setGovernorScalingMaxFrequency(profile.cpu.scalingMaxFrequency);
+                } else {
+                    this.cpuCtrl.setGovernorScalingMinFrequency(-2);
+                    this.cpuCtrl.setGovernorScalingMaxFrequency(undefined);
+                }
+                this.cpuCtrl.useCores(profile.cpu.onlineCores);
+            }
 
             if (this.cpuCtrl.intelPstate.noTurbo.isAvailable() && this.cpuCtrl.intelPstate.noTurbo.isWritable()) {
                 if (profile.cpu.noTurbo !== undefined) {
@@ -210,6 +216,43 @@ export class CpuWorker extends DaemonWorker {
             }
         } catch (err: unknown) {
             console.error(`CpuWorker: applyCpuProfile failed => ${err}`);
+        }
+    }
+
+    private applyCpuProfilePerCore(profile: ITccProfile): void {
+        if (!profile.cpu.perCoreConfig || profile.cpu.perCoreConfig.length === 0) {
+            return;
+        }
+        for (const coreConfig of profile.cpu.perCoreConfig) {
+            const coreIndex: number = coreConfig.cpuId;
+            if (coreIndex == null || coreIndex < 0 || coreIndex >= this.cpuCtrl.cores.length) {
+                continue;
+            }
+            const core = this.cpuCtrl.cores[coreIndex];
+
+            // Set online/offline state (CPU 0 is always online, skip it)
+            if (coreIndex > 0 && core.online.isAvailable() && core.online.isWritable()) {
+                try {
+                    core.online.writeValue(coreConfig.online);
+                } catch (err: unknown) {
+                    this.tccd.logLine(`CpuWorker: Failed to set online state for CPU ${coreIndex} => ${err}`);
+                }
+            }
+
+            if (!coreConfig.online) {
+                continue;
+            }
+
+            try {
+                if (core.scalingMinFreq.isAvailable() && core.scalingMinFreq.isWritable()) {
+                    core.scalingMinFreq.writeValue(coreConfig.scalingMinFrequency);
+                }
+                if (core.scalingMaxFreq.isAvailable() && core.scalingMaxFreq.isWritable()) {
+                    core.scalingMaxFreq.writeValue(coreConfig.scalingMaxFrequency);
+                }
+            } catch (err: unknown) {
+                this.tccd.logLine(`CpuWorker: Failed to set frequencies for CPU ${coreIndex} => ${err}`);
+            }
         }
     }
 
@@ -243,34 +286,45 @@ export class CpuWorker extends DaemonWorker {
 
         let cpuFreqValidConfig: boolean = true;
 
-        // Check number of online cores
+        // Refresh the core list first so a hot-plugged/removed core is picked up before
+        // validating either mode below (both index into this.cpuCtrl.cores).
         this.cpuCtrl.getAvailableLogicalCores(this.basePath);
-        if (this.cpuCtrl.online.isAvailable() && this.cpuCtrl.cores?.length !== 0) {
-            const currentOnlineCores: number[] = this.cpuCtrl.online.readValue();
-            let onlineCoresProfile: number = profile.cpu.onlineCores;
-            if (onlineCoresProfile === undefined) {
-                onlineCoresProfile = this.cpuCtrl.cores?.length;
-            }
-            if (currentOnlineCores?.length !== onlineCoresProfile) {
+
+        if (profile.cpu.mode === 'per-core') {
+            // Per-core mode: validate individual core frequencies and online states
+            if (!this.validateCpuFreqPerCore(profile)) {
                 cpuFreqValidConfig = false;
-                console.error(
-                    `CpuWorker: onlineCores not as expected ${currentOnlineCores?.length} instead of ${onlineCoresProfile}`,
-                );
+            }
+        } else {
+            // Basic mode: validate global online core count
+            if (this.cpuCtrl.online.isAvailable() && this.cpuCtrl.cores?.length !== 0) {
+                const currentOnlineCores: number[] = this.cpuCtrl.online.readValue();
+                let onlineCoresProfile: number = profile.cpu.onlineCores;
+                if (onlineCoresProfile === undefined) {
+                    onlineCoresProfile = this.cpuCtrl.cores?.length;
+                }
+                if (currentOnlineCores?.length !== onlineCoresProfile) {
+                    cpuFreqValidConfig = false;
+                    console.error(
+                        `CpuWorker: onlineCores not as expected ${currentOnlineCores?.length} instead of ${onlineCoresProfile}`,
+                    );
+                }
             }
         }
 
         let scalingDriver: string;
 
-        // Check settings for each core
+        // Check settings for each online core (governor, EPP, and basic-mode frequencies)
         for (const core of this.cpuCtrl.cores) {
             if (core.coreIndex !== 0 && !core.online.readValue()) {
                 // Skip offline cores
                 continue;
             }
 
-            // Also Skip min/max freq validation on intel_pstate meanwhile bugged
-            // ie scaling_max_freq readout does not stay at cpuinfo_max_freq
+            // Basic mode only: validate per-core min/max frequency
+            // Skip on intel_pstate (bugged readout: scaling_max_freq does not stay at cpuinfo_max_freq)
             if (
+                profile.cpu.mode !== 'per-core' &&
                 profile.cpu.noTurbo !== true &&
                 this.cpuCtrl.cores[0].scalingDriver.isAvailable() &&
                 this.cpuCtrl.cores[0].scalingDriver.readValueNT() !== 'intel_pstate'
@@ -373,9 +427,9 @@ export class CpuWorker extends DaemonWorker {
             }
         }
 
-        if (this.cpuCtrl.boost.isAvailable() && scalingDriver === ScalingDriver.acpi_cpufreq) {
+        // Basic mode only: validate boost state
+        if (profile.cpu.mode !== 'per-core' && this.cpuCtrl.boost.isAvailable() && scalingDriver === ScalingDriver.acpi_cpufreq) {
             const currentBoost: boolean = this.cpuCtrl.boost.readValue();
-            //const coreMaxFreq: number = this.cpuCtrl.cores[0].cpuinfoMaxFreq.readValue();
             const availableFreqs: number[] = this.cpuCtrl.cores[0].scalingAvailableFrequencies.readValueNT();
             let maxSelectableFreq: number;
             if (availableFreqs !== undefined && availableFreqs?.length > 0) {
@@ -421,6 +475,68 @@ export class CpuWorker extends DaemonWorker {
             }
         }
 
+        return cpuFreqValidConfig;
+    }
+
+    private validateCpuFreqPerCore(profile: ITccProfile): boolean {
+        let cpuFreqValidConfig: boolean = true;
+        if (!profile.cpu.perCoreConfig || profile.cpu.perCoreConfig.length === 0) {
+            return cpuFreqValidConfig;
+        }
+        for (const coreConfig of profile.cpu.perCoreConfig) {
+            const coreIndex: number = coreConfig.cpuId;
+            if (coreIndex == null || coreIndex < 0 || coreIndex >= this.cpuCtrl.cores.length) {
+                continue;
+            }
+            const core = this.cpuCtrl.cores[coreIndex];
+
+            // Check online/offline state (CPU 0 is always online, skip it)
+            if (coreIndex > 0 && core.online.isAvailable()) {
+                try {
+                    const currentOnline: boolean = core.online.readValue();
+                    if (currentOnline !== coreConfig.online) {
+                        cpuFreqValidConfig = false;
+                        this.tccd.logLine(
+                            `CpuWorker: CPU ${coreIndex} online state mismatch => ${currentOnline} instead of ${coreConfig.online}`,
+                        );
+                    }
+                } catch (err: unknown) {
+                    this.tccd.logLine(`CpuWorker: Error reading online state for CPU ${coreIndex} => ${err}`);
+                }
+            }
+
+            if (!coreConfig.online) {
+                continue;
+            }
+
+            if (core.scalingMinFreq.isAvailable()) {
+                try {
+                    const currentMinFreq: number = core.scalingMinFreq.readValue();
+                    if (currentMinFreq !== coreConfig.scalingMinFrequency) {
+                        cpuFreqValidConfig = false;
+                        this.tccd.logLine(
+                            `CpuWorker: CPU ${coreIndex} min frequency mismatch => ${currentMinFreq} instead of ${coreConfig.scalingMinFrequency}`,
+                        );
+                    }
+                } catch (err: unknown) {
+                    this.tccd.logLine(`CpuWorker: Error reading min frequency for CPU ${coreIndex} => ${err}`);
+                }
+            }
+
+            if (core.scalingMaxFreq.isAvailable()) {
+                try {
+                    const currentMaxFreq: number = core.scalingMaxFreq.readValue();
+                    if (currentMaxFreq !== coreConfig.scalingMaxFrequency) {
+                        cpuFreqValidConfig = false;
+                        this.tccd.logLine(
+                            `CpuWorker: CPU ${coreIndex} max frequency mismatch => ${currentMaxFreq} instead of ${coreConfig.scalingMaxFrequency}`,
+                        );
+                    }
+                } catch (err: unknown) {
+                    this.tccd.logLine(`CpuWorker: Error reading max frequency for CPU ${coreIndex} => ${err}`);
+                }
+            }
+        }
         return cpuFreqValidConfig;
     }
 }
