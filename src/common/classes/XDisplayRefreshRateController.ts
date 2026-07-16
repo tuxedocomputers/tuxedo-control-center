@@ -19,10 +19,21 @@
 
 import * as child_process from 'node:child_process';
 import * as fs from 'node:fs';
+import type { IDisplayRefreshRateController } from '../models/IDisplayRefreshRateController';
 import type { IDisplayFreqRes, IDisplayMode } from '../models/DisplayFreqRes';
 import { execCommandAsync } from './Utils';
 
-export class XDisplayRefreshRateController {
+/**
+ * Detects the active graphical session (X11/Wayland/TTY, desktop environment, and the
+ * various session env vars other backends need) and, when the session is X11, also
+ * implements the refresh-rate backend itself via xrandr.
+ *
+ * Session detection here is shared infrastructure: other IDisplayRefreshRateController
+ * backends (e.g. KScreenDisplayController for KDE Plasma on Wayland) rely on the
+ * Wayland/desktop-environment/session env vars this class captures, even though they
+ * don't use its X11-specific operations.
+ */
+export class XDisplayRefreshRateController implements IDisplayRefreshRateController {
     private displayName: string = '';
 
     private isX11: number = -1;
@@ -32,6 +43,12 @@ export class XDisplayRefreshRateController {
 
     private display: string = '';
     private xAuthorityFile: string = '';
+
+    private username: string = '';
+    private currentDesktop: string = '';
+    private waylandDisplay: string = '';
+    private xdgRuntimeDir: string = '';
+    private dbusSessionBusAddress: string = '';
 
     private setSessionType(xdgSessionMatch: RegExpMatchArray) {
         const sessionType: string = xdgSessionMatch
@@ -87,20 +104,39 @@ export class XDisplayRefreshRateController {
                 awk ' /DISPLAY=/ && !countDisplay {print; countDisplay++} \
                     /XAUTHORITY=/ && !countXAuthority {print; countXAuthority++} \
                     /XDG_SESSION_TYPE=/ && !countSessionType {print; countSessionType++} \
+                    /XDG_CURRENT_DESKTOP=/ && !countDesktop {print; countDesktop++} \
+                    /WAYLAND_DISPLAY=/ && !countWaylandDisplay {print; countWaylandDisplay++} \
+                    /XDG_RUNTIME_DIR=/ && !countRuntimeDir {print; countRuntimeDir++} \
+                    /DBUS_SESSION_BUS_ADDRESS=/ && !countDbusAddress {print; countDbusAddress++} \
                     /USER=/ && !countUser {print; countUser++} \
-                    {if (countDisplay && countXAuthority && countSessionType && countUser) exit} '`,
+                    {if (countDisplay && countXAuthority && countSessionType && countDesktop && countWaylandDisplay && countRuntimeDir && countDbusAddress && countUser) exit} '`,
             )
             .toString();
 
         const displayMatch: RegExpMatchArray = environmentVariables.match(/^DISPLAY=(.*)$/m);
         const xAuthorityMatch: RegExpMatchArray = environmentVariables.match(/^XAUTHORITY=(.*)$/m);
         const xdgSessionMatch: RegExpMatchArray = environmentVariables.match(/^XDG_SESSION_TYPE=(.*)$/m);
+        const currentDesktopMatch: RegExpMatchArray = environmentVariables.match(/^XDG_CURRENT_DESKTOP=(.*)$/m);
+        const waylandDisplayMatch: RegExpMatchArray = environmentVariables.match(/^WAYLAND_DISPLAY=(.*)$/m);
+        const xdgRuntimeDirMatch: RegExpMatchArray = environmentVariables.match(/^XDG_RUNTIME_DIR=(.*)$/m);
+        const dbusSessionBusAddressMatch: RegExpMatchArray = environmentVariables.match(
+            /^DBUS_SESSION_BUS_ADDRESS=(.*)$/m,
+        );
         const userMatch: RegExpMatchArray = environmentVariables.match(/^USER=(.*)$/m);
 
         this.setSessionType(xdgSessionMatch);
         this.setXAuthority(xAuthorityMatch, userMatch);
 
         this.display = displayMatch ? displayMatch[1].replace('DISPLAY=', '').trim() : '';
+        this.username = userMatch ? userMatch[1].replace('USER=', '').trim() : '';
+        this.currentDesktop = currentDesktopMatch
+            ? currentDesktopMatch[1].replace('XDG_CURRENT_DESKTOP=', '').trim()
+            : '';
+        this.waylandDisplay = waylandDisplayMatch ? waylandDisplayMatch[1].replace('WAYLAND_DISPLAY=', '').trim() : '';
+        this.xdgRuntimeDir = xdgRuntimeDirMatch ? xdgRuntimeDirMatch[1].replace('XDG_RUNTIME_DIR=', '').trim() : '';
+        this.dbusSessionBusAddress = dbusSessionBusAddressMatch
+            ? dbusSessionBusAddressMatch[1].replace('DBUS_SESSION_BUS_ADDRESS=', '').trim()
+            : '';
 
         if (this.xrandrAvailable === undefined) {
             this.xrandrAvailable = await this.checkXrandrInstalled();
@@ -131,12 +167,45 @@ export class XDisplayRefreshRateController {
         return this.xAuthorityFile;
     }
 
+    public getUsername(): string {
+        return this.username;
+    }
+
+    /**
+     * Whether the current desktop environment (per XDG_CURRENT_DESKTOP) is KDE Plasma.
+     * KDE prefixes/joins this with other values (e.g. "KDE" or "X-Cinnamon:KDE"), hence includes().
+     */
+    public getIsKdePlasma(): boolean {
+        return this.currentDesktop.toUpperCase().includes('KDE');
+    }
+
+    public getWaylandDisplay(): string {
+        return this.waylandDisplay;
+    }
+
+    public getXdgRuntimeDir(): string {
+        return this.xdgRuntimeDir;
+    }
+
+    public getDbusSessionBusAddress(): string {
+        return this.dbusSessionBusAddress;
+    }
+
+    public getDebugInfo(): string {
+        return `display "${this.display}" with the name "${this.displayName}" and XAUTHORITY "${this.xAuthorityFile}"`;
+    }
+
     public resetValues(): void {
         this.isX11 = -1;
         this.isWayland = undefined;
         this.isTTY = undefined;
         this.display = '';
         this.xAuthorityFile = '';
+        this.username = '';
+        this.currentDesktop = '';
+        this.waylandDisplay = '';
+        this.xdgRuntimeDir = '';
+        this.dbusSessionBusAddress = '';
     }
 
     public checkVariablesAvailable(): boolean {
