@@ -1,6 +1,6 @@
 # Changelog
 
-## [] - UNRELEASED
+## [3.0.7] - 2026-07-16
 ### Fixed
 - Accidental wake of discrete GPU when opening Dashboard, dGPU should now be left in low-power mode
 - Slowly increasing memory usage over longer time
