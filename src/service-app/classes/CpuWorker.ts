@@ -287,9 +287,7 @@ export class CpuWorker extends DaemonWorker {
 
         if (profile.cpu.mode === 'per-core') {
             // Per-core mode: validate individual core frequencies and online states
-            if (!this.validateCpuFreqPerCore(profile)) {
-                cpuFreqValidConfig = false;
-            }
+            cpuFreqValidConfig &&= this.validateCpuFreqPerCore(profile);
         } else {
             // Basic mode: validate global online core count
             if (this.cpuCtrl.online.isAvailable() && this.cpuCtrl.cores?.length !== 0) {
