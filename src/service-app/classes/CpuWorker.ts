@@ -269,6 +269,14 @@ export class CpuWorker extends DaemonWorker {
     }
 
     // todo: function too long
+    // todo: min/max frequency validation is asymmetric between modes - per-core mode validates it
+    // in validateCpuFreqPerCore() before the loop below, while basic mode validates it inside the
+    // loop alongside mode-agnostic checks (governor, EPP). When tackling the "function too long"
+    // todo, this is worth revisiting - not a decided plan, just options to keep in mind, e.g.:
+    // - symmetric per-mode validation blocks executed before a strictly mode-agnostic loop
+    // - or a single loop validating each online core regardless of mode: online state validated
+    //   first (e.g. validateCpuCoreState), then a loop validating each online core's frequency
+    //   (e.g. validateCpuOnlineCoreFreq)
     private validateCpuFreq(): boolean {
         const profile: ITccProfile = this.activeProfile;
 
