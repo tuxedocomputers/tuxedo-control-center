@@ -173,26 +173,19 @@ export class CpuWorker extends DaemonWorker {
             this.setCpuDefaultConfig();
 
             // Apply common settings: governor and energy performance preference
-            if (!profile.cpu.useMaxPerfGov) {
-                // Note: Hard set governor to default (not included in profiles atm)
-                profile.cpu.governor = this.findDefaultGovernor();
+            // Note: Hard set governor to default (not included in profiles atm)
+            profile.cpu.governor = profile.cpu.useMaxPerfGov
+                ? this.findPerformanceGovernor()
+                : this.findDefaultGovernor();
 
-                this.cpuCtrl.setGovernor(profile.cpu.governor);
-                if (!this.noEPPWriteQuirk) {
-                    if (this.hasEPPPerformanceQuirk) {
-                        // Setting for certain devices that need EPP = performance to allow full frequency range
-                        this.cpuCtrl.setEnergyPerformancePreference('performance');
-                    } else {
-                        this.cpuCtrl.setEnergyPerformancePreference(profile.cpu.energyPerformancePreference);
-                    }
-                }
-            } else {
-                profile.cpu.governor = this.findPerformanceGovernor();
-
-                this.cpuCtrl.setGovernor(profile.cpu.governor);
-                if (!this.noEPPWriteQuirk) {
-                    this.cpuCtrl.setEnergyPerformancePreference('performance');
-                }
+            this.cpuCtrl.setGovernor(profile.cpu.governor);
+            if (!this.noEPPWriteQuirk) {
+                // hasEPPPerformanceQuirk: certain devices need EPP = performance to allow full frequency range
+                const energyPerformancePreference =
+                    this.hasEPPPerformanceQuirk || profile.cpu.useMaxPerfGov
+                        ? 'performance'
+                        : profile.cpu.energyPerformancePreference;
+                this.cpuCtrl.setEnergyPerformancePreference(energyPerformancePreference);
             }
 
             // Apply mode-specific frequency and online core settings
@@ -209,10 +202,12 @@ export class CpuWorker extends DaemonWorker {
                 this.cpuCtrl.useCores(profile.cpu.onlineCores);
             }
 
-            if (this.cpuCtrl.intelPstate.noTurbo.isAvailable() && this.cpuCtrl.intelPstate.noTurbo.isWritable()) {
-                if (profile.cpu.noTurbo !== undefined) {
-                    this.cpuCtrl.intelPstate.noTurbo.writeValue(profile.cpu.noTurbo);
-                }
+            if (
+                this.cpuCtrl.intelPstate.noTurbo.isAvailable() &&
+                this.cpuCtrl.intelPstate.noTurbo.isWritable() &&
+                profile.cpu.noTurbo !== undefined
+            ) {
+                this.cpuCtrl.intelPstate.noTurbo.writeValue(profile.cpu.noTurbo);
             }
         } catch (err: unknown) {
             console.error(`CpuWorker: applyCpuProfile failed => ${err}`);

@@ -842,6 +842,33 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                         </content>
                                     </mat-grid-tile>
 
+                                    <!-- Maximum performance -->
+                                    <mat-grid-tile [colspan]="gridParams.header">
+                                        <header i18n="@@cProfMgrDetailsUseMaxPerfGovLabel">Maximum performance</header>
+                                    </mat-grid-tile>
+                                    <mat-grid-tile class="value" [colspan]="gridParams.value">
+                                        <content class="value">
+                                            <span [hidden]="!inputUseMaxPerfGov.checked" i18n="@@cProfMgrDetailsUseMaxPerfGovYes">yes</span>
+                                            <span [hidden]="inputUseMaxPerfGov.checked" i18n="@@cProfMgrDetailsUseMaxPerfGovNo">no</span>
+                                        </content>
+                                    </mat-grid-tile>
+                                    <mat-grid-tile [colspan]="gridParams.input">
+                                        <content class="input" [hidden]="!editProfile">
+                                            <mat-checkbox #inputUseMaxPerfGov formControlName="useMaxPerfGov" color="primary"> </mat-checkbox>
+                                        </content>
+                                    </mat-grid-tile>
+
+                                    <mat-grid-tile [colspan]="gridParams.undo">
+                                        <button
+                                            type="button"
+                                            mat-icon-button
+                                            color="primary"
+                                            (click)="profileFormGroup.get('cpu').get('useMaxPerfGov').reset(viewProfile.cpu.useMaxPerfGov)"
+                                            [hidden]="profileFormGroup.get('cpu').get('useMaxPerfGov').value === viewProfile.cpu.useMaxPerfGov">
+                                            <mat-icon>undo</mat-icon>
+                                        </button>
+                                    </mat-grid-tile>
+
                                     <ng-container *ngIf="profileFormGroup.get('cpu').get('mode')?.value !== 'per-core'">
                                     <!-- Number of logical cores -->
                                     <mat-grid-tile [colspan]="gridParams.header">
@@ -888,33 +915,6 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                                             color="primary"
                                             (click)="profileFormGroup.get('cpu').get('onlineCores').reset(viewProfile.cpu.onlineCores)"
                                             [hidden]="profileFormGroup.get('cpu').get('onlineCores').value === viewProfile.cpu.onlineCores">
-                                            <mat-icon>undo</mat-icon>
-                                        </button>
-                                    </mat-grid-tile>
-
-                                    <!-- Maximum performance -->
-                                    <mat-grid-tile [colspan]="gridParams.header">
-                                        <header i18n="@@cProfMgrDetailsUseMaxPerfGovLabel">Maximum performance</header>
-                                    </mat-grid-tile>
-                                    <mat-grid-tile class="value" [colspan]="gridParams.value">
-                                        <content class="value">
-                                            <span [hidden]="!inputUseMaxPerfGov.checked" i18n="@@cProfMgrDetailsUseMaxPerfGovYes">yes</span>
-                                            <span [hidden]="inputUseMaxPerfGov.checked" i18n="@@cProfMgrDetailsUseMaxPerfGovNo">no</span>
-                                        </content>
-                                    </mat-grid-tile>
-                                    <mat-grid-tile [colspan]="gridParams.input">
-                                        <content class="input" [hidden]="!editProfile">
-                                            <mat-checkbox #inputUseMaxPerfGov formControlName="useMaxPerfGov" color="primary"> </mat-checkbox>
-                                        </content>
-                                    </mat-grid-tile>
-
-                                    <mat-grid-tile [colspan]="gridParams.undo">
-                                        <button
-                                            type="button"
-                                            mat-icon-button
-                                            color="primary"
-                                            (click)="profileFormGroup.get('cpu').get('useMaxPerfGov').reset(viewProfile.cpu.useMaxPerfGov)"
-                                            [hidden]="profileFormGroup.get('cpu').get('useMaxPerfGov').value === viewProfile.cpu.useMaxPerfGov">
                                             <mat-icon>undo</mat-icon>
                                         </button>
                                     </mat-grid-tile>
