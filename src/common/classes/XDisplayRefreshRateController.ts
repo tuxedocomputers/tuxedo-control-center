@@ -101,6 +101,10 @@ export class XDisplayRefreshRateController implements IDisplayRefreshRateControl
         return `display "${this.display}" with the name "${this.displayName}" and XAUTHORITY "${this.xAuthorityFile}"`;
     }
 
+    public getDisplayType(): string {
+        return 'x11';
+    }
+
     public resetValues(): void {
         this.applies = false;
         this.display = '';

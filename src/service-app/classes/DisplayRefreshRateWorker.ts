@@ -168,10 +168,12 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
             await controller.setVariables(env);
             if (controller.checkVariablesAvailable()) {
                 this.activeController = controller;
+                console.log(`DisplayRefreshRateWorker: Detected ${controller.getDisplayType()}`);
                 return;
             }
         }
         this.noControllerApplies = true;
+        console.log(`DisplayRefreshRateWorker: Detected session type: ${env.sessionType}`);
     }
 
     private async updateDisplayData(): Promise<void> {
@@ -194,15 +196,5 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
         }
 
         this.tccd.dbusData.isX11 = env.sessionType === '' ? -1 : env.sessionType === 'x11' ? 1 : 0;
-
-        if (env.sessionType === 'x11') {
-            console.log('DisplayRefreshRateWorker: Detected x11');
-        } else if (env.sessionType === 'wayland') {
-            console.log(
-                `DisplayRefreshRateWorker: Detected wayland${env.currentDesktop.toUpperCase().includes('KDE') ? ' (KDE Plasma)' : ''}`,
-            );
-        } else if (env.sessionType === 'tty') {
-            console.log('DisplayRefreshRateWorker: Detected tty');
-        }
     }
 }

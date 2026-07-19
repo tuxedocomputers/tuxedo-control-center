@@ -224,4 +224,8 @@ export class KScreenDisplayController implements IDisplayRefreshRateController {
     public getDebugInfo(): string {
         return `kscreen-doctor output "${this.outputName}" for user "${this.username}" with XDG_RUNTIME_DIR "${this.xdgRuntimeDir}"`;
     }
+
+    public getDisplayType(): string {
+        return 'wayland (KDE Plasma)';
+    }
 }

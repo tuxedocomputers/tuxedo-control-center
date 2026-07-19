@@ -65,4 +65,11 @@ export interface IDisplayRefreshRateController {
      * output name/user for KDE). Not meant to be parsed, only logged.
      */
     getDebugInfo(): string;
+
+    /**
+     * Short human-readable description of the windowing system/desktop environment
+     * this backend handles (e.g. "x11", "wayland (KDE Plasma)"), for the "Detected ..."
+     * log message once this backend has been selected as active.
+     */
+    getDisplayType(): string;
 }
