@@ -173,7 +173,9 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
             }
         }
         this.noControllerApplies = true;
-        console.log(`DisplayRefreshRateWorker: Detected session type: ${env.sessionType}`);
+        console.log(
+            `DisplayRefreshRateWorker: Detected session type: ${env.sessionType}, unhandled refresh rate feature`,
+        );
     }
 
     private async updateDisplayData(): Promise<void> {
