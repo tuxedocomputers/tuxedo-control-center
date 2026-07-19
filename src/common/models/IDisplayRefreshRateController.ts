@@ -18,25 +18,29 @@
  */
 
 import type { IDisplayFreqRes } from './DisplayFreqRes';
+import type { ISessionEnvironment } from './SessionEnvironment';
 
 /**
  * Common contract for a "set refresh rate on profile activation" backend.
  *
  * Each windowing-system/desktop-environment combination that can support this feature
  * (X11 via xrandr, KDE Plasma via kscreen-doctor, ...) implements this the same way, so
- * DisplayRefreshRateWorker can pick whichever backend applies at runtime and drive it
- * without caring which one it is. Additional backends (GNOME/Mutter, wlroots-based
- * compositors, ...) can be added later by implementing this interface.
+ * DisplayRefreshRateWorker can try each backend in turn and drive whichever one applies,
+ * without hardcoding per-backend selection logic. Additional backends (GNOME/Mutter,
+ * wlroots-based compositors, ...) can be added later by implementing this interface and
+ * adding an instance to the worker's controller list.
  */
 export interface IDisplayRefreshRateController {
     /**
-     * Queries the current session for whatever this backend needs (env vars, tool
-     * availability, ...). Must be called before checkVariablesAvailable()/getDisplayModes().
+     * Given the raw session environment, decides whether this backend applies to the
+     * current session and, if so, checks whatever else it needs (tool availability, ...).
+     * Must be called before checkVariablesAvailable()/getDisplayModes().
      */
-    setVariables(): Promise<void>;
+    setVariables(env: ISessionEnvironment): Promise<void>;
 
     /**
-     * Whether setVariables() found everything this backend needs to operate.
+     * Whether the last setVariables() call determined that this backend applies to the
+     * current session AND found everything it needs to operate.
      */
     checkVariablesAvailable(): boolean;
 

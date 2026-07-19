@@ -20,21 +20,25 @@
 import * as child_process from 'node:child_process';
 import { execCommandAsync } from '../../common/classes/Utils';
 import { KScreenDisplayController } from '../../common/classes/KScreenDisplayController';
+import { SessionEnvironmentReader } from '../../common/classes/SessionEnvironmentReader';
 import { XDisplayRefreshRateController } from '../../common/classes/XDisplayRefreshRateController';
 import type { IDisplayFreqRes, IDisplayMode } from '../../common/models/DisplayFreqRes';
 import type { IDisplayRefreshRateController } from '../../common/models/IDisplayRefreshRateController';
+import type { ISessionEnvironment } from '../../common/models/SessionEnvironment';
 import type { ITccProfile } from '../../common/models/TccProfile';
 import { DaemonWorker } from './DaemonWorker';
 import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
 export class DisplayRefreshRateWorker extends DaemonWorker {
-    // Detects the session (X11/Wayland/TTY, desktop environment, ...) and is itself the
-    // X11/xrandr backend.
-    private sessionController: XDisplayRefreshRateController;
-    // KDE Plasma (X11 or Wayland) backend, driven via kscreen-doctor.
-    private kscreenController: KScreenDisplayController;
+    // Reads the raw session environment, shared by all candidate backends below.
+    private sessionReader: SessionEnvironmentReader;
+    // Candidate backends, tried in order; each decides for itself whether it applies.
+    private controllers: IDisplayRefreshRateController[];
     // Whichever backend applies to the current session, or undefined if none does.
     private activeController: IDisplayRefreshRateController;
+    // Set once a full pass over this.controllers found none applicable (e.g. TTY session),
+    // so we stop re-scanning every poll until a user/session change resets it.
+    private noControllerApplies: boolean = false;
 
     private displayInfo: IDisplayFreqRes;
     private displayInfoFound: boolean = false;
@@ -44,8 +48,8 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
 
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(5000, 'DisplayRefreshrateWorker', tccd);
-        this.sessionController = new XDisplayRefreshRateController();
-        this.kscreenController = new KScreenDisplayController();
+        this.sessionReader = new SessionEnvironmentReader();
+        this.controllers = [new XDisplayRefreshRateController(), new KScreenDisplayController()];
     }
 
     public async onStart(): Promise<void> {
@@ -91,8 +95,10 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
         this.displayInfo = undefined;
         this.displayInfoFound = false;
         this.activeController = undefined;
-        this.sessionController.resetValues();
-        this.kscreenController.resetValues();
+        this.noControllerApplies = false;
+        for (const controller of this.controllers) {
+            controller.resetValues();
+        }
     }
 
     public async onWork(): Promise<void> {
@@ -106,10 +112,8 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
             this.resetToDefault();
         }
 
-        if (usersAvailable && !this.sessionController.checkVariablesAvailable()) {
-            if (!this.displayInfoFound && this.sessionController.getIsTTY() !== true) {
-                await this.updateDisplayData();
-            }
+        if (usersAvailable && !this.activeController && !this.noControllerApplies && !this.displayInfoFound) {
+            await this.updateDisplayData();
         }
         this.setActiveDisplayMode();
     }
@@ -154,47 +158,27 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
     }
 
     /**
-     * Picks which backend (if any) applies to the currently detected session, and
-     * initializes it. this.activeController stays undefined if no backend applies
-     * (e.g. TTY, or a Wayland session on a desktop environment without a backend yet).
+     * Tries each candidate backend in order against the given raw session environment,
+     * and picks the first one that applies and is ready. this.activeController stays
+     * undefined, and this.noControllerApplies is set, if none applies (e.g. TTY, or a
+     * Wayland session on a desktop environment without a backend yet).
      */
-    private async selectActiveController(): Promise<void> {
-        const isX11 =
-            this.sessionController.getIsTTY() === false &&
-            this.sessionController.getIsWayland() === false &&
-            this.sessionController.getIsX11() === 1;
-
-        if (isX11) {
-            this.activeController = this.sessionController;
-            return;
-        }
-
-        const isKdePlasmaWayland =
-            this.sessionController.getIsTTY() === false &&
-            this.sessionController.getIsWayland() === true &&
-            this.sessionController.getIsKdePlasma();
-
-        if (isKdePlasmaWayland) {
-            this.kscreenController.setSessionContext(
-                this.sessionController.getUsername(),
-                this.sessionController.getXdgRuntimeDir(),
-                this.sessionController.getWaylandDisplay(),
-                this.sessionController.getDbusSessionBusAddress(),
-            );
-            await this.kscreenController.setVariables();
-            if (this.kscreenController.checkVariablesAvailable()) {
-                this.activeController = this.kscreenController;
+    private async selectActiveController(env: ISessionEnvironment): Promise<void> {
+        for (const controller of this.controllers) {
+            await controller.setVariables(env);
+            if (controller.checkVariablesAvailable()) {
+                this.activeController = controller;
+                return;
             }
         }
+        this.noControllerApplies = true;
     }
 
     private async updateDisplayData(): Promise<void> {
         this.resetToDefault();
-        await this.sessionController.setVariables();
+        const env: ISessionEnvironment = this.sessionReader.read();
 
-        if (this.sessionController.checkVariablesAvailable()) {
-            await this.selectActiveController();
-        }
+        await this.selectActiveController(env);
 
         if (this.activeController) {
             this.displayInfo = this.activeController.getDisplayModes();
@@ -209,22 +193,16 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
             this.tccd.dbusData.displayModesJSON = '{}';
         }
 
-        if (this.sessionController.checkVariablesAvailable()) {
-            this.tccd.dbusData.isX11 = this.sessionController.getIsX11();
+        this.tccd.dbusData.isX11 = env.sessionType === '' ? -1 : env.sessionType === 'x11' ? 1 : 0;
 
-            if (this.sessionController.getIsX11() === 1) {
-                console.log('DisplayRefreshRateWorker: Detected x11');
-            }
-
-            if (this.sessionController.getIsWayland()) {
-                console.log(
-                    `DisplayRefreshRateWorker: Detected wayland${this.sessionController.getIsKdePlasma() ? ' (KDE Plasma)' : ''}`,
-                );
-            }
-
-            if (this.sessionController.getIsTTY()) {
-                console.log('DisplayRefreshRateWorker: Detected tty');
-            }
+        if (env.sessionType === 'x11') {
+            console.log('DisplayRefreshRateWorker: Detected x11');
+        } else if (env.sessionType === 'wayland') {
+            console.log(
+                `DisplayRefreshRateWorker: Detected wayland${env.currentDesktop.toUpperCase().includes('KDE') ? ' (KDE Plasma)' : ''}`,
+            );
+        } else if (env.sessionType === 'tty') {
+            console.log('DisplayRefreshRateWorker: Detected tty');
         }
     }
 }

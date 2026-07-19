@@ -20,7 +20,22 @@
 import 'jasmine';
 
 import type { IDisplayFreqRes } from '../models/DisplayFreqRes';
+import type { ISessionEnvironment } from '../models/SessionEnvironment';
 import { KScreenDisplayController } from './KScreenDisplayController';
+
+function sessionEnvironment(overrides: Partial<ISessionEnvironment> = {}): ISessionEnvironment {
+    return {
+        sessionType: 'wayland',
+        currentDesktop: 'KDE',
+        display: '',
+        xAuthorityRaw: '',
+        username: 'testuser',
+        waylandDisplay: 'wayland-0',
+        xdgRuntimeDir: '/run/user/1000',
+        dbusSessionBusAddress: 'unix:path=/run/user/1000/bus',
+        ...overrides,
+    };
+}
 
 function kscreenDoctorJSON(overrides: Partial<Record<string, unknown>> = {}): string {
     return JSON.stringify({
@@ -142,6 +157,58 @@ describe('KScreenDisplayController', (): void => {
             const controller = new KScreenDisplayController();
 
             expect(controller.setRefreshRateAndResolution(1920, 1080, 144)).toBe(false);
+        });
+    });
+
+    describe('setVariables / checkVariablesAvailable', (): void => {
+        it('applies and becomes available on a KDE Plasma Wayland session', async (): Promise<void> => {
+            const controller = new KScreenDisplayController();
+
+            await controller.setVariables(sessionEnvironment());
+
+            expect(controller.checkVariablesAvailable()).toBe(true);
+        });
+
+        it('does not apply on a non-KDE Wayland session (e.g. GNOME)', async (): Promise<void> => {
+            const controller = new KScreenDisplayController();
+
+            await controller.setVariables(sessionEnvironment({ currentDesktop: 'GNOME' }));
+
+            expect(controller.checkVariablesAvailable()).toBe(false);
+        });
+
+        it('does not apply on an X11 session even if the desktop is KDE', async (): Promise<void> => {
+            const controller = new KScreenDisplayController();
+
+            await controller.setVariables(sessionEnvironment({ sessionType: 'x11' }));
+
+            expect(controller.checkVariablesAvailable()).toBe(false);
+        });
+
+        it('matches XDG_CURRENT_DESKTOP case-insensitively (e.g. "X-Cinnamon:KDE")', async (): Promise<void> => {
+            const controller = new KScreenDisplayController();
+
+            await controller.setVariables(sessionEnvironment({ currentDesktop: 'X-Cinnamon:kde' }));
+
+            expect(controller.checkVariablesAvailable()).toBe(true);
+        });
+
+        it('stays unavailable if required session fields are missing despite applying', async (): Promise<void> => {
+            const controller = new KScreenDisplayController();
+
+            await controller.setVariables(sessionEnvironment({ waylandDisplay: '' }));
+
+            expect(controller.checkVariablesAvailable()).toBe(false);
+        });
+
+        it('resetValues() clears applicability so checkVariablesAvailable() is false again', async (): Promise<void> => {
+            const controller = new KScreenDisplayController();
+            await controller.setVariables(sessionEnvironment());
+            expect(controller.checkVariablesAvailable()).toBe(true);
+
+            controller.resetValues();
+
+            expect(controller.checkVariablesAvailable()).toBe(false);
         });
     });
 });

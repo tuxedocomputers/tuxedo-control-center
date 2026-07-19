@@ -19,6 +19,7 @@
 
 import type { IDisplayFreqRes, IDisplayMode } from '../models/DisplayFreqRes';
 import type { IDisplayRefreshRateController } from '../models/IDisplayRefreshRateController';
+import type { ISessionEnvironment } from '../models/SessionEnvironment';
 import { execCommandAsync, execCommandSync } from './Utils';
 
 interface IKScreenMode {
@@ -54,6 +55,8 @@ function modeKey(xRes: number, yRes: number, rate: number): string {
  * driven through KWin's own kscreen-doctor CLI instead of xrandr.
  */
 export class KScreenDisplayController implements IDisplayRefreshRateController {
+    private applies: boolean = false;
+
     private username: string = '';
     private xdgRuntimeDir: string = '';
     private waylandDisplay: string = '';
@@ -63,23 +66,16 @@ export class KScreenDisplayController implements IDisplayRefreshRateController {
     private outputName: string = '';
     private modeIdByKey: Map<string, string> = new Map();
 
-    /**
-     * Session context needed to reach the target user's KWin/kscreen session from tccd,
-     * which runs as root. Mirrors XAUTHORITY/DISPLAY on the X11 side.
-     */
-    public setSessionContext(
-        username: string,
-        xdgRuntimeDir: string,
-        waylandDisplay: string,
-        dbusSessionBusAddress: string,
-    ): void {
-        this.username = username;
-        this.xdgRuntimeDir = xdgRuntimeDir;
-        this.waylandDisplay = waylandDisplay;
-        this.dbusSessionBusAddress = dbusSessionBusAddress;
-    }
+    public async setVariables(env: ISessionEnvironment): Promise<void> {
+        this.applies = env.sessionType === 'wayland' && env.currentDesktop.toUpperCase().includes('KDE');
 
-    public async setVariables(): Promise<void> {
+        if (this.applies) {
+            this.username = env.username;
+            this.xdgRuntimeDir = env.xdgRuntimeDir;
+            this.waylandDisplay = env.waylandDisplay;
+            this.dbusSessionBusAddress = env.dbusSessionBusAddress;
+        }
+
         if (this.kscreenDoctorAvailable === undefined) {
             this.kscreenDoctorAvailable = await this.checkKscreenDoctorInstalled();
         }
@@ -87,6 +83,7 @@ export class KScreenDisplayController implements IDisplayRefreshRateController {
 
     public checkVariablesAvailable(): boolean {
         return (
+            this.applies &&
             !!this.username &&
             !!this.xdgRuntimeDir &&
             !!this.waylandDisplay &&
@@ -95,6 +92,7 @@ export class KScreenDisplayController implements IDisplayRefreshRateController {
     }
 
     public resetValues(): void {
+        this.applies = false;
         this.username = '';
         this.xdgRuntimeDir = '';
         this.waylandDisplay = '';
