@@ -106,7 +106,6 @@ export const DbusClientAPI = {
     setChargeType: (chargeType: ChargeType): Promise<boolean> =>
         ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.setChargeType, chargeType]),
     fanHwmonAvailable: (): Promise<boolean> => ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.fanHwmonAvailable]),
-    getIsX11: (): Promise<number> => ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.getIsX11]),
     getDeviceJSON: (): Promise<string> => ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.getDeviceJSON]),
     getNVIDIAPowerCTRLDefaultPowerLimit: (): Promise<number> =>
         ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.getNVIDIAPowerCTRLDefaultPowerLimit]),
@@ -168,7 +167,6 @@ export interface IDbusClientAPI {
     setChargeEndThreshold: (newValue: number) => Promise<boolean>;
     setChargeType: (chargeType: ChargeType) => Promise<boolean>;
     fanHwmonAvailable: () => Promise<boolean>;
-    getIsX11: () => Promise<number>;
     getDeviceJSON: () => Promise<string>;
     getNVIDIAPowerCTRLDefaultPowerLimit: () => Promise<number>;
     getNVIDIAPowerCTRLMaxPowerLimit: () => Promise<number>;

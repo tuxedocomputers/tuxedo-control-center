@@ -194,7 +194,5 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
         } else {
             this.tccd.dbusData.displayModesJSON = '{}';
         }
-
-        this.tccd.dbusData.isX11 = env.sessionType === '' ? -1 : env.sessionType === 'x11' ? 1 : 0;
     }
 }

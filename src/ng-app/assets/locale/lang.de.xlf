@@ -414,9 +414,9 @@
           <context context-type="linenumber">317</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="ProfMgrRefreshRatesNotAvailableOnWaylandTooltip" datatype="html">
-        <source>This feature is currently not supported on Wayland</source>
-        <target state="translated">Dieses Feature wird derzeit auf Wayland nicht unterstützt</target>
+      <trans-unit id="ProfMgrRefreshRatesNotAvailableTooltip" datatype="html">
+        <source>This feature is not supported in the current desktop session</source>
+        <target state="translated">Dieses Feature wird in der aktuellen Desktop-Sitzung nicht unterstützt</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/profile-details-edit/profile-details-edit.component.ts</context>
           <context context-type="linenumber">727</context>

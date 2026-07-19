@@ -432,18 +432,6 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
         );
     })
 
-    .set(DbusAPIFunctions.getIsX11, (): Promise<number> => {
-        return new Promise<number>(
-            (resolve: (value: number | PromiseLike<number>) => void, _reject: (reason?: unknown) => void): void => {
-                try {
-                    resolve(tccDBus.getIsX11());
-                } catch (err: unknown) {
-                    console.error(`dbusAPI: getIsX11 failed => ${err}`);
-                }
-            },
-        );
-    })
-
     .set(DbusAPIFunctions.setSensorDataCollectionStatus, (status: boolean): Promise<boolean> => {
         return new Promise<boolean>(
             (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
