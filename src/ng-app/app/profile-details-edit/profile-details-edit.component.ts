@@ -721,7 +721,10 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     }
 
     public getRefreshRateNotAvailableTooltipText(): string {
-        if (this.isX11) {
+        // The section this tooltip is attached to only renders while displayModes is
+        // populated (*ngIf), so if we get here the feature is actually working, regardless
+        // of which backend (X11/xrandr or e.g. KDE Plasma/kscreen-doctor) provided it.
+        if (this.displayModes) {
             return '';
         } else {
             return $localize`:@@ProfMgrRefreshRatesNotAvailableOnWaylandTooltip:This feature is currently not supported on Wayland`;
