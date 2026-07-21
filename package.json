@@ -86,7 +86,6 @@
         "process": "0.11.10",
         "rxjs": "7.8.2",
         "stream": "0.0.3",
-        "usocket": "git+https://github.com/tuxedoder/usocket.git#c630666325e59755eba6c20461d12ecb80aba0cd",
         "util": "0.12.5",
         "x11": "2.3.0",
         "xliff": "6.3.0",
