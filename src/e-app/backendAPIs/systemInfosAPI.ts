@@ -62,11 +62,11 @@ function updateSystemInfosLabel(text: string): void {
 async function runSystemInfos(ticketNumber: string): Promise<void> {
     try {
         const systemInfosPackagePath: string = (await execCommandAsync('which tuxedo-systeminfo')).toString().trim();
-        const systeminfoPackageAvailable: boolean = !!systemInfosPackagePath;
+        const systemInfosPackageAvailable: boolean = !!systemInfosPackagePath;
 
         let systemInfosPath: string = '';
 
-        if (!systeminfoPackageAvailable) {
+        if (!systemInfosPackageAvailable) {
             if (!fs.existsSync(systemInfosTmpFilePath)) {
                 console.log(
                     `systemInfosAPI: runSystemInfos: tuxedo-systeminfo does not exist, downloading ${systemInfosTmpFilePath}`,
@@ -137,7 +137,7 @@ async function executeSystemInfosScript(ticketNumber: string, systemInfosFilePat
 
     try {
         await execCmd(
-            `pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY XDG_SESSION_TYPE=$XDG_SESSION_TYPE XDG_CURRENT_DESKTOP=$XDG_CURRENT_DESKTOP sh ${systemInfosFilePath} ${ticketNumber}`,
+            `pkexec env TCC_SYSTEM_INFOS=1 DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY XDG_SESSION_TYPE=$XDG_SESSION_TYPE XDG_CURRENT_DESKTOP=$XDG_CURRENT_DESKTOP sh ${systemInfosFilePath} ${ticketNumber}`,
         );
     } catch (err: unknown) {
         throw new Error(`systemInfosAPI: executeSystemInfosScript: systeminfos.sh failed => ${err}`);
