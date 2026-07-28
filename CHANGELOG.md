@@ -1,5 +1,13 @@
 # Changelog
 
+## [] - UNRELEASED
+### Added
+- Environmental variable to systeminfos when executed through TCC
+
+### Changed
+- Library to upstream usocket release (since "memoryleak-fix" now is included)
+- Other library updates (incl. electron 43)
+
 ## [3.0.7] - 2026-07-16
 ### Fixed
 - Accidental wake of discrete GPU when opening Dashboard, dGPU should now be left in low-power mode
