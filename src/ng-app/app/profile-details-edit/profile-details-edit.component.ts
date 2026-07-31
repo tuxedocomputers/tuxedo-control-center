@@ -107,12 +107,16 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             return;
         }
 
-        // Create form group from profile
-        if (this.profileFormGroup === undefined) {
+        // Create form group from profile. Rebuilt (not just reset) whenever the edited
+        // profile's identity changes, since validators/FormArray controls are wired to a
+        // specific profile's shape (e.g. odmPowerLimits.tdpValues length) and become stale
+        // if reused across profiles with a different shape.
+        if (this.profileFormGroup === undefined || this.viewProfile === undefined || this.currentProfileId !== profile.id) {
             this.profileFormGroup = this.createProfileFormGroup(profile);
         } else {
             this.profileFormGroup.reset(profile);
         }
+        this.currentProfileId = profile.id;
 
         if (this.selectStateControl === undefined) {
             this.selectStateControl = new FormControl(this.state.getProfileStates(this.viewProfile.id));
@@ -136,6 +140,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public selectStateControl: FormControl;
     public profileFormGroup: FormGroup;
     public profileFormProgress: boolean = false;
+    private currentProfileId: string;
 
     private subscriptions: Subscription = new Subscription();
     private fansMinSpeedSubscription: Subscription = new Subscription();
