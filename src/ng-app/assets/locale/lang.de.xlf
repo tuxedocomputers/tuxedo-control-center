@@ -306,6 +306,14 @@
           <context context-type="linenumber">96,98</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="cProfMgrOverviewFreqAvg" datatype="html">
+        <source>(avg)</source>
+        <target state="translated">(Ø)</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/profile-overview-tile/profile-overview-tile.component.html</context>
+          <context context-type="linenumber">108</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="cProfMgrOverviewMaxPerf" datatype="html">
         <source>Max performance</source>
         <target state="translated">Max. Leistung</target>

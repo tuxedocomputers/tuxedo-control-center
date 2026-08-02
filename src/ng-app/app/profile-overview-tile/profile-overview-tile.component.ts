@@ -23,7 +23,7 @@ import { FormControl } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import type { IGeneralCPUInfo } from '../../../common/models/ICpuInfos';
-import { type ITccProfile, profileImageMap } from '../../../common/models/TccProfile';
+import { type IPerCoreConfig, type ITccProfile, profileImageMap } from '../../../common/models/TccProfile';
 import type { ITccSettings } from '../../../common/models/TccSettings';
 import type { TDPInfo } from '../../../native-lib/TuxedoIOAPI';
 // biome-ignore lint: injection token
@@ -79,6 +79,36 @@ export class ProfileOverviewTileComponent implements OnInit {
 
     public get hasMaxFreqWorkaround(): boolean {
         return this.compat.hasMissingMaxFreqBoostWorkaround;
+    }
+
+    public get isPerCoreMode(): boolean {
+        return this.profile?.cpu?.mode === 'per-core' && this.profile.cpu.perCoreConfig?.length > 0;
+    }
+
+    public get activeCoreCount(): number {
+        if (this.isPerCoreMode) {
+            return this.getOnlinePerCoreConfig().length;
+        }
+        return this.profile?.cpu?.onlineCores;
+    }
+
+    public get perCoreAvgMinFrequency(): number {
+        return this.averageFrequency(this.getOnlinePerCoreConfig().map((core): number => core.scalingMinFrequency));
+    }
+
+    public get perCoreAvgMaxFrequency(): number {
+        return this.averageFrequency(this.getOnlinePerCoreConfig().map((core): number => core.scalingMaxFrequency));
+    }
+
+    private getOnlinePerCoreConfig(): IPerCoreConfig[] {
+        return this.profile.cpu.perCoreConfig.filter((core): boolean => core.online);
+    }
+
+    private averageFrequency(frequencies: number[]): number {
+        if (frequencies.length === 0) {
+            return 0;
+        }
+        return frequencies.reduce((sum, frequency): number => sum + frequency, 0) / frequencies.length;
     }
 
     constructor(
