@@ -1,5 +1,12 @@
 # Changelog
 
+## [] - UNRELEASED
+### Changed
+- Electron 42 instead of Electron 43
+
+### Fixed
+- Webcam menu not loading
+
 ## [3.0.8] - 2026-07-28
 ### Added
 - Environmental variable to systeminfos when executed through TCC
@@ -24,7 +31,7 @@
 ### Fixed
 - Profile manager save new profile button not working
 
-## [3.0.4] - 2026-05-26
+## [3.0.4] - 2026-05-05
 ### Fixed
 - Profile "Cool and breezy" not having intended max frequency limit
 - Frequency configuration slider min/max values not being able to set lower/upper limit
