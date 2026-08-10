@@ -1,6 +1,6 @@
 # Changelog
 
-## [] - UNRELEASED
+## [3.0.9] - 2026-08-10
 ### Changed
 - Electron 42 instead of Electron 43
 
