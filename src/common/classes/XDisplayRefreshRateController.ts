@@ -19,42 +19,35 @@
 
 import * as child_process from 'node:child_process';
 import * as fs from 'node:fs';
+import type { IDisplayRefreshRateController } from '../models/IDisplayRefreshRateController';
 import type { IDisplayFreqRes, IDisplayMode } from '../models/DisplayFreqRes';
+import type { ISessionEnvironment } from '../models/SessionEnvironment';
 import { execCommandAsync } from './Utils';
 
-export class XDisplayRefreshRateController {
+/**
+ * Refresh-rate-on-profile-activation backend for X11 sessions, driven via xrandr.
+ */
+export class XDisplayRefreshRateController implements IDisplayRefreshRateController {
     private displayName: string = '';
 
-    private isX11: number = -1;
-    private isWayland: boolean = undefined;
-    private isTTY: boolean = undefined;
+    private applies: boolean = false;
     private xrandrAvailable: boolean = undefined;
 
     private display: string = '';
     private xAuthorityFile: string = '';
 
-    private setSessionType(xdgSessionMatch: RegExpMatchArray) {
-        const sessionType: string = xdgSessionMatch
-            ? xdgSessionMatch[1].replace('XDG_SESSION_TYPE=', '').trim().toLowerCase()
-            : '';
-
-        this.isX11 = sessionType === 'x11' ? 1 : 0;
-        this.isWayland = sessionType === 'wayland';
-        this.isTTY = sessionType === 'tty';
-    }
-
-    private setXAuthority(xAuthorityMatch: RegExpMatchArray, userMatch: RegExpMatchArray) {
+    private setXAuthority(env: ISessionEnvironment) {
         // additional checks to make sure environment variables are not taken from login screen
         // sddm XDG_SESSION_TYPE can differ from actual session type
         let xAuthorityFile: string;
 
         if (
-            xAuthorityMatch &&
-            (xAuthorityMatch[1].includes('/var/run/sddm/{') || xAuthorityMatch[1].includes('/var/lib/lightdm'))
+            env.xAuthorityRaw &&
+            (env.xAuthorityRaw.includes('/var/run/sddm/{') || env.xAuthorityRaw.includes('/var/lib/lightdm'))
         ) {
             xAuthorityFile = undefined;
         } else {
-            xAuthorityFile = xAuthorityMatch ? xAuthorityMatch[1].replace('XAUTHORITY=', '').trim() : '';
+            xAuthorityFile = env.xAuthorityRaw;
         }
 
         let xAuthorityFileExists: boolean = undefined;
@@ -69,7 +62,7 @@ export class XDisplayRefreshRateController {
             // but Tuxedo OS with sddm allows the user name gdm
             const xAuthorityFileInfo: string = child_process.execSync(`ls -l ${xAuthorityFile}`).toString();
 
-            if (xAuthorityFileInfo.includes(' gdm gdm ') && userMatch && userMatch[1] === 'gdm') {
+            if (xAuthorityFileInfo.includes(' gdm gdm ') && env.username === 'gdm') {
                 this.xAuthorityFile = undefined;
             } else {
                 this.xAuthorityFile = xAuthorityFile;
@@ -79,44 +72,17 @@ export class XDisplayRefreshRateController {
         }
     }
 
-    public async setVariables(): Promise<undefined> {
-        const environmentVariables: string = child_process
-            .execSync(
-                `cat $(printf "/proc/%s/environ " $(pgrep -vu root | tail -n 20)) 2>/dev/null | \
-                tr '\\0' '\\n' | \
-                awk ' /DISPLAY=/ && !countDisplay {print; countDisplay++} \
-                    /XAUTHORITY=/ && !countXAuthority {print; countXAuthority++} \
-                    /XDG_SESSION_TYPE=/ && !countSessionType {print; countSessionType++} \
-                    /USER=/ && !countUser {print; countUser++} \
-                    {if (countDisplay && countXAuthority && countSessionType && countUser) exit} '`,
-            )
-            .toString();
+    public async setVariables(env: ISessionEnvironment): Promise<void> {
+        this.applies = env.sessionType === 'x11';
 
-        const displayMatch: RegExpMatchArray = environmentVariables.match(/^DISPLAY=(.*)$/m);
-        const xAuthorityMatch: RegExpMatchArray = environmentVariables.match(/^XAUTHORITY=(.*)$/m);
-        const xdgSessionMatch: RegExpMatchArray = environmentVariables.match(/^XDG_SESSION_TYPE=(.*)$/m);
-        const userMatch: RegExpMatchArray = environmentVariables.match(/^USER=(.*)$/m);
-
-        this.setSessionType(xdgSessionMatch);
-        this.setXAuthority(xAuthorityMatch, userMatch);
-
-        this.display = displayMatch ? displayMatch[1].replace('DISPLAY=', '').trim() : '';
+        if (this.applies) {
+            this.setXAuthority(env);
+            this.display = env.display;
+        }
 
         if (this.xrandrAvailable === undefined) {
             this.xrandrAvailable = await this.checkXrandrInstalled();
         }
-    }
-
-    public getIsX11(): number {
-        return this.isX11;
-    }
-
-    public getIsWayland(): boolean {
-        return this.isWayland;
-    }
-
-    public getIsTTY(): boolean {
-        return this.isTTY;
     }
 
     public getDisplay(): string {
@@ -131,20 +97,24 @@ export class XDisplayRefreshRateController {
         return this.xAuthorityFile;
     }
 
+    public getDebugInfo(): string {
+        return `display "${this.display}" with the name "${this.displayName}" and XAUTHORITY "${this.xAuthorityFile}"`;
+    }
+
+    public getDisplayType(): string {
+        return 'x11';
+    }
+
     public resetValues(): void {
-        this.isX11 = -1;
-        this.isWayland = undefined;
-        this.isTTY = undefined;
+        this.applies = false;
         this.display = '';
         this.xAuthorityFile = '';
+        this.displayName = '';
     }
 
     public checkVariablesAvailable(): boolean {
         return (
-            this.isX11 !== undefined &&
-            this.isX11 !== -1 &&
-            this.isWayland !== undefined &&
-            this.isTTY !== undefined &&
+            this.applies &&
             this.display !== undefined &&
             this.display !== '' &&
             this.display !== ' ' &&
@@ -263,7 +233,7 @@ export class XDisplayRefreshRateController {
     }
 
     public setRefreshRateAndResolution(xRes: number, yRes: number, rate: number): boolean {
-        if (this.checkVariablesAvailable() && this.isX11 === 1) {
+        if (this.checkVariablesAvailable()) {
             try {
                 child_process.execSync(
                     `XAUTHORITY=${this.xAuthorityFile} xrandr -display ${this.display} --output ${this.displayName} --mode ${xRes}x${yRes} -r ${rate}`,

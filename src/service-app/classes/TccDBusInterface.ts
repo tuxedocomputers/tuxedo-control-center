@@ -31,7 +31,6 @@ export class TccDBusData {
     public device: string = '';
     public deviceHasAquaris: boolean = false;
     public displayModesJSON: string = '{}';
-    public isX11: number = -1;
     public tuxedoWmiAvailable: boolean = false;
     public fanHwmonAvailable: boolean = false;
     public tccdVersion: string = '';
@@ -115,11 +114,6 @@ export class TccDBusInterface extends dbus.interface.Interface {
     // biome-ignore lint: function is never read because of dbus
     private GetDisplayModesJSON(): string {
         return this.data.displayModesJSON;
-    }
-
-    // biome-ignore lint: function is never read because of dbus
-    private GetIsX11(): number {
-        return this.data.isX11;
     }
 
     // biome-ignore lint: function is never read because of dbus
@@ -420,7 +414,6 @@ TccDBusInterface.configureMembers({
         GetDeviceName: { outSignature: 's' },
         DeviceHasAquaris: { outSignature: 'b' },
         GetDisplayModesJSON: { outSignature: 's' },
-        GetIsX11: { outSignature: 'i' },
         TuxedoWmiAvailable: { outSignature: 'b' },
         FanHwmonAvailable: { outSignature: 'b' },
         TccdVersion: { outSignature: 's' },

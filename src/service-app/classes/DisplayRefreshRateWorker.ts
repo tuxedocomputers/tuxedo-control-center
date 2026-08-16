@@ -19,14 +19,27 @@
 
 import * as child_process from 'node:child_process';
 import { execCommandAsync } from '../../common/classes/Utils';
+import { KScreenDisplayController } from '../../common/classes/KScreenDisplayController';
+import { SessionEnvironmentReader } from '../../common/classes/SessionEnvironmentReader';
 import { XDisplayRefreshRateController } from '../../common/classes/XDisplayRefreshRateController';
 import type { IDisplayFreqRes, IDisplayMode } from '../../common/models/DisplayFreqRes';
+import type { IDisplayRefreshRateController } from '../../common/models/IDisplayRefreshRateController';
+import type { ISessionEnvironment } from '../../common/models/SessionEnvironment';
 import type { ITccProfile } from '../../common/models/TccProfile';
 import { DaemonWorker } from './DaemonWorker';
 import type { TuxedoControlCenterDaemon } from './TuxedoControlCenterDaemon';
 
 export class DisplayRefreshRateWorker extends DaemonWorker {
-    private controller: XDisplayRefreshRateController;
+    // Reads the raw session environment, shared by all candidate backends below.
+    private sessionReader: SessionEnvironmentReader;
+    // Candidate backends, tried in order; each decides for itself whether it applies.
+    private controllers: IDisplayRefreshRateController[];
+    // Whichever backend applies to the current session, or undefined if none does.
+    private activeController: IDisplayRefreshRateController;
+    // Set once a full pass over this.controllers found none applicable (e.g. TTY session),
+    // so we stop re-scanning every poll until a user/session change resets it.
+    private noControllerApplies: boolean = false;
+
     private displayInfo: IDisplayFreqRes;
     private displayInfoFound: boolean = false;
     private previousUsers: string[] = [];
@@ -35,7 +48,8 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
 
     constructor(tccd: TuxedoControlCenterDaemon) {
         super(5000, 'DisplayRefreshrateWorker', tccd);
-        this.controller = new XDisplayRefreshRateController();
+        this.sessionReader = new SessionEnvironmentReader();
+        this.controllers = [new XDisplayRefreshRateController(), new KScreenDisplayController()];
     }
 
     public async onStart(): Promise<void> {
@@ -80,7 +94,11 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
     private resetToDefault(): void {
         this.displayInfo = undefined;
         this.displayInfoFound = false;
-        this.controller.resetValues();
+        this.activeController = undefined;
+        this.noControllerApplies = false;
+        for (const controller of this.controllers) {
+            controller.resetValues();
+        }
     }
 
     public async onWork(): Promise<void> {
@@ -94,10 +112,8 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
             this.resetToDefault();
         }
 
-        if (usersAvailable && !this.controller.checkVariablesAvailable()) {
-            if (!this.displayInfoFound && this.controller.getIsTTY() !== true) {
-                await this.updateDisplayData();
-            }
+        if (usersAvailable && !this.activeController && !this.noControllerApplies && !this.displayInfoFound) {
+            await this.updateDisplayData();
         }
         this.setActiveDisplayMode();
     }
@@ -110,13 +126,13 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
         const useRefRate: boolean = activeprofile?.display?.useRefRate;
         const activeMode: IDisplayMode = this.displayInfo?.activeMode;
 
-        if (useRefRate && activeMode) {
+        if (useRefRate && activeMode && this.activeController) {
             const refreshRate: number = activeprofile.display.refreshRate;
             // todo: add variable checks to avoid access error
             const hasDifferentRefreshRate: boolean = refreshRate !== activeMode?.refreshRates[0];
 
             if (hasDifferentRefreshRate) {
-                const status: boolean = this.controller.setRefreshRateAndResolution(
+                const status: boolean = this.activeController.setRefreshRateAndResolution(
                     activeMode.xResolution,
                     activeMode.yResolution,
                     refreshRate,
@@ -126,16 +142,14 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
                     console.log(
                         `DisplayRefreshRateWorker: setActiveDisplayMode: Set ${refreshRate}Hz with ${
                             activeMode.xResolution
-                        }x${activeMode.yResolution} and XAUTHORITY "${this.controller.getXAuthorityFile()}"`,
+                        }x${activeMode.yResolution} via ${this.activeController.getDebugInfo()}`,
                     );
                     activeMode.refreshRates[0] = refreshRate;
                 } else {
                     console.error(
                         `DisplayRefreshRateWorker: setActiveDisplayMode: Failed to set refresh rate ${refreshRate}Hz with ${
                             activeMode.xResolution
-                        }x${
-                            activeMode.yResolution
-                        } for display "${this.controller.getDisplay()}" with the name "${this.controller.getDisplayName()}" and XAUTHORITY "${this.controller.getXAuthorityFile()}"`,
+                        }x${activeMode.yResolution} via ${this.activeController.getDebugInfo()}`,
                     );
                     this.resetToDefault();
                 }
@@ -143,17 +157,35 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
         }
     }
 
+    /**
+     * Tries each candidate backend in order against the given raw session environment,
+     * and picks the first one that applies and is ready. this.activeController stays
+     * undefined, and this.noControllerApplies is set, if none applies (e.g. TTY, or a
+     * Wayland session on a desktop environment without a backend yet).
+     */
+    private async selectActiveController(env: ISessionEnvironment): Promise<void> {
+        for (const controller of this.controllers) {
+            await controller.setVariables(env);
+            if (controller.checkVariablesAvailable()) {
+                this.activeController = controller;
+                console.log(`DisplayRefreshRateWorker: Detected ${controller.getDisplayType()}`);
+                return;
+            }
+        }
+        this.noControllerApplies = true;
+        console.log(
+            `DisplayRefreshRateWorker: Detected session type: ${env.sessionType}, unhandled refresh rate feature`,
+        );
+    }
+
     private async updateDisplayData(): Promise<void> {
         this.resetToDefault();
-        await this.controller.setVariables();
+        const env: ISessionEnvironment = this.sessionReader.read();
 
-        if (
-            this.controller.checkVariablesAvailable() &&
-            this.controller.getIsTTY() === false &&
-            this.controller.getIsWayland() === false &&
-            this.controller.getIsX11() === 1
-        ) {
-            this.displayInfo = this.controller.getDisplayModes();
+        await this.selectActiveController(env);
+
+        if (this.activeController) {
+            this.displayInfo = this.activeController.getDisplayModes();
 
             if (this.displayInfo === undefined) {
                 this.tccd.dbusData.displayModesJSON = '{}';
@@ -163,22 +195,6 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
             }
         } else {
             this.tccd.dbusData.displayModesJSON = '{}';
-        }
-
-        if (this.controller.checkVariablesAvailable()) {
-            this.tccd.dbusData.isX11 = this.controller.getIsX11();
-
-            if (this.controller.getIsX11() === 1) {
-                console.log('DisplayRefreshRateWorker: Detected x11');
-            }
-
-            if (this.controller.getIsWayland()) {
-                console.log('DisplayRefreshRateWorker: Detected wayland');
-            }
-
-            if (this.controller.getIsTTY()) {
-                console.log('DisplayRefreshRateWorker: Detected tty');
-            }
         }
     }
 }

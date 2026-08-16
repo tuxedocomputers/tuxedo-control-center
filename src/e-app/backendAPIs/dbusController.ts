@@ -278,24 +278,6 @@ export class TccDBusController {
         }
     }
 
-    async getIsX11(): Promise<number> {
-        try {
-            if (this.dbusStatus && this.interface) {
-                return await this.interface.GetIsX11();
-            }
-        } catch (err: unknown) {
-            this.dbusStatus = false;
-
-            if (err instanceof dbus.DBusError) {
-                console.error(`dbusController: getIsX11 failed => ${err?.text}`);
-                return -1;
-            }
-
-            console.error(`dbusController: getIsX11 failed => ${err}`);
-            return -1;
-        }
-    }
-
     async webcamSWAvailable(): Promise<boolean> {
         try {
             if (this.dbusStatus && this.interface) {

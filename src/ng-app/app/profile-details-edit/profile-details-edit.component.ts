@@ -138,7 +138,6 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     public odmPowerLimitInfos: TDPInfo[] = [];
     public displayModes: IDisplayFreqRes;
-    public isX11: number = -1;
     public refreshRate: number;
 
     private tdpLabels: Map<string, string>;
@@ -262,14 +261,6 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
                     this.displayModes = nextdisplayModes;
                 }
                 this.overwriteDefaultRefreshRateValue();
-            }),
-        );
-
-        this.subscriptions.add(
-            this.tccDBus.isX11.subscribe((nextIsX11: number): void => {
-                if (nextIsX11 !== this.isX11) {
-                    this.isX11 = nextIsX11;
-                }
             }),
         );
 
@@ -721,10 +712,13 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     }
 
     public getRefreshRateNotAvailableTooltipText(): string {
-        if (this.isX11) {
+        // The section this tooltip is attached to only renders while displayModes is
+        // populated (*ngIf), so if we get here the feature is actually working, regardless
+        // of which backend (X11/xrandr or e.g. KDE Plasma/kscreen-doctor) provided it.
+        if (this.displayModes) {
             return '';
         } else {
-            return $localize`:@@ProfMgrRefreshRatesNotAvailableOnWaylandTooltip:This feature is currently not supported on Wayland`;
+            return $localize`:@@ProfMgrRefreshRatesNotAvailableTooltip:This feature is not supported in the current desktop session`;
         }
     }
 

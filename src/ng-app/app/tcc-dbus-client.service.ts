@@ -101,7 +101,6 @@ export class TccDBusClientService implements OnDestroy {
     public nvidiaPowerCTRLAvailable: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(undefined);
     public isUnsupportedConfigurableTGPDevice: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(undefined);
 
-    public isX11: BehaviorSubject<number> = new BehaviorSubject<number>(-1);
     public device: TUXEDODevice = 0;
     public hasAquaris: boolean = true;
 
@@ -114,13 +113,6 @@ export class TccDBusClientService implements OnDestroy {
             {
                 dbusFunctionName: 'getFanData',
                 dbusFunction: (): Promise<string> => window.dbusAPI.getFanData(),
-            },
-        ],
-        [
-            this.isX11,
-            {
-                dbusFunctionName: 'getIsX11',
-                dbusFunction: (): Promise<number> => window.dbusAPI.getIsX11(),
             },
         ],
         [
