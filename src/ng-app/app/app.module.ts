@@ -72,8 +72,8 @@ import { FanChartComponent } from './fan-chart/fan-chart.component';
 import { FanCustomChartComponent } from './fan-custom-chart/fan-custom-chart.component';
 import { GlobalSettingsComponent } from './global-settings/global-settings.component';
 import { InfoComponent } from './info/info.component';
-import { KeyboardBacklightComponent } from './keyboard-backlight/keyboard-backlight.component';
 import { KeyboardVisualComponent } from './keyboard-visual/keyboard-visual.component';
+import { LightingComponent } from './lighting-settings/lighting-settings.component';
 import { MainGuiComponent } from './main-gui/main-gui.component';
 import { PrimeDialogComponent } from './prime-dialog/prime-dialog.component';
 import { PrimeSelectComponent } from './prime-select/prime-select.component';
@@ -106,7 +106,7 @@ declare const require;
         GlobalSettingsComponent,
         ShutdownTimerComponent,
         ToolsComponent,
-        KeyboardBacklightComponent,
+        LightingComponent,
         ChangeCryptPasswordComponent,
         FanChartComponent,
         TgpChartComponent,

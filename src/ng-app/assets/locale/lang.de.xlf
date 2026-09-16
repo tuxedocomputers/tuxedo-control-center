@@ -1210,9 +1210,9 @@ Handelsregisternummer HRB 27755
           <context context-type="linenumber">109,111</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="cGlobalSettingsKeyboardBacklightHeader" datatype="html">
-        <source>Keyboard Backlight Control</source>
-        <target phase-name="approval-1" state="new">Tastaturbeleuchtungssteuerung</target>
+      <trans-unit id="cGlobalSettingsLightingHeader" datatype="html">
+        <source>Lighting Control</source>
+        <target phase-name="approval-1" state="new">Beleuchtungssteuerung</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/global-settings/global-settings.component.html</context>
           <context context-type="linenumber">113,115</context>
@@ -1376,9 +1376,9 @@ Handelsregisternummer HRB 27755
           <context context-type="linenumber">29,32</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="menuKeyboardBacklight" datatype="html">
-        <source>Keyboard Backlight</source>
-        <target phase-name="approval-1" state="translated">Tastaturbeleuchtung</target>
+      <trans-unit id="menuLightingSettings" datatype="html">
+        <source>Lighting settings</source>
+        <target phase-name="approval-1" state="new">Beleuchtungseinstellungen</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/tools/tools.component.html</context>
           <context context-type="linenumber">57,60</context>
@@ -1392,27 +1392,27 @@ Handelsregisternummer HRB 27755
           <context context-type="linenumber">71,74</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="cKeyboardBacklightLabel" datatype="html">
-        <source>Keyboard Backlight</source>
-        <target phase-name="approval-1" state="translated">Tastaturbeleuchtung</target>
+      <trans-unit id="cLightingSettingsTitle" datatype="html">
+        <source>Lighting settings</source>
+        <target phase-name="approval-1" state="new">Beleuchtungseinstellungen</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
+          <context context-type="sourcefile">src/ng-app/app/lighting-settings/lighting-settings.component.html</context>
           <context context-type="linenumber">29,35</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="cKeyboardBacklightDescription1" datatype="html">
+      <trans-unit id="cLightingDescription1" datatype="html">
         <source>Click on a key area to select it.</source>
         <target state="new">Klicken Sie einen Tastenbereich an, um ihn auszuwählen.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
+          <context context-type="sourcefile">src/ng-app/app/lighting-settings/lighting-settings.component.html</context>
           <context context-type="linenumber">36,37</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="cKeyboardBacklightDescription2" datatype="html">
+      <trans-unit id="cLightingDescription2" datatype="html">
         <source>Hold down shift to select multiple key areas.</source>
         <target state="new">Halten Sie Shift gedrückt, um mehrere Tastenbereiche auszuwählen.</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
+          <context context-type="sourcefile">src/ng-app/app/lighting-settings/lighting-settings.component.html</context>
           <context context-type="linenumber">37,40</context>
         </context-group>
       </trans-unit>
@@ -1420,24 +1420,8 @@ Handelsregisternummer HRB 27755
         <source> Your device is not (yet) supported by this control interface, or the driver is too old. At least tuxedo-drivers 4.0.0 and Linux kernel 5.15 are required for most devices (some devices need newer versions). </source>
         <target phase-name="approval-1" state="new">Ihr Gerät ist (noch) nicht mit dieser Steuerungsoberfläche kompatibel oder der Treiber ist zu alt. Mindestens tuxedo-drivers 4.0.0 und Linux Kernel 5.15 werden benötigt (manche Geräte brauchen neuere Versionen).</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
+          <context context-type="sourcefile">src/ng-app/app/lighting-settings/lighting-settings.component.html</context>
           <context context-type="linenumber">42,48</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cKeyboardBacklightColorLabel" datatype="html">
-        <source>Backlight Color:</source>
-        <target phase-name="approval-1" state="new">Beleuchtungsfarbe:</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
-          <context context-type="linenumber">66,69</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cKeyboardBacklightBrightnessLabel" datatype="html">
-        <source>Backlight Brightness</source>
-        <target phase-name="approval-1" state="new">Beleuchtungshelligkeit:</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/ng-app/app/keyboard-backlight/keyboard-backlight.component.html</context>
-          <context context-type="linenumber">100,102</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cShutdownTimerInformations" datatype="html">
@@ -3853,6 +3837,46 @@ Handelsregisternummer HRB 27755
         <context-group purpose="location">
           <context context-type="sourcefile">src/ng-app/app/change-crypt-password/change-crypt-password.component.html</context>
           <context context-type="linenumber">79,83</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cLightingKeyboardSettingsLabel" datatype="html">
+        <source> Keyboard lighting </source>
+        <target state="new"> Tastaturbeleuchtung </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/lighting-settings/lighting-settings.component.html</context>
+          <context context-type="linenumber">61,64</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cLightingColorLabel" datatype="html">
+        <source>Color:</source>
+        <target state="new">Farbe:</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/lighting-settings/lighting-settings.component.html</context>
+          <context context-type="linenumber">66,68</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/lighting-settings/lighting-settings.component.html</context>
+          <context context-type="linenumber">147,149</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cLightingBrightnessLabel" datatype="html">
+        <source>Brightness:</source>
+        <target state="new">Helligkeit:</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/lighting-settings/lighting-settings.component.html</context>
+          <context context-type="linenumber">98,100</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/lighting-settings/lighting-settings.component.html</context>
+          <context context-type="linenumber">177,179</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cLightingLightbarSettingsLabel" datatype="html">
+        <source>Lightbar lighting</source>
+        <target state="new">Lichtleistenbeleuchtung</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/ng-app/app/lighting-settings/lighting-settings.component.html</context>
+          <context context-type="linenumber">142,145</context>
         </context-group>
       </trans-unit>
     </body>

@@ -31,7 +31,8 @@ import {
 } from './dashboard.resolver';
 import { GlobalSettingsComponent } from './global-settings/global-settings.component';
 import { InfoComponent } from './info/info.component';
-import { KeyboardBacklightComponent } from './keyboard-backlight/keyboard-backlight.component';
+import { KeyboardCapabilitiesResolver, LightbarCapabilitiesResolver } from './lighting.resolver';
+import { LightingComponent } from './lighting-settings/lighting-settings.component';
 import { LoaderResolver } from './loader.resolver';
 import { MainGuiComponent } from './main-gui/main-gui.component';
 import { PrimeDialogComponent } from './prime-dialog/prime-dialog.component';
@@ -85,8 +86,12 @@ const routes: Routes = [
             },
             { path: 'tools', component: ToolsComponent },
             {
-                path: 'keyboard-backlight',
-                component: KeyboardBacklightComponent,
+                path: 'lighting',
+                component: LightingComponent,
+                resolve: {
+                    keyboardCapabilities: KeyboardCapabilitiesResolver,
+                    lightbarCapabilities: LightbarCapabilitiesResolver,
+                },
             },
             {
                 path: 'camera-settings',

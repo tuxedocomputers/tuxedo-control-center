@@ -56,9 +56,12 @@ export class TccDBusData {
     public settingsJSON: string = '{}';
     public odmProfilesAvailable: string[] = [''];
     public odmPowerLimitsJSON: string = '{}';
-    public keyboardBacklightCapabilitiesJSON: string = '{}';
-    public keyboardBacklightStatesJSON: string = '{}';
-    public keyboardBacklightStatesNewJSON: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
+    public keyboardCapabilitiesJSON: string = '{}';
+    public lightbarCapabilitiesJSON: string = '{}';
+    public keyboardStatesJSON: string = '{}';
+    public lightbarStatesJSON: string = '{}';
+    public keyboardStatesPendingJSON: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
+    public lightbarStatesPendingJSON: BehaviorSubject<string> = new BehaviorSubject<string>(undefined);
     public fansMinSpeed: number = -1;
     public fansOffAvailable: boolean = false;
     public sensorDataCollectionStatus: boolean = false;
@@ -274,18 +277,34 @@ export class TccDBusInterface extends dbus.interface.Interface {
     }
 
     // biome-ignore lint: function is never read because of dbus
-    private GetKeyboardBacklightCapabilitiesJSON(): string {
-        return this.data.keyboardBacklightCapabilitiesJSON;
+    private GetKeyboardCapabilitiesJSON(): string {
+        return this.data.keyboardCapabilitiesJSON;
     }
 
     // biome-ignore lint: function is never read because of dbus
-    private GetKeyboardBacklightStatesJSON(): string {
-        return this.data.keyboardBacklightStatesJSON;
+    private GetLightbarCapabilitiesJSON(): string {
+        return this.data.lightbarCapabilitiesJSON;
     }
 
     // biome-ignore lint: function is never read because of dbus
-    private SetKeyboardBacklightStatesJSON(keyboardBacklightStatesJSON: string): boolean {
-        this.data.keyboardBacklightStatesNewJSON.next(keyboardBacklightStatesJSON);
+    private GetKeyboardStatesJSON(): string {
+        return this.data.keyboardStatesJSON;
+    }
+
+    // biome-ignore lint: function is never read because of dbus
+    private GetLightbarStatesJSON(): string {
+        return this.data.lightbarStatesJSON;
+    }
+
+    // biome-ignore lint: function is never read because of dbus
+    private SetKeyboardStatesJSON(keyboardStatesJSON: string): boolean {
+        this.data.keyboardStatesPendingJSON.next(keyboardStatesJSON);
+        return true;
+    }
+
+    // biome-ignore lint: function is never read because of dbus
+    private SetLightbarStatesJSON(lightbarStatesJSON: string): boolean {
+        this.data.lightbarStatesPendingJSON.next(lightbarStatesJSON);
         return true;
     }
 
@@ -445,9 +464,12 @@ TccDBusInterface.configureMembers({
         GetSettingsJSON: { outSignature: 's' },
         ODMProfilesAvailable: { outSignature: 'as' },
         ODMPowerLimitsJSON: { outSignature: 's' },
-        GetKeyboardBacklightCapabilitiesJSON: { outSignature: 's' },
-        GetKeyboardBacklightStatesJSON: { outSignature: 's' },
-        SetKeyboardBacklightStatesJSON: { inSignature: 's', outSignature: 'b' },
+        GetKeyboardCapabilitiesJSON: { outSignature: 's' },
+        GetLightbarCapabilitiesJSON: { outSignature: 's' },
+        GetKeyboardStatesJSON: { outSignature: 's' },
+        GetLightbarStatesJSON: { outSignature: 's' },
+        SetKeyboardStatesJSON: { inSignature: 's', outSignature: 'b' },
+        SetLightbarStatesJSON: { inSignature: 's', outSignature: 'b' },
         GetFansMinSpeed: { outSignature: 'i' },
         GetFansOffAvailable: { outSignature: 'b' },
         GetChargingProfilesAvailable: { outSignature: 's' },
