@@ -169,10 +169,15 @@ export class SupportComponent implements OnInit {
 
       // Run
       try {
+        const DISPLAY = process.env.DISPLAY?.replace('"', '');
+        const XAUTHORITY = process.env.XAUTHORITY?.replace('"', '');
+        const XDG_SESSION_TYPE = process.env.XDG_SESSION_TYPE?.replace('"', '');
+        const XDG_CURRENT_DESKTOP = process.env.XDG_CURRENT_DESKTOP?.replace('"', '');
+
         const ticketNumber: number = this.formTicketNumber.controls.inputTicketNumber.value;
         this.systeminfoOutput('Running systeminfos.sh');
         this.utils.pageDisabled = true;
-        await this.utils.execCmdAsync('pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY XDG_SESSION_TYPE=$XDG_SESSION_TYPE XDG_CURRENT_DESKTOP=$XDG_CURRENT_DESKTOP sh ' + this.systeminfoFilePath + ' ' + ticketNumber);
+        await this.utils.execCmdAsync(`pkexec env DISPLAY="${DISPLAY}" XAUTHORITY="${XAUTHORITY}" XDG_SESSION_TYPE="${XDG_SESSION_TYPE}" XDG_CURRENT_DESKTOP="${XDG_CURRENT_DESKTOP}" sh ` + this.systeminfoFilePath + ' ' + ticketNumber);
       } catch (err) {
         reject('Failed to execute script');
       } finally {
