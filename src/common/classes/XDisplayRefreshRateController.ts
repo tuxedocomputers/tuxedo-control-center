@@ -33,7 +33,7 @@ export class XDisplayRefreshRateController {
         this.setEnvVariables();
     }
 
-    private setEnvVariables(): void {
+    private async setEnvVariables(): Promise<void> {
         const envVariables = child_process
             .execSync(
                 `cat $(printf "/proc/%s/environ " $(pgrep -vu root | tail -n 20)) 2>/dev/null | \
@@ -69,9 +69,7 @@ export class XDisplayRefreshRateController {
         // gdm XDG_SESSION_TYPE can differ from actual session type
         // Ubuntu creates xAuthority file with user gdm and that user name is unavailable,
         // but Tuxedo OS with sddm allows the user name gdm
-        const xAuthorityFileInfo = child_process
-            .execSync(`ls -l ${xAuthorityFile}`)
-            .toString();
+        const xAuthorityFileInfo = await spawnCmdAsync('ls', ['-l', `${xAuthorityFile}`], {});
 
         if (
             xAuthorityFileInfo.includes(" gdm gdm ") &&
@@ -126,7 +124,7 @@ export class XDisplayRefreshRateController {
 
     public async getDisplayModes(): Promise<IDisplayFreqRes> {
         if (!this.checkEnvVariablesAvailable()) {
-            this.setEnvVariables();
+            await this.setEnvVariables();
         }
 
         if (!this.checkEnvVariablesAvailable() || this.isWayland) {
