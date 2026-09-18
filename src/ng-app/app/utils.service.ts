@@ -241,6 +241,18 @@ export class UtilsService {
     });
   }
 
+  public async removeFile(filePath: string): Promise<void> {
+    return new Promise<void>((resolve, reject) => {
+      fs.unlink(filePath, (err) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve();
+        }
+      });
+    });
+  }
+
   public formatCpuFrequency(frequency: number): string {
     return this.decimalPipe.transform(frequency / 1000000, '1.1-1');
   }
@@ -376,7 +388,7 @@ export class UtilsService {
     });
     return dialogRef.afterClosed().toPromise();
   }
-  
+
   private defaultProfileInfos = new Map<string, IProfileTextMappings>();
 
   public fillDefaultProfileTexts(profile: ITccProfile) {

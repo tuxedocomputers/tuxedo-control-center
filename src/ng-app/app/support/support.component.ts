@@ -144,6 +144,12 @@ export class SupportComponent implements OnInit {
   public async runSysteminfo(): Promise<void> {
     return new Promise<void>(async (resolve, reject) => {
       let fileData: string;
+      // Attempt to clean up previous file
+      try {
+        await this.utils.removeFile(this.systeminfoFilePath);
+      } catch (err) {
+        // Could fail due to not existing etc.
+      }
       // Download file
       try {
         this.systeminfoOutput('Fetching: ' + this.systeminfosURL);
