@@ -20,6 +20,7 @@
 import { IDisplayFreqRes, IDisplayMode } from "../models/DisplayFreqRes";
 import * as child_process from "child_process";
 import * as fs from "fs";
+import { spawnCmdAsync } from "./Utils";
 export class XDisplayRefreshRateController {
     private displayName: string = "";
     private isX11: boolean = undefined;
@@ -123,7 +124,7 @@ export class XDisplayRefreshRateController {
         );
     }
 
-    public getDisplayModes(): IDisplayFreqRes {
+    public async getDisplayModes(): Promise<IDisplayFreqRes> {
         if (!this.checkEnvVariablesAvailable()) {
             this.setEnvVariables();
         }
@@ -132,11 +133,14 @@ export class XDisplayRefreshRateController {
             return undefined;
         }
 
-        const result = child_process
-            .execSync(
-                `export XAUTHORITY=${this.xAuthorityFile} && xrandr -q -display ${this.displayEnvVariable} --current`
-            )
-            .toString();
+        const result = await spawnCmdAsync(
+            'xrandr',
+            ['-q', '-display', `${this.displayEnvVariable}`, '--current'],
+            {
+                env: { XAUTHORITY: `${this.xAuthorityFile}` },
+            },
+        );
+
 
         const displayNameRegex = /(eDP\S*|LVDS\S*)/;
 
@@ -176,7 +180,7 @@ export class XDisplayRefreshRateController {
             currLine = lineIter.next().value;
         }
         while (currLine && currLine.match(fullLineRegex)) {
-            this.createDisplayMode(
+            await this.createDisplayMode(
                 currLine,
                 resolutionRegex,
                 freqRegex,
@@ -188,12 +192,12 @@ export class XDisplayRefreshRateController {
         return newDisplayModes;
     }
 
-    private createDisplayMode(
+    private async createDisplayMode(
         line: string,
         resolutionRegex: RegExp,
         freqRegex: RegExp,
         newDisplayModes: IDisplayFreqRes
-    ): void {
+    ): Promise<void> {
         const resolution = line.match(resolutionRegex)[0].split("x");
         const refreshrates = line.match(freqRegex);
         const newMode: IDisplayMode = {
@@ -209,7 +213,7 @@ export class XDisplayRefreshRateController {
         }
         newDisplayModes.displayModes.push(newMode);
 
-        this.setActiveDisplayMode(refreshrates, newDisplayModes, newMode);
+        await this.setActiveDisplayMode(refreshrates, newDisplayModes, newMode);
     }
 
     private setActiveDisplayMode(
@@ -229,30 +233,59 @@ export class XDisplayRefreshRateController {
         }
     }
 
-    public setRefreshRate(rate: number): void {
+    public async setRefreshRate(rate: number): Promise<void> {
         if (this.isX11 && this.displayEnvVariable && this.xAuthorityFile) {
-            child_process.execSync(
-                `export XAUTHORITY=${this.xAuthorityFile} && xrandr -display ${this.displayEnvVariable} --output ${this.displayName} -r ${rate}`
+            await spawnCmdAsync(
+                'xrandr',
+                [
+                    '-display',
+                    `${this.displayEnvVariable}`,
+                    '--output',
+                    `${this.displayName}`,
+                    '-r',
+                    `${rate}`,
+                ],
+                { env: { XAUTHORITY: `${this.xAuthorityFile}` } },
             );
         }
     }
 
-    public setResolution(xRes: number, yRes: number): void {
+    public async setResolution(xRes: number, yRes: number): Promise<void> {
         if (this.isX11 && this.displayEnvVariable && this.xAuthorityFile) {
-            child_process.execSync(
-                `export XAUTHORITY=${this.xAuthorityFile} && xrandr -display ${this.displayEnvVariable} --output ${this.displayName} --mode ${xRes}x${yRes}`
+            await spawnCmdAsync(
+                'xrandr',
+                [
+                    '-display',
+                    `${this.displayEnvVariable}`,
+                    '--output',
+                    `${this.displayName}`,
+                    '--mode',
+                    `${xRes}x${yRes}`,
+                ],
+                { env: { XAUTHORITY: `${this.xAuthorityFile}` } },
             );
         }
     }
 
-    public setRefreshResolution(
+    public async setRefreshResolution(
         xRes: number,
         yRes: number,
         rate: number
-    ): void {
+    ): Promise<void> {
         if (this.isX11 && this.displayEnvVariable && this.xAuthorityFile) {
-            child_process.execSync(
-                `export XAUTHORITY=${this.xAuthorityFile} && xrandr -display ${this.displayEnvVariable} --output ${this.displayName} --mode ${xRes}x${yRes} -r ${rate}`
+            await spawnCmdAsync(
+                'xrandr',
+                [
+                    '-display',
+                    `${this.displayEnvVariable}`,
+                    '--output',
+                    `${this.displayName}`,
+                    '--mode',
+                    `${xRes}x${yRes}`,
+                    '-r',
+                    `${rate}`,
+                ],
+                { env: { XAUTHORITY: `${this.xAuthorityFile}` } },
             );
         }
     }

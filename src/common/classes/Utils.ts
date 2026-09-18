@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-import { exec, execSync } from "child_process";
+import { exec, execSync, spawn, SpawnOptions } from "child_process";
 import * as fs from "fs";
 
 export function getDirectories(source: string) {
@@ -120,6 +120,35 @@ export function execCommandSync(command: string): string {
         return undefined;
     }
 }
+
+export async function spawnCmdAsync(
+    command: string,
+    args: readonly string[],
+    options: SpawnOptions,
+): Promise<string> {
+    return new Promise<string>((resolve, reject) => {
+        const cmd = spawn(command, args, options);
+        let output: string = '';
+        cmd.stdout?.on('data', (data) => {
+            output += data;
+        });
+        cmd.stderr?.on('data', (data) => {
+            output += data;
+        });
+        cmd.on('close', (code) => {
+            if (code === 0) {
+                resolve(output);
+            } else {
+                reject(output);
+            }
+        });
+        cmd.on('error', (err) => {
+            reject(err);
+        });
+
+    });
+}
+
 
 export function countLines(input: string): number {
     return input.split("\n").filter((str) => str !== "").length;
