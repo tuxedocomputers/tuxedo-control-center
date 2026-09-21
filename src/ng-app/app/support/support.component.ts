@@ -45,7 +45,7 @@ export class SupportComponent implements OnInit {
   public formTicketNumber: FormGroup;
   public systeminfoRunOutput = '';
   public systeminfoRunProgress = false;
-  public systeminfoFilePath = '/tmp/tcc/systeminfos.sh';
+  public systeminfoFilePath = `/run/user/${this.electron.process.getuid()}/tcc/systeminfos.sh`;
   public systeminfosURL = 'https://mytuxedo.de/public.php/dav/files/DcAeZk4TbBTTjRq/?accept=zip';
   public systeminfosCompleted = false;
 
