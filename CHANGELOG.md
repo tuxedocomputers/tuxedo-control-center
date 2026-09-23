@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.1.17-lts-jammy.1] - 2026-09-23
+### Changed
+- Environment variable sanitization before command execution of systeminfos
+- Display refreshrate alternative command execution through parameterized spawn
+- Multi-user issue with script path and deletion of systeminfos script before execution
+
 ## [2.1.17] - 2025-07-10
 ### Fixed
 - Download of system diagnostics script failing, URL adjusted
