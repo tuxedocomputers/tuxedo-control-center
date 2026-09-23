@@ -58,7 +58,7 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
         this.controller.resetValues();
     }
 
-    public onWork(): void {
+    public async onWork(): Promise<void> {
         const [usersAvailable, usersChanged] = this.checkUsers();
 
         if (usersChanged) {
@@ -67,16 +67,16 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
 
         if (usersAvailable && !this.controller.getIsWayland()) {
             if (!this.displayInfoFound) {
-                this.updateDisplayData();
+                await this.updateDisplayData();
             }
 
-            this.setActiveDisplayMode();
+            await this.setActiveDisplayMode();
         }
     }
 
     public onExit(): void {}
 
-    private setActiveDisplayMode(): void {
+    private async setActiveDisplayMode(): Promise<void> {
         const activeprofile = this.tccd.getCurrentProfile();
 
         const useRefRate = activeprofile?.display?.useRefRate;
@@ -88,7 +88,7 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
                 refreshRate !== activeMode.refreshRates[0];
 
             if (hasDifferentRefreshRate) {
-                this.setDisplayMode(
+                await this.setDisplayMode(
                     activeMode.xResolution,
                     activeMode.yResolution,
                     refreshRate
@@ -98,8 +98,8 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
         }
     }
 
-    private updateDisplayData(): void {
-        this.displayInfo = this.controller.getDisplayModes();
+    private async updateDisplayData(): Promise<void> {
+        this.displayInfo = await this.controller.getDisplayModes();
 
         this.tccd.dbusData.isX11 = this.controller.getIsX11();
 
@@ -111,9 +111,9 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
         }
     }
 
-    public getActiveDisplayMode(): IDisplayMode {
+    public async getActiveDisplayMode(): Promise<IDisplayMode> {
         if (this.displayInfo === undefined) {
-            this.updateDisplayData();
+            await this.updateDisplayData();
         }
         if (this.displayInfo === undefined) {
             return undefined;
@@ -122,7 +122,7 @@ export class DisplayRefreshRateWorker extends DaemonWorker {
         }
     }
 
-    private setDisplayMode(xRes: number, yRes: number, refRate: number) {
-        this.controller.setRefreshResolution(xRes, yRes, refRate);
+    private async setDisplayMode(xRes: number, yRes: number, refRate: number) {
+        await this.controller.setRefreshResolution(xRes, yRes, refRate);
     }
 }
