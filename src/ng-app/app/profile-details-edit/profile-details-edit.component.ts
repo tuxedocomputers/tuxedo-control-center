@@ -21,10 +21,10 @@ import { Component, EventEmitter, Input, type OnDestroy, type OnInit, Output, Vi
 // biome-ignore lint: injection token
 import {
     type AbstractControl,
-    type FormArray,
+    FormArray,
     FormBuilder,
     FormControl,
-    type FormGroup,
+    FormGroup,
     type ValidatorFn,
     Validators,
 } from '@angular/forms';
@@ -72,6 +72,23 @@ function maxControlValidator(comparisonControl: AbstractControl): ValidatorFn {
     };
 }
 
+// Diagnostic helper: submitFormInput() silently no-ops when the form is invalid, with no
+// indication of which control caused it. Walks the control tree and returns "path: {errors}"
+// for every invalid leaf control, so that reason shows up in the console instead.
+function findInvalidControlPaths(control: AbstractControl, path: string = ''): string[] {
+    if (control instanceof FormGroup || control instanceof FormArray) {
+        const childPaths: string[] = [];
+        for (const key of Object.keys(control.controls)) {
+            childPaths.push(...findInvalidControlPaths(control.controls[key], path ? `${path}.${key}` : key));
+        }
+        return childPaths;
+    }
+    if (control.invalid) {
+        return [`${path}: ${JSON.stringify(control.errors)}`];
+    }
+    return [];
+}
+
 @Component({
     selector: 'app-profile-details-edit',
     templateUrl: './profile-details-edit.component.html',
@@ -90,12 +107,16 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
             return;
         }
 
-        // Create form group from profile
-        if (this.profileFormGroup === undefined) {
+        // Create form group from profile. Rebuilt (not just reset) whenever the edited
+        // profile's identity changes, since validators/FormArray controls are wired to a
+        // specific profile's shape (e.g. odmPowerLimits.tdpValues length) and become stale
+        // if reused across profiles with a different shape.
+        if (this.profileFormGroup === undefined || this.viewProfile === undefined || this.currentProfileId !== profile.id) {
             this.profileFormGroup = this.createProfileFormGroup(profile);
         } else {
             this.profileFormGroup.reset(profile);
         }
+        this.currentProfileId = profile.id;
 
         if (this.selectStateControl === undefined) {
             this.selectStateControl = new FormControl(this.state.getProfileStates(this.viewProfile.id));
@@ -119,6 +140,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     public selectStateControl: FormControl;
     public profileFormGroup: FormGroup;
     public profileFormProgress: boolean = false;
+    private currentProfileId: string;
 
     private subscriptions: Subscription = new Subscription();
     private fansMinSpeedSubscription: Subscription = new Subscription();
@@ -434,6 +456,9 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
                     this.utils.pageDisabled = false;
                 });
         } else {
+            console.error(
+                `ProfileDetailsEditComponent: submitFormInput: form invalid, not saving. Invalid controls: ${findInvalidControlPaths(this.profileFormGroup).join(', ')}`,
+            );
             this.profileFormProgress = false;
             this.utils.pageDisabled = false;
         }
