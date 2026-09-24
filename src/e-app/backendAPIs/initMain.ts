@@ -57,10 +57,6 @@ if (watchOption) {
     require('electron-reload')(path.join(__dirname, '..', '..', 'ng-app'));
 }
 
-if (isFirstStart()) {
-    installAutostartTray();
-}
-
 export const userConfig = new UserConfig(tccStandardConfigFile);
 
 if (!userConfigDirExists()) {
@@ -100,6 +96,8 @@ app.whenReady().then(async (): Promise<void> => {
         // Trigger initial update manually
         nativeTheme.emit('updated');
     });
+
+    await migrateOldAutostartState();
 
     startDbusAndInit();
 });
@@ -154,7 +152,7 @@ async function startDbusAndInit(): Promise<void> {
 
 async function initTray(): Promise<void> {
     tray.state.tccGUIVersion = `v${app.getVersion()}`;
-    tray.state.isAutostartTrayInstalled = isAutostartTrayInstalled();
+    tray.state.isAutostartTrayActive = isAutostartTrayActive();
     tray.state.fnLockSupported = await fnLockSupported();
     tray.state.hasAquaris = await hasAquaris();
     if (tray.state.fnLockSupported) {
@@ -168,12 +166,12 @@ async function initTray(): Promise<void> {
     tray.events.startAquarisControl = (): Promise<void> => activateTccGui('/main-gui/aquaris-control');
     tray.events.exitClick = (): void => quitCurrentTccSession();
     tray.events.autostartTrayToggle = (): void => {
-        if (tray.state.isAutostartTrayInstalled) {
-            removeAutostartTray();
+        if (tray.state.isAutostartTrayActive) {
+            disableAutostartTray();
         } else {
-            installAutostartTray();
+            enableAutostartTray();
         }
-        tray.state.isAutostartTrayInstalled = isAutostartTrayInstalled();
+        tray.state.isAutostartTrayActive = isAutostartTrayActive();
         tray.create();
     };
 
@@ -258,43 +256,62 @@ async function initMain(): Promise<void> {
     }, profilesCheckInterval);
 }
 
-function installAutostartTray(): boolean {
+function enableAutostartTray(): boolean {
+    try {
+        fs.unlinkSync(path.join(autostartLocation, autostartDesktopFilename));
+        return true;
+    } catch (err: unknown) {
+        console.error(`initMain: remove autostart .desktop file failed => ${err}`);
+        return false;
+    }
+}
+
+function disableAutostartTray(): boolean {
     try {
         fs.mkdirSync(autostartLocation, { recursive: true });
-        fs.copyFileSync(
-            path.join(appPath, '../../../data/dist-data', autostartDesktopFilename),
-            path.join(autostartLocation, autostartDesktopFilename),
+        fs.writeFileSync(path.join(autostartLocation, autostartDesktopFilename), '');
+        return true;
+    } catch (err: unknown) {
+        console.error(`initMain: create autostart .desktop file failed => ${err}`);
+        return false;
+    }
+}
+
+function isAutostartTrayActive(): boolean {
+    try {
+        return !fs.existsSync(path.join(autostartLocation, autostartDesktopFilename));
+    } catch (err: unknown) {
+        console.error(`initMain: isAutostartTrayActive failed => ${err}`);
+        return false;
+    }
+}
+
+/**
+ * Old autostart solution was a real .desktop-file, new one is a dummy (empty) file
+ * disabling the default in `/etc/xdg/autostart`
+ *
+ * Old autostart state needs to be migrated to new impl to not interfere with new impl
+ */
+async function migrateOldAutostartState(): Promise<void> {
+    if ((await userConfig.get('migrateAutostart')) === 'done') {
+        // Only migrate once per user
+        return;
+    } else {
+        const oldAutostartFile = path.join(
+            path.join(os.homedir(), '.config/autostart'),
+            'tuxedo-control-center-tray.desktop',
         );
-        return true;
-    } catch (err: unknown) {
-        console.error(`initMain: installAutostartTray failed => ${err}`);
-        return false;
-    }
-}
 
-function removeAutostartTray(): boolean {
-    try {
-        if (fs.existsSync(path.join(autostartLocation, autostartDesktopFilename))) {
-            fs.unlinkSync(path.join(autostartLocation, autostartDesktopFilename));
+        if (fs.existsSync(oldAutostartFile)) {
+            // If exists, assume autostart was previously enabled => remove .desktop file
+            enableAutostartTray();
+        } else {
+            // If doesn't exist, assume autostart was previously disabled => create empty desktop file
+            disableAutostartTray();
         }
-        return true;
-    } catch (err: unknown) {
-        console.error(`initMain: removeAutostartTray failed => ${err}`);
-        return false;
-    }
-}
 
-function isAutostartTrayInstalled(): boolean {
-    try {
-        return fs.existsSync(path.join(autostartLocation, autostartDesktopFilename));
-    } catch (err: unknown) {
-        console.error(`initMain: isAutostartTrayInstalled failed => ${err}`);
-        return false;
+        await userConfig.set('migrateAutostart', 'done');
     }
-}
-
-function isFirstStart(): boolean {
-    return !userConfigDirExists();
 }
 
 function userConfigDirExists(): boolean {
