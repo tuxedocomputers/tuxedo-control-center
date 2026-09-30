@@ -51,7 +51,7 @@
         "test-service-app": "tsx node_modules/jasmine/bin/jasmine --config=./src/service-app/jasmine.json",
         "test-ng": "ng test --watch=false",
         "test-ng-e2e": "ng e2e",
-        "test-appstream": "appstreamcli validate ./src/dist-data/com.tuxedocomputers.tcc.metainfo.xml",
+        "test-appstream": "appstreamcli validate ./src/dist-data/com.tuxedocomputers.tcc-gui.metainfo.xml",
         "install-build-dep": "curl -sL https://deb.nodesource.com/setup_24.x | sudo -E bash - && sudo apt install nodejs autoconf automake build-essential gcc g++ make rpm",
         "start-watch": "run-s clean build-electron build-native-debug build-service-debug copy-files && npm run watch-ng-and-electron",
         "watch-ng-and-electron": "run-p start-ng-watch start-electron-watch",
