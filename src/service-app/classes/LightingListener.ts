@@ -140,7 +140,7 @@ export class LightingListener {
     private async initLightbarStates(): Promise<void> {
         const currentStates: LightbarStateInterface | null = this.tccd.settings.lightbarStates;
         const defaultState: LightbarStateInterface = {
-            brightness: this.lightbarCapabilities.maxBrightness,
+            brightness: 0,
             red: this.lightbarCapabilities.maxRed,
             green: this.lightbarCapabilities.maxGreen,
             blue: this.lightbarCapabilities.maxBlue,
