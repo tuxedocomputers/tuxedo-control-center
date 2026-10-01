@@ -657,56 +657,110 @@ export class TccDBusController {
         }
     }
 
-    async getKeyboardBacklightCapabilitiesJSON(): Promise<string> {
+    async getKeyboardCapabilitiesJSON(): Promise<string> {
         try {
             if (this.dbusStatus && this.interface) {
-                return await this.interface.GetKeyboardBacklightCapabilitiesJSON();
+                return await this.interface.GetKeyboardCapabilitiesJSON();
             }
         } catch (err: unknown) {
             this.dbusStatus = false;
 
             if (err instanceof dbus.DBusError) {
-                console.error(`dbusController: getKeyboardBacklightCapabilitiesJSON failed => ${err?.text}`);
+                console.error(`dbusController: getKeyboardCapabilitiesJSON failed => ${err?.text}`);
                 return undefined;
             }
 
-            console.error(`dbusController: getKeyboardBacklightCapabilitiesJSON failed => ${err}`);
+            console.error(`dbusController: getKeyboardCapabilitiesJSON failed => ${err}`);
             return undefined;
         }
     }
 
-    async getKeyboardBacklightStatesJSON(): Promise<string> {
+    async getLightbarCapabilitiesJSON(): Promise<string> {
         try {
             if (this.dbusStatus && this.interface) {
-                return await this.interface.GetKeyboardBacklightStatesJSON();
+                return await this.interface.GetLightbarCapabilitiesJSON();
             }
         } catch (err: unknown) {
             this.dbusStatus = false;
 
             if (err instanceof dbus.DBusError) {
-                console.error(`dbusController: getKeyboardBacklightStatesJSON failed => ${err?.text}`);
+                console.error(`dbusController: getLightbarCapabilitiesJSON failed => ${err?.text}`);
                 return undefined;
             }
 
-            console.error(`dbusController: getKeyboardBacklightStatesJSON failed => ${err}`);
+            console.error(`dbusController: getLightbarCapabilitiesJSON failed => ${err}`);
             return undefined;
         }
     }
 
-    async setKeyboardBacklightStatesJSON(keyboardBacklightStatesJSON: string): Promise<boolean> {
+    async getKeyboardStatesJSON(): Promise<string> {
         try {
             if (this.dbusStatus && this.interface) {
-                return await this.interface.SetKeyboardBacklightStatesJSON(keyboardBacklightStatesJSON);
+                return await this.interface.GetKeyboardStatesJSON();
             }
         } catch (err: unknown) {
             this.dbusStatus = false;
 
             if (err instanceof dbus.DBusError) {
-                console.error(`dbusController: setKeyboardBacklightStatesJSON failed => ${err?.text}`);
+                console.error(`dbusController: getKeyboardStatesJSON failed => ${err?.text}`);
                 return undefined;
             }
 
-            console.error(`dbusController: setKeyboardBacklightStatesJSON failed => ${err}`);
+            console.error(`dbusController: getKeyboardStatesJSON failed => ${err}`);
+            return undefined;
+        }
+    }
+
+    async getLightbarStatesJSON(): Promise<string> {
+        try {
+            if (this.dbusStatus && this.interface) {
+                return await this.interface.GetLightbarStatesJSON();
+            }
+        } catch (err: unknown) {
+            this.dbusStatus = false;
+
+            if (err instanceof dbus.DBusError) {
+                console.error(`dbusController: getLightbarStatesJSON failed => ${err?.text}`);
+                return undefined;
+            }
+
+            console.error(`dbusController: getLightbarStatesJSON failed => ${err}`);
+            return undefined;
+        }
+    }
+
+    async setKeyboardStatesJSON(keyboardStatesJSON: string): Promise<boolean> {
+        try {
+            if (this.dbusStatus && this.interface) {
+                return await this.interface.SetKeyboardStatesJSON(keyboardStatesJSON);
+            }
+        } catch (err: unknown) {
+            this.dbusStatus = false;
+
+            if (err instanceof dbus.DBusError) {
+                console.error(`dbusController: setKeyboardStatesJSON failed => ${err?.text}`);
+                return undefined;
+            }
+
+            console.error(`dbusController: setKeyboardStatesJSON failed => ${err}`);
+            return undefined;
+        }
+    }
+
+    async setLightbarStatesJSON(lightbarStatesJSON: string): Promise<boolean> {
+        try {
+            if (this.dbusStatus && this.interface) {
+                return await this.interface.SetLightbarStatesJSON(lightbarStatesJSON);
+            }
+        } catch (err: unknown) {
+            this.dbusStatus = false;
+
+            if (err instanceof dbus.DBusError) {
+                console.error(`dbusController: setLightbarStatesJSON failed => ${err?.text}`);
+                return undefined;
+            }
+
+            console.error(`dbusController: setLightbarStatesJSON failed => ${err}`);
             return undefined;
         }
     }

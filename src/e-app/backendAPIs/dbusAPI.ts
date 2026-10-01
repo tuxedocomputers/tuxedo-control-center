@@ -204,37 +204,73 @@ export const dbusHandlers: Map<string, (...args: any[]) => any> = new Map<string
         );
     })
 
-    .set(DbusAPIFunctions.getKeyboardBacklightCapabilitiesJSON, (): Promise<string> => {
+    .set(DbusAPIFunctions.getKeyboardCapabilitiesJSON, (): Promise<string> => {
         return new Promise<string>(
             (resolve: (value: string | PromiseLike<string>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
-                    resolve(tccDBus.getKeyboardBacklightCapabilitiesJSON());
+                    resolve(tccDBus.getKeyboardCapabilitiesJSON());
                 } catch (err: unknown) {
-                    console.error(`dbusAPI: getKeyboardBacklightCapabilitiesJSON failed => ${err}`);
+                    console.error(`dbusAPI: getKeyboardCapabilitiesJSON failed => ${err}`);
                 }
             },
         );
     })
 
-    .set(DbusAPIFunctions.getKeyboardBacklightStatesJSON, (): Promise<string> => {
+    .set(DbusAPIFunctions.getLightbarCapabilitiesJSON, (): Promise<string> => {
         return new Promise<string>(
             (resolve: (value: string | PromiseLike<string>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
-                    resolve(tccDBus.getKeyboardBacklightStatesJSON());
+                    resolve(tccDBus.getLightbarCapabilitiesJSON());
                 } catch (err: unknown) {
-                    console.error(`dbusAPI: getKeyboardBacklightStatesJSON failed => ${err}`);
+                    console.error(`dbusAPI: getLightbarCapabilitiesJSON failed => ${err}`);
                 }
             },
         );
     })
 
-    .set(DbusAPIFunctions.setKeyboardBacklightStatesJSON, (keyboardBacklightStatesJSON: string): Promise<boolean> => {
+    .set(DbusAPIFunctions.getKeyboardStatesJSON, (): Promise<string> => {
+        return new Promise<string>(
+            (resolve: (value: string | PromiseLike<string>) => void, _reject: (reason?: unknown) => void): void => {
+                try {
+                    resolve(tccDBus.getKeyboardStatesJSON());
+                } catch (err: unknown) {
+                    console.error(`dbusAPI: getKeyboardStatesJSON failed => ${err}`);
+                }
+            },
+        );
+    })
+
+    .set(DbusAPIFunctions.getLightbarStatesJSON, (): Promise<string> => {
+        return new Promise<string>(
+            (resolve: (value: string | PromiseLike<string>) => void, _reject: (reason?: unknown) => void): void => {
+                try {
+                    resolve(tccDBus.getLightbarStatesJSON());
+                } catch (err: unknown) {
+                    console.error(`dbusAPI: getLightbarStatesJSON failed => ${err}`);
+                }
+            },
+        );
+    })
+
+    .set(DbusAPIFunctions.setKeyboardStatesJSON, (keyboardStatesJSON: string): Promise<boolean> => {
         return new Promise<boolean>(
             (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
                 try {
-                    resolve(tccDBus.setKeyboardBacklightStatesJSON(keyboardBacklightStatesJSON));
+                    resolve(tccDBus.setKeyboardStatesJSON(keyboardStatesJSON));
                 } catch (err: unknown) {
-                    console.error(`dbusAPI: setKeyboardBacklightStatesJSON failed => ${err}`);
+                    console.error(`dbusAPI: setKeyboardStatesJSON failed => ${err}`);
+                }
+            },
+        );
+    })
+
+    .set(DbusAPIFunctions.setLightbarStatesJSON, (lightbarStatesJSON: string): Promise<boolean> => {
+        return new Promise<boolean>(
+            (resolve: (value: boolean | PromiseLike<boolean>) => void, _reject: (reason?: unknown) => void): void => {
+                try {
+                    resolve(tccDBus.setLightbarStatesJSON(lightbarStatesJSON));
+                } catch (err: unknown) {
+                    console.error(`dbusAPI: setLightbarStatesJSON failed => ${err}`);
                 }
             },
         );

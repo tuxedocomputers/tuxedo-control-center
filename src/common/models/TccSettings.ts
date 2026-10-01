@@ -24,22 +24,37 @@ export enum ProfileStates {
     BAT = 'power_bat',
 }
 
-export enum KeyboardBacklightColorModes {
+export enum KeyboardColorModes {
     static,
     breathing,
 }
 
-export interface KeyboardBacklightCapabilitiesInterface {
-    modes: Array<KeyboardBacklightColorModes>;
+export interface KeyboardCapabilitiesInterface {
+    modes?: KeyboardColorModes[];
     zones: number;
+    maxBrightness: number;
+    // colors optional because of white only keyboard
+    maxRed?: number;
+    maxGreen?: number;
+    maxBlue?: number;
+}
+
+export interface LightbarCapabilitiesInterface {
     maxBrightness: number;
     maxRed: number;
     maxGreen: number;
     maxBlue: number;
 }
 
-export interface KeyboardBacklightStateInterface {
-    mode: KeyboardBacklightColorModes;
+export interface KeyboardStateInterface {
+    mode: KeyboardColorModes;
+    brightness: number;
+    red: number;
+    green: number;
+    blue: number;
+}
+
+export interface LightbarStateInterface {
     brightness: number;
     red: number;
     green: number;
@@ -59,7 +74,9 @@ export interface ITccSettings {
     ycbcr420Workaround: Array<Object>;
     chargingProfile: string | null;
     chargingPriority: string | null;
-    keyboardBacklightStates: Array<KeyboardBacklightStateInterface>;
+    keyboardBacklightStates?: KeyboardStateInterface[];
+    keyboardStates: KeyboardStateInterface[];
+    lightbarStates: LightbarStateInterface | null;
 }
 
 export const defaultSettings: ITccSettings = {
@@ -75,7 +92,8 @@ export const defaultSettings: ITccSettings = {
     ycbcr420Workaround: [],
     chargingProfile: null,
     chargingPriority: null,
-    keyboardBacklightStates: [],
+    keyboardStates: [],
+    lightbarStates: null,
 };
 
 export const defaultSettingsXP1508UHD: ITccSettings = {
@@ -91,7 +109,8 @@ export const defaultSettingsXP1508UHD: ITccSettings = {
     ycbcr420Workaround: [],
     chargingProfile: null,
     chargingPriority: null,
-    keyboardBacklightStates: [],
+    keyboardStates: [],
+    lightbarStates: null,
 };
 
 const defaultSettingsMobile: ITccSettings = {
@@ -107,7 +126,8 @@ const defaultSettingsMobile: ITccSettings = {
     ycbcr420Workaround: [],
     chargingProfile: null,
     chargingPriority: null,
-    keyboardBacklightStates: [],
+    keyboardStates: [],
+    lightbarStates: null,
 };
 
 export const deviceCustomSettings: Map<TUXEDODevice, ITccSettings> = new Map();

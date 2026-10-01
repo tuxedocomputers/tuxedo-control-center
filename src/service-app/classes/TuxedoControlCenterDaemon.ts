@@ -39,7 +39,7 @@ import { DisplayBacklightWorker } from './DisplayBacklightWorker';
 import { DisplayRefreshRateWorker } from './DisplayRefreshRateWorker';
 import { FanControlWorker } from './FanControlWorker';
 import { GpuInfoWorker } from './GpuInfoWorker';
-import { KeyboardBacklightListener } from './KeyboardBacklightListener';
+import { LightingListener } from './LightingListener';
 import { NVIDIAPowerCTRLListener } from './NVIDIAPowerCTRLListener';
 import { ODMPowerLimitWorker } from './ODMPowerLimitWorker';
 import { ODMProfileWorker } from './ODMProfileWorker';
@@ -69,7 +69,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
     public activeProfile: ITccProfile;
 
     private workers: DaemonWorker[] = [];
-    private listeners: (KeyboardBacklightListener | NVIDIAPowerCTRLListener)[] = [];
+    private listeners: (LightingListener | NVIDIAPowerCTRLListener)[] = [];
 
     protected started: boolean = false;
 
@@ -126,7 +126,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
         this.workers.push(new ODMPowerLimitWorker(this));
         this.workers.push(this.displayWorker); // todo: why not "new DisplayRefreshRateWorker(this)"?
 
-        this.listeners.push(new KeyboardBacklightListener(this));
+        this.listeners.push(new LightingListener(this));
         this.listeners.push(new NVIDIAPowerCTRLListener(this));
 
         await this.startWorkers();
@@ -460,9 +460,19 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
                 this.settings.chargingPriority = this.config.getDefaultSettings(device).chargingPriority;
                 missingSetting = true;
             }
-            if (this.settings.keyboardBacklightStates === undefined) {
-                this.logLine('TuxedoControlCenterDaemon: Missing keyboardBacklightStates setting');
-                this.settings.keyboardBacklightStates = this.config.getDefaultSettings(device).keyboardBacklightStates;
+            if (this.settings.keyboardBacklightStates !== undefined && this.settings.keyboardStates === undefined) {
+                this.logLine('TuxedoControlCenterDaemon: Detected keyboardBacklightStates setting');
+                this.settings.keyboardStates = this.settings.keyboardBacklightStates;
+                this.settings.keyboardBacklightStates = undefined;
+            }
+            if (this.settings.keyboardStates === undefined) {
+                this.logLine('TuxedoControlCenterDaemon: Missing keyboardStates setting');
+                this.settings.keyboardStates = this.config.getDefaultSettings(device).keyboardStates;
+                missingSetting = true;
+            }
+            if (this.settings.lightbarStates === undefined) {
+                this.logLine('TuxedoControlCenterDaemon: Missing lightbarStates setting');
+                this.settings.lightbarStates = this.config.getDefaultSettings(device).lightbarStates;
                 missingSetting = true;
             }
             missingSetting = this.syncOutputPortsSetting();
@@ -677,7 +687,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             this.activeProfile = this.getDefaultProfile();
             result = false;
         }
-        this.listeners.forEach((listener: KeyboardBacklightListener | NVIDIAPowerCTRLListener): void => {
+        this.listeners.forEach((listener: LightingListener | NVIDIAPowerCTRLListener): void => {
             listener.onActiveProfileChanged();
         });
         return result;
@@ -690,7 +700,7 @@ export class TuxedoControlCenterDaemon extends SingleProcess {
             this.activeProfile = this.getDefaultProfile();
             result = false;
         }
-        this.listeners.forEach((listener: KeyboardBacklightListener | NVIDIAPowerCTRLListener): void => {
+        this.listeners.forEach((listener: LightingListener | NVIDIAPowerCTRLListener): void => {
             listener.onActiveProfileChanged();
         });
         return result;

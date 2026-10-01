@@ -49,15 +49,18 @@ export const DbusClientAPI = {
     odmProfilesAvailable: (): Promise<string[]> =>
         ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.odmProfilesAvailable]),
     odmPowerLimitsJSON: (): Promise<string> => ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.odmPowerLimitsJSON]),
-    getKeyboardBacklightCapabilitiesJSON: (): Promise<string> =>
-        ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.getKeyboardBacklightCapabilitiesJSON]),
-    getKeyboardBacklightStatesJSON: (): Promise<string> =>
-        ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.getKeyboardBacklightStatesJSON]),
-    setKeyboardBacklightStatesJSON: (keyboardBacklightStatesJSON: string): Promise<boolean> =>
-        ipcRenderer.invoke(dbusAPIHandle, [
-            DbusAPIFunctions.setKeyboardBacklightStatesJSON,
-            keyboardBacklightStatesJSON,
-        ]),
+    getKeyboardCapabilitiesJSON: (): Promise<string> =>
+        ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.getKeyboardCapabilitiesJSON]),
+    getLightbarCapabilitiesJSON: (): Promise<string> =>
+        ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.getLightbarCapabilitiesJSON]),
+    getKeyboardStatesJSON: (): Promise<string> =>
+        ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.getKeyboardStatesJSON]),
+    getLightbarStatesJSON: (): Promise<string> =>
+        ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.getLightbarStatesJSON]),
+    setKeyboardStatesJSON: (keyboardStatesJSON: string): Promise<boolean> =>
+        ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.setKeyboardStatesJSON, keyboardStatesJSON]),
+    setLightbarStatesJSON: (lightbarStatesJSON: string): Promise<boolean> =>
+        ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.setLightbarStatesJSON, lightbarStatesJSON]),
     getFansMinSpeed: (): Promise<number> => ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.getFansMinSpeed]),
     getFansOffAvailable: (): Promise<boolean> =>
         ipcRenderer.invoke(dbusAPIHandle, [DbusAPIFunctions.getFansOffAvailable]),
@@ -136,9 +139,12 @@ export interface IDbusClientAPI {
     getSettingsJSON: () => Promise<string>;
     odmProfilesAvailable: () => Promise<string[]>;
     odmPowerLimitsJSON: () => Promise<string>;
-    getKeyboardBacklightCapabilitiesJSON: () => Promise<string>;
-    getKeyboardBacklightStatesJSON: () => Promise<string>;
-    setKeyboardBacklightStatesJSON: (keyboardBacklightStatesJSON: string) => Promise<boolean>;
+    getKeyboardCapabilitiesJSON: () => Promise<string>;
+    getLightbarCapabilitiesJSON: () => Promise<string>;
+    getKeyboardStatesJSON: () => Promise<string>;
+    getLightbarStatesJSON: () => Promise<string>;
+    setKeyboardStatesJSON: (keyboardStatesJSON: string) => Promise<boolean>;
+    setLightbarStatesJSON: (lightbarStatesJSON: string) => Promise<boolean>;
     getFansMinSpeed: () => Promise<number>;
     getFansOffAvailable: () => Promise<boolean>;
     getChargingProfilesAvailable: () => Promise<string[]>;

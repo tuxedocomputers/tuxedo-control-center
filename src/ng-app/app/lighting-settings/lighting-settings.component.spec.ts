@@ -19,20 +19,20 @@
 
 import { async, type ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { KeyboardBacklightComponent } from './keyboard-backlight.component';
+import { LightingComponent } from './lighting-settings.component';
 
-describe('KeyboardBacklightComponent', () => {
-    let component: KeyboardBacklightComponent;
-    let fixture: ComponentFixture<KeyboardBacklightComponent>;
+describe('LightingComponent', () => {
+    let component: LightingComponent;
+    let fixture: ComponentFixture<LightingComponent>;
 
     beforeEach(async(() => {
         TestBed.configureTestingModule({
-            declarations: [KeyboardBacklightComponent],
+            declarations: [LightingComponent],
         }).compileComponents();
     }));
 
     beforeEach(() => {
-        fixture = TestBed.createComponent(KeyboardBacklightComponent);
+        fixture = TestBed.createComponent(LightingComponent);
         component = fixture.componentInstance;
         fixture.detectChanges();
     });
