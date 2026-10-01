@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.1.0] - UNRELEASED
+### Added
+- Lightbar color and brightness selection in Tools => Lighting settings
+
 ## [3.0.10] - 2026-09-16
 ### Added
 - Aquaris menu for Stellaris Gen8 Intel
