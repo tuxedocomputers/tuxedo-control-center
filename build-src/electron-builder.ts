@@ -26,15 +26,15 @@ const buildSteps: Array<(filenameAddition: string) => Promise<void>> = [];
 
 const distSrc = './dist/tuxedo-control-center';
 
+const desktopFileCategories = 'System;TUXEDO;';
+const desktopFileDescription = 'An application helping you to tune your TUXEDO';
 const linuxDesktopFile = {
     entry: {
         Name: 'TUXEDO Control Center',
-        Comment: 'An application helping you to tune your TUXEDO',
         Terminal: 'false',
         Type: 'Application',
         Icon: '/opt/tuxedo-control-center/resources/dist/tuxedo-control-center/data/dist-data/tuxedo-control-center_256.svg',
         StartupWMClass: 'tuxedo-control-center',
-        Categories: 'System;TUXEDO;',
         Keywords: 'TCC',
     },
 };
@@ -94,7 +94,8 @@ async function buildDeb(filenameAddition: string): Promise<void> {
         ],
         linux: {
             target: ['deb'],
-            category: 'System',
+            description: desktopFileDescription,
+            category: desktopFileCategories,
             icon: `${distSrc}/data/dist-data/tuxedo-control-center_256.svg`,
             desktop: linuxDesktopFile,
         },
@@ -102,7 +103,6 @@ async function buildDeb(filenameAddition: string): Promise<void> {
             compression: 'xz',
             depends: ['tuxedo-drivers (>= 4.0.0) | tuxedo-keyboard (>= 3.1.2)', 'libayatana-appindicator3-1'],
             recommends: ['tuxedo-systeminfos'],
-            category: 'System',
             afterInstall: './build-src/after_install.sh',
             afterRemove: './build-src/after_remove.sh',
             fpm: [
@@ -155,7 +155,8 @@ async function buildRpm(filenameAddition: string): Promise<void> {
         ],
         linux: {
             target: ['rpm'],
-            category: 'System',
+            description: desktopFileDescription,
+            category: desktopFileCategories,
             icon: `${distSrc}/data/dist-data/tuxedo-control-center_256.svg`,
             desktop: linuxDesktopFile,
         },
