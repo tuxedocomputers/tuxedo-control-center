@@ -34,7 +34,6 @@ const linuxDesktopFile = {
         Terminal: 'false',
         Type: 'Application',
         Icon: '/opt/tuxedo-control-center/resources/dist/tuxedo-control-center/data/dist-data/tuxedo-control-center_256.svg',
-        StartupWMClass: 'tuxedo-control-center',
         Keywords: 'TCC',
     },
 };
@@ -98,6 +97,7 @@ async function buildDeb(filenameAddition: string): Promise<void> {
             category: desktopFileCategories,
             icon: `${distSrc}/data/dist-data/tuxedo-control-center_256.svg`,
             desktop: linuxDesktopFile,
+            syncDesktopName: true,
         },
         deb: {
             compression: 'xz',
@@ -159,6 +159,7 @@ async function buildRpm(filenameAddition: string): Promise<void> {
             category: desktopFileCategories,
             icon: `${distSrc}/data/dist-data/tuxedo-control-center_256.svg`,
             desktop: linuxDesktopFile,
+            syncDesktopName: true,
         },
         rpm: {
             compression: 'xz',
