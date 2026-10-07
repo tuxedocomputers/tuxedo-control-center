@@ -44,6 +44,7 @@ startTCCAccelerator = app.commandLine.getSwitchValue('start-tcc-accelerator');
 if (startTCCAccelerator === '') {
     startTCCAccelerator = 'Super+Alt+F6';
 }
+
 const tccConfigDir: string = path.join(os.homedir(), '.tcc');
 const tccStandardConfigFile: string = path.join(tccConfigDir, 'user.conf');
 // Tweak to get correct dirname for resource files outside app.asar
@@ -81,7 +82,8 @@ app.whenReady().then(async (): Promise<void> => {
         quitCurrentTccSession();
     }
 
-    if (startTCCAccelerator !== 'none') {
+    // using X-KDE-Shortcuts for KDE to avoid dialog
+    if (startTCCAccelerator !== 'none' && !isKDE()) {
         const success: boolean = globalShortcut.register(startTCCAccelerator, (): void => {
             activateTccGui();
         });
@@ -101,6 +103,15 @@ app.whenReady().then(async (): Promise<void> => {
 
     startDbusAndInit();
 });
+
+function isKDE(): boolean {
+    const xdgDesktop: string | undefined = process.env?.XDG_CURRENT_DESKTOP;
+
+    if (xdgDesktop?.includes('KDE')) {
+        return true;
+    }
+    return false;
+}
 
 function exitIfProcessExists(): void {
     if (applicationLock) {
