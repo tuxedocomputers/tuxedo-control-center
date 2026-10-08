@@ -26,6 +26,18 @@ const buildSteps: Array<(filenameAddition: string) => Promise<void>> = [];
 
 const distSrc = './dist/tuxedo-control-center';
 
+const desktopFileCategories = 'System;TUXEDO;';
+const desktopFileDescription = 'An application helping you to tune your TUXEDO';
+const linuxDesktopFile = {
+    entry: {
+        Name: 'TUXEDO Control Center',
+        Terminal: 'false',
+        Type: 'Application',
+        Icon: '/opt/tuxedo-control-center/resources/dist/tuxedo-control-center/data/dist-data/tuxedo-control-center_256.svg',
+        Keywords: 'TCC',
+    },
+};
+
 /**
  * Parse command line parameter and set up the build
  */
@@ -74,31 +86,27 @@ async function buildDeb(filenameAddition: string): Promise<void> {
             `${distSrc}/data/service/tccd`,
             `${distSrc}/data/service/TuxedoIOAPI.node`,
             `${distSrc}/data/CHANGELOG.md`,
-            `${distSrc}/data/dist-data/tccd.service`,
-            `${distSrc}/data/dist-data/tccd-sleep.service`,
             `${distSrc}/data/dist-data/tuxedo-control-center_256.svg`,
-            `${distSrc}/data/dist-data/tuxedo-control-center.desktop`,
             `${distSrc}/data/dist-data/tuxedo-control-center-tray.desktop`,
-            `${distSrc}/data/dist-data/com.tuxedocomputers.tccd.policy`,
-            `${distSrc}/data/dist-data/com.tuxedocomputers.tccd.conf`,
             `${distSrc}/data/camera/cameractrls.py`,
-            `${distSrc}/data/dist-data/99-webcam.rules`,
-            `${distSrc}/data/dist-data/com.tuxedocomputers.tomte.policy`,
             `${distSrc}/data/camera/v4l2_kernel_names.json`,
         ],
         linux: {
             target: ['deb'],
-            category: 'System',
+            description: desktopFileDescription,
+            category: desktopFileCategories,
             icon: `${distSrc}/data/dist-data/tuxedo-control-center_256.svg`,
+            desktop: linuxDesktopFile,
+            syncDesktopName: true,
         },
         deb: {
             compression: 'xz',
             depends: ['tuxedo-drivers (>= 4.0.0) | tuxedo-keyboard (>= 3.1.2)', 'libayatana-appindicator3-1'],
             recommends: ['tuxedo-systeminfos'],
-            category: 'System',
             afterInstall: './build-src/after_install.sh',
             afterRemove: './build-src/after_remove.sh',
             fpm: [
+                '--before-remove=./build-src/before_remove.sh',
                 '--conflicts=tuxedofancontrol',
                 '--replaces=tuxedofancontrol',
                 '--inputs=build-src/package-files.txt',
@@ -141,18 +149,17 @@ async function buildRpm(filenameAddition: string): Promise<void> {
             `${distSrc}/data/dist-data/tccd.service`,
             `${distSrc}/data/dist-data/tccd-sleep.service`,
             `${distSrc}/data/dist-data/tuxedo-control-center_256.svg`,
-            `${distSrc}/data/dist-data/tuxedo-control-center.desktop`,
             `${distSrc}/data/dist-data/tuxedo-control-center-tray.desktop`,
-            `${distSrc}/data/dist-data/com.tuxedocomputers.tccd.policy`,
-            `${distSrc}/data/dist-data/com.tuxedocomputers.tccd.conf`,
             `${distSrc}/data/camera/cameractrls.py`,
             `${distSrc}/data/camera/v4l2_kernel_names.json`,
-            `${distSrc}/data/dist-data/99-webcam.rules`,
         ],
         linux: {
             target: ['rpm'],
-            category: 'System',
+            description: desktopFileDescription,
+            category: desktopFileCategories,
             icon: `${distSrc}/data/dist-data/tuxedo-control-center_256.svg`,
+            desktop: linuxDesktopFile,
+            syncDesktopName: true,
         },
         rpm: {
             compression: 'xz',
@@ -164,6 +171,7 @@ async function buildRpm(filenameAddition: string): Promise<void> {
             afterRemove: './build-src/after_remove.sh',
             fpm: [
                 '--replaces=tuxedofancontrol <= 0.1.9',
+                '--before-remove=./build-src/before_remove.sh',
                 '--rpm-posttrans=./build-src/after_install.sh',
                 '--inputs=build-src/package-files.txt',
                 '--rpm-tag=%define _build_id_links none',
