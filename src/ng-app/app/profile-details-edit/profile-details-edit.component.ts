@@ -31,11 +31,11 @@ import {
 import type { MatInput } from '@angular/material/input';
 import { Subscription } from 'rxjs';
 import type { IDisplayFreqRes, IDisplayMode } from '../../../common/models/DisplayFreqRes';
-import type { IGeneralCPUInfo } from '../../../common/models/ICpuInfos';
+import type { IGeneralCPUInfo, ILogicalCoreInfo } from '../../../common/models/ICpuInfos';
 import { GridParamsProfileSettings, GridParamsSettings, type IGridParams } from '../../../common/models/IGridParams';
 import type { SystemProfileInfo } from '../../../common/models/ISystemProfileInfo';
 import type { ITccFanProfile } from '../../../common/models/TccFanTable';
-import type { ITccProfile, ITccProfileDisplay } from '../../../common/models/TccProfile';
+import type { IPerCoreConfig, ITccProfile, ITccProfileDisplay } from '../../../common/models/TccProfile';
 import type { ITccSettings } from '../../../common/models/TccSettings';
 import type { TDPInfo } from '../../../native-lib/TuxedoIOAPI';
 // biome-ignore lint: injection token
@@ -72,6 +72,19 @@ function maxControlValidator(comparisonControl: AbstractControl): ValidatorFn {
     };
 }
 
+function setPerCoreFrequencyValidators(perCoreConfigArray: FormArray): void {
+    for (const coreGroup of perCoreConfigArray.controls as FormGroup[]) {
+        coreGroup.controls.scalingMinFrequency.setValidators([
+            maxControlValidator(coreGroup.controls.scalingMaxFrequency),
+        ]);
+        coreGroup.controls.scalingMaxFrequency.setValidators([
+            minControlValidator(coreGroup.controls.scalingMinFrequency),
+        ]);
+        coreGroup.controls.scalingMinFrequency.updateValueAndValidity({ onlySelf: true });
+        coreGroup.controls.scalingMaxFrequency.updateValueAndValidity({ onlySelf: true });
+    }
+}
+
 @Component({
     selector: 'app-profile-details-edit',
     templateUrl: './profile-details-edit.component.html',
@@ -94,7 +107,17 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         if (this.profileFormGroup === undefined) {
             this.profileFormGroup = this.createProfileFormGroup(profile);
         } else {
-            this.profileFormGroup.reset(profile);
+            // Rebuild perCoreConfig FormArray before reset — reset() won't add/remove array controls
+            const cpuGroup: FormGroup = this.profileFormGroup.controls.cpu as FormGroup;
+            const newPerCoreArray: FormArray = profile.cpu.perCoreConfig
+                ? this.fb.array(profile.cpu.perCoreConfig.map((c: IPerCoreConfig, i: number) => this.fb.group({ cpuId: i, ...c })))
+                : this.fb.array([]);
+            setPerCoreFrequencyValidators(newPerCoreArray);
+            cpuGroup.setControl('perCoreConfig', newPerCoreArray);
+            this.profileFormGroup.reset({
+                ...profile,
+                cpu: { ...profile.cpu, mode: profile.cpu.mode ?? 'basic' },
+            });
         }
 
         if (this.selectStateControl === undefined) {
@@ -126,6 +149,7 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
     private fansOffAvailableSubscription: Subscription = new Subscription();
 
     public cpuInfo: IGeneralCPUInfo;
+    public logicalCoreInfo: ILogicalCoreInfo[] = [];
     public editProfile: boolean;
     public stateInputArray: IStateInfo[];
 
@@ -205,6 +229,13 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
                 if (generalCpuInfo) {
                     this.cpuInfo = generalCpuInfo;
                     this.selectableFrequencies = generalCpuInfo.scalingAvailableFrequencies;
+                }
+            }),
+        );
+        this.subscriptions.add(
+            this.sysfs.logicalCoreInfo.subscribe((logicalCoreInfo: ILogicalCoreInfo[]): void => {
+                if (logicalCoreInfo) {
+                    this.logicalCoreInfo = logicalCoreInfo;
                 }
             }),
         );
@@ -474,7 +505,11 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
 
     private createProfileFormGroup(profile: ITccProfile): FormGroup {
         const displayGroup: FormGroup = this.fb.group(profile.display);
-        const cpuGroup: FormGroup = this.fb.group(profile.cpu);
+        const perCoreConfigArray: FormArray = profile.cpu.perCoreConfig
+            ? this.fb.array(profile.cpu.perCoreConfig.map((c: IPerCoreConfig, i: number) => this.fb.group({ cpuId: i, ...c })))
+            : this.fb.array([]);
+        setPerCoreFrequencyValidators(perCoreConfigArray);
+        const cpuGroup: FormGroup = this.fb.group({ ...profile.cpu, mode: profile.cpu.mode ?? 'basic', perCoreConfig: perCoreConfigArray });
         const webcamGroup: FormGroup = this.fb.group(profile.webcam);
         const fanControlGroup: FormGroup = this.fb.group(profile.fan);
         const odmProfileGroup: FormGroup = this.fb.group(profile.odmProfile);
@@ -576,6 +611,36 @@ export class ProfileDetailsEditComponent implements OnInit, OnDestroy {
         if (newValue !== undefined) {
             cpuGroup.controls.scalingMaxFrequency.setValue(newValue);
         }
+    }
+
+    public get getPerCoreConfigControls(): AbstractControl[] {
+        const cpuGroup: FormGroup = this.profileFormGroup.controls.cpu as FormGroup;
+        const perCoreConfig: FormArray = cpuGroup.controls.perCoreConfig as FormArray;
+        return perCoreConfig ? perCoreConfig.controls : [];
+    }
+
+    public onCpuModeChange(mode: string): void {
+        if (mode !== 'per-core') { return; }
+        const cpuGroup = this.profileFormGroup.controls.cpu as FormGroup;
+        const perCoreConfig = cpuGroup.controls.perCoreConfig as FormArray;
+        if (perCoreConfig.length > 0) { return; }
+        for (const core of this.logicalCoreInfo) {
+            perCoreConfig.push(this.fb.group({
+                cpuId: core.index,
+                online: core.online,
+                scalingMinFrequency: core.cpuInfoMinFreq,
+                scalingMaxFrequency: core.cpuInfoMaxFreq,
+            }));
+        }
+        setPerCoreFrequencyValidators(perCoreConfig);
+    }
+
+    public getCpuMinFreq(cpuIndex: number): number {
+        return this.logicalCoreInfo[cpuIndex]?.cpuInfoMinFreq ?? 0;
+    }
+
+    public getCpuMaxFreq(cpuIndex: number): number {
+        return this.logicalCoreInfo[cpuIndex]?.cpuInfoMaxFreq ?? 0;
     }
 
     public sliderMinFanChange(): void {

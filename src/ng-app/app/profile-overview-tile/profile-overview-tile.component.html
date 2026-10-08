@@ -93,7 +93,7 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                             <use href="./assets/images/icon_cpu.svg#Icon"></use>
                         </svg>
                     </div>
-                    <span> {{ profile.cpu.onlineCores }} <span i18n="@@cProfMgrOverviewCores">cores</span> </span>
+                    <span> {{ activeCoreCount }} <span i18n="@@cProfMgrOverviewCores">cores</span> </span>
                 </div>
                 <div class="status-component" [ngClass]="{ 'not-available': !this.config.getSettings().cpuSettingsEnabled }">
                     <div class="status-icon-container">
@@ -102,13 +102,21 @@ along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
                         </svg>
                     </div>
                     <span *ngIf="selectedCPUTabIndex === 1">
-                        <span *ngIf="!profile.cpu.useMaxPerfGov && (!hasMaxFreqWorkaround || profile.cpu.scalingMaxFrequency < cpuInfo.maxFreq)"
-                            >{{ formatCpuFrequency(profile.cpu.scalingMinFrequency) }} - {{ formatCpuFrequency(profile.cpu.scalingMaxFrequency) }} GHz</span
-                        >
-                        <span *ngIf="!profile.cpu.useMaxPerfGov && !(!hasMaxFreqWorkaround || profile.cpu.scalingMaxFrequency < cpuInfo.maxFreq)"
-                            >{{ formatCpuFrequency(profile.cpu.scalingMinFrequency) }} - Boost</span
-                        >
-                        <span *ngIf="profile.cpu.useMaxPerfGov" i18n="@@cProfMgrOverviewMaxPerf">Max performance</span>
+                        <ng-container *ngIf="isPerCoreMode; else basicFrequencyRange">
+                            <span
+                                >{{ formatCpuFrequency(perCoreAvgMinFrequency) }} - {{ formatCpuFrequency(perCoreAvgMaxFrequency) }} GHz
+                                <span i18n="@@cProfMgrOverviewFreqAvg">(avg)</span></span
+                            >
+                        </ng-container>
+                        <ng-template #basicFrequencyRange>
+                            <span *ngIf="!profile.cpu.useMaxPerfGov && (!hasMaxFreqWorkaround || profile.cpu.scalingMaxFrequency < cpuInfo.maxFreq)"
+                                >{{ formatCpuFrequency(profile.cpu.scalingMinFrequency) }} - {{ formatCpuFrequency(profile.cpu.scalingMaxFrequency) }} GHz</span
+                            >
+                            <span *ngIf="!profile.cpu.useMaxPerfGov && !(!hasMaxFreqWorkaround || profile.cpu.scalingMaxFrequency < cpuInfo.maxFreq)"
+                                >{{ formatCpuFrequency(profile.cpu.scalingMinFrequency) }} - Boost</span
+                            >
+                            <span *ngIf="profile.cpu.useMaxPerfGov" i18n="@@cProfMgrOverviewMaxPerf">Max performance</span>
+                        </ng-template>
                     </span>
                     <span *ngIf="selectedCPUTabIndex === 0">
                         <ng-container *ngIf="odmPowerLimitInfos?.length > 0">{{ profile.odmPowerLimits.tdpValues[0] }} W</ng-container>

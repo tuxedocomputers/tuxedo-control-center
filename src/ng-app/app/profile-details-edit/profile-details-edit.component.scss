@@ -148,3 +148,40 @@ mat-grid-tile {
 .hide-element {
     display: none;
 }
+
+.per-core-config-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+
+    th, td {
+        padding: 6px 8px;
+        text-align: left;
+        vertical-align: middle;
+    }
+
+    th {
+        font-weight: bold;
+        font-size: 14px;
+    }
+
+    .slider-with-value {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+
+        mat-slider {
+            flex: 1;
+        }
+
+        .slider-value {
+            min-width: 60px;
+            font-size: 13px;
+        }
+    }
+
+    .error-hint {
+        font-size: 95%;
+        color: #f44336;
+    }
+}
