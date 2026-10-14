@@ -4,6 +4,14 @@
 ### Added
 - Lightbar color and brightness selection in Tools => Lighting settings
 
+### Changed
+- Packaging structure rework
+
+### Fixed
+- TCC autostart in combination with FAI-install
+- Missing dependency on pkexec for .deb packages
+- Various installation warnings/errors for deb/rpm
+
 ## [3.0.10] - 2026-09-16
 ### Added
 - Aquaris menu for Stellaris Gen8 Intel
