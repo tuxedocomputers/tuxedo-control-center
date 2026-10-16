@@ -35,6 +35,7 @@ const linuxDesktopFile = {
         Type: 'Application',
         Icon: '/opt/tuxedo-control-center/resources/dist/tuxedo-control-center/data/dist-data/tuxedo-control-center_256.svg',
         Keywords: 'TCC',
+        'X-KDE-Shortcuts': 'Meta+Alt+F6',
     },
 };
 
