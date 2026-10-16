@@ -9,6 +9,7 @@
 
 ### Fixed
 - TCC autostart in combination with FAI-install
+- Global shortcut workaround for KDE (without manual confirmation of global shortcut by user)
 - Missing dependency on pkexec for .deb packages
 - Various installation warnings/errors for deb/rpm
 
