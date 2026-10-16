@@ -19,6 +19,7 @@
 
 import * as child_process from 'node:child_process';
 import * as fs from 'node:fs';
+import * as fsa from 'node:fs/promises';
 import * as os from 'node:os';
 import * as path from 'node:path';
 import { app, globalShortcut, nativeTheme, powerSaveBlocker } from 'electron';
@@ -32,6 +33,7 @@ import { getBrightnessMode, setBrightnessMode } from './brightnessAPI';
 import { activateTccGui, createPrimeWindow, quitCurrentTccSession } from './browserWindowsAPI';
 import { tccDBus } from './dbusAPI';
 import { loadTranslation } from './utilsAPI';
+import { spawnCmdAsync } from '../../common/classes/Utils';
 
 export const tray: TccTray = new TccTray(path.join(__dirname, '../../../data/dist-data/tuxedo-control-center_256.png'));
 const trayOnlyOption: boolean = process.argv.includes('--tray');
@@ -100,6 +102,7 @@ app.whenReady().then(async (): Promise<void> => {
     });
 
     await migrateOldAutostartState();
+    await migrateOldGlobalShortcutConfigKDE();
 
     startDbusAndInit();
 });
@@ -322,6 +325,140 @@ async function migrateOldAutostartState(): Promise<void> {
         }
 
         await userConfig.set('migrateAutostart', 'done');
+    }
+}
+
+async function hasCommand(cmd: string): Promise<boolean> {
+    try {
+        await spawnCmdAsync('command', ['-v', cmd], { shell: true });
+    } catch (err: unknown) {
+        return false;
+    }
+
+    return true;
+}
+
+/**
+ * Removes two entries in group `[control-center]`. Future entries,
+ * if/when functionality returns to using global shortcuts portal,
+ * should not be in the same group.
+ *
+ * Example of entries to be deleted:
+ * ```
+ * [control-center]
+ * B205BB3F38EE290D809C8828F3C337EC-=Meta+Alt+F6,Meta+Alt+F6,tuxedo-control-center shortcut:\s
+ * _k_friendly_name=control-center
+ *
+ * [services][com.tuxedocomputers.tcc.desktop]
+ * _launch=
+ * ```
+ *
+ * Note: key of shortcut is variable and need to be read from the file "manually"
+ */
+async function migrateOldGlobalShortcutConfigKDE() {
+    if (!isKDE()) {
+        return;
+    }
+
+    // Find the shortcut key through manual parsing
+    let oldShortcutKey: string = '';
+    const configFileContents = await fsa.readFile(path.join(os.homedir(), '.config', 'kglobalshortcutsrc'), {
+        encoding: 'utf8',
+    });
+    const configFilecontentsList = configFileContents.split('\n');
+    for (const line of configFilecontentsList) {
+        const parts = line.split('=');
+        if (parts.length === 2) {
+            if (parts[1].includes('tuxedo-control-center shortcut')) {
+                oldShortcutKey = parts[0].trim();
+                if (oldShortcutKey.length > 0) {
+                    break;
+                }
+            }
+        }
+    }
+    if (oldShortcutKey.length === 0) {
+        return;
+    }
+
+    const cmdVer5 = 'kwriteconfig5';
+    const cmdVer6 = 'kwriteconfig6';
+    const hasCommandVer5 = await hasCommand(cmdVer5);
+    const hasCommandVer6 = await hasCommand(cmdVer6);
+
+    let kwriteConfigCmd: string = '';
+    if (hasCommandVer6) {
+        kwriteConfigCmd = cmdVer6;
+    } else if (hasCommandVer5) {
+        kwriteConfigCmd = cmdVer5;
+    } else {
+        return;
+    }
+
+    // Remove shortcut entry with key
+    try {
+        await spawnCmdAsync(
+            kwriteConfigCmd,
+            [
+                '--file',
+                'kglobalshortcutsrc',
+                '--group',
+                'control-center',
+                '--key',
+                oldShortcutKey,
+                '--delete',
+                '--notify',
+            ],
+            {},
+        );
+    } catch (err: unknown) {
+        console.error(
+            `initMain: migrateOldGlobalShortcutConfigKDE: Unexpected error removing shortcut entry => ${err}`,
+        );
+    }
+
+    // Remove fixed name entry
+    try {
+        await spawnCmdAsync(
+            kwriteConfigCmd,
+            [
+                '--file',
+                'kglobalshortcutsrc',
+                '--group',
+                'control-center',
+                '--key',
+                '_k_friendly_name',
+                '--delete',
+                '--notify',
+            ],
+            {},
+        );
+    } catch (err: unknown) {
+        console.error(`initMain: migrateOldGlobalShortcutConfigKDE: Unexpected error removing name entry => ${err}`);
+    }
+
+    // Remove possibly newly created entry for disabled .desktop shortcut only appearing in rare cases
+    try {
+        await spawnCmdAsync(
+            kwriteConfigCmd,
+            [
+                '--file',
+                'kglobalshortcutsrc',
+                '--group',
+                'services',
+                '--group',
+                'com.tuxedocomputers.tcc.desktop',
+                '--key',
+                '_launch',
+                '--delete',
+                '--notify',
+            ],
+            {},
+        );
+    } catch (err: unknown) {
+        console.error(
+            `initMain: migrateOldGlobalShortcutConfigKDE: Unexpected error removing new disabled .desktop shortcut entry => ${err}`,
+        );
     }
 }
 
