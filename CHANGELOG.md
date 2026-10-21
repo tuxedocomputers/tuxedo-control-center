@@ -1,6 +1,6 @@
 # Changelog
 
-## [3.1.0] - UNRELEASED
+## [3.1.0] - 2026-10-21
 ### Added
 - Lightbar color and brightness selection in Tools => Lighting settings
 
