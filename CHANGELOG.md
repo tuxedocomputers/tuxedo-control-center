@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.1.1] - 2026-10-21
+### Fixed
+- TCC GUI autostart migration, added missing case
+
 ## [3.1.0] - 2026-10-21
 ### Added
 - Lightbar color and brightness selection in Tools => Lighting settings
