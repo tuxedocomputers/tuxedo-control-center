@@ -17,7 +17,7 @@
  * along with TUXEDO Control Center.  If not, see <https://www.gnu.org/licenses/>.
  */
 
-.backlight-settings-edit {
+.lighting-settings-edit {
     overflow-x: hidden;
 
     display: block;
@@ -31,7 +31,7 @@
     overflow-y: scroll;
     user-select: none;
 
-    .inner-backlight-settings-edit {
+    .inner-lighting-settings-edit {
         margin: 0 10px 10px 10px;
 
         .sub-header {

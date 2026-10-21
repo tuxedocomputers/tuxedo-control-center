@@ -1,5 +1,18 @@
 # Changelog
 
+## [3.1.0] - UNRELEASED
+### Added
+- Lightbar color and brightness selection in Tools => Lighting settings
+
+### Changed
+- Packaging structure rework
+
+### Fixed
+- TCC autostart in combination with FAI-install
+- Global shortcut workaround for KDE (without manual confirmation of global shortcut by user)
+- Missing dependency on pkexec for .deb packages
+- Various installation warnings/errors for deb/rpm
+
 ## [3.0.10] - 2026-09-16
 ### Added
 - Aquaris menu for Stellaris Gen8 Intel

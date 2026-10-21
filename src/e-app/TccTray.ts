@@ -80,7 +80,7 @@ export class TccTray {
             {
                 label: 'Tray autostart',
                 type: 'checkbox',
-                checked: this.state.isAutostartTrayInstalled,
+                checked: this.state.isAutostartTrayActive,
                 click: (): void => this.events.autostartTrayToggle(),
             },
             {
@@ -139,7 +139,7 @@ export class TccTray {
 
 class TrayState {
     tccGUIVersion: string;
-    isAutostartTrayInstalled: boolean;
+    isAutostartTrayActive: boolean;
     isPrimeSupported: boolean;
     iGpuAvailable: boolean;
     dGpuAvailable: boolean;

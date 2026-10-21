@@ -28,8 +28,10 @@ import type { ICpuPower } from '../../common/models/TccPowerSettings';
 import type { ITccProfile, TccProfile } from '../../common/models/TccProfile';
 import type {
     ITccSettings,
-    KeyboardBacklightCapabilitiesInterface,
-    KeyboardBacklightStateInterface,
+    KeyboardCapabilitiesInterface,
+    KeyboardStateInterface,
+    LightbarCapabilitiesInterface,
+    LightbarStateInterface,
 } from '../../common/models/TccSettings';
 import type { IDbusClientAPI } from '../../e-app/preloadAPIs/DbusClientAPI';
 import type { TDPInfo } from '../../native-lib/TuxedoIOAPI';
@@ -78,11 +80,17 @@ export class TccDBusClientService implements OnDestroy {
     public settings: BehaviorSubject<ITccSettings> = new BehaviorSubject<ITccSettings>(undefined);
     private previousSettingsJSON: string = '';
 
-    public keyboardBacklightCapabilities: BehaviorSubject<KeyboardBacklightCapabilitiesInterface> =
-        new BehaviorSubject<KeyboardBacklightCapabilitiesInterface>(undefined);
-    public keyboardBacklightStates: BehaviorSubject<Array<KeyboardBacklightStateInterface>> = new BehaviorSubject<
-        Array<KeyboardBacklightStateInterface>
-    >(undefined);
+    public keyboardCapabilities: BehaviorSubject<KeyboardCapabilitiesInterface> =
+        new BehaviorSubject<KeyboardCapabilitiesInterface>(undefined);
+    public lightbarCapabilities: BehaviorSubject<LightbarCapabilitiesInterface> =
+        new BehaviorSubject<LightbarCapabilitiesInterface>(undefined);
+
+    public keyboardStates: BehaviorSubject<KeyboardStateInterface[]> = new BehaviorSubject<KeyboardStateInterface[]>(
+        undefined,
+    );
+    public lightbarStates: BehaviorSubject<LightbarStateInterface> = new BehaviorSubject<LightbarStateInterface>(
+        undefined,
+    );
 
     public fansMinSpeed: BehaviorSubject<number> = new BehaviorSubject<number>(undefined);
     public fansOffAvailable: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(undefined);
@@ -159,20 +167,33 @@ export class TccDBusClientService implements OnDestroy {
             },
         ],
         [
-            this.keyboardBacklightCapabilities,
+            this.keyboardCapabilities,
             {
-                dbusFunctionName: 'getKeyboardBacklightCapabilitiesJSON',
-                dbusFunction: (): Promise<string> => window.dbusAPI.getKeyboardBacklightCapabilitiesJSON(),
+                dbusFunctionName: 'getKeyboardCapabilitiesJSON',
+                dbusFunction: (): Promise<string> => window.dbusAPI.getKeyboardCapabilitiesJSON(),
             },
         ],
         [
-            this.keyboardBacklightStates,
+            this.lightbarCapabilities,
             {
-                dbusFunctionName: 'getKeyboardBacklightStatesJSON',
-                dbusFunction: (): Promise<string> => window.dbusAPI.getKeyboardBacklightStatesJSON(),
+                dbusFunctionName: 'getLightbarCapabilitiesJSON',
+                dbusFunction: (): Promise<string> => window.dbusAPI.getLightbarCapabilitiesJSON(),
             },
         ],
-
+        [
+            this.keyboardStates,
+            {
+                dbusFunctionName: 'getKeyboardStatesJSON',
+                dbusFunction: (): Promise<string> => window.dbusAPI.getKeyboardStatesJSON(),
+            },
+        ],
+        [
+            this.lightbarStates,
+            {
+                dbusFunctionName: 'getLightbarStatesJSON',
+                dbusFunction: (): Promise<string> => window.dbusAPI.getLightbarStatesJSON(),
+            },
+        ],
         [
             this.fansMinSpeed,
             {
@@ -409,8 +430,12 @@ export class TccDBusClientService implements OnDestroy {
         }
     }
 
-    public setKeyboardBacklightStates(keyboardBacklightStates: Array<KeyboardBacklightStateInterface>): void {
-        window.dbusAPI.setKeyboardBacklightStatesJSON(JSON.stringify(keyboardBacklightStates));
+    public setKeyboardStates(keyboardStates: KeyboardStateInterface[]): void {
+        window.dbusAPI.setKeyboardStatesJSON(JSON.stringify(keyboardStates));
+    }
+
+    public setLightbarStates(lightbarStates: LightbarStateInterface): void {
+        window.dbusAPI.setLightbarStatesJSON(JSON.stringify(lightbarStates));
     }
 
     public async triggerUpdate(): Promise<void> {
