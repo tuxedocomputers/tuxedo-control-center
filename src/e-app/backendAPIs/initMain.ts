@@ -62,8 +62,11 @@ if (watchOption) {
 
 export const userConfig = new UserConfig(tccStandardConfigFile);
 
+let firstStart = false;
+
 if (!userConfigDirExists()) {
     createUserConfigDir();
+    firstStart = true;
 }
 
 app.whenReady().then(async (): Promise<void> => {
@@ -310,6 +313,9 @@ async function migrateOldAutostartState(): Promise<void> {
     if ((await userConfig.get('migrateAutostart')) === 'done') {
         // Only migrate once per user
         return;
+    } else if (firstStart) {
+        // Nothing to migrate if first start
+        await userConfig.set('migrateAutostart', 'done');
     } else {
         const oldAutostartFile = path.join(
             path.join(os.homedir(), '.config/autostart'),
