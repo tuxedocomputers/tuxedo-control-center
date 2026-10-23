@@ -1,5 +1,9 @@
 # Changelog
 
+## [3.1.2] - 2026-10-23
+### Fixed
+- Package rebuild due to build environment permission issue
+
 ## [3.1.1] - 2026-10-21
 ### Fixed
 - TCC GUI autostart migration, added missing case
