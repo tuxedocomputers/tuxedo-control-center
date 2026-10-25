@@ -192,9 +192,9 @@ async function initTray(): Promise<void> {
         tray.create();
     };
 
-    tray.events.fnLockClick = (status: boolean): void => {
-        tray.state.fnLockStatus = !status;
-        tccDBus.setFnLockStatus(tray.state.fnLockStatus);
+    tray.events.fnLockClick = async (status: boolean): Promise<void> => {
+        await tccDBus.setFnLockStatus(!status);
+        await updateTrayFnLock(true);
     };
 
     tray.events.selectNvidiaClick = async (): Promise<void> => {
@@ -270,6 +270,7 @@ async function initMain(): Promise<void> {
     const profilesCheckInterval = 4000;
     setInterval(async (): Promise<void> => {
         updateTrayProfiles();
+        updateTrayFnLock();
     }, profilesCheckInterval);
 }
 
@@ -556,6 +557,22 @@ export async function updateTrayProfiles(): Promise<void> {
         }
     } catch (err: unknown) {
         console.error(`initMain: updateTrayProfiles failed => ${err}`);
+    }
+}
+
+// Fn-Lock can also be toggled with Fn+Esc or be restored by tccd, keep the tray checkbox in sync
+async function updateTrayFnLock(forceRefresh: boolean = false): Promise<void> {
+    if (!tray.state.fnLockSupported) {
+        return;
+    }
+    try {
+        const updatedStatus: boolean = await fnLockStatus();
+        if (forceRefresh || updatedStatus !== tray.state.fnLockStatus) {
+            tray.state.fnLockStatus = updatedStatus;
+            await tray.create();
+        }
+    } catch (err: unknown) {
+        console.error(`initMain: updateTrayFnLock failed => ${err}`);
     }
 }
 
