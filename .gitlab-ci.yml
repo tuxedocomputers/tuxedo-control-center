@@ -80,8 +80,7 @@ package-release:
         - npm run check-release
         - npm run build-release autoversion
 
-# Check that expected built packages exist
-test-package-exist:
+test-package:
     stage: test-package
     parallel:
         matrix:
@@ -92,4 +91,5 @@ test-package-exist:
         - !reference [.rules-test-packages, rules]
         - !reference [.rules-release-packages, rules]
     script:
-        - find dist/packages -type f -name *.$PKG_EXT | read
+        - npm ci
+        - npm run check-package-$PKG_EXT
