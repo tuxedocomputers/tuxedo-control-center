@@ -47,7 +47,7 @@ test:
     script:
         - npm ci
         - npm run build-prod
-        - npm run tests
+        - runuser -l ubuntu -c "cd $PWD && npm run tests" # run tests as non-root user
 
 # Package non-release
 package-other:
