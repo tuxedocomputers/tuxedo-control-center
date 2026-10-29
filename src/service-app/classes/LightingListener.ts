@@ -179,20 +179,32 @@ export class LightingListener {
             path: string;
             name: string;
         }[] = [
-            { path: '/org/freedesktop/UPower/KbdBacklight', name: 'org.freedesktop.UPower.KbdBacklight' },
+            {
+                path: '/org/freedesktop/UPower/KbdBacklight',
+                name: 'org.freedesktop.UPower.KbdBacklight',
+            },
             {
                 path: '/org/freedesktop/UPower/KbdBacklight/rgbokbd_backlight',
                 name: 'org.freedesktop.UPower.KbdBacklight',
             },
         ];
+
         for (const { path, name } of paths) {
             try {
                 const proxy: dbus.ProxyObject = await bus.getProxyObject('org.freedesktop.UPower', path);
                 console.log(`LightingListener: initKeyboardUPowerInterface: Using ${path}`);
                 this.dbusKbdBacklightInterface = proxy.getInterface(name);
+
                 return true;
-            } catch {}
+            } catch (err: unknown) {
+                if (err instanceof dbus.DBusError) {
+                    console.error(`LightingListener: initKeyboardUPowerInterface failed => ${err.message}`);
+                }
+
+                console.error(`LightingListener: initKeyboardUPowerInterface failed => ${err}`);
+            }
         }
+
         return false;
     }
 
