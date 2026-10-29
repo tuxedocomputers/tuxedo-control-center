@@ -84,7 +84,10 @@ export class LightingListener {
             setTimeout(() => this.initKeyboard(), 3000);
             return;
         } else if (!capabilitiesExist) {
-            console.log('LightingListener: initKeyboard: Failed to configure keyboard');
+            console.log('LightingListener: initKeyboard: Failed to detect keyboard paths');
+            return;
+        } else if (this.onStartRetryCount <= 0) {
+            console.log('LightingListener: initKeyboard: Maximum number of retries reached');
             return;
         }
 
@@ -94,6 +97,7 @@ export class LightingListener {
         const status: boolean = await this.initKeyboardUPower();
         if (!status) {
             console.log('LightingListener: initKeyboard: UPower initialization failed');
+            this.onStartRetryCount--;
             setTimeout(() => this.initKeyboard(), 3000);
             return;
         }
