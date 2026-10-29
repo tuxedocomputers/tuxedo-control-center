@@ -160,7 +160,11 @@ export class LightingListener {
         this.dbusUPowerProps = upowerObject.getInterface('org.freedesktop.DBus.Properties');
 
         const status: boolean = await this.initKeyboardUPowerInterface(bus);
-        if (!status) return false;
+
+        if (!status) {
+            bus.disconnect();
+            return false;
+        }
 
         this.registerKeyboardBrightnessChangeListener();
         return true;
