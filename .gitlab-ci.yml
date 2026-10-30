@@ -22,6 +22,9 @@ default:
     before_script:
         - unset CI_PIPELINE_IID # Needed to remove build ID extension from package version
 
+variables:
+    FF_DISABLE_UMASK_FOR_DOCKER_EXECUTOR: 1
+
 stages:
     - test
     - package
@@ -40,6 +43,9 @@ stages:
 # Build and run project tests
 test:
     stage: test
+    variables:
+        # clone in first stage
+        GIT_STRATEGY: clone
     rules:
         - !reference [.rules-test-packages, rules]
         - !reference [.rules-release-packages, rules]
@@ -47,6 +53,7 @@ test:
     script:
         - npm ci
         - npm run build-prod
+        - ls -al # log directory listing with permissions owners etc
         - runuser -l ubuntu -c "cd $PWD && npm run tests" # run tests as non-root user
 
 # Package non-release
