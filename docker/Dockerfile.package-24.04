@@ -15,5 +15,4 @@ RUN apt update && apt install -y \
     && apt update && apt install -y nodejs \
     && apt -y autoremove \
     && rm -rf /var/lib/apt/lists/*
-USER ubuntu
 RUN git config --global --add safe.directory '*'
