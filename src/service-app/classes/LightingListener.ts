@@ -179,12 +179,15 @@ export class LightingListener {
             path: string;
             name: string;
         }[] = [
+            // Tuxedo OS / Ubuntu
+            { path: '/org/freedesktop/UPower/KbdBacklight', name: 'org.freedesktop.UPower.KbdBacklight' },
+            // Fedora
             {
-                path: '/org/freedesktop/UPower/KbdBacklight',
+                path: '/org/freedesktop/UPower/KbdBacklight/rgbokbd_backlight',
                 name: 'org.freedesktop.UPower.KbdBacklight',
             },
             {
-                path: '/org/freedesktop/UPower/KbdBacklight/rgbokbd_backlight',
+                path: '/org/freedesktop/UPower/KbdBacklight/whiteokbd_backlight',
                 name: 'org.freedesktop.UPower.KbdBacklight',
             },
         ];
