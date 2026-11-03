@@ -1,6 +1,6 @@
 # Changelog
 
-## [3.1.3] - UNRELEASED
+## [3.1.3] - 2026-11-03
 ### Added
 - Another DBUS path for keyboard backlight control seen on for example Fedora
   when using a device with white keyboard backlight
