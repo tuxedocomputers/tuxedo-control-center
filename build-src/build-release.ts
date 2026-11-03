@@ -41,10 +41,14 @@ async function setVersion(version: string) {
 
 async function main() {
     let automaticVersion = false;
+    let noBuild = false;
 
     process.argv.forEach((parameter, index, array) => {
         if (parameter.includes('autoversion')) {
             automaticVersion = true;
+        }
+        if (parameter.includes('nobuild')) {
+            noBuild = true;
         }
     });
 
@@ -67,8 +71,10 @@ async function main() {
             await setVersion(version);
             newVersion = version;
         }
-        console.log('Run production build');
-        console.log((await execp('npm run build-prod')).stdout);
+        if (!noBuild) {
+            console.log('Run production build');
+            console.log((await execp('npm run build-prod')).stdout);
+        }
         console.log('Run electron-builder');
         console.log((await execp(`npm run electron-builder "fnameadd=${filenameAddition}"`)).stdout);
     } catch (err) {

@@ -84,7 +84,10 @@ export class LightingListener {
             setTimeout(() => this.initKeyboard(), 3000);
             return;
         } else if (!capabilitiesExist) {
-            console.log('LightingListener: initKeyboard: Failed to configure keyboard');
+            console.log('LightingListener: initKeyboard: Failed to detect keyboard paths');
+            return;
+        } else if (this.onStartRetryCount <= 0) {
+            console.log('LightingListener: initKeyboard: Maximum number of retries reached');
             return;
         }
 
@@ -94,6 +97,7 @@ export class LightingListener {
         const status: boolean = await this.initKeyboardUPower();
         if (!status) {
             console.log('LightingListener: initKeyboard: UPower initialization failed');
+            this.onStartRetryCount--;
             setTimeout(() => this.initKeyboard(), 3000);
             return;
         }
@@ -160,7 +164,11 @@ export class LightingListener {
         this.dbusUPowerProps = upowerObject.getInterface('org.freedesktop.DBus.Properties');
 
         const status: boolean = await this.initKeyboardUPowerInterface(bus);
-        if (!status) return false;
+
+        if (!status) {
+            bus.disconnect();
+            return false;
+        }
 
         this.registerKeyboardBrightnessChangeListener();
         return true;
@@ -171,20 +179,35 @@ export class LightingListener {
             path: string;
             name: string;
         }[] = [
+            // Tuxedo OS / Ubuntu
             { path: '/org/freedesktop/UPower/KbdBacklight', name: 'org.freedesktop.UPower.KbdBacklight' },
+            // Fedora
             {
                 path: '/org/freedesktop/UPower/KbdBacklight/rgbokbd_backlight',
                 name: 'org.freedesktop.UPower.KbdBacklight',
             },
+            {
+                path: '/org/freedesktop/UPower/KbdBacklight/whiteokbd_backlight',
+                name: 'org.freedesktop.UPower.KbdBacklight',
+            },
         ];
+
         for (const { path, name } of paths) {
             try {
                 const proxy: dbus.ProxyObject = await bus.getProxyObject('org.freedesktop.UPower', path);
                 console.log(`LightingListener: initKeyboardUPowerInterface: Using ${path}`);
                 this.dbusKbdBacklightInterface = proxy.getInterface(name);
+
                 return true;
-            } catch {}
+            } catch (err: unknown) {
+                if (err instanceof dbus.DBusError) {
+                    console.error(`LightingListener: initKeyboardUPowerInterface failed => ${err.message}`);
+                }
+
+                console.error(`LightingListener: initKeyboardUPowerInterface failed => ${err}`);
+            }
         }
+
         return false;
     }
 

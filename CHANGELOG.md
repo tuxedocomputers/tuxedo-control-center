@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.1.3] - UNRELEASED
+### Added
+- Another DBUS path for keyboard backlight control seen on for example Fedora
+  when using a device with white keyboard backlight
+
+### Fixed
+- DBUS connection limit issue where too many retries with missing dbus
+  interface could crash the tccd service
+  - Cleanup previous connection on retry
+  - Automatic restart of tccd if service fails
+
 ## [3.1.2] - 2026-10-23
 ### Fixed
 - Package rebuild due to build environment permission issue
