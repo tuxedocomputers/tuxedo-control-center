@@ -52,3 +52,6 @@ src/ng-app/assets/CHANGELOG.md
 
 # cache
 .angular/cache*
+
+# local nix build result folder
+/result
