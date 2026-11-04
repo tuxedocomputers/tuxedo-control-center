@@ -9,6 +9,42 @@ There are pre-build packages available at our repositories. For details please h
 
 Note: TCC depends on `tuxedo-drivers` for some core functionality like fan control.
 
+## Nix
+
+The flake (`flake.nix`) exposes the package and a development shell for `x86_64-linux`. The package definition lives in `nix/package.nix` in nixpkgs style (`callPackage`-able, `fetchFromGitHub` source).
+
+```
+# build the checked-out tree
+nix build .
+./result/bin/tuxedo-control-center
+
+# run directly
+nix run .
+
+# development shell (node, python, pkg-config, udev, electron, biome)
+nix develop
+npm clean-install --ignore-scripts
+```
+
+Notes:
+- The GUI only works with the `tccd` service running. The flake provides a NixOS module (`nix/module.nix`) that installs the service, D-Bus config, polkit policies and udev rules, and enables `tuxedo-drivers`:
+    ```nix
+    {
+      inputs.tuxedo-control-center.url = "github:tuxedocomputers/tuxedo-control-center";
+
+      outputs = { nixpkgs, tuxedo-control-center, ... }: {
+        nixosConfigurations.host = nixpkgs.lib.nixosSystem {
+          modules = [
+            tuxedo-control-center.nixosModules.default
+            { hardware.tuxedo-control-center.enable = true; }
+          ];
+        };
+      };
+    }
+    ```
+- After changing `package-lock.json`, update `npmDepsHash` in `nix/package.nix` (set it to `lib.fakeHash` and copy the hash from the build error).
+- `nix build .#tuxedo-control-center` builds the tagged release referenced by `nix/package.nix` instead of the local tree.
+
 ## Project structure
 
 ```
