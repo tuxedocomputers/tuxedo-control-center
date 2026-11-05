@@ -77,6 +77,7 @@ export interface ITccSettings {
     keyboardBacklightStates?: KeyboardStateInterface[];
     keyboardStates: KeyboardStateInterface[];
     lightbarStates: LightbarStateInterface | null;
+    fnLock?: boolean;
 }
 
 export const defaultSettings: ITccSettings = {
