@@ -106,6 +106,10 @@ export class CpuWorker extends DaemonWorker {
                 // Preferred governors list for other drivers, mainly 'acpi-cpufreq'.
                 // Also includes 'intel_cpufreq' which according to kernel.org doc on intel_pstate
                 // behaves as the acpi-cpufreq governors.
+                if (!this.cpuCtrl.cores[0].scalingAvailableGovernors.isAvailable()) {
+                    // No cpufreq driver, no governor to choose
+                    return chosenName;
+                }
                 const availableGovernors: string[] = this.cpuCtrl.cores[0].scalingAvailableGovernors.readValue();
                 for (const governorName of this.preferredAcpiFreqGovernors) {
                     if (availableGovernors.includes(governorName)) {
@@ -145,6 +149,10 @@ export class CpuWorker extends DaemonWorker {
                 // Preferred governors list for other drivers, mainly 'acpi-cpufreq'.
                 // Also includes 'intel_cpufreq' which according to kernel.org doc on intel_pstate
                 // behaves as the acpi-cpufreq governors.
+                if (!this.cpuCtrl.cores[0].scalingAvailableGovernors.isAvailable()) {
+                    // No cpufreq driver, no governor to choose
+                    return chosenName;
+                }
                 const availableGovernors: string[] = this.cpuCtrl.cores[0].scalingAvailableGovernors.readValue();
                 for (const governorName of this.preferredPerformanceAcpiFreqGovernors) {
                     if (availableGovernors.includes(governorName)) {
